@@ -24,6 +24,12 @@ public abstract class ChestedDinosaur extends Dinosaur{
         };
     }
 
+    @Override
+    protected void registerData() {
+        super.registerData();
+        this.dataManager.set(HAS_CHEST, false);
+    }
+
     public boolean hasChest(){
         return BitUtils.getBit(5, this.dataManager.get(BOOLS)) > 0;
     }
