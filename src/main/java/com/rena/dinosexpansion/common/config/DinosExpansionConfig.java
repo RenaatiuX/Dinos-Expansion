@@ -5,8 +5,8 @@ import net.minecraftforge.common.ForgeConfigSpec;
 public class DinosExpansionConfig {
 
     public static final ForgeConfigSpec.Builder BUILDER;
-    public static final ForgeConfigSpec.IntValue MAX_LEVEL, MAX_XP, XP_INCREASE, HEALTH_PER_LEVEL, NARCOTIC_NEEDED_PERCENT;
-    public static final ForgeConfigSpec.DoubleValue ATTACK_DAMAGE_PER_LEVEL;
+    public static final ForgeConfigSpec.IntValue MAX_LEVEL, MAX_XP, XP_INCREASE, NARCOTIC_NEEDED_PERCENT;
+    public static final ForgeConfigSpec.DoubleValue ATTACK_DAMAGE_PER_LEVEL, HEALTH_PER_LEVEL, ARMOR_PER_LEVEL;
 
     static {
         ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
@@ -20,9 +20,11 @@ public class DinosExpansionConfig {
                 "so the maxXP is calculated: max_Xp + level*xp_increase");
         XP_INCREASE = builder.defineInRange("xp_increase", 3, 0, 100);
         builder.comment("this defines how many max health the dino gets when leveling up");
-        HEALTH_PER_LEVEL = builder.defineInRange("healt_per_level", 2, 1, Integer.MAX_VALUE);
+        HEALTH_PER_LEVEL = builder.defineInRange("healt_per_level", 10f, 0f, 255);
         builder.comment("this defines how many attack damage the dino gets additional when leveling up");
-        ATTACK_DAMAGE_PER_LEVEL = builder.defineInRange("attack_damage_per_level", 1f, 0f, 100f);
+        ATTACK_DAMAGE_PER_LEVEL = builder.defineInRange("attack_damage_per_level", .1f, 0f, 255f);
+        builder.comment("this defines how much armor a dinosaur will get per Level");
+        ARMOR_PER_LEVEL = builder.defineInRange("armor_per_level", .1f, 0f, 255f);
         builder.comment("this defines how many narcitocs u will need to make the dinosaur go knocked out.", "this value is in percent so u can just modify it for all entities");
         NARCOTIC_NEEDED_PERCENT = builder.defineInRange("narcotic_percent", 100, 0, 100);
         builder.pop();

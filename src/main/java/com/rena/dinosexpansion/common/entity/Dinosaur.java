@@ -14,8 +14,8 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.items.ItemStackHandler;
 
-import javax.swing.plaf.ButtonUI;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -33,17 +33,26 @@ public abstract class Dinosaur extends MonsterEntity {
 
 
     protected int maxNarcotic, maxHunger;
+    protected ItemStackHandler inventory = new ItemStackHandler(2){
+        @Override
+        protected void onContentsChanged(int slot) {
+            super.onContentsChanged(slot);
+            Dinosaur.this.onContentsChanged(slot);
+        }
+    };
 
-    public Dinosaur(EntityType<? extends MonsterEntity> type, World world, int maxNarcotic, int maxHunger) {
+    public Dinosaur(EntityType<? extends MonsterEntity> type, World world, int maxNarcotic, int maxHunger, int level) {
         super(type, world);
-        this.maxNarcotic = (int)((float)maxNarcotic * (float)DinosExpansionConfig.NARCOTIC_NEEDED_PERCENT.get()/100f);
+        this.maxNarcotic = (int) ((float) maxNarcotic * (float) DinosExpansionConfig.NARCOTIC_NEEDED_PERCENT.get() / 100f);
         this.maxHunger = maxHunger;
         this.dataManager.set(RARITY, getinitialRarity().ordinal());
         this.dataManager.set(GENDER, getInitialGender().ordinal());
+        this.dataManager.set(LEVEL, level);
         Rarity rarity = getRarity();
-        getAttribute(Attributes.MAX_HEALTH).setBaseValue(getAttribute(Attributes.MAX_HEALTH).getValue() + rarity.healthBonus);
-        getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(getAttribute(Attributes.ATTACK_DAMAGE).getValue() + rarity.attackDamageBonus);
+        getAttribute(Attributes.MAX_HEALTH).setBaseValue(getAttribute(Attributes.MAX_HEALTH).getValue() + rarity.healthBonus + DinosExpansionConfig.HEALTH_PER_LEVEL.get() * (double) level);
+        getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(getAttribute(Attributes.ATTACK_DAMAGE).getValue() + rarity.attackDamageBonus + DinosExpansionConfig.ATTACK_DAMAGE_PER_LEVEL.get() * (double) level);
         getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(getAttribute(Attributes.MOVEMENT_SPEED).getValue() + rarity.speedBonus);
+        getAttribute(Attributes.ARMOR).setBaseValue(getAttribute(Attributes.ARMOR).getValue() + rarity.armorBonus + DinosExpansionConfig.ARMOR_PER_LEVEL.get() * (double) level);
     }
 
 
@@ -70,6 +79,7 @@ public abstract class Dinosaur extends MonsterEntity {
         this.dataManager.set(GENDER, nbt.getInt("gender"));
         this.maxNarcotic = nbt.getInt("maxNarcotic");
         this.maxHunger = nbt.getInt("maxHunger");
+        this.inventory.deserializeNBT(nbt.getCompound("inventory"));
         if (nbt.contains("owner"))
             this.dataManager.set(OWNER, Optional.of(nbt.getUniqueId("owner")));
         if (nbt.contains("knocked_out_player"))
@@ -86,6 +96,7 @@ public abstract class Dinosaur extends MonsterEntity {
         nbt.putInt("gender", this.dataManager.get(GENDER));
         nbt.putInt("maxNarcotic", this.maxNarcotic);
         nbt.putInt("maxHunger", this.maxHunger);
+        nbt.put("inventory", this.inventory.serializeNBT());
         this.dataManager.get(OWNER).ifPresent(uuid -> nbt.putUniqueId("owner", uuid));
         this.dataManager.get(KNOCKED_OUT).ifPresent(uuid -> nbt.putUniqueId("knocked_out_player", uuid));
     }
@@ -96,6 +107,7 @@ public abstract class Dinosaur extends MonsterEntity {
         double attackDamage = this.getAttribute(Attributes.ATTACK_DAMAGE).getValue();
         this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(health + DinosExpansionConfig.HEALTH_PER_LEVEL.get());
         this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(attackDamage + DinosExpansionConfig.ATTACK_DAMAGE_PER_LEVEL.get());
+        getAttribute(Attributes.ARMOR).setBaseValue(getAttribute(Attributes.ARMOR).getValue() + DinosExpansionConfig.ARMOR_PER_LEVEL.get());
     }
 
     public void increaseXp() {
@@ -192,32 +204,53 @@ public abstract class Dinosaur extends MonsterEntity {
         this.dataManager.set(BOOLS, BitUtils.setBit(4, bools, armor));
     }
 
-    public int getNarcoticValue(){
+    public int getNarcoticValue() {
         return this.dataManager.get(NARCOTIC_VALUE);
     }
 
-    public int getHungerValue(){
+    public int getHungerValue() {
         return this.dataManager.get(HUNGER_VALUE);
     }
 
-    protected void setHungerValue(int value){
+    protected void setHungerValue(int value) {
         this.dataManager.set(HUNGER_VALUE, Math.min(value, maxHunger));
     }
 
-    protected void addHungerValue(int add){
+    protected void addHungerValue(int add) {
         this.dataManager.set(HUNGER_VALUE, Math.min(getHungerValue() + add, maxHunger));
     }
 
-    protected void addNarcoticValue(int add){
+    protected void addNarcoticValue(int add) {
         this.dataManager.set(NARCOTIC_VALUE, Math.min(getNarcoticValue() + add, this.maxNarcotic));
     }
 
-    protected void setNarcoticValue(int value){
+    public ItemStackHandler getInventory() {
+        return inventory;
+    }
+
+    /**
+     * called when in the inventory of saddle and armor are changed
+     * @param slot - the slot where the change happened
+     */
+    protected void onContentsChanged(int slot){
+        if (slot == 0){
+            boolean saddle = !inventory.getStackInSlot(slot).isEmpty();
+            if (hasSaddle() != saddle)
+                setSaddle(saddle);
+        }else if (slot == 1){
+            boolean armor = !inventory.getStackInSlot(slot).isEmpty();
+            if (hasArmor() == armor)
+                setArmor(armor);
+        }
+    }
+
+    protected void setNarcoticValue(int value) {
         this.dataManager.set(NARCOTIC_VALUE, Math.min(value, maxNarcotic));
     }
 
     /**
      * this is called at the constructor to feine the initial rarity
+     *
      * @return
      */
     protected abstract Rarity getinitialRarity();
@@ -229,13 +262,13 @@ public abstract class Dinosaur extends MonsterEntity {
 
 
     public enum Rarity {
-        COMMON(new TranslationTextComponent("rarity.dinosexpansion.common"), 0, 0, 0),
-        UNCOMMON(new TranslationTextComponent("rarity.dinosexpansion.uncommon"), 4f, 1f, 0),
-        RARE(new TranslationTextComponent("rarity.dinosexpansion.rare"), 8, 2, .3f),
-        EPIC(new TranslationTextComponent("rarity.dinosexpansion.epic"), 16, 4, .3f),
-        LEGENDARY(new TranslationTextComponent("rarity.dinosexpansion.legendary"), 32, 16, .5f);
+        COMMON(new TranslationTextComponent("rarity." + DinosExpansion.MOD_ID + ".common"), 0, 0, 0, 0),
+        UNCOMMON(new TranslationTextComponent("rarity." + DinosExpansion.MOD_ID + ".uncommon"), 4f, 1f, 0, 2),
+        RARE(new TranslationTextComponent("rarity." + DinosExpansion.MOD_ID + ".rare"), 8, 2, .3f, 4),
+        EPIC(new TranslationTextComponent("rarity." + DinosExpansion.MOD_ID + ".epic"), 16, 4, .3f, 8),
+        LEGENDARY(new TranslationTextComponent("rarity." + DinosExpansion.MOD_ID + ".legendary"), 32, 16, .5f, 16);
 
-        private final float healthBonus, attackDamageBonus, speedBonus;
+        private final float healthBonus, attackDamageBonus, speedBonus, armorBonus;
         private final ITextComponent name;
 
         /**
@@ -244,11 +277,12 @@ public abstract class Dinosaur extends MonsterEntity {
          * @param attackDamageBonus will increase the attack Damage of the entity by that value
          * @param speedBonus        will just be faster when attacking a target
          */
-        Rarity(ITextComponent name, float healthBonus, float attackDamageBonus, float speedBonus) {
+        Rarity(ITextComponent name, float healthBonus, float attackDamageBonus, float speedBonus, float armorBonus) {
             this.healthBonus = healthBonus;
             this.attackDamageBonus = attackDamageBonus;
             this.speedBonus = speedBonus;
             this.name = name;
+            this.armorBonus = armorBonus;
         }
     }
 
