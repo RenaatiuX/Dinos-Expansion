@@ -3,6 +3,7 @@ package com.rena.dinosexpansion.common.entity;
 import com.rena.dinosexpansion.common.BitUtils;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.monster.MonsterEntity;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -24,6 +25,18 @@ public abstract class ChestedDinosaur extends Dinosaur{
 
     public boolean hasChest(){
         return BitUtils.getBit(5, this.dataManager.get(BOOLS)) > 0;
+    }
+
+    @Override
+    public void readAdditional(CompoundNBT nbt) {
+        super.readAdditional(nbt);
+        this.setChested(nbt.getBoolean("chested"));
+    }
+
+    @Override
+    public void writeAdditional(CompoundNBT nbt) {
+        super.writeAdditional(nbt);
+        nbt.putBoolean("chested", hasChest());
     }
 
     protected void setChested(boolean chested){
