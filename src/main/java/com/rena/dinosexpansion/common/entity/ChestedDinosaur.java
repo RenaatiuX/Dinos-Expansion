@@ -11,8 +11,6 @@ import net.minecraftforge.items.ItemStackHandler;
 
 public abstract class ChestedDinosaur extends Dinosaur{
 
-    public static final DataParameter<Boolean> HAS_CHEST = EntityDataManager.createKey(ChestedDinosaur.class, DataSerializers.BOOLEAN);
-
     public ChestedDinosaur(EntityType<? extends MonsterEntity> type, World world, int maxNarcotic, int maxHunger, int level) {
         super(type, world, maxNarcotic, maxHunger, level);
         this.inventory = new ItemStackHandler(3){
@@ -22,12 +20,6 @@ public abstract class ChestedDinosaur extends Dinosaur{
                 ChestedDinosaur.this.onContentsChanged(slot);
             }
         };
-    }
-
-    @Override
-    protected void registerData() {
-        super.registerData();
-        this.dataManager.set(HAS_CHEST, false);
     }
 
     public boolean hasChest(){
@@ -46,7 +38,7 @@ public abstract class ChestedDinosaur extends Dinosaur{
         if(slot == 2){
             boolean chested = !inventory.getStackInSlot(slot).isEmpty();
             if (hasChest() != chested)
-                this.dataManager.set(HAS_CHEST, chested);
+                setChested(chested);
         }
     }
 }
