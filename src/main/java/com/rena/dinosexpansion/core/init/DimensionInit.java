@@ -8,7 +8,7 @@ import net.minecraft.world.World;
 
 public class DimensionInit {
 
-    public static RegistryKey<World> DINO_DIMENSION = RegistryKey.getOrCreateKey(Registry.WORLD_KEY,
+    public static final RegistryKey<World> DINO_DIMENSION = RegistryKey.getOrCreateKey(Registry.WORLD_KEY,
             new ResourceLocation(DinosExpansion.MOD_ID, "dino_dimension"));
 
 }

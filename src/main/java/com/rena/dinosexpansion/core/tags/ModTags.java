@@ -6,7 +6,7 @@ import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.ITag;
 import net.minecraft.util.ResourceLocation;
 
-public class Tags {
+public class ModTags {
 
 
     //Entities

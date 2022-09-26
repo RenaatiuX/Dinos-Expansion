@@ -1,7 +1,7 @@
 package com.rena.dinosexpansion.core.datagen.server;
 
 import com.rena.dinosexpansion.DinosExpansion;
-import com.rena.dinosexpansion.core.tags.Tags;
+import com.rena.dinosexpansion.core.tags.ModTags;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.EntityTypeTagsProvider;
 import net.minecraft.entity.EntityType;
@@ -23,6 +23,6 @@ public class ModEntityTypeTagsProvider extends EntityTypeTagsProvider {
      * adds Entity types that cant be cough with the ball
      */
     private void addBlacklisted() {
-        getOrCreateBuilder(Tags.EntityTypes.NET_BLACKLISTED).add(EntityType.WITHER, EntityType.ENDER_DRAGON, EntityType.END_CRYSTAL).addTag(EntityTypeTags.ARROWS);
+        getOrCreateBuilder(ModTags.EntityTypes.NET_BLACKLISTED).add(EntityType.WITHER, EntityType.ENDER_DRAGON, EntityType.END_CRYSTAL).addTag(EntityTypeTags.ARROWS);
     }
 }

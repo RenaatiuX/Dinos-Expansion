@@ -1,6 +1,12 @@
 package com.rena.dinosexpansion;
 
 import com.rena.dinosexpansion.common.config.DinosExpansionConfig;
+import com.rena.dinosexpansion.core.init.BiomeInit;
+import com.rena.dinosexpansion.core.init.CriteriaTriggerInit;
+import com.rena.dinosexpansion.core.init.EntityInit;
+import com.rena.dinosexpansion.core.init.ItemInit;
+import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -30,19 +36,22 @@ public class DinosExpansion
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
 
         bus.addListener(this::setup);
-        // Register the doClientStuff method for modloading
-        bus.addListener(this::doClientStuff);
+        ItemInit.ITEMS.register(bus);
+        EntityInit.ENTITY_TYPES.register(bus);
+        BiomeInit.BIOMES.register(bus);
+
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
     }
 
-    private void setup(final FMLCommonSetupEvent event)
-    {
-
+    public static ResourceLocation modLoc(String name) {
+        return new ResourceLocation(MOD_ID, name);
     }
 
-    private void doClientStuff(final FMLClientSetupEvent event) {
-
+    private void setup(final FMLCommonSetupEvent event) {
+        event.enqueueWork(() ->  {
+            CriteriaTriggerInit.REGISTRY.forEach(trigger -> CriteriaTriggers.register(trigger));
+        });
     }
 }

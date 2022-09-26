@@ -3,10 +3,12 @@ package com.rena.dinosexpansion.common.entity;
 import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.common.BitUtils;
 import com.rena.dinosexpansion.common.config.DinosExpansionConfig;
+import com.rena.dinosexpansion.core.init.CriteriaTriggerInit;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -149,6 +151,9 @@ public abstract class Dinosaur extends MonsterEntity {
 
     public void setTamedBy(PlayerEntity player) {
         this.setTamed(true);
+        if (player instanceof ServerPlayerEntity){
+            CriteriaTriggerInit.TAME_DINOSAUR.trigger((ServerPlayerEntity) player, this);
+        }
         this.dataManager.set(OWNER, Optional.of(player.getUniqueID()));
     }
 
@@ -248,8 +253,14 @@ public abstract class Dinosaur extends MonsterEntity {
         this.dataManager.set(NARCOTIC_VALUE, Math.min(value, maxNarcotic));
     }
 
+    public boolean isOwner(PlayerEntity player){
+        if (this.dataManager.get(OWNER).isPresent())
+            return this.dataManager.get(OWNER).get().equals(player.getUniqueID());
+        return false;
+    }
+
     /**
-     * this is called at the constructor to feine the initial rarity
+     * this is called at the constructor to define the initial rarity
      *
      * @return
      */
