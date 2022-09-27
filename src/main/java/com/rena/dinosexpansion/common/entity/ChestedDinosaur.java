@@ -3,6 +3,7 @@ package com.rena.dinosexpansion.common.entity;
 import com.rena.dinosexpansion.common.BitUtils;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.monster.MonsterEntity;
+import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -12,8 +13,15 @@ import net.minecraftforge.items.ItemStackHandler;
 
 public abstract class ChestedDinosaur extends Dinosaur{
 
-    public ChestedDinosaur(EntityType<? extends MonsterEntity> type, World world, int maxNarcotic, int maxHunger, int level) {
-        super(type, world, maxNarcotic, maxHunger, level);
+    private ItemStackHandler chestInventory = new ItemStackHandler(27);
+
+    public ChestedDinosaur(EntityType<? extends TameableEntity> type, World world, DinosaurInfo info, int level, int chestInventorySize) {
+        this(type, world, info, level);
+        this.chestInventory = new ItemStackHandler(chestInventorySize);
+    }
+
+    public ChestedDinosaur(EntityType<? extends TameableEntity> type, World world, DinosaurInfo info, int level) {
+        super(type, world, info, level);
         this.inventory = new ItemStackHandler(3){
             @Override
             protected void onContentsChanged(int slot) {
@@ -31,12 +39,14 @@ public abstract class ChestedDinosaur extends Dinosaur{
     public void readAdditional(CompoundNBT nbt) {
         super.readAdditional(nbt);
         this.setChested(nbt.getBoolean("chested"));
+        this.chestInventory.deserializeNBT(nbt.getCompound("chestInventory"));
     }
 
     @Override
     public void writeAdditional(CompoundNBT nbt) {
         super.writeAdditional(nbt);
         nbt.putBoolean("chested", hasChest());
+        nbt.put("chestInventory", this.chestInventory.serializeNBT());
     }
 
     protected void setChested(boolean chested){
@@ -53,5 +63,9 @@ public abstract class ChestedDinosaur extends Dinosaur{
             if (hasChest() != chested)
                 setChested(chested);
         }
+    }
+
+    public ItemStackHandler getChestInventory() {
+        return chestInventory;
     }
 }

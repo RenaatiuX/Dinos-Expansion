@@ -3,18 +3,23 @@ package com.rena.dinosexpansion.common.entity;
 import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.common.BitUtils;
 import com.rena.dinosexpansion.common.config.DinosExpansionConfig;
+import com.rena.dinosexpansion.common.entity.ia.SleepRhythmGoal;
+import com.rena.dinosexpansion.common.entity.projectile.INarcoticProjectile;
 import com.rena.dinosexpansion.core.init.CriteriaTriggerInit;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.stats.Stats;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
@@ -24,7 +29,7 @@ import javax.annotation.Nullable;
 import java.util.Optional;
 import java.util.UUID;
 
-public abstract class Dinosaur extends MonsterEntity {
+public abstract class Dinosaur extends TameableEntity {
 
     public static final DataParameter<Integer> LEVEL = EntityDataManager.createKey(Dinosaur.class, DataSerializers.VARINT);
     public static final DataParameter<Integer> XP = EntityDataManager.createKey(Dinosaur.class, DataSerializers.VARINT);
@@ -32,13 +37,13 @@ public abstract class Dinosaur extends MonsterEntity {
     public static final DataParameter<Integer> RARITY = EntityDataManager.createKey(Dinosaur.class, DataSerializers.VARINT);
     public static final DataParameter<Integer> GENDER = EntityDataManager.createKey(Dinosaur.class, DataSerializers.VARINT);
     public static final DataParameter<Integer> NARCOTIC_VALUE = EntityDataManager.createKey(Dinosaur.class, DataSerializers.VARINT);
-    public static final DataParameter<Integer> HUNGER_VALUE = EntityDataManager.createKey(Dinosaur.class, DataSerializers.VARINT);
-    public static final DataParameter<Optional<UUID>> OWNER = EntityDataManager.createKey(Dinosaur.class, DataSerializers.OPTIONAL_UNIQUE_ID);
+    public static final DataParameter<Float> HUNGER_VALUE = EntityDataManager.createKey(Dinosaur.class, DataSerializers.FLOAT);
     public static final DataParameter<Optional<UUID>> KNOCKED_OUT = EntityDataManager.createKey(Dinosaur.class, DataSerializers.OPTIONAL_UNIQUE_ID);
 
 
     protected int maxNarcotic, maxHunger;
-    protected ItemStackHandler inventory = new ItemStackHandler(2){
+    protected DinosaurInfo info;
+    protected ItemStackHandler inventory = new ItemStackHandler(2) {
         @Override
         protected void onContentsChanged(int slot) {
             super.onContentsChanged(slot);
@@ -46,10 +51,10 @@ public abstract class Dinosaur extends MonsterEntity {
         }
     };
 
-    public Dinosaur(EntityType<? extends MonsterEntity> type, World world, int maxNarcotic, int maxHunger, int level) {
+    public Dinosaur(EntityType<? extends TameableEntity> type, World world, DinosaurInfo info, int level) {
         super(type, world);
-        this.maxNarcotic = (int) ((float) maxNarcotic * (float) DinosExpansionConfig.NARCOTIC_NEEDED_PERCENT.get() / 100f);
-        this.maxHunger = maxHunger;
+        this.maxNarcotic = (int) ((float) info.maxNarcotic * (float) DinosExpansionConfig.NARCOTIC_NEEDED_PERCENT.get() / 100f);
+        this.maxHunger = info.maxHunger;
         this.dataManager.set(RARITY, getinitialRarity().ordinal());
         this.dataManager.set(GENDER, getInitialGender().ordinal());
         this.dataManager.set(LEVEL, level);
@@ -58,8 +63,14 @@ public abstract class Dinosaur extends MonsterEntity {
         getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(getAttribute(Attributes.ATTACK_DAMAGE).getValue() + rarity.attackDamageBonus + DinosExpansionConfig.ATTACK_DAMAGE_PER_LEVEL.get() * (double) level);
         getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(getAttribute(Attributes.MOVEMENT_SPEED).getValue() + rarity.speedBonus);
         getAttribute(Attributes.ARMOR).setBaseValue(getAttribute(Attributes.ARMOR).getValue() + rarity.armorBonus + DinosExpansionConfig.ARMOR_PER_LEVEL.get() * (double) level);
+        updateInfo();
     }
 
+    @Override
+    protected void registerGoals() {
+        super.registerGoals();
+        this.goalSelector.addGoal(3, new SleepRhythmGoal(this, this.info.rhythm));
+    }
 
     @Override
     protected void registerData() {
@@ -69,7 +80,6 @@ public abstract class Dinosaur extends MonsterEntity {
         this.dataManager.set(BOOLS, 0);
         this.dataManager.set(RARITY, Rarity.COMMON.ordinal());
         this.dataManager.set(GENDER, Gender.MALE.ordinal());
-        this.dataManager.set(OWNER, Optional.empty());
         this.dataManager.set(KNOCKED_OUT, Optional.empty());
         this.dataManager.set(NARCOTIC_VALUE, 0);
     }
@@ -85,8 +95,6 @@ public abstract class Dinosaur extends MonsterEntity {
         this.maxNarcotic = nbt.getInt("maxNarcotic");
         this.maxHunger = nbt.getInt("maxHunger");
         this.inventory.deserializeNBT(nbt.getCompound("inventory"));
-        if (nbt.contains("owner"))
-            this.dataManager.set(OWNER, Optional.of(nbt.getUniqueId("owner")));
         if (nbt.contains("knocked_out_player"))
             this.dataManager.set(KNOCKED_OUT, Optional.of(nbt.getUniqueId("knocked_out_player")));
     }
@@ -102,7 +110,6 @@ public abstract class Dinosaur extends MonsterEntity {
         nbt.putInt("maxNarcotic", this.maxNarcotic);
         nbt.putInt("maxHunger", this.maxHunger);
         nbt.put("inventory", this.inventory.serializeNBT());
-        this.dataManager.get(OWNER).ifPresent(uuid -> nbt.putUniqueId("owner", uuid));
         this.dataManager.get(KNOCKED_OUT).ifPresent(uuid -> nbt.putUniqueId("knocked_out_player", uuid));
     }
 
@@ -121,6 +128,14 @@ public abstract class Dinosaur extends MonsterEntity {
             this.dataManager.set(XP, 0);
             increaseLevel();
         }
+    }
+
+    public boolean canEat(ItemStack stack) {
+        for (Item item : this.getFood()) {
+            if (item == stack.getItem())
+                return true;
+        }
+        return false;
     }
 
     /**
@@ -147,17 +162,9 @@ public abstract class Dinosaur extends MonsterEntity {
         return value > 0;
     }
 
-    public void setKnockedOutBy(PlayerEntity player) {
+    public void setKnockedOutBy(LivingEntity player) {
         this.setKnockout(true);
         this.dataManager.set(KNOCKED_OUT, Optional.of(player.getUniqueID()));
-    }
-
-    public void setTamedBy(PlayerEntity player) {
-        this.setTamed(true);
-        if (player instanceof ServerPlayerEntity){
-            CriteriaTriggerInit.TAME_DINOSAUR.trigger((ServerPlayerEntity) player, this);
-        }
-        this.dataManager.set(OWNER, Optional.of(player.getUniqueID()));
     }
 
     protected void setKnockout(boolean knockout) {
@@ -169,13 +176,6 @@ public abstract class Dinosaur extends MonsterEntity {
 
     public boolean isKnockout() {
         return BitUtils.getBit(1, this.dataManager.get(BOOLS)) > 0;
-    }
-
-    protected void setTamed(boolean tamed) {
-        if (tamed == isTamed())
-            return;
-        int bools = this.dataManager.get(BOOLS);
-        this.dataManager.set(BOOLS, BitUtils.setBit(2, bools, tamed));
     }
 
     public boolean isTamed() {
@@ -226,26 +226,63 @@ public abstract class Dinosaur extends MonsterEntity {
         return this.dataManager.get(NARCOTIC_VALUE);
     }
 
-    public int getHungerValue() {
+    public float getHungerValue() {
         return this.dataManager.get(HUNGER_VALUE);
     }
 
-    protected void setHungerValue(int value) {
+    protected void setHungerValue(float value) {
         this.dataManager.set(HUNGER_VALUE, Math.min(value, maxHunger));
     }
 
-    public void addHungerValue(Item food){
-        if (!food.isFood())
+    public void addHungerValue(ItemStack food, LivingEntity feeder) {
+        if (!food.isFood() || !isOwner(feeder))
             return;
-
+        if (feeder instanceof ServerPlayerEntity)
+            CriteriaTriggerInit.FEED_DINOSAUR.trigger((ServerPlayerEntity) feeder, food, this);
+        setHungerValue(getHungerValue() + food.getItem().getFood().getSaturation());
     }
 
     protected void addHungerValue(int add) {
         this.dataManager.set(HUNGER_VALUE, Math.min(getHungerValue() + add, maxHunger));
     }
 
-    protected void addNarcoticValue(int add) {
-        this.dataManager.set(NARCOTIC_VALUE, Math.min(getNarcoticValue() + add, this.maxNarcotic));
+    protected void addNarcoticValue(int add, LivingEntity cause) {
+        this.dataManager.set(NARCOTIC_VALUE, Math.max(0, Math.min(getNarcoticValue() + add, this.maxNarcotic)));
+        if (getNarcoticValue() >= this.maxNarcotic)
+            this.setKnockedOutBy(cause);
+        else if (getNarcoticValue() <= this.info.narcoticThreshold)
+            this.setKnockout(false);
+    }
+
+    @Override
+    protected void damageEntity(DamageSource source, float damageAmount) {
+        if (!this.isInvulnerableTo(source)) {
+            damageAmount = net.minecraftforge.common.ForgeHooks.onLivingHurt(this, source, damageAmount);
+            if (damageAmount <= 0) return;
+            damageAmount = this.applyArmorCalculations(source, damageAmount);
+            damageAmount = this.applyPotionDamageCalculations(source, damageAmount);
+            float f2 = Math.max(damageAmount - this.getAbsorptionAmount(), 0.0F);
+            this.setAbsorptionAmount(this.getAbsorptionAmount() - (damageAmount - f2));
+            float f = damageAmount - f2;
+            if (f > 0.0F && f < 3.4028235E37F && source.getTrueSource() instanceof ServerPlayerEntity) {
+                ((ServerPlayerEntity) source.getTrueSource()).addStat(Stats.DAMAGE_DEALT_ABSORBED, Math.round(f * 10.0F));
+            }
+
+            f2 = net.minecraftforge.common.ForgeHooks.onLivingDamage(this, source, f2);
+            if (f2 != 0.0F) {
+                float f1 = this.getHealth();
+                this.getCombatTracker().trackDamage(source, f1, f2);
+                this.setHealth(f1 - f2); // Forge: moved to fix MC-121048
+                this.setAbsorptionAmount(this.getAbsorptionAmount() - f2);
+                if (source.getImmediateSource() instanceof INarcoticProjectile && source.getTrueSource() instanceof LivingEntity)
+                    this.addNarcoticValue(((INarcoticProjectile) source.getTrueSource()).getNarcoticValue(), (LivingEntity) source.getTrueSource());
+            }
+        }
+    }
+
+    public DinosaurInfo getInfo() {
+        this.updateInfo();
+        return info;
     }
 
     public ItemStackHandler getInventory() {
@@ -254,35 +291,34 @@ public abstract class Dinosaur extends MonsterEntity {
 
     /**
      * called when in the inventory of saddle and armor are changed
+     *
      * @param slot - the slot where the change happened
      */
-    protected void onContentsChanged(int slot){
-        if (slot == 0){
+    protected void onContentsChanged(int slot) {
+        if (slot == 0) {
             boolean saddle = !inventory.getStackInSlot(slot).isEmpty();
             if (hasSaddle() != saddle)
                 setSaddle(saddle);
-        }else if (slot == 1){
+        } else if (slot == 1) {
             boolean armor = !inventory.getStackInSlot(slot).isEmpty();
             if (hasArmor() == armor)
                 setArmor(armor);
         }
     }
 
+    protected void updateInfo() {
+        this.info.health = getAttributeValue(Attributes.MAX_HEALTH);
+        this.info.armor = getAttributeValue(Attributes.ARMOR);
+        this.info.movementSpeed = getAttributeValue(Attributes.MOVEMENT_SPEED);
+        this.info.level = getLevel();
+        this.info.rarity = this.getRarity();
+        this.info.gender = this.getGender();
+    }
+
+    public abstract Iterable<Item> getFood();
+
     protected void setNarcoticValue(int value) {
         this.dataManager.set(NARCOTIC_VALUE, Math.min(value, maxNarcotic));
-    }
-
-    public boolean isOwner(PlayerEntity player){
-        if (this.dataManager.get(OWNER).isPresent())
-            return this.dataManager.get(OWNER).get().equals(player.getUniqueID());
-        return false;
-    }
-
-    protected UUID getOwnerId(){
-        Optional<UUID> id = this.dataManager.get(OWNER);
-        if (id.isPresent())
-            return id.get();
-        return null;
     }
 
     /**
@@ -331,6 +367,58 @@ public abstract class Dinosaur extends MonsterEntity {
 
         Gender(ITextComponent name) {
             this.name = name;
+        }
+    }
+
+    public static class DinosaurInfo {
+        private final int maxHunger, maxNarcotic, narcoticThreshold;
+        private Gender gender;
+        private Rarity rarity;
+        private final SleepRhythmGoal.SleepRhythm rhythm;
+        private int level;
+        private double health, armor, movementSpeed;
+
+        public DinosaurInfo(int maxHunger, int maxNarcotic, int narcoticThreshold, SleepRhythmGoal.SleepRhythm rhythm) {
+            this.maxHunger = maxHunger;
+            this.maxNarcotic = maxNarcotic;
+            this.narcoticThreshold = narcoticThreshold;
+            this.rhythm = rhythm;
+        }
+
+        public int getMaxHunger() {
+            return maxHunger;
+        }
+
+        public Gender getGender() {
+            return gender;
+        }
+
+        public int getMaxNarcotic() {
+            return maxNarcotic;
+        }
+
+        public int getNarcoticThreshold() {
+            return narcoticThreshold;
+        }
+
+        public Rarity getRarity() {
+            return rarity;
+        }
+
+        public double getMaxHealth() {
+            return health;
+        }
+
+        public double getArmor() {
+            return armor;
+        }
+
+        public double getMovementSpeed() {
+            return movementSpeed;
+        }
+
+        public int getLevel() {
+            return level;
         }
     }
 }

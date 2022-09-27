@@ -36,12 +36,15 @@ public class SleepRhythmGoal extends Goal {
 
     public enum SleepRhythm {
         DIURNAL(new TranslationTextComponent("sleep_rhythm." + DinosExpansion.MOD_ID + ".diurnal"), (day, dino) -> dino.setSleeping(!day)),
-        NOCTURNAL(new TranslationTextComponent("sleep_rhythm." + DinosExpansion.MOD_ID + ".nocturnal"), (day, dino) -> dino.setSleeping(day));
+        NOCTURNAL(new TranslationTextComponent("sleep_rhythm." + DinosExpansion.MOD_ID + ".nocturnal"), (day, dino) -> dino.setSleeping(day)),
+        NONE(new TranslationTextComponent("sleep_rhythm." + DinosExpansion.MOD_ID + ".none"), (day, dino) -> {});
+
 
         private final ITextComponent displayName;
         private final BiConsumer<Boolean, Dinosaur> action;
-        SleepRhythm(ITextComponent diusplayName, BiConsumer<Boolean, Dinosaur> action) {
-            this.displayName = diusplayName;
+
+        SleepRhythm(ITextComponent displayName, BiConsumer<Boolean, Dinosaur> action) {
+            this.displayName = displayName;
             this.action = action;
         }
 

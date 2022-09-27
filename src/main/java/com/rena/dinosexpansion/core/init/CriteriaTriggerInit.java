@@ -12,7 +12,6 @@ public class CriteriaTriggerInit {
 
     public static final List<ICriterionTrigger<?>> REGISTRY = new ArrayList<>();
 
-    public static final TameDinosaurCriterion TAME_DINOSAUR = register(new TameDinosaurCriterion());
     public static final FeedDinosaurCriterion FEED_DINOSAUR = register(new FeedDinosaurCriterion());
 
     public static final <P extends ICriterionInstance, T extends ICriterionTrigger<P>> T register(T criterion){
