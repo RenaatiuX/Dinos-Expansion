@@ -5,10 +5,12 @@ import com.rena.dinosexpansion.common.BitUtils;
 import com.rena.dinosexpansion.common.config.DinosExpansionConfig;
 import com.rena.dinosexpansion.core.init.CriteriaTriggerInit;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -18,6 +20,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.items.ItemStackHandler;
 
+import javax.annotation.Nullable;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -209,6 +212,16 @@ public abstract class Dinosaur extends MonsterEntity {
         this.dataManager.set(BOOLS, BitUtils.setBit(4, bools, armor));
     }
 
+    @Nullable
+    public LivingEntity getOwner() {
+        try {
+            UUID uuid = this.getOwnerId();
+            return uuid == null ? null : this.world.getPlayerByUuid(uuid);
+        } catch (IllegalArgumentException illegalargumentexception) {
+            return null;
+        }
+    }
+
     public int getNarcoticValue() {
         return this.dataManager.get(NARCOTIC_VALUE);
     }
@@ -219,6 +232,12 @@ public abstract class Dinosaur extends MonsterEntity {
 
     protected void setHungerValue(int value) {
         this.dataManager.set(HUNGER_VALUE, Math.min(value, maxHunger));
+    }
+
+    public void addHungerValue(Item food){
+        if (!food.isFood())
+            return;
+
     }
 
     protected void addHungerValue(int add) {
@@ -257,6 +276,13 @@ public abstract class Dinosaur extends MonsterEntity {
         if (this.dataManager.get(OWNER).isPresent())
             return this.dataManager.get(OWNER).get().equals(player.getUniqueID());
         return false;
+    }
+
+    protected UUID getOwnerId(){
+        Optional<UUID> id = this.dataManager.get(OWNER);
+        if (id.isPresent())
+            return id.get();
+        return null;
     }
 
     /**

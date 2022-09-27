@@ -9,6 +9,7 @@ import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -51,7 +52,7 @@ public class DinosExpansion
 
     private void setup(final FMLCommonSetupEvent event) {
         event.enqueueWork(() ->  {
-            CriteriaTriggerInit.REGISTRY.forEach(trigger -> CriteriaTriggers.register(trigger));
+            CriteriaTriggerInit.REGISTRY.forEach(CriteriaTriggers::register);
         });
     }
 }
