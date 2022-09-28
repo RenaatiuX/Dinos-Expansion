@@ -1,10 +1,7 @@
 package com.rena.dinosexpansion;
 
 import com.rena.dinosexpansion.common.config.DinosExpansionConfig;
-import com.rena.dinosexpansion.core.init.BiomeInit;
-import com.rena.dinosexpansion.core.init.CriteriaTriggerInit;
-import com.rena.dinosexpansion.core.init.EntityInit;
-import com.rena.dinosexpansion.core.init.ItemInit;
+import com.rena.dinosexpansion.core.init.*;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
@@ -40,6 +37,9 @@ public class DinosExpansion
         ItemInit.ITEMS.register(bus);
         EntityInit.ENTITY_TYPES.register(bus);
         BiomeInit.BIOMES.register(bus);
+        EnchantmentInit.VANILLA.register(bus);
+        EnchantmentInit.ENCHANTMENTS.register(bus);
+        EffectInit.EFFECTS.register(bus);
 
 
         // Register ourselves for server and other game events we are interested in
