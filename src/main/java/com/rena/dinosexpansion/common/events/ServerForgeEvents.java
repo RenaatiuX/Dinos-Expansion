@@ -13,6 +13,7 @@ import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.ProjectileImpactEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingHealEvent;
@@ -23,13 +24,13 @@ import net.minecraftforge.fml.common.Mod;
 public class ServerForgeEvents {
 
     @SubscribeEvent
-    public static final void playerTick(LivingEvent.LivingUpdateEvent event){
-        if (!event.getEntityLiving().world.isRemote()){
-            if (event.getEntityLiving().isPotionActive(EffectInit.PARLYSIS.get())) {
-                KeyBinding.unPressAllKeys();
-                event.getEntityLiving().getAttribute(Attributes.MOVEMENT_SPEED).applyNonPersistentModifier(new AttributeModifier(DinosExpansion.MOD_ID + ".place_keeper", -event.getEntityLiving().getAttributeValue(Attributes.MOVEMENT_SPEED), AttributeModifier.Operation.ADDITION));
-            }else{
-                event.getEntityLiving().getAttribute(Attributes.MOVEMENT_SPEED).removeModifier(new AttributeModifier(DinosExpansion.MOD_ID + ".place_keeper", -event.getEntityLiving().getAttributeValue(Attributes.MOVEMENT_SPEED), AttributeModifier.Operation.ADDITION));
+    public static final void playerTick(EntityEvent.CanUpdate event){
+        if (!event.getEntity().world.isRemote() && event.getEntity() instanceof LivingEntity){
+            LivingEntity living = (LivingEntity) event.getEntity();
+            if (living.isPotionActive(EffectInit.PARLYSIS.get())) {
+                event.setCanUpdate(false);
+            }if (living.isPotionActive(EffectInit.FREEZE.get()) && living.getActivePotionEffect(EffectInit.FREEZE.get()).getDuration() > 30) {
+                event.setCanUpdate(false);
             }
 
         }
@@ -46,6 +47,13 @@ public class ServerForgeEvents {
                         int amplifier = arrow.getPersistentData().getInt(DinosExpansion.MOD_ID + "." + EnchantmentInit.ELECTRIC_ENCHANTMENT.get().getRegistryName().getPath());
                         LivingEntity living = (LivingEntity) hit.getEntity();
                         living.addPotionEffect(new EffectInstance(EffectInit.PARLYSIS.get(), 20 * amplifier));
+                    }
+                }
+                if (arrow.getPersistentData().contains(DinosExpansion.MOD_ID + "." + EnchantmentInit.ICE_ENCHANTMENT.get().getRegistryName().getPath())) {
+                    if (hit.getEntity() instanceof LivingEntity){
+                        int amplifier = arrow.getPersistentData().getInt(DinosExpansion.MOD_ID + "." + EnchantmentInit.ICE_ENCHANTMENT.get().getRegistryName().getPath());
+                        LivingEntity living = (LivingEntity) hit.getEntity();
+                        living.addPotionEffect(new EffectInstance(EffectInit.FREEZE.get(), 20 * amplifier));
                     }
                 }
             }
