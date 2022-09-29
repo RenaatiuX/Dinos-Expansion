@@ -16,6 +16,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.gui.ForgeIngameGui;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -36,7 +37,16 @@ public class ClientForgeEvents {
 
 
     @SubscribeEvent
-    public static final void renderOverlay(RenderGameOverlayEvent.Post event){
+    public static final void mouseInput(InputEvent.RawMouseEvent event) {
+        if (Minecraft.getInstance() != null && Minecraft.getInstance().player != null) {
+            if (Minecraft.getInstance().player.isPotionActive(EffectInit.PARLYSIS.get()) && Minecraft.getInstance().player.getActivePotionEffect(EffectInit.PARLYSIS.get()).getDuration() > 40) {
+                event.setCanceled(true);
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static final void renderOverlay(RenderGameOverlayEvent.Post event) {
         //this ensures this is renderd with the potions overlay cause it caused by a potion
         if (event.getType() == RenderGameOverlayEvent.ElementType.POTION_ICONS) {
             //check if the player has the potion effect
@@ -50,9 +60,9 @@ public class ClientForgeEvents {
     }
 
     @SubscribeEvent
-    public static final void renderOverlayPre(RenderGameOverlayEvent.Pre event){
+    public static final void renderOverlayPre(RenderGameOverlayEvent.Pre event) {
         //this is just there to cancel vanilla heart rendering so i can render our own hearts
-        if (event.getType() == RenderGameOverlayEvent.ElementType.HEALTH){
+        if (event.getType() == RenderGameOverlayEvent.ElementType.HEALTH) {
             if (Minecraft.getInstance().player != null && Minecraft.getInstance().player.isPotionActive(EffectInit.FREEZE.get())) {
                 event.setCanceled(true);
                 MainWindow window = event.getWindow();
@@ -64,30 +74,25 @@ public class ClientForgeEvents {
     }
 
     //this is the copied vanilla code that draws the hearts
-    public static void renderHealth(int width, int height, MatrixStack mStack)
-    {
+    public static void renderHealth(int width, int height, MatrixStack mStack) {
         Minecraft mc = Minecraft.getInstance();
         mc.textureManager.bindTexture(FROZEN_HEARTS);
         int ticks = mc.ingameGUI.getTicks();
         RenderSystem.enableBlend();
 
-        PlayerEntity player = (PlayerEntity)mc.getRenderViewEntity();
+        PlayerEntity player = (PlayerEntity) mc.getRenderViewEntity();
         int health = MathHelper.ceil(player.getHealth());
-        boolean highlight = mc.ingameGUI.healthUpdateCounter > (long)ticks && (mc.ingameGUI.healthUpdateCounter - (long)ticks) / 3L %2L == 1L;
+        boolean highlight = mc.ingameGUI.healthUpdateCounter > (long) ticks && (mc.ingameGUI.healthUpdateCounter - (long) ticks) / 3L % 2L == 1L;
 
-        if (health <  mc.ingameGUI.playerHealth && player.hurtResistantTime > 0)
-        {
+        if (health < mc.ingameGUI.playerHealth && player.hurtResistantTime > 0) {
             mc.ingameGUI.lastSystemTime = Util.milliTime();
-            mc.ingameGUI.healthUpdateCounter = (long)(ticks + 20);
-        }
-        else if (health > mc.ingameGUI.playerHealth && player.hurtResistantTime > 0)
-        {
+            mc.ingameGUI.healthUpdateCounter = (long) (ticks + 20);
+        } else if (health > mc.ingameGUI.playerHealth && player.hurtResistantTime > 0) {
             mc.ingameGUI.lastSystemTime = Util.milliTime();
-            mc.ingameGUI.healthUpdateCounter = (long)(ticks + 10);
+            mc.ingameGUI.healthUpdateCounter = (long) (ticks + 10);
         }
 
-        if (Util.milliTime() -  mc.ingameGUI.lastSystemTime > 1000L)
-        {
+        if (Util.milliTime() - mc.ingameGUI.lastSystemTime > 1000L) {
             mc.ingameGUI.playerHealth = health;
             mc.ingameGUI.lastPlayerHealth = health;
             mc.ingameGUI.lastSystemTime = Util.milliTime();
@@ -97,13 +102,13 @@ public class ClientForgeEvents {
         int healthLast = mc.ingameGUI.lastPlayerHealth;
 
         ModifiableAttributeInstance attrMaxHealth = player.getAttribute(Attributes.MAX_HEALTH);
-        float healthMax = (float)attrMaxHealth.getValue();
+        float healthMax = (float) attrMaxHealth.getValue();
         float absorb = MathHelper.ceil(player.getAbsorptionAmount());
 
         int healthRows = MathHelper.ceil((healthMax + absorb) / 2.0F / 10.0F);
         int rowHeight = Math.max(10 - (healthRows - 2), 3);
 
-        rand.setSeed((long)(ticks * 312871l));
+        rand.setSeed((long) (ticks * 312871l));
 
         int left = width / 2 - 91;
         int top = height - ForgeIngameGui.left_height;
@@ -114,10 +119,9 @@ public class ClientForgeEvents {
         final int BACKGROUND = (highlight ? 43 : 34);
         float absorbRemaining = absorb;
 
-        for (int i = MathHelper.ceil((healthMax + absorb) / 2.0F) - 1; i >= 0; --i)
-        {
+        for (int i = MathHelper.ceil((healthMax + absorb) / 2.0F) - 1; i >= 0; --i) {
             //int b0 = (highlight ? 1 : 0);
-            int row = MathHelper.ceil((float)(i + 1) / 10.0F) - 1;
+            int row = MathHelper.ceil((float) (i + 1) / 10.0F) - 1;
             int x = left + i % 10 * 8;
             int y = top - row * rowHeight;
 
@@ -134,10 +138,9 @@ public class ClientForgeEvents {
 
             if (absorbRemaining > 0.0F) {
                 if (absorbRemaining == absorb && absorb % 2.0F == 1.0F) {
-                    mc.ingameGUI.blit(mStack, x , y, 170, 0, 9, 9); //17
+                    mc.ingameGUI.blit(mStack, x, y, 170, 0, 9, 9); //17
                     absorbRemaining -= 1.0F;
-                }
-                else {
+                } else {
                     mc.ingameGUI.blit(mStack, x, y, 161, 0, 9, 9); //16
                     absorbRemaining -= 2.0F;
                 }
@@ -150,11 +153,10 @@ public class ClientForgeEvents {
         }
 
         RenderSystem.disableBlend();
-        mc.getProfiler().endSection();
     }
 
-    private static void blit(MatrixStack matrixStack, int x, int y, int uOffset, int vOffset, int uWidth, int vHeight){
-        AbstractGui.blit(matrixStack, x, y, 1, (float)uOffset, (float)vOffset, uWidth, vHeight, 256, 256);
+    private static void blit(MatrixStack matrixStack, int x, int y, int uOffset, int vOffset, int uWidth, int vHeight) {
+        AbstractGui.blit(matrixStack, x, y, 1, (float) uOffset, (float) vOffset, uWidth, vHeight, 256, 256);
     }
 
 

@@ -24,7 +24,7 @@ public class DinosExpansion
     public static final String MOD_ID = "dinosexpansion";
 
     // Directly reference a log4j logger.
-    private static final Logger LOGGER = LogManager.getLogger();
+    public static final Logger LOGGER = LogManager.getLogger();
 
     public DinosExpansion() {
 
@@ -35,6 +35,7 @@ public class DinosExpansion
 
         bus.addListener(this::setup);
         ItemInit.ITEMS.register(bus);
+        BlockInit.BLOCKS.register(bus);
         EntityInit.ENTITY_TYPES.register(bus);
         BiomeInit.BIOMES.register(bus);
         EnchantmentInit.VANILLA.register(bus);
