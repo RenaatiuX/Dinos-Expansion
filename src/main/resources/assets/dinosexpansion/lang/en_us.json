@@ -8,6 +8,11 @@
   "block.dinosexpansion.mossy_futuristic_block_1": "Unknown Block",
   "block.dinosexpansion.mossy_futuristic_block_2": "Unknown Block",
 
+  "_comment": "Items",
+  "item.dinosexpansion.compound_arrow": "Compound Arrow",
+  "item.dinosexpansion.compound_bow": "Compound Bow",
+  "item.dinosexpansion.tranquillizer_arrow": "Tranquillizer Arrow",
+
   "_comment": "Effects",
   "effect.dinosexpansion.freeze": "Freeze"
 }

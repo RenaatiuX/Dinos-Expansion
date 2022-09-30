@@ -2,6 +2,7 @@ package com.rena.dinosexpansion.core.datagen.server;
 
 import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.core.init.BlockInit;
+import com.rena.dinosexpansion.core.init.ItemInit;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.data.LanguageProvider;
 
@@ -18,5 +19,8 @@ public class MOdLanguageProvider extends LanguageProvider {
         add(BlockInit.FUTURISTIC_BLOCK_ON2.get(), "Unknown Block");
         add(BlockInit.MOSSY_FUTURISTIC_BLOCK1.get(), "Unknown Block");
         add(BlockInit.MOSSY_FUTURISTIC_BLOCK2.get(), "Unknown Block");
+        add(ItemInit.COMPOUND_ARROW.get(), "Compound Arrow");
+        add(ItemInit.COMPOUND_BOW.get(), "Compound Bow");
+        add(ItemInit.TRANQUILLIZER_ARROW.get(), "Tranquillizer Arrow");
     }
 }

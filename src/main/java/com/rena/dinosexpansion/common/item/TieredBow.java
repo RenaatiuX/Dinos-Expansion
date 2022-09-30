@@ -24,7 +24,7 @@ public class TieredBow extends BowItem {
     private final BowTier tier;
 
     public TieredBow(Properties properties, BowTier tier) {
-        super(properties);
+        super(properties.maxDamage(tier.getDurability()));
         this.tier = tier;
     }
 
@@ -126,6 +126,7 @@ public class TieredBow extends BowItem {
         double getDamageAddition();
         double getSpeedAddition();
         int getEnchantability();
+        int getDurability();
 
         default Predicate<ItemStack> getAmmo(){
             return BowItem.ARROWS;

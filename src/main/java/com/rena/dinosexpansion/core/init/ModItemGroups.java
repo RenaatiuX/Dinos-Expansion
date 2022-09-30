@@ -10,6 +10,7 @@ import java.util.function.Supplier;
 public class ModItemGroups extends ItemGroup {
 
     public static final ItemGroup BLOCKS = new ModItemGroups("blocks", () -> BlockInit.FUTURISTIC_BLOCK_ON1.get());
+    public static final ItemGroup WEAPONS = new ModItemGroups("weapons", () -> ItemInit.COMPOUND_BOW.get());
 
 
     private final Supplier<IItemProvider> icon;

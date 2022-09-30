@@ -11,7 +11,6 @@ import net.minecraft.client.settings.PointOfView;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.potion.Effects;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.MathHelper;
@@ -21,12 +20,8 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.gui.ForgeIngameGui;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import org.apache.logging.log4j.LogManager;
-import software.bernie.shadowed.eliotlash.mclib.math.functions.limit.Min;
 
 import java.util.Random;
-
-import static net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType.HEALTH;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE, modid = DinosExpansion.MOD_ID, value = Dist.CLIENT)
 public class ClientForgeEvents {
@@ -39,7 +34,7 @@ public class ClientForgeEvents {
     @SubscribeEvent
     public static final void mouseInput(InputEvent.RawMouseEvent event) {
         if (Minecraft.getInstance() != null && Minecraft.getInstance().player != null) {
-            if (Minecraft.getInstance().player.isPotionActive(EffectInit.PARLYSIS.get()) && Minecraft.getInstance().player.getActivePotionEffect(EffectInit.PARLYSIS.get()).getDuration() > 40) {
+            if (Minecraft.getInstance().player.isPotionActive(EffectInit.PARALYSIS.get()) && Minecraft.getInstance().player.getActivePotionEffect(EffectInit.PARALYSIS.get()).getDuration() > 40) {
                 event.setCanceled(true);
             }
         }

@@ -31,7 +31,7 @@ public class ServerForgeEvents {
     @SubscribeEvent
     public static final void playerTick(LivingEvent.LivingUpdateEvent event) {
         LivingEntity living = event.getEntityLiving();
-        if (living.isPotionActive(EffectInit.PARLYSIS.get())) {
+        if (living.isPotionActive(EffectInit.PARALYSIS.get())) {
             setStunned(living, event);
             living.baseTick();
         }
@@ -60,7 +60,7 @@ public class ServerForgeEvents {
                     if (hit.getEntity() instanceof LivingEntity) {
                         int amplifier = arrow.getPersistentData().getInt(DinosExpansion.MOD_ID + "." + EnchantmentInit.ELECTRIC_ENCHANTMENT.get().getRegistryName().getPath());
                         LivingEntity living = (LivingEntity) hit.getEntity();
-                        living.addPotionEffect(new EffectInstance(EffectInit.PARLYSIS.get(), 20 * amplifier));
+                        living.addPotionEffect(new EffectInstance(EffectInit.PARALYSIS.get(), 20 * amplifier));
                     }
                 }
                 if (arrow.getPersistentData().contains(DinosExpansion.MOD_ID + "." + EnchantmentInit.ICE_ENCHANTMENT.get().getRegistryName().getPath())) {
@@ -81,4 +81,5 @@ public class ServerForgeEvents {
                 event.setAmount(0);
         }
     }
+
 }
