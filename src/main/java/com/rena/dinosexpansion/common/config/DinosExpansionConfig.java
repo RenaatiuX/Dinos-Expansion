@@ -5,8 +5,14 @@ import net.minecraftforge.common.ForgeConfigSpec;
 public class DinosExpansionConfig {
 
     public static final ForgeConfigSpec.Builder BUILDER;
-    public static final ForgeConfigSpec.IntValue MAX_LEVEL, MAX_XP, XP_INCREASE, NARCOTIC_NEEDED_PERCENT;
+    public static final ForgeConfigSpec.IntValue MAX_LEVEL, MAX_XP, XP_INCREASE, NARCOTIC_NEEDED_PERCENT,
+            WOOD_BOOMERANG_RANGE, WOOD_BOOMERANG_DAMAGE, IRON_BOOMERANG_RANGE, IRON_BOOMERANG_DAMAGE,
+            DIAMOND_BOOMERANG_RANGE, DIAMOND_BOOMERANG_DAMAGE;
     public static final ForgeConfigSpec.DoubleValue ATTACK_DAMAGE_PER_LEVEL, HEALTH_PER_LEVEL, ARMOR_PER_LEVEL;
+    public static final ForgeConfigSpec.BooleanValue TURN_AROUND_ITEM, TURN_AROUND_MOB, TURN_AROUND_BUTTON,
+            WOOD_BOOMERANG_FOLLOWS, BREAKS_TORCHES, BREAKS_FLOWERS, BREAKS_GRASS, BREAKS_TALLGRASS,
+            ACTIVATES_LEVERS, ACTIVATES_BUTTONS, ACTIVATES_PRESSURES_PLATES, ACTIVATES_TRIP_WIRE,
+            IRON_BOOMERANG_FOLLOWS, DIAMOND_BOOMERANG_FOLLOWS;
 
     static {
         ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
@@ -29,6 +35,34 @@ public class DinosExpansionConfig {
         NARCOTIC_NEEDED_PERCENT = builder.defineInRange("narcotic_percent", 100, 0, 100);
         builder.pop();
         BUILDER =  builder;
+    }
+
+    static {
+        ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
+
+        builder.push("Boomerang");
+        TURN_AROUND_ITEM = builder.comment("Comes back to the player after picking up items.").define("turnAroundItem", true);
+        TURN_AROUND_MOB = builder.comment("Comes back to the player after hitting a mob.").define("turnAroundMob", true);
+        TURN_AROUND_BUTTON = builder.comment("Comes back to player after hitting a button.").define("turnAroundButton", true);
+        WOOD_BOOMERANG_RANGE = builder.comment("The maximum range of travel before returning to player.").defineInRange("WoodBoomerangRange", 30, 1, 200);
+        WOOD_BOOMERANG_DAMAGE = builder.comment("The amount of damage that is done when hitting any living entity.").defineInRange("WoodBoomerangDamage", 5, 1, 500);
+        WOOD_BOOMERANG_FOLLOWS = builder.comment("The Wood Boomerang will follow your mouse till it hits it's range limit.").define("WoodBoomerangFollows", true);
+        IRON_BOOMERANG_RANGE = builder.comment("The maximum range of travel before returning to player.").defineInRange("IronBoomerangRange", 30, 1, 200);
+        IRON_BOOMERANG_DAMAGE = builder.comment("The amount of damage that is done when hitting any living entity.").defineInRange("IronBoomerangDamage", 5, 1, 500);
+        IRON_BOOMERANG_FOLLOWS = builder.comment("The Iron Boomerang will follow your mouse till it hits it's range limit.").define("IronBoomerangFollows", true);
+        DIAMOND_BOOMERANG_RANGE = builder.comment("The maximum range of travel before returning to player.").defineInRange("DiamondBoomerangRange", 30, 1, 200);
+        DIAMOND_BOOMERANG_DAMAGE = builder.comment("The amount of damage that is done when hitting any living entity.").defineInRange("DiamondBoomerangDamage", 5, 1, 500);
+        DIAMOND_BOOMERANG_FOLLOWS = builder.comment("The Diamond Boomerang will follow your mouse till it hits it's range limit.").define("DiamondBoomerangFollows", true);
+        BREAKS_TORCHES = builder.comment("Can boomerang break torches.").define("breaksTorches", true);
+        BREAKS_FLOWERS = builder.comment("Can boomerang break Flowers.").define("breaksFlowers", true);
+        BREAKS_GRASS = builder.comment("Can boomerang break Grass.").define("breaksGrass", true);
+        BREAKS_TALLGRASS = builder.comment("Can boomerang break Tall Grass.").define("breaksTallGrass", true);
+        ACTIVATES_LEVERS = builder.comment("Can boomerang switch levers on and off.").define("activatesLevers", true);
+        ACTIVATES_BUTTONS = builder.comment("Can boomerang activate/push buttons.").define("activatesButtons", true);
+        ACTIVATES_PRESSURES_PLATES = builder.comment("Can boomerang activate regular and lightweight pressure plates.").define("activatesPressurePlates", true);
+        ACTIVATES_TRIP_WIRE = builder.comment("Can boomerang activate/trigger tripwire(s).").define("activatesTripWire", true);
+        builder.pop();
+
     }
 
 
