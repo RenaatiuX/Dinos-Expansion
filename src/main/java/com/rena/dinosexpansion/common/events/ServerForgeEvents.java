@@ -23,13 +23,13 @@ import net.minecraftforge.fml.common.Mod;
 public class ServerForgeEvents {
 
     @SubscribeEvent
-    public static final void potionAddEvent(PotionEvent.PotionAddedEvent event){
+    public static void potionAddEvent(PotionEvent.PotionAddedEvent event){
         if (event.getPotionEffect().getPotion() == EffectInit.FREEZE.get())
             event.getEntityLiving().attackEntityFrom(DamageSourceInit.FREEZE, 4 << event.getPotionEffect().getAmplifier());
     }
 
     @SubscribeEvent
-    public static final void playerTick(LivingEvent.LivingUpdateEvent event) {
+    public static void playerTick(LivingEvent.LivingUpdateEvent event) {
         LivingEntity living = event.getEntityLiving();
         if (living.isPotionActive(EffectInit.PARLYSIS.get())) {
             setStunned(living, event);
@@ -51,7 +51,7 @@ public class ServerForgeEvents {
     }
 
     @SubscribeEvent
-    public static final void onProjectileHit(ProjectileImpactEvent.Arrow event) {
+    public static void onProjectileHit(ProjectileImpactEvent.Arrow event) {
         if (!event.getArrow().world.isRemote()) {
             AbstractArrowEntity arrow = event.getArrow();
             if (event.getRayTraceResult().getType() == RayTraceResult.Type.ENTITY) {
@@ -75,7 +75,7 @@ public class ServerForgeEvents {
     }
 
     @SubscribeEvent
-    public static final void onEntityHeal(LivingHealEvent event) {
+    public static void onEntityHeal(LivingHealEvent event) {
         if (!event.getEntityLiving().world.isRemote()) {
             if (event.getEntityLiving().isPotionActive(EffectInit.FREEZE.get()))
                 event.setAmount(0);
