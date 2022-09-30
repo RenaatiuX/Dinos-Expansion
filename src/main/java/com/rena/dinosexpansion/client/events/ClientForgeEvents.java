@@ -6,22 +6,29 @@ import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.core.init.EffectInit;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.settings.PointOfView;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.potion.Effects;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.gui.ForgeIngameGui;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import org.apache.logging.log4j.LogManager;
+import software.bernie.shadowed.eliotlash.mclib.math.functions.limit.Min;
 
 import java.util.Random;
+
+import static net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType.HEALTH;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE, modid = DinosExpansion.MOD_ID, value = Dist.CLIENT)
 public class ClientForgeEvents {
@@ -32,17 +39,17 @@ public class ClientForgeEvents {
 
 
     @SubscribeEvent
-    public static final void mouseInput(InputEvent.RawMouseEvent event) {
-        if (Minecraft.getInstance() != null && Minecraft.getInstance().player != null) {
-            if (Minecraft.getInstance().player.isPotionActive(EffectInit.PARALYSIS.get()) && Minecraft.getInstance().player.getActivePotionEffect(EffectInit.PARALYSIS.get()).getDuration() > 40) {
+    public static void mouseInput(InputEvent.RawMouseEvent event) {
+        if (Minecraft.getInstance().player != null) {
+            if (Minecraft.getInstance().player.isPotionActive(EffectInit.PARLYSIS.get()) && Minecraft.getInstance().player.getActivePotionEffect(EffectInit.PARLYSIS.get()).getDuration() > 40) {
                 event.setCanceled(true);
             }
         }
     }
 
     @SubscribeEvent
-    public static final void renderOverlay(RenderGameOverlayEvent.Post event) {
-        //this ensures this is renderd with the potions overlay cause it caused by a potion
+    public static void renderOverlay(RenderGameOverlayEvent.Post event) {
+        //this ensures this is render with the potions overlay cause it caused by a potion
         if (event.getType() == RenderGameOverlayEvent.ElementType.POTION_ICONS) {
             //check if the player has the potion effect
             if (Minecraft.getInstance().player != null && Minecraft.getInstance().player.isPotionActive(EffectInit.FREEZE.get()) && Minecraft.getInstance().gameSettings.getPointOfView() == PointOfView.FIRST_PERSON) {
@@ -55,8 +62,8 @@ public class ClientForgeEvents {
     }
 
     @SubscribeEvent
-    public static final void renderOverlayPre(RenderGameOverlayEvent.Pre event) {
-        //this is just there to cancel vanilla heart rendering so i can render our own hearts
+    public static void renderOverlayPre(RenderGameOverlayEvent.Pre event) {
+        //this is just there to cancel vanilla heart rendering, so I can render our own hearts
         if (event.getType() == RenderGameOverlayEvent.ElementType.HEALTH) {
             if (Minecraft.getInstance().player != null && Minecraft.getInstance().player.isPotionActive(EffectInit.FREEZE.get())) {
                 event.setCanceled(true);
@@ -65,7 +72,6 @@ public class ClientForgeEvents {
                 Minecraft.getInstance().textureManager.bindTexture(ForgeIngameGui.GUI_ICONS_LOCATION);
             }
         }
-
     }
 
     //this is the copied vanilla code that draws the hearts
@@ -103,7 +109,7 @@ public class ClientForgeEvents {
         int healthRows = MathHelper.ceil((healthMax + absorb) / 2.0F / 10.0F);
         int rowHeight = Math.max(10 - (healthRows - 2), 3);
 
-        rand.setSeed((long) (ticks * 312871l));
+        rand.setSeed(ticks * 312871L);
 
         int left = width / 2 - 91;
         int top = height - ForgeIngameGui.left_height;
@@ -149,10 +155,4 @@ public class ClientForgeEvents {
 
         RenderSystem.disableBlend();
     }
-
-    private static void blit(MatrixStack matrixStack, int x, int y, int uOffset, int vOffset, int uWidth, int vHeight) {
-        AbstractGui.blit(matrixStack, x, y, 1, (float) uOffset, (float) vOffset, uWidth, vHeight, 256, 256);
-    }
-
-
 }

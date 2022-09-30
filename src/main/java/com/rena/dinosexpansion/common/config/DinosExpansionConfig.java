@@ -16,7 +16,6 @@ public class DinosExpansionConfig {
 
     static {
         ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
-        /**Dinos*/
         builder.push("Dinos");
         builder.comment("this defines the max Level Dios can have");
         MAX_LEVEL = builder.defineInRange("max_level", 50, 10, 450);
@@ -34,11 +33,6 @@ public class DinosExpansionConfig {
         builder.comment("this defines how many narcitocs u will need to make the dinosaur go knocked out.", "this value is in percent so u can just modify it for all entities");
         NARCOTIC_NEEDED_PERCENT = builder.defineInRange("narcotic_percent", 100, 0, 100);
         builder.pop();
-        BUILDER =  builder;
-    }
-
-    static {
-        ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
 
         builder.push("Boomerang");
         TURN_AROUND_ITEM = builder.comment("Comes back to the player after picking up items.").define("turnAroundItem", true);
@@ -63,7 +57,7 @@ public class DinosExpansionConfig {
         ACTIVATES_TRIP_WIRE = builder.comment("Can boomerang activate/trigger tripwire(s).").define("activatesTripWire", true);
         builder.pop();
 
+        BUILDER =  builder;
     }
-
 
 }
