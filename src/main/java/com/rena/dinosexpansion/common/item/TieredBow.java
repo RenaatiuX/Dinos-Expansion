@@ -7,10 +7,7 @@ import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.item.ArrowItem;
-import net.minecraft.item.BowItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.SoundCategory;
@@ -41,7 +38,7 @@ public class TieredBow extends BowItem {
 
             if (!itemstack.isEmpty() || flag) {
                 if (itemstack.isEmpty()) {
-                    itemstack = new ItemStack(Items.ARROW);
+                    itemstack = new ItemStack(tier.creativeDefault());
                 }
 
                 float f = getArrowVelocity(i);
@@ -49,6 +46,9 @@ public class TieredBow extends BowItem {
                 if (!((double)f < 0.1D)) {
                     boolean flag1 = playerentity.abilities.isCreativeMode || (itemstack.getItem() instanceof ArrowItem && ((ArrowItem)itemstack.getItem()).isInfinite(itemstack, stack, playerentity));
                     if (!worldIn.isRemote) {
+                        if (!(itemstack.getItem() instanceof ArrowItem)){
+                            DinosExpansion.LOGGER.warn("either the creativeDefault or the ammo Predicate contains items which r not ArrowItems");
+                        }
                         ArrowItem arrowitem = (ArrowItem)(itemstack.getItem() instanceof ArrowItem ? itemstack.getItem() : Items.ARROW);
                         AbstractArrowEntity abstractarrowentity = arrowitem.createArrow(worldIn, itemstack, playerentity);
                         abstractarrowentity = customArrow(abstractarrowentity);
@@ -76,6 +76,10 @@ public class TieredBow extends BowItem {
                         if (EnchantmentHelper.getEnchantmentLevel(EnchantmentInit.ELECTRIC_ENCHANTMENT.get(), stack) > 0){
                             CompoundNBT nbt = abstractarrowentity.getPersistentData();
                             nbt.putInt(DinosExpansion.MOD_ID + "." + EnchantmentInit.ELECTRIC_ENCHANTMENT.get().getRegistryName().getPath(), EnchantmentHelper.getEnchantmentLevel(EnchantmentInit.ELECTRIC_ENCHANTMENT.get(), stack));
+                        }
+                        if (EnchantmentHelper.getEnchantmentLevel(EnchantmentInit.ICE_ENCHANTMENT.get(), stack) > 0){
+                            CompoundNBT nbt = abstractarrowentity.getPersistentData();
+                            nbt.putInt(DinosExpansion.MOD_ID + "." + EnchantmentInit.ICE_ENCHANTMENT.get().getRegistryName().getPath(), EnchantmentHelper.getEnchantmentLevel(EnchantmentInit.ICE_ENCHANTMENT.get(), stack));
                         }
 
                         stack.damageItem(1, playerentity, (player) -> {
@@ -128,8 +132,20 @@ public class TieredBow extends BowItem {
         int getEnchantability();
         int getDurability();
 
+        /**
+         * here will be determined which itemStack will be considered as Arrow for this Bow
+         * @return
+         */
         default Predicate<ItemStack> getAmmo(){
             return BowItem.ARROWS;
+        }
+
+        /**
+         * this will be the arrow that will be shot if the creative player has no matching arrows in its inventory
+         * @return - the arrowItem
+         */
+        default Item creativeDefault(){
+            return Items.ARROW;
         }
 
 

@@ -14,5 +14,11 @@
   "item.dinosexpansion.tranquillizer_arrow": "Tranquillizer Arrow",
 
   "_comment": "Effects",
-  "effect.dinosexpansion.freeze": "Freeze"
+  "effect.dinosexpansion.freeze": "Freeze",
+
+  "_comment": "DamageSources",
+  "death.attack.freeze": "%s Freezed to Death",
+
+  "_comment": "Enchantments"
+
 }

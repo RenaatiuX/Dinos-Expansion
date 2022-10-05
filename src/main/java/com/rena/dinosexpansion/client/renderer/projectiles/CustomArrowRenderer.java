@@ -39,9 +39,7 @@ public class CustomArrowRenderer extends ArrowRenderer<CustomArrow> {
 
     @Override
     public ResourceLocation getEntityTexture(CustomArrow entity) {
-        DinosExpansion.LOGGER.info(entity.getArrowStack().getItem().getRegistryName());
         ResourceLocation texture = TEXTURE_REGISTRY.get().getOrDefault(entity.getArrowStack().getItem(), TippedArrowRenderer.RES_ARROW);
-        DinosExpansion.LOGGER.info(texture.toString());
         return texture;
     }
 }

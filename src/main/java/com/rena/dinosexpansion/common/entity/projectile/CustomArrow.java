@@ -1,8 +1,6 @@
 package com.rena.dinosexpansion.common.entity.projectile;
 
-import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.core.init.EntityInit;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
@@ -31,7 +29,9 @@ public class CustomArrow extends AbstractArrowEntity implements INarcoticProject
 
     public CustomArrow( double x, double y, double z, World world, ItemStack arrow, int narcoticValue) {
         super(EntityInit.CUSTOM_ARROW.get(), x, y, z, world);
-        this.dataManager.set(ARROW_STACK, arrow);
+        ItemStack countArrow = arrow.copy();
+        countArrow.setCount(1);
+        this.dataManager.set(ARROW_STACK, countArrow);
         this.narcoticValue = narcoticValue;
     }
 
@@ -41,7 +41,9 @@ public class CustomArrow extends AbstractArrowEntity implements INarcoticProject
 
     public CustomArrow(LivingEntity shooter, World world, ItemStack arrow, int narcoticValue) {
         super(EntityInit.CUSTOM_ARROW.get(), shooter, world);
-        this.dataManager.set(ARROW_STACK, arrow);
+        ItemStack countArrow = arrow.copy();
+        countArrow.setCount(1);
+        this.dataManager.set(ARROW_STACK, countArrow);
         this.narcoticValue = narcoticValue;
     }
 
