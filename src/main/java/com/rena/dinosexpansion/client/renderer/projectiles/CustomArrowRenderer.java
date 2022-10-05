@@ -30,17 +30,16 @@ public class CustomArrowRenderer extends ArrowRenderer<CustomArrow> {
 
     public CustomArrowRenderer(EntityRendererManager p_i46179_1_) {
         super(p_i46179_1_);
-        DinosExpansion.LOGGER.info("this has to be long so i can later see it maybe ill ad another few words so i can see it even better");
     }
 
     @Override
     public void render(CustomArrow p_225623_1_, float p_225623_2_, float p_225623_3_, MatrixStack p_225623_4_, IRenderTypeBuffer p_225623_5_, int p_225623_6_) {
         super.render(p_225623_1_, p_225623_2_, p_225623_3_, p_225623_4_, p_225623_5_, p_225623_6_);
-        DinosExpansion.LOGGER.info("rendered");
     }
 
     @Override
     public ResourceLocation getEntityTexture(CustomArrow entity) {
+        DinosExpansion.LOGGER.info(entity.getArrowStack().getItem().getRegistryName());
         ResourceLocation texture = TEXTURE_REGISTRY.get().getOrDefault(entity.getArrowStack().getItem(), TippedArrowRenderer.RES_ARROW);
         DinosExpansion.LOGGER.info(texture.toString());
         return texture;
