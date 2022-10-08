@@ -1,0 +1,102 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.unknown",
+				"texture_width": 256,
+				"texture_height": 256,
+				"visible_bounds_width": 6,
+				"visible_bounds_height": 3.5,
+				"visible_bounds_offset": [0, 1.25, 0]
+			},
+			"bones": [
+				{
+					"name": "Parapuzosia",
+					"pivot": [0, 0, 20]
+				},
+				{
+					"name": "Shell",
+					"parent": "Parapuzosia",
+					"pivot": [0, 0, 20],
+					"cubes": [
+						{"origin": [-9.5, 0, 4], "size": [19, 32, 32], "uv": [0, 0]},
+						{"origin": [-6.5, 11.975, -11.975], "size": [13, 4, 16], "uv": [70, 0]}
+					]
+				},
+				{
+					"name": "Head",
+					"parent": "Shell",
+					"pivot": [0, 11, 4],
+					"cubes": [
+						{"origin": [-5.5, 0, -6.975], "size": [11, 12, 11], "uv": [108, 35]}
+					]
+				},
+				{
+					"name": "Tentacle1",
+					"parent": "Head",
+					"pivot": [4, 11, -7],
+					"cubes": [
+						{"origin": [2.5, 9, -38.975], "size": [3, 3, 32], "uv": [108, 0]}
+					]
+				},
+				{
+					"name": "Tentacle2",
+					"parent": "Head",
+					"pivot": [-4, 11, -7],
+					"cubes": [
+						{"origin": [-5.5, 9, -38.975], "size": [3, 3, 32], "uv": [76, 70]}
+					]
+				},
+				{
+					"name": "Tentacle3",
+					"parent": "Head",
+					"pivot": [0, 11, -7],
+					"cubes": [
+						{"origin": [-1.5, 9, -38.975], "size": [3, 3, 32], "uv": [38, 67]}
+					]
+				},
+				{
+					"name": "Tentacle4",
+					"parent": "Head",
+					"pivot": [4, 7, -7],
+					"cubes": [
+						{"origin": [2.5, 5, -38.975], "size": [3, 3, 32], "uv": [76, 105]}
+					]
+				},
+				{
+					"name": "Tentacle5",
+					"parent": "Head",
+					"pivot": [-4, 7, -7],
+					"cubes": [
+						{"origin": [2.5, 1, -38.975], "size": [3, 3, 32], "uv": [38, 102]}
+					]
+				},
+				{
+					"name": "Tentacle6",
+					"parent": "Head",
+					"pivot": [-4, 3, -7],
+					"cubes": [
+						{"origin": [-1.5, 1, -38.975], "size": [3, 3, 32], "uv": [0, 64]}
+					]
+				},
+				{
+					"name": "Tentacle7",
+					"parent": "Head",
+					"pivot": [0, 3, -7],
+					"cubes": [
+						{"origin": [-5.5, 1, -38.975], "size": [3, 3, 32], "uv": [70, 32]}
+					]
+				},
+				{
+					"name": "Tentacle8",
+					"parent": "Head",
+					"pivot": [4, 3, -7],
+					"cubes": [
+						{"origin": [-5.5, 5, -38.975], "size": [3, 3, 32], "uv": [0, 99]}
+					]
+				}
+			]
+		}
+	]
+}

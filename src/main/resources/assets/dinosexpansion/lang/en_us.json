@@ -12,7 +12,21 @@
   "item.dinosexpansion.compound_arrow": "Compound Arrow",
   "item.dinosexpansion.compound_bow": "Compound Bow",
   "item.dinosexpansion.tranquillizer_arrow": "Tranquillizer Arrow",
+  "item.dinosexpansion.parapuzosia_spawn_egg": "Parapuzosia Spawn Egg",
 
   "_comment": "Effects",
-  "effect.dinosexpansion.freeze": "Freeze"
+  "effect.dinosexpansion.freeze": "Freeze",
+
+  "_comment": "DamageSources",
+  "death.attack.freeze": "%s Freezed to Death",
+
+  "_comment": "Enchantments",
+  "enchantment.dinosexpansion.electric": "Electrified",
+  "enchantment.dinosexpansion.iced_arrow": "Iced",
+
+  "_comment": "ItemGroups",
+  "itemGroup.dinosexpansion.blocks": "Blocks",
+  "itemGroup.dinosexpansion.spawn_eggs": "Spawn Eggs",
+  "itemGroup.dinosexpansion.weapons": "Weapons"
+
 }

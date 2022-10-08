@@ -1,23 +1,26 @@
 package com.rena.dinosexpansion.common.entity.projectile;
 
-import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.core.init.EntityInit;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.IPacket;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.network.NetworkHooks;
 
 public class CustomArrow extends AbstractArrowEntity implements INarcoticProjectile{
 
+    public static final DataParameter<ItemStack> ARROW_STACK = EntityDataManager.createKey(CustomArrow.class, DataSerializers.ITEMSTACK);
+
     private final int narcoticValue;
-    private final ItemStack arrowStack;
 
     public CustomArrow(EntityType<CustomArrow> type, World world) {
         super(type, world);
         narcoticValue = 0;
-        arrowStack = ItemStack.EMPTY;
     }
 
     public CustomArrow( double x, double y, double z, World world, ItemStack arrow) {
@@ -26,7 +29,9 @@ public class CustomArrow extends AbstractArrowEntity implements INarcoticProject
 
     public CustomArrow( double x, double y, double z, World world, ItemStack arrow, int narcoticValue) {
         super(EntityInit.CUSTOM_ARROW.get(), x, y, z, world);
-        this.arrowStack = arrow;
+        ItemStack countArrow = arrow.copy();
+        countArrow.setCount(1);
+        this.dataManager.set(ARROW_STACK, countArrow);
         this.narcoticValue = narcoticValue;
     }
 
@@ -36,18 +41,30 @@ public class CustomArrow extends AbstractArrowEntity implements INarcoticProject
 
     public CustomArrow(LivingEntity shooter, World world, ItemStack arrow, int narcoticValue) {
         super(EntityInit.CUSTOM_ARROW.get(), shooter, world);
-        this.arrowStack = arrow;
+        ItemStack countArrow = arrow.copy();
+        countArrow.setCount(1);
+        this.dataManager.set(ARROW_STACK, countArrow);
         this.narcoticValue = narcoticValue;
-        DinosExpansion.LOGGER.info("entity constructed");
+    }
+
+    @Override
+    protected void registerData() {
+        super.registerData();
+        this.dataManager.register(ARROW_STACK, ItemStack.EMPTY);
     }
 
     @Override
     public ItemStack getArrowStack() {
-        return this.arrowStack.copy();
+        return this.dataManager.get(ARROW_STACK);
     }
 
     @Override
     public int getNarcoticValue() {
         return this.narcoticValue;
+    }
+
+    @Override
+    public IPacket<?> createSpawnPacket() {
+        return NetworkHooks.getEntitySpawningPacket(this);
     }
 }
