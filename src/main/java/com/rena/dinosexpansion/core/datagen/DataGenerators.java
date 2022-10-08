@@ -39,7 +39,7 @@ public class DataGenerators {
     private static void gatherServerData(DataGenerator gen, ExistingFileHelper helper) {
         gen.addProvider(new ModEntityTypeTagsProvider(gen, helper));
         gen.addProvider(new ModLootTableProvider(gen));
-        gen.addProvider(new MOdLanguageProvider(gen));
+        gen.addProvider(new ModLanguageProvider(gen));
         ModBlockTagsProvider blockTags = new ModBlockTagsProvider(gen, helper);
         gen.addProvider(blockTags);
         gen.addProvider(new ModItemTagsProvider(gen, blockTags, helper));

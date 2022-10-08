@@ -21,12 +21,20 @@ public class ModItemModelsProvider extends ItemModelProvider {
     protected void registerModels() {
         simple(ItemInit.COMPOUND_ARROW.get());
         simple(ItemInit.TRANQUILLIZER_ARROW.get());
+        spawnEgg(ItemInit.PARAPUZOSIA_SPAWN_EGG.get());
     }
 
-    private void simple(Item... items){
-       for (Item item : items){
-           String name = item.getRegistryName().getPath();
-           getBuilder(name).parent(generated).texture("layer0", "item/" + name);
-       }
+    private void simple(Item... items) {
+        for (Item item : items) {
+            String name = item.getRegistryName().getPath();
+            getBuilder(name).parent(generated).texture("layer0", "item/" + name);
+        }
+    }
+
+    private void spawnEgg(Item... items) {
+        for (Item item : items) {
+            String name = item.getRegistryName().getPath();
+            getBuilder(name).parent(spawnEgg);
+        }
     }
 }

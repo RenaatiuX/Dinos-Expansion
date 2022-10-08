@@ -33,11 +33,6 @@ public class CustomArrowRenderer extends ArrowRenderer<CustomArrow> {
     }
 
     @Override
-    public void render(CustomArrow p_225623_1_, float p_225623_2_, float p_225623_3_, MatrixStack p_225623_4_, IRenderTypeBuffer p_225623_5_, int p_225623_6_) {
-        super.render(p_225623_1_, p_225623_2_, p_225623_3_, p_225623_4_, p_225623_5_, p_225623_6_);
-    }
-
-    @Override
     public ResourceLocation getEntityTexture(CustomArrow entity) {
         ResourceLocation texture = TEXTURE_REGISTRY.get().getOrDefault(entity.getArrowStack().getItem(), TippedArrowRenderer.RES_ARROW);
         return texture;

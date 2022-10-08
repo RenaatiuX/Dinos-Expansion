@@ -4,11 +4,13 @@ import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.core.init.BlockInit;
 import com.rena.dinosexpansion.core.init.EnchantmentInit;
 import com.rena.dinosexpansion.core.init.ItemInit;
+import com.rena.dinosexpansion.core.init.ModItemGroups;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.item.ItemGroup;
 import net.minecraftforge.common.data.LanguageProvider;
 
-public class MOdLanguageProvider extends LanguageProvider {
-    public MOdLanguageProvider(DataGenerator gen) {
+public class ModLanguageProvider extends LanguageProvider {
+    public ModLanguageProvider(DataGenerator gen) {
         super(gen, DinosExpansion.MOD_ID, "en_us");
     }
 
@@ -25,5 +27,13 @@ public class MOdLanguageProvider extends LanguageProvider {
         add(ItemInit.TRANQUILLIZER_ARROW.get(), "Tranquillizer Arrow");
         add(EnchantmentInit.ICE_ENCHANTMENT.get(), "Iced");
         add(EnchantmentInit.ELECTRIC_ENCHANTMENT.get(), "Electrified");
+        add(ModItemGroups.SPAWN_EGGS, "Spawn Eggs");
+        add(ModItemGroups.WEAPONS, "Weapons");
+        add(ModItemGroups.BLOCKS, "Blocks");
+        add(ItemInit.PARAPUZOSIA_SPAWN_EGG.get(), "Parapuzosia Spawn Egg");
+    }
+
+    public void add(ItemGroup group, String key){
+        add(group.getGroupName().getString(), key);
     }
 }

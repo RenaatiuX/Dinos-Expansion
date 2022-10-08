@@ -2,23 +2,24 @@ package com.rena.dinosexpansion.common.entity.ia.movecontroller;
 
 import com.rena.dinosexpansion.common.entity.Dinosaur;
 import com.rena.dinosexpansion.common.entity.ia.helper.ISemiAquatic;
+import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.controller.MovementController;
 import net.minecraft.util.math.MathHelper;
 
 public class AquaticMoveController extends MovementController {
 
-    private final Dinosaur dinosaur;
+    private final CreatureEntity dinosaur;
     private float speedMulti;
     private float yawLimit = 3.0F;
 
-    public AquaticMoveController(Dinosaur dinosaur, float speedMulti) {
+    public AquaticMoveController(CreatureEntity dinosaur, float speedMulti) {
         super(dinosaur);
         this.dinosaur = dinosaur;
         this.speedMulti = speedMulti;
     }
 
-    public AquaticMoveController(Dinosaur dinosaur, float speedMulti, float yawLimit) {
+    public AquaticMoveController(CreatureEntity dinosaur, float speedMulti, float yawLimit) {
         super(dinosaur);
         this.dinosaur = dinosaur;
         this.yawLimit = yawLimit;

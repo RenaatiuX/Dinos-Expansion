@@ -11,6 +11,7 @@ public class ModItemGroups extends ItemGroup {
 
     public static final ItemGroup BLOCKS = new ModItemGroups("blocks", () -> BlockInit.FUTURISTIC_BLOCK_ON1.get());
     public static final ItemGroup WEAPONS = new ModItemGroups("weapons", () -> ItemInit.COMPOUND_BOW.get());
+    public static final ItemGroup SPAWN_EGGS = new ModItemGroups("spawn_eggs", () -> ItemInit.PARAPUZOSIA_SPAWN_EGG.get());
 
 
     private final Supplier<IItemProvider> icon;
