@@ -19,7 +19,7 @@ import static net.minecraft.item.ItemModelsProperties.registerProperty;
 public class ClientSetupEvents {
 
     @SubscribeEvent
-    public static final void clientSetup(FMLClientSetupEvent event){
+    public static void clientSetup(FMLClientSetupEvent event){
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.CUSTOM_ARROW.get(), CustomArrowRenderer::new);
 
         registerProperty(ItemInit.COMPOUND_BOW.get(), new ResourceLocation("pull"), (p_239429_0_, p_239429_1_, p_239429_2_) -> {

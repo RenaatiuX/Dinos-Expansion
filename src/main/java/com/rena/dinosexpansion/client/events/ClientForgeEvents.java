@@ -41,7 +41,7 @@ public class ClientForgeEvents {
     @SubscribeEvent
     public static void mouseInput(InputEvent.RawMouseEvent event) {
         if (Minecraft.getInstance().player != null) {
-            if (Minecraft.getInstance().player.isPotionActive(EffectInit.PARLYSIS.get()) && Minecraft.getInstance().player.getActivePotionEffect(EffectInit.PARLYSIS.get()).getDuration() > 40) {
+            if (Minecraft.getInstance().player.isPotionActive(EffectInit.PARALYSIS.get()) && Minecraft.getInstance().player.getActivePotionEffect(EffectInit.PARALYSIS.get()).getDuration() > 40) {
                 event.setCanceled(true);
             }
         }

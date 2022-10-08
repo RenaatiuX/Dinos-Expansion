@@ -347,7 +347,7 @@ public abstract class Dinosaur extends TameableEntity {
         /**
          * @param name              the display name that will be displayed
          * @param healthBonus       increase max Health by that value
-         * @param attackDamageBonus will increase the attack Damage of the entity by that value
+         * @param attackDamageBonus will increase the attack Damage to the entity by that value
          * @param speedBonus        will just be faster when attacking a target
          */
         Rarity(ITextComponent name, float healthBonus, float attackDamageBonus, float speedBonus, float armorBonus) {

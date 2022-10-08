@@ -1,6 +1,6 @@
 package com.rena.dinosexpansion.common.item;
 
-import com.rena.dinosexpansion.DinosExpansion;
+import com.rena.dinosexpansion.common.entity.projectile.CustomArrow;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.item.ArrowItem;
@@ -20,6 +20,6 @@ public class CustomArrowItem extends ArrowItem {
     }
 
     public interface IArrowEntitySupplier{
-        AbstractArrowEntity getArrow(World worldIn, ItemStack stack, LivingEntity shooter);
+        CustomArrow getArrow(World worldIn, ItemStack stack, LivingEntity shooter);
     }
 }
