@@ -21,5 +21,5 @@ public class ItemInit {
 
 
     public static final RegistryObject<ForgeSpawnEggItem> PARAPUZOSIA_SPAWN_EGG = ITEMS.register("parapuzosia_spawn_egg", () -> new ForgeSpawnEggItem(() -> EntityInit.PARAPUZOSIA.get(), 0x392829,0x77554c, new Item.Properties().group(ModItemGroups.SPAWN_EGGS)));
-
+    public static final RegistryObject<ForgeSpawnEggItem> EOSQUALODON_SPAWN_EGG = ITEMS.register("eosqualodon_spawn_egg", () -> new ForgeSpawnEggItem(() -> EntityInit.EOSQUALODON.get(), 2239024, 16777215, new Item.Properties().group(ModItemGroups.SPAWN_EGGS)));
 }

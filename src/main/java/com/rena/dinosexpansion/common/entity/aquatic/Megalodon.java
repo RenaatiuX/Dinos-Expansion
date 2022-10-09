@@ -1,4 +1,4 @@
 package com.rena.dinosexpansion.common.entity.aquatic;
 
-public class MegalodonEntity {
+public class Megalodon {
 }

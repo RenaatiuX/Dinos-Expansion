@@ -31,6 +31,7 @@ public class ModLanguageProvider extends LanguageProvider {
         add(ModItemGroups.WEAPONS, "Weapons");
         add(ModItemGroups.BLOCKS, "Blocks");
         add(ItemInit.PARAPUZOSIA_SPAWN_EGG.get(), "Parapuzosia Spawn Egg");
+        add(ItemInit.EOSQUALODON_SPAWN_EGG.get(), "Eosqualodon Spawn Egg");
     }
 
     public void add(ItemGroup group, String key){
