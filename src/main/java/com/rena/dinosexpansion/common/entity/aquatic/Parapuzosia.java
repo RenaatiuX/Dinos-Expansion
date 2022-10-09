@@ -210,7 +210,7 @@ public class Parapuzosia extends WaterMobEntity implements IAnimatable {
             Parapuzosia parapuzosia = Parapuzosia.this;
             LivingEntity target = Parapuzosia.this.getAttackTarget();
             double dist = parapuzosia.getDistance(target);
-            if (parapuzosia.canEntityBeSeen(target) && dist < 1.0F) {
+            if (parapuzosia.canEntityBeSeen(target) && dist < 3.0F) {
                 parapuzosia.setGrabbing(true);
             } else {
                 Vector3d moveBodyTo = target.getPositionVec();
