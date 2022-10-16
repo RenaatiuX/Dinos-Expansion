@@ -15,33 +15,15 @@ import java.util.function.Supplier;
 public class CropBaseBlock extends CropsBlock {
 
     private final Supplier<Item> seedItemSupplier;
-    private final VoxelShape[] SHAPES;
 
     public CropBaseBlock(Properties builder, Supplier<Item> seedItemSupplier) {
         super(builder);
         this.seedItemSupplier = seedItemSupplier;
-        SHAPES = null;
-    }
-
-    public CropBaseBlock(Properties properties, Supplier<Item> seedItemSupplier, VoxelShape[] voxelShapes) {
-        super(properties);
-        this.seedItemSupplier = seedItemSupplier;
-        this.SHAPES = voxelShapes;
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-        return SHAPES != null ? SHAPES[state.get(this.getAgeProperty())] : super.getShape(state, worldIn, pos, context);
-    }
-
-    @Override
-    public int getAge(BlockState state) {
-        return super.getAge(state);
-    }
-
-    @Override
-    protected boolean isValidGround(BlockState state, IBlockReader worldIn, BlockPos pos) {
-        return state.getBlock() instanceof FarmlandBlock;
+    public BlockState withAge(int age) {
+        return this.getDefaultState().with(this.getAgeProperty(), age);
     }
 
     @Override

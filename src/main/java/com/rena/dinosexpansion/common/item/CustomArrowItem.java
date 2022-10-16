@@ -9,8 +9,8 @@ import net.minecraft.world.World;
 
 public class CustomArrowItem extends ArrowItem {
     private final IArrowEntitySupplier arrowSupplier;
-    public CustomArrowItem(Properties p_i48531_1_, IArrowEntitySupplier arrowSupplier) {
-        super(p_i48531_1_);
+    public CustomArrowItem(Properties builder, IArrowEntitySupplier arrowSupplier) {
+        super(builder);
         this.arrowSupplier = arrowSupplier;
     }
 
