@@ -39,8 +39,7 @@ public class Eosqualodon extends WaterMobEntity implements IAnimatable {
 
     private static final DataParameter<Boolean> ATTACK = EntityDataManager.createKey(Eosqualodon.class, DataSerializers.BOOLEAN);
 
-
-    public static final AttributeModifierMap.MutableAttribute createAttributes(){
+    public static AttributeModifierMap.MutableAttribute createAttributes(){
         return MobEntity.func_233666_p_().createMutableAttribute(Attributes.MAX_HEALTH, 30f)
                 .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.3f)
                 .createMutableAttribute(Attributes.ATTACK_DAMAGE, 5.0f);
