@@ -24,8 +24,16 @@ import java.util.function.Supplier;
 public class CustomArrowRenderer extends ArrowRenderer<CustomArrow> {
 
     public static final Supplier<Map<Item, ResourceLocation>> TEXTURE_REGISTRY = () -> Util.make(Maps.newHashMap(), map -> {
-        map.put(ItemInit.COMPOUND_ARROW.get(),projectile("compound_arrow_model.png"));
-        map.put(ItemInit.TRANQUILLIZER_ARROW.get(), projectile("tranquilizer_arrow_model.png"));
+        map.put(ItemInit.COMPOUND_ARROW.get(),projectile("compound_arrow.png"));
+        map.put(ItemInit.TRANQUILLIZER_ARROW.get(), projectile("tranquilizer_arrow.png"));
+        map.put(ItemInit.BONE_ARROW.get(), projectile("bone_arrow.png"));
+        map.put(ItemInit.DIAMOND_ARROW.get(), projectile("diamond_arrow.png"));
+        map.put(ItemInit.EMERALD_ARROW.get(), projectile("emerald_arrow.png"));
+        map.put(ItemInit.GOLD_ARROW.get(), projectile("golden_arrow.png"));
+        map.put(ItemInit.IORN_ARROW.get(), projectile("iron_arrow.png"));
+        map.put(ItemInit.STONE_ARROW.get(), projectile("stone_arrow.png"));
+        map.put(ItemInit.WOODEN_ARROW.get(), projectile("wooden_arrow.png"));
+        map.put(ItemInit.NETHERITE_ARROW.get(), projectile("netherite_arrow.png"));
     });
 
     public CustomArrowRenderer(EntityRendererManager p_i46179_1_) {
