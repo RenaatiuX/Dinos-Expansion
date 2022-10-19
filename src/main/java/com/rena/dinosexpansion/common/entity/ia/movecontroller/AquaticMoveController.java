@@ -1,6 +1,5 @@
 package com.rena.dinosexpansion.common.entity.ia.movecontroller;
 
-import com.rena.dinosexpansion.common.entity.Dinosaur;
 import com.rena.dinosexpansion.common.entity.ia.helper.ISemiAquatic;
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.ai.attributes.Attributes;

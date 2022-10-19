@@ -6,15 +6,14 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class BoomerangTiers extends Item {
+public class TieredBoomerang extends Item {
 
     private final BoomerangSupplier supplier;
 
-    public BoomerangTiers(Properties properties, BoomerangSupplier supplier) {
+    public TieredBoomerang(Properties properties, BoomerangSupplier supplier) {
         super(properties);
         this.supplier = supplier;
     }
@@ -33,7 +32,7 @@ public class BoomerangTiers extends Item {
 
         return ActionResult.resultSuccess(playerIn.getHeldItem(handIn));    }
 
-    public static interface BoomerangSupplier{
-        public BoomerangEntity createBoomerang(World world, PlayerEntity player, ItemStack stack, Hand hand);
+    public interface BoomerangSupplier{
+        BoomerangEntity createBoomerang(World world, PlayerEntity player, ItemStack stack, Hand hand);
     }
 }

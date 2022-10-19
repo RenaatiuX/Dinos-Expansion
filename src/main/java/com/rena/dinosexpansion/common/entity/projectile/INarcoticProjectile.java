@@ -9,5 +9,5 @@ public interface INarcoticProjectile {
      *
      * @return the narcotic value that will be added to the dino when hit
      */
-    public int getNarcoticValue();
+    int getNarcoticValue();
 }

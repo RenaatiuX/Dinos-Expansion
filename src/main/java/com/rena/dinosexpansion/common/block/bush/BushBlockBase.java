@@ -51,16 +51,9 @@ public class BushBlockBase extends BushBlock implements IGrowable {
         return AGE;
     }
 
-    public BlockState withAge(int age) {
-        return getDefaultState().with(getAgeProperty(), age);
-    }
-
-    public BlockState withMaxAge() {
-        return getDefaultState().with(getAgeProperty(), getMaxAge());
-    }
-
-    public boolean isMaxAge(BlockState state) {
-        return state.get(getAgeProperty()) == getMaxAge();
+    @Override
+    public boolean ticksRandomly(BlockState state) {
+        return state.get(AGE) < 3;
     }
 
     public int getMaxAge() {
@@ -69,7 +62,7 @@ public class BushBlockBase extends BushBlock implements IGrowable {
 
     @Override
     public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
-        int i = state.get(AGE);
+        int i = state.get(getAgeProperty());
         boolean flag = i == 3;
         if (!flag && player.getHeldItem(handIn).getItem() == Items.BONE_MEAL) {
             return ActionResultType.PASS;
@@ -77,7 +70,7 @@ public class BushBlockBase extends BushBlock implements IGrowable {
             int j = 1 + worldIn.rand.nextInt(2);
             spawnAsEntity(worldIn, pos, new ItemStack(itemSupplier.get(), j + (flag ? 1 : 0)));
             worldIn.playSound(null, pos, SoundEvents.ITEM_SWEET_BERRIES_PICK_FROM_BUSH, SoundCategory.BLOCKS, 1.0F, 0.8F + worldIn.rand.nextFloat() * 0.4F);
-            worldIn.setBlockState(pos, state.with(AGE, 1), 2);
+            worldIn.setBlockState(pos, state.with(getAgeProperty(), 1), 2);
             return ActionResultType.func_233537_a_(worldIn.isRemote);
         } else {
             return super.onBlockActivated(state, worldIn, pos, player, handIn, hit);

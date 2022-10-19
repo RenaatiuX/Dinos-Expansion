@@ -37,7 +37,9 @@ public class Eosqualodon extends WaterMobEntity implements IAnimatable {
     public static final String CONTROLLER_NAME = "controller";
     public static final String ATTACK_CONTROLLER_NAME = "attack_controller";
 
-    public static final AttributeModifierMap.MutableAttribute createAttributes(){
+    private static final DataParameter<Boolean> ATTACK = EntityDataManager.createKey(Eosqualodon.class, DataSerializers.BOOLEAN);
+
+    public static AttributeModifierMap.MutableAttribute createAttributes(){
         return MobEntity.func_233666_p_().createMutableAttribute(Attributes.MAX_HEALTH, 30f)
                 .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.3f)
                 .createMutableAttribute(Attributes.ATTACK_DAMAGE, 5.0f);
@@ -58,7 +60,7 @@ public class Eosqualodon extends WaterMobEntity implements IAnimatable {
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(1, new FindWaterGoal(this));
-        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.2D, false));
+        this.goalSelector.addGoal(2, new EosqualodonAttackGoal(this, 1.2D, false));
         this.goalSelector.addGoal(4, new RandomSwimmingGoal(this, 0.8F, 3));
         this.goalSelector.addGoal(5, new LookRandomlyGoal(this));
         this.goalSelector.addGoal(6, new FollowBoatGoal(this));
@@ -115,6 +117,20 @@ public class Eosqualodon extends WaterMobEntity implements IAnimatable {
         }
     }
 
+    @Override
+    protected void registerData() {
+        super.registerData();
+        this.dataManager.register(ATTACK, false);
+    }
+
+    public boolean isAttacking() {
+        return this.dataManager.get(ATTACK);
+    }
+
+    public void setAttacking(boolean running) {
+        this.dataManager.set(ATTACK, running);
+    }
+
     private PlayState predicate(AnimationEvent<Eosqualodon> event){
         if (isInWater()){
             event.getController().setAnimation(new AnimationBuilder().addAnimation("eosqualodon_swim", true));
@@ -124,12 +140,11 @@ public class Eosqualodon extends WaterMobEntity implements IAnimatable {
     }
 
     private PlayState attackPredicate(AnimationEvent<Eosqualodon> event){
-        if(this.isSwingInProgress && event.getController().getAnimationState().equals(AnimationState.Stopped)) {
-            event.getController().markNeedsReload();
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("eosqualodon_bite", false));
-            this.isSwingInProgress = false;
+        if(isAttacking()) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("eosqualodon_bite", true));
+            return PlayState.CONTINUE;
         }
-        return PlayState.CONTINUE;
+        return PlayState.STOP;
     }
 
     @Override
@@ -142,4 +157,49 @@ public class Eosqualodon extends WaterMobEntity implements IAnimatable {
     public AnimationFactory getFactory() {
         return this.factory;
     }
+
+    private class EosqualodonAttackGoal extends MeleeAttackGoal {
+
+        private Eosqualodon eosqualodon;
+        private int animCounter = 0;
+        private int animTickLength = 20;
+
+        public EosqualodonAttackGoal(CreatureEntity creature, double speedIn, boolean useLongMemory) {
+            super(creature, speedIn, useLongMemory);
+            eosqualodon = ((Eosqualodon) creature);
+        }
+
+        @Override
+        protected void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr) {
+            if (distToEnemySqr <= this.getAttackReachSqr(enemy) && this.getSwingCooldown() <= 0) {
+                if(eosqualodon != null) {
+                    eosqualodon.setAttacking(true);
+                    animCounter = 0;
+                }
+            }
+
+            super.checkAndPerformAttack(enemy, distToEnemySqr);
+        }
+
+        @Override
+        public void tick() {
+            super.tick();
+            if(eosqualodon.isAttacking()) {
+                animCounter++;
+
+                if(animCounter >= animTickLength) {
+                    animCounter = 0;
+                    eosqualodon.setAttacking(false);
+                }
+            }
+        }
+
+        @Override
+        public void resetTask() {
+            animCounter = 0;
+            eosqualodon.setAttacking(false);
+            super.resetTask();
+        }
+    }
+
 }
