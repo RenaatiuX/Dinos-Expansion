@@ -27,22 +27,31 @@ public class CustomArrow extends AbstractArrowEntity implements INarcoticProject
         this(x, y, z, world, arrow, 0);
     }
 
-    public CustomArrow( double x, double y, double z, World world, ItemStack arrow, int narcoticValue) {
+    public CustomArrow( double x, double y, double z, World world, ItemStack arrow, double damage) {
+      this(x, y, z, world, arrow, damage, 0);
+    }
+    public CustomArrow(double x, double y, double z, World world, ItemStack arrow, double damage, int narcoticValue) {
         super(EntityInit.CUSTOM_ARROW.get(), x, y, z, world);
         ItemStack countArrow = arrow.copy();
         countArrow.setCount(1);
+        setDamage(damage);
         this.dataManager.set(ARROW_STACK, countArrow);
         this.narcoticValue = narcoticValue;
     }
 
     public CustomArrow(LivingEntity shooter, World world, ItemStack arrow) {
-        this(shooter, world, arrow, 0);
+        this(shooter, world, arrow, 2.0, 0);
     }
 
-    public CustomArrow(LivingEntity shooter, World world, ItemStack arrow, int narcoticValue) {
+    public CustomArrow(LivingEntity shooter, World world, ItemStack arrow, double damage) {
+        this(shooter, world, arrow, damage, 0);
+    }
+
+    public CustomArrow(LivingEntity shooter, World world, ItemStack arrow, double damage, int narcoticValue) {
         super(EntityInit.CUSTOM_ARROW.get(), shooter, world);
         ItemStack countArrow = arrow.copy();
         countArrow.setCount(1);
+        setDamage(damage);
         this.dataManager.set(ARROW_STACK, countArrow);
         this.narcoticValue = narcoticValue;
     }

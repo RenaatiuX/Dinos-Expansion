@@ -25,6 +25,7 @@ import net.minecraft.world.*;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.builder.ILoopType;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
@@ -178,7 +179,7 @@ public class Parapuzosia extends WaterMobEntity implements IAnimatable {
 
     private PlayState predicate(AnimationEvent<Parapuzosia> event){
         if (isInWater()){
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Parapuzosia.Swim", true));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Parapuzosia.Swim", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }
         return PlayState.CONTINUE;
@@ -186,7 +187,7 @@ public class Parapuzosia extends WaterMobEntity implements IAnimatable {
 
     private PlayState attackPredicate(AnimationEvent<Parapuzosia> event){
         if (isGrabbing()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Parapuzosia.Catch", false));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Parapuzosia.Catch"));
             return PlayState.CONTINUE;
         }
         return PlayState.CONTINUE;
@@ -209,7 +210,7 @@ public class Parapuzosia extends WaterMobEntity implements IAnimatable {
             super.tick();
             Parapuzosia parapuzosia = Parapuzosia.this;
             LivingEntity target = Parapuzosia.this.getAttackTarget();
-            double dist = parapuzosia.getDistance(target);
+            double dist = parapuzosia.getDistanceSq(target);
             if (parapuzosia.canEntityBeSeen(target) && dist < 1.0F) {
                 parapuzosia.setGrabbing(true);
             } else {

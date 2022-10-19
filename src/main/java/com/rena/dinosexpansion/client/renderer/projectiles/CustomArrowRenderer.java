@@ -24,8 +24,8 @@ import java.util.function.Supplier;
 public class CustomArrowRenderer extends ArrowRenderer<CustomArrow> {
 
     public static final Supplier<Map<Item, ResourceLocation>> TEXTURE_REGISTRY = () -> Util.make(Maps.newHashMap(), map -> {
-        map.put(ItemInit.COMPOUND_ARROW.get(), DinosExpansion.modLoc("textures/entity/projectile/compound_arrow_model.png"));
-        map.put(ItemInit.TRANQUILLIZER_ARROW.get(), DinosExpansion.modLoc("textures/entity/projectile/tranquilizer_arrow_model.png"));
+        map.put(ItemInit.COMPOUND_ARROW.get(),projectile("compound_arrow_model.png"));
+        map.put(ItemInit.TRANQUILLIZER_ARROW.get(), projectile("tranquilizer_arrow_model.png"));
     });
 
     public CustomArrowRenderer(EntityRendererManager p_i46179_1_) {
@@ -36,5 +36,9 @@ public class CustomArrowRenderer extends ArrowRenderer<CustomArrow> {
     public ResourceLocation getEntityTexture(CustomArrow entity) {
         ResourceLocation texture = TEXTURE_REGISTRY.get().getOrDefault(entity.getArrowStack().getItem(), TippedArrowRenderer.RES_ARROW);
         return texture;
+    }
+
+    private static ResourceLocation projectile(String name){
+        return DinosExpansion.modLoc("textures/entity/projectile/" + name);
     }
 }
