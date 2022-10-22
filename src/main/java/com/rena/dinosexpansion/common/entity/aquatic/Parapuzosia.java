@@ -45,10 +45,14 @@ public class Parapuzosia extends WaterMobEntity implements IAnimatable {
     private int holdTime;
 
     public static final AttributeModifierMap.MutableAttribute createAttributes(){
-        return MobEntity.func_233666_p_().createMutableAttribute(Attributes.MAX_HEALTH, 15f).createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.3f).createMutableAttribute(Attributes.ATTACK_DAMAGE, 4.0f);
+        return MobEntity.func_233666_p_().createMutableAttribute(Attributes.MAX_HEALTH, 50F)
+                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.3F)
+                .createMutableAttribute(Attributes.ATTACK_DAMAGE, 4.0F)
+                .createMutableAttribute(Attributes.ARMOR, 15F)
+                .createMutableAttribute(Attributes.KNOCKBACK_RESISTANCE, 15F);
     }
 
-    private AnimationFactory factory = new AnimationFactory(this);
+    private final AnimationFactory factory = new AnimationFactory(this);
 
     public Parapuzosia(EntityType<Parapuzosia> type, World world) {
         super(type, world);
@@ -187,7 +191,7 @@ public class Parapuzosia extends WaterMobEntity implements IAnimatable {
 
     private PlayState attackPredicate(AnimationEvent<Parapuzosia> event){
         if (isGrabbing()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Parapuzosia.Catch"));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Parapuzosia.Catch", ILoopType.EDefaultLoopTypes.HOLD_ON_LAST_FRAME));
             return PlayState.CONTINUE;
         }
         return PlayState.CONTINUE;
