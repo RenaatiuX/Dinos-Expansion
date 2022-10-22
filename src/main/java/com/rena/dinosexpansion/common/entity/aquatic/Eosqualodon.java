@@ -45,7 +45,7 @@ public class Eosqualodon extends WaterMobEntity implements IAnimatable {
                 .createMutableAttribute(Attributes.ATTACK_DAMAGE, 5.0F);
     }
 
-    private AnimationFactory factory = new AnimationFactory(this);
+    private final AnimationFactory factory = new AnimationFactory(this);
 
     public Eosqualodon(EntityType<Eosqualodon> type, World world) {
         super(type, world);

@@ -2,6 +2,7 @@ package com.rena.dinosexpansion.core.init;
 
 import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.common.entity.aquatic.Eosqualodon;
+import com.rena.dinosexpansion.common.entity.aquatic.MegaPiranha;
 import com.rena.dinosexpansion.common.entity.aquatic.Parapuzosia;
 import com.rena.dinosexpansion.common.entity.misc.SpearEntity;
 import com.rena.dinosexpansion.common.entity.projectile.CustomArrow;
@@ -25,6 +26,8 @@ public class EntityInit {
     public static final RegistryObject<EntityType<Parapuzosia>> PARAPUZOSIA = register("parapuzosia", () -> EntityType.Builder.<Parapuzosia>create(Parapuzosia::new, EntityClassification.AMBIENT).size(3f, 2.5f));
     public static final RegistryObject<EntityType<Eosqualodon>> EOSQUALODON = register("eosqualodon",
             () -> EntityType.Builder.<Eosqualodon>create(Eosqualodon::new, EntityClassification.WATER_CREATURE).size(3f, 2.0f));
+    public static final RegistryObject<EntityType<MegaPiranha>> MEGA_PIRANHA = register("megapiranha",
+            () -> EntityType.Builder.<MegaPiranha>create(MegaPiranha::new, EntityClassification.WATER_CREATURE).size(1F, 1F));
 
     public static final <T extends Entity> RegistryObject<EntityType<T>> register(String name, Supplier<EntityType.Builder<T>> builder){
         return ENTITY_TYPES.register(name, () -> builder.get().build(DinosExpansion.modLoc(name).toString()));

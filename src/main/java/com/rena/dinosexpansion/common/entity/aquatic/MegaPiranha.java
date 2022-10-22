@@ -2,10 +2,8 @@ package com.rena.dinosexpansion.common.entity.aquatic;
 
 import com.rena.dinosexpansion.common.entity.ia.DinosaurAINearestTarget;
 import com.rena.dinosexpansion.common.entity.ia.movecontroller.AquaticMoveController;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.MoverType;
+import com.rena.dinosexpansion.core.init.EntityInit;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.*;
@@ -22,24 +20,32 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.PlayState;
+import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.builder.ILoopType;
+import software.bernie.geckolib3.core.controller.AnimationController;
+import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
-
-import java.util.EnumSet;
 
 public class MegaPiranha extends WaterMobEntity implements IAnimatable {
 
     public static final String CONTROLLER_NAME = "controller";
     public static final String ATTACK_CONTROLLER_NAME = "attack_controller";
 
+    private final AnimationFactory factory = new AnimationFactory(this);
     public float prevOnLandProgress;
     public float onLandProgress;
 
-    private static final DataParameter<Boolean> ATTACK = EntityDataManager.createKey(Eosqualodon.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> ATTACK = EntityDataManager.createKey(MegaPiranha.class, DataSerializers.BOOLEAN);
 
-    protected MegaPiranha(EntityType<MegaPiranha> type, World worldIn) {
+    public MegaPiranha(EntityType<MegaPiranha> type, World worldIn) {
         super(type, worldIn);
         this.moveController = new AquaticMoveController(this, 1F);
+    }
+
+    public MegaPiranha(World world) {
+        this(EntityInit.MEGA_PIRANHA.get(), world);
     }
 
     public static AttributeModifierMap.MutableAttribute createAttributes(){
@@ -52,6 +58,7 @@ public class MegaPiranha extends WaterMobEntity implements IAnimatable {
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(1, new FindWaterGoal(this));
+        this.goalSelector.addGoal(2, new MegaPiranhaAttackMeleeGoal(this, 1.5D, false));
         this.goalSelector.addGoal(4, new RandomSwimmingGoal(this, 0.8F, 3));
         this.goalSelector.addGoal(5, new LookRandomlyGoal(this));
         this.goalSelector.addGoal(6, new FollowBoatGoal(this));
@@ -104,59 +111,91 @@ public class MegaPiranha extends WaterMobEntity implements IAnimatable {
         if (this.isInWater() && onLandProgress > 0F) {
             onLandProgress--;
         }
-        if (this.isInWater()) {
-            this.setMotion(this.getMotion().mul(1.0D, 0.8D, 1.0D));
-        }
-        if (!world.isRemote && this.getAttackTarget() != null && this.isAttacking()) {
-            float f1 = this.rotationYaw * ((float) Math.PI / 180F);
-            this.setMotion(this.getMotion().add(-MathHelper.sin(f1) * 0.06F, 0.0D, MathHelper.cos(f1) * 0.06F));
-        }
     }
 
     @Override
     public void registerControllers(AnimationData data) {
+        data.addAnimationController(new AnimationController<>(this, CONTROLLER_NAME, 0, this::predicate));
+        data.addAnimationController(new AnimationController<>(this, ATTACK_CONTROLLER_NAME, 0, this::attackPredicate));
+    }
 
+    private PlayState predicate(AnimationEvent<MegaPiranha> event){
+        if (isInWater()){
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("de.megapiranha.swim", ILoopType.EDefaultLoopTypes.LOOP));
+            return PlayState.CONTINUE;
+        }
+        event.getController().setAnimation(new AnimationBuilder().addAnimation("de.megapiranha.outofwater", ILoopType.EDefaultLoopTypes.LOOP));
+        return PlayState.CONTINUE;
+    }
+
+    private PlayState attackPredicate(AnimationEvent<MegaPiranha> event){
+        if(isAttacking()) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("de.megapiranha.bite", ILoopType.EDefaultLoopTypes.LOOP));
+            return PlayState.CONTINUE;
+        }
+        return PlayState.STOP;
     }
 
     @Override
     public AnimationFactory getFactory() {
-        return null;
+        return this.factory;
     }
 
-    private class MegaPiranhaAttackMeleeGoal extends Goal {
-        public MegaPiranhaAttackMeleeGoal() {
-            this.setMutexFlags(EnumSet.of(Flag.MOVE));
+    private class MegaPiranhaAttackMeleeGoal extends MeleeAttackGoal {
+
+        private final MegaPiranha piranha;
+        private int attackStep;
+        public MegaPiranhaAttackMeleeGoal(MegaPiranha piranha, double speedIn, boolean useLongMemory) {
+            super(piranha, speedIn, useLongMemory);
+            this.piranha = piranha;
+        }
+
+        @Override
+        protected void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr) {
+            double d0 = this.getAttackReachSqr(enemy);
+            if(distToEnemySqr <= d0 && this.isSwingOnCooldown())
+            {
+                this.resetSwingCooldown();
+                this.piranha.attackEntityAsMob(enemy);
+                MegaPiranha.this.setAttacking(false);
+            }
+            else if(distToEnemySqr <= d0 * 2.0D)
+            {
+                if(this.isSwingOnCooldown())
+                {
+                    MegaPiranha.this.setAttacking(false);
+                    this.resetSwingCooldown();
+                }
+
+                if(this.getSwingCooldown() <= 10)
+                {
+                    MegaPiranha.this.setAttacking(true);
+                }
+            }
+            else
+            {
+                this.resetSwingCooldown();
+                MegaPiranha.this.setAttacking(false);
+            }
         }
 
         @Override
         public boolean shouldExecute() {
-            return MegaPiranha.this.getAttackTarget() != null && MegaPiranha.this.getAttackTarget().isAlive();
+            LivingEntity livingentity = this.piranha.getAttackTarget();
+            return livingentity != null && livingentity.isAlive() && this.piranha.canAttack(livingentity);
         }
 
         @Override
-        public void tick() {
-            LivingEntity target = MegaPiranha.this.getAttackTarget();
-            double speed = 1.0F;
-            boolean move = true;
-            if (MegaPiranha.this.getDistance(target) < 10) {
-                if (MegaPiranha.this.getDistance(target) < 1.9D) {
-                    MegaPiranha.this.attackEntityAsMob(target);
-                    speed = 0.8F;
-                } else {
-                    speed = 0.6F;
-                    MegaPiranha.this.faceEntity(target, 70, 70);
-                    if (target instanceof SquidEntity) {
-                        Vector3d mouth = MegaPiranha.this.getPositionVec();
-                        float squidSpeed = 0.07F;
-                        ((SquidEntity) target).setMovementVector((float) (mouth.x - target.getPosX()) * squidSpeed, (float) (mouth.y - target.getPosYEye()) * squidSpeed, (float) (mouth.z - target.getPosZ()) * squidSpeed);
-                        MegaPiranha.this.world.setEntityState(MegaPiranha.this, (byte) 68);
-                    }
-                }
-            }
-            if (target instanceof PlayerEntity) {
-                speed = 1.0F;
-            }
-            MegaPiranha.this.getNavigator().tryMoveToEntityLiving(target, speed);
+        public void startExecuting() {
+            super.startExecuting();
+            this.attackStep = 0;
+        }
+
+        @Override
+        public void resetTask() {
+            super.resetTask();
+            this.piranha.setAttacking(false);
         }
     }
+
 }
