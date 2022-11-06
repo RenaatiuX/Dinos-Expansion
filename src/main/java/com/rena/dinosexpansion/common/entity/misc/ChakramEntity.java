@@ -16,7 +16,6 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.EntityRayTraceResult;
@@ -28,35 +27,56 @@ import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 
-public class SpearEntity extends AbstractArrowEntity {
-    protected static final DataParameter<ItemStack> ITEM = EntityDataManager.createKey(SpearEntity.class, DataSerializers.ITEMSTACK);
+public class ChakramEntity extends AbstractArrowEntity {
+
+    protected static final DataParameter<ItemStack> ITEM = EntityDataManager.createKey(ChakramEntity.class, DataSerializers.ITEMSTACK);
+    protected static final DataParameter<Float> PREV_ROTATION = EntityDataManager.createKey(ChakramEntity.class, DataSerializers.FLOAT);
+    protected static final DataParameter<Float> ROTATION = EntityDataManager.createKey(ChakramEntity.class, DataSerializers.FLOAT);
+
     protected boolean dealtDamage;
     protected boolean enchanted;
     protected int loyaltyLevel;
     protected int returningTicks;
 
-    public SpearEntity(EntityType<SpearEntity> type, World worldIn) {
+    public ChakramEntity(EntityType<? extends ChakramEntity> type, World worldIn) {
         super(type, worldIn);
     }
 
-    public SpearEntity(World world, LivingEntity thrower, ItemStack item) {
-        super(EntityInit.SPEAR.get(), thrower, world);
-        setArrowStack(item);
+    public ChakramEntity(World worldIn, LivingEntity thrower, ItemStack thrownStackIn) {
+        super(EntityInit.CHAKRAM.get(), thrower, worldIn);
+        setArrowStack(thrownStackIn);
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public ChakramEntity(World worldIn, double x, double y, double z) {
+        super(EntityInit.CHAKRAM.get(), x, y, z, worldIn);
     }
 
     @Override
     protected void registerData() {
         super.registerData();
         this.dataManager.register(ITEM, ItemStack.EMPTY);
+        this.dataManager.register(ROTATION, 0.0F);
+        this.dataManager.register(PREV_ROTATION, 0.0F);
     }
 
     @Override
     public void tick() {
+        this.dataManager.set(PREV_ROTATION, this.getRotation());
         if (this.timeInGround > 4) {
             this.dealtDamage = true;
+        } else {
+            this.dataManager.set(ROTATION, this.getRotation() + 45.0F);
+
+            if (!this.hasNoGravity() && !this.getNoClip()) {
+                Vector3d motion = this.getMotion();
+                this.setMotion(motion.x, motion.y + 0.025, motion.z);
+            }
         }
 
         Entity entity = this.getShooter();
+        Vector3d vector3d;
+
         if ((this.dealtDamage || this.getNoClip()) && entity != null) {
             if (loyaltyLevel > 0 && !this.shouldReturnToThrower()) {
                 if (!this.world.isRemote && this.pickupStatus == AbstractArrowEntity.PickupStatus.ALLOWED) {
@@ -66,10 +86,9 @@ public class SpearEntity extends AbstractArrowEntity {
                 this.remove();
             } else if (loyaltyLevel > 0) {
                 this.setNoClip(true);
-                Vector3d vector3d = new Vector3d(entity.getPosX() - this.getPosX(), entity.getPosYEye() - this.getPosY(),
-                        entity.getPosZ() - this.getPosZ());
+                vector3d = new Vector3d(entity.getPosX() - this.getPosX(), entity.getPosYEye() - this.getPosY(), entity.getPosZ() - this.getPosZ());
                 this.setRawPosition(this.getPosX(), this.getPosY() + vector3d.y * 0.015D * loyaltyLevel, this.getPosZ());
-                if (this.world.isRemote()) {
+                if (this.world.isRemote) {
                     this.lastTickPosY = this.getPosY();
                 }
 
@@ -82,17 +101,20 @@ public class SpearEntity extends AbstractArrowEntity {
                 ++this.returningTicks;
             }
         }
-
         super.tick();
     }
 
-    protected boolean shouldReturnToThrower() {
+    private boolean shouldReturnToThrower() {
         Entity entity = this.getShooter();
-        return entity != null && entity.isAlive() && (!(entity instanceof ServerPlayerEntity) || !entity.isSpectator());
+        if (entity != null && entity.isAlive()) {
+            return !(entity instanceof ServerPlayerEntity) || !entity.isSpectator();
+        } else {
+            return false;
+        }
     }
 
     @Override
-    protected ItemStack getArrowStack() {
+    public ItemStack getArrowStack() {
         return this.getDataManager().get(ITEM).copy();
     }
 
@@ -105,43 +127,11 @@ public class SpearEntity extends AbstractArrowEntity {
     @Override
     public void notifyDataManagerChange(DataParameter<?> key) {
         super.notifyDataManagerChange(key);
-        if(key.equals(ITEM)) {
+        if (key.equals(ITEM)) {
             ItemStack stack = getArrowStack();
             this.loyaltyLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.LOYALTY, stack);
             this.enchanted = stack.hasEffect();
         }
-    }
-
-    @Override
-    protected void onEntityHit(EntityRayTraceResult result) {
-        Entity entity = result.getEntity();
-        dealtDamage = true;
-
-        if (entity instanceof LivingEntity) {
-            LivingEntity living = (LivingEntity) entity;
-            this.setDamage(this.getDamage() + EnchantmentHelper.getModifierForCreature(this.getArrowStack(), living.getCreatureAttribute()));
-        }
-
-        Entity thrower = getShooter();
-        DamageSource source = DamageSource.causeTridentDamage(this, (thrower == null) ? this : thrower);
-        SoundEvent sound = SoundEvents.ITEM_TRIDENT_HIT;
-
-        if (entity.attackEntityFrom(source, (float) this.getDamage())) {
-            if (entity.getType() == EntityType.ENDERMAN) {
-                return;
-            }
-            if (entity instanceof LivingEntity) {
-                LivingEntity living = (LivingEntity) entity;
-                if (thrower instanceof LivingEntity) {
-                    EnchantmentHelper.applyThornEnchantments(living, thrower);
-                    EnchantmentHelper.applyArthropodEnchantments((LivingEntity) thrower, living);
-                }
-                arrowHit(living);
-            }
-        }
-
-        setMotion(getMotion().mul(-0.01D, -0.1D, -0.01D));
-        playSound(sound, 1.0F, 1.0F);
     }
 
     @Nullable
@@ -151,33 +141,35 @@ public class SpearEntity extends AbstractArrowEntity {
     }
 
     @Override
-    public void onCollideWithPlayer(PlayerEntity entityIn) {
-        Entity entity = this.getShooter();
-        if (entity == null || entity.getUniqueID() == entityIn.getUniqueID()) {
-            return;
+    protected void onEntityHit(EntityRayTraceResult result) {
+        Entity entity = result.getEntity();
+        float f = 8.0F;
+        if (entity instanceof LivingEntity) {
+            LivingEntity livingentity = (LivingEntity) entity;
+            f += EnchantmentHelper.getModifierForCreature(this.getArrowStack(), livingentity.getCreatureAttribute());
         }
-        super.onCollideWithPlayer(entityIn);
-    }
 
-    @Override
-    public void readAdditional(CompoundNBT compound) {
-        super.readAdditional(compound);
-        if (compound.contains("Spear", 10)) {
-            setArrowStack(ItemStack.read(compound.getCompound("Spear")));
+        Entity entity1 = this.getShooter();
+        DamageSource damagesource = DamageSource.causeTridentDamage(this, entity1 == null ? this : entity1);
+        this.dealtDamage = true;
+        SoundEvent soundevent = SoundEvents.ITEM_TRIDENT_HIT;
+        if (entity.attackEntityFrom(damagesource, f)) {
+            if (entity.getType() == EntityType.ENDERMAN) {
+                return;
+            }
+
+            if (entity instanceof LivingEntity) {
+                LivingEntity livingentity1 = (LivingEntity) entity;
+                if (entity1 instanceof LivingEntity) {
+                    EnchantmentHelper.applyThornEnchantments(livingentity1, entity1);
+                    EnchantmentHelper.applyArthropodEnchantments((LivingEntity) entity1, livingentity1);
+                }
+
+                this.arrowHit(livingentity1);
+            }
         }
-        dealtDamage = compound.getBoolean("damage");
-    }
-
-    @Override
-    public void writeAdditional(CompoundNBT compound) {
-        super.writeAdditional(compound);
-        compound.put("Spear", getArrowStack().write(new CompoundNBT()));
-        compound.putBoolean("damage", this.dealtDamage);
-    }
-
-    @Override
-    public IPacket<?> createSpawnPacket() {
-        return NetworkHooks.getEntitySpawningPacket(this);
+        this.setMotion(this.getMotion().mul(-0.01D, -0.1D, -0.01D));
+        this.playSound(soundevent, 1.0F, 1.0F);
     }
 
     @Override
@@ -186,12 +178,61 @@ public class SpearEntity extends AbstractArrowEntity {
     }
 
     @Override
+    public void onCollideWithPlayer(PlayerEntity entityIn) {
+        Entity entity = this.getShooter();
+        if (entity == null || entity.getUniqueID() == entityIn.getUniqueID()) {
+            super.onCollideWithPlayer(entityIn);
+        }
+    }
+
+    @Override
+    public void readAdditional(CompoundNBT compound) {
+        super.readAdditional(compound);
+        if (compound.contains("Chakram", 10)) {
+            setArrowStack(ItemStack.read(compound.getCompound("Chakram")));
+        }
+
+        this.dealtDamage = compound.getBoolean("DealtDamage");
+    }
+
+    @Override
+    public void writeAdditional(CompoundNBT compound) {
+        super.writeAdditional(compound);
+        compound.put("Chakram", getArrowStack().write(new CompoundNBT()));
+        compound.putBoolean("DealtDamage", this.dealtDamage);
+    }
+
+    public float getRotation() {
+        return this.dataManager.get(ROTATION);
+    }
+
+    public float getPrevRotation() {
+        return this.dataManager.get(PREV_ROTATION);
+    }
+
+    @Override
+    public void func_225516_i_() {
+        int i = loyaltyLevel;
+        if (this.pickupStatus != AbstractArrowEntity.PickupStatus.ALLOWED || i <= 0) {
+            super.func_225516_i_();
+        }
+    }
+
+
+    @Override
+    public IPacket<?> createSpawnPacket() {
+        return NetworkHooks.getEntitySpawningPacket(this);
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    @Override
     public boolean isInRangeToRender3d(double x, double y, double z) {
         return true;
     }
 
     @OnlyIn(Dist.CLIENT)
-    public boolean isEnchanted() {
-        return enchanted;
+    @Override
+    public boolean canRenderOnFire() {
+        return false;
     }
 }

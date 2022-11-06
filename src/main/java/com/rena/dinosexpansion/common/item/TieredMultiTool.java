@@ -29,7 +29,7 @@ import java.util.Set;
 
 import static net.minecraftforge.event.ForgeEventFactory.onHoeUse;
 
-public class MultiToolTiers extends ToolItem{
+public class TieredMultiTool extends ToolItem{
 
     private final float attackDamage;
     private final float attackSpeed;
@@ -40,7 +40,7 @@ public class MultiToolTiers extends ToolItem{
     protected static final Map<Block, BlockState> SHOVEL_LOOKUP;
     protected static final Map<Block, BlockState> HOE_LOOKUP;
 
-    public MultiToolTiers(float attackDamageIn, float attackSpeedIn, IItemTier tier, Properties builderIn) {
+    public TieredMultiTool(float attackDamageIn, float attackSpeedIn, IItemTier tier, Properties builderIn) {
         super(attackDamageIn, attackSpeedIn, tier, EFFECTIVE_ON, builderIn.addToolType(ToolType.AXE, tier.getHarvestLevel()).addToolType(ToolType.PICKAXE, tier.getHarvestLevel()).addToolType(ToolType.SHOVEL, tier.getHarvestLevel()).maxStackSize(1));
 
         this.material = tier;
@@ -283,7 +283,7 @@ public class MultiToolTiers extends ToolItem{
 
     @Override
     public boolean canDisableShield(ItemStack stack, ItemStack shield, LivingEntity entity, LivingEntity attacker) {
-        return stack.getItem() instanceof MultiToolTiers;
+        return stack.getItem() instanceof TieredMultiTool;
     }
 
     static {
@@ -350,6 +350,5 @@ public class MultiToolTiers extends ToolItem{
         HOE_LOOKUP = Maps.newHashMap(ImmutableMap.of(Blocks.GRASS_BLOCK, Blocks.FARMLAND.getDefaultState(),
                 Blocks.GRASS_PATH, Blocks.FARMLAND.getDefaultState(), Blocks.DIRT, Blocks.FARMLAND.getDefaultState(),
                 Blocks.COARSE_DIRT, Blocks.DIRT.getDefaultState()));
-
     }
 }

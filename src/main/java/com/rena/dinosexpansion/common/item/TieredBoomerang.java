@@ -34,5 +34,8 @@ public class TieredBoomerang extends Item {
 
     public interface BoomerangSupplier{
         BoomerangEntity createBoomerang(World world, PlayerEntity player, ItemStack stack, Hand hand);
+        double getDamageAddition();
+        int getEnchantability();
+        int getDurability();
     }
 }

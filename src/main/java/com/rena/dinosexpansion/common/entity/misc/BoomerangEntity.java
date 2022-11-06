@@ -10,6 +10,7 @@ import net.minecraft.entity.MoverType;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.network.IPacket;
@@ -22,6 +23,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.*;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
@@ -38,15 +40,15 @@ public abstract class BoomerangEntity extends Entity {
     List<ItemEntity> itemsPickedUp;
     private ItemStack selfStack;
     private Hand hand;
-    private static final DataParameter<Float> ROTATION;
-    private static final DataParameter<Optional<UUID>> RETURN_UNIQUE_ID;
+    private static final DataParameter<Float> ROTATION = EntityDataManager.createKey(BoomerangEntity.class, DataSerializers.FLOAT);
+    private static final DataParameter<Optional<UUID>> RETURN_UNIQUE_ID = EntityDataManager.createKey(BoomerangEntity.class, DataSerializers.OPTIONAL_UNIQUE_ID);
 
     public BoomerangEntity(EntityType<BoomerangEntity> entityTypeIn, World worldIn) {
         super(entityTypeIn, worldIn);
         this.bounceFactor = 0.85D;
         this.turningAround = false;
         this.timeBeforeTurnAround = 30;
-        this.itemsPickedUp = new ArrayList<>();
+        this.itemsPickedUp = new ArrayList<ItemEntity>();
         this.hand = Hand.MAIN_HAND;
     }
 
@@ -56,9 +58,10 @@ public abstract class BoomerangEntity extends Entity {
         this.setRotation(entity.rotationYaw, entity.rotationPitch);
         double x = -MathHelper.sin(entity.rotationYaw * 3.141593F / 180.0F);
         double z = MathHelper.cos(entity.rotationYaw * 3.141593F / 180.0F);
-        double motionX = 0.5D * x * (double)MathHelper.cos(entity.rotationPitch / 180.0F * 3.141593F);
-        double motionY = -0.5D * (double)MathHelper.sin(entity.rotationPitch / 180.0F * 3.141593F);
-        double motionZ = 0.5D * z * (double)MathHelper.cos(entity.rotationPitch / 180.0F * 3.141593F);
+
+        double motionX = 0.5D * x * (double) MathHelper.cos(entity.rotationPitch / 180.0F * 3.141593F);
+        double motionY = -0.5D * (double) MathHelper.sin(entity.rotationPitch / 180.0F * 3.141593F);
+        double motionZ = 0.5D * z * (double) MathHelper.cos(entity.rotationPitch / 180.0F * 3.141593F);
         this.setMotion(new Vector3d(motionX, motionY, motionZ));
         this.setPosition(entity.getPosX(), this.getReturnEntityY(entity), entity.getPosZ());
         this.prevPosX = this.getPosX();
@@ -71,12 +74,31 @@ public abstract class BoomerangEntity extends Entity {
     }
 
     public double getReturnEntityY(PlayerEntity entity) {
-        return entity.getPosY() + (double)entity.getEyeHeight() - 0.10000000149011612D;
+        return entity.getPosY() + (double) entity.getEyeHeight() - 0.10000000149011612D;
+    }
+
+    public void setEntityDeadWithPlayerDeadOrMissing() {
+        if (selfStack != null && !this.world.isRemote) {
+            ItemEntity itementity = new ItemEntity(world, this.getPosX(), this.getPosY(), this.getPosZ(), selfStack);
+            itementity.setDefaultPickupDelay();
+            itementity.setMotion(itementity.getMotion().add((world.rand.nextFloat() - world.rand.nextFloat()) * 0.1F, (double) (world.rand.nextFloat() * 0.05F), (double) ((world.rand.nextFloat() - world.rand.nextFloat()) * 0.1F)));
+            world.addEntity(itementity);
+        }
+        super.setDead();
     }
 
     @Override
     public void tick() {
         PlayerEntity player = this.getReturnTo();
+
+        if (player == null) {
+            setEntityDeadWithPlayerDeadOrMissing();
+        }
+
+        if (player != null && player.getShouldBeDead()) {
+            setEntityDeadWithPlayerDeadOrMissing();
+        }
+
         if (this.ticksExisted % 11 == 0) {
             BlockPos currentPos = this.getPosition();
             //this.world.playSound(null, currentPos.getX(), currentPos.getY(), currentPos.getZ(), SoundInit.BOOMERANG_LOOP.get(), SoundCategory.PLAYERS, 0.4F, 1.0F);
@@ -84,77 +106,80 @@ public abstract class BoomerangEntity extends Entity {
 
         Vector3d vec3d1 = this.getPositionVec();
         Vector3d vec3d = this.getPositionVec().add(this.getMotion());
-        RayTraceResult raytraceresult = this.world.rayTraceBlocks(new RayTraceContext(vec3d1, vec3d, RayTraceContext.BlockMode.OUTLINE, RayTraceContext.FluidMode.ANY, (Entity)null));
-        if (raytraceresult != null && raytraceresult.getType() == RayTraceResult.Type.BLOCK) {
-            BlockPos pos = new BlockPos(raytraceresult.getHitVec());
-            BlockState state = this.world.getBlockState(pos);
-            if (state.getMaterial() == Material.PLANTS && DinosExpansionConfig.BREAKS_FLOWERS.get()) {
-                this.world.destroyBlock(pos, true);
-            }
+        RayTraceResult raytraceresult = this.world.rayTraceBlocks(new RayTraceContext(vec3d1, vec3d, RayTraceContext.BlockMode.OUTLINE, RayTraceContext.FluidMode.ANY, (Entity) null));
 
-            if (state.getMaterial() == Material.TALL_PLANTS && DinosExpansionConfig.BREAKS_TALLGRASS.get()) {
-                this.world.destroyBlock(pos, true);
-            }
+        if (raytraceresult != null) {
+            if (raytraceresult.getType() == RayTraceResult.Type.BLOCK) {
+                BlockPos pos = new BlockPos(raytraceresult.getHitVec());
+                BlockState state = this.world.getBlockState(pos);
 
-            if (state.getBlock() instanceof TorchBlock && DinosExpansionConfig.BREAKS_TORCHES.get()) {
-                this.world.destroyBlock(pos, true);
-            }
-
-            if (state.getBlock() instanceof LeverBlock && DinosExpansionConfig.ACTIVATES_LEVERS.get()) {
-                if (this.timeBeforeTurnAround > 0 && DinosExpansionConfig.TURN_AROUND_BUTTON.get()) {
-                    this.timeBeforeTurnAround = 0;
+                if (state.getMaterial() == Material.PLANTS && DinosExpansionConfig.BREAKS_FLOWERS.get()) {
+                    this.world.destroyBlock(pos, true);
                 }
 
-                if (this.activatedPos == null || !this.activatedPos.equals(pos)) {
-                    this.activatedPos = pos;
-                    state.getBlock().onBlockActivated(state, this.world, pos, player, Hand.MAIN_HAND, (BlockRayTraceResult)raytraceresult.hitInfo);
-                }
-            }
-
-            if (state.getBlock() instanceof AbstractButtonBlock && DinosExpansionConfig.ACTIVATES_BUTTONS.get()) {
-                if (this.timeBeforeTurnAround > 0 && DinosExpansionConfig.TURN_AROUND_BUTTON.get()) {
-                    this.timeBeforeTurnAround = 0;
+                if (state.getMaterial() == Material.TALL_PLANTS && DinosExpansionConfig.BREAKS_TALLGRASS.get()) {
+                    this.world.destroyBlock(pos, true);
                 }
 
-                if (this.activatedPos == null || !this.activatedPos.equals(pos)) {
-                    this.activatedPos = pos;
-                    state.getBlock().onBlockActivated(state, this.world, pos, player, Hand.MAIN_HAND, (BlockRayTraceResult)raytraceresult.hitInfo);
-                }
-            }
-
-            if (state.getBlock() instanceof PressurePlateBlock && DinosExpansionConfig.ACTIVATES_PRESSURES_PLATES.get()) {
-                if (this.timeBeforeTurnAround > 0 && DinosExpansionConfig.TURN_AROUND_BUTTON.get()) {
-                    this.timeBeforeTurnAround = 0;
+                if (state.getBlock() instanceof TorchBlock && DinosExpansionConfig.BREAKS_TORCHES.get()) {
+                    this.world.destroyBlock(pos, true);
                 }
 
-                if (this.activatedPos == null || !this.activatedPos.equals(pos)) {
-                    this.activatedPos = pos;
-                    state.getBlock().onBlockActivated(state, this.world, pos, player, Hand.MAIN_HAND, (BlockRayTraceResult)raytraceresult.hitInfo);
-                }
-            }
+                if (state.getBlock() instanceof LeverBlock && DinosExpansionConfig.ACTIVATES_LEVERS.get()) {
+                    if (this.timeBeforeTurnAround > 0 && DinosExpansionConfig.TURN_AROUND_BUTTON.get()) {
+                        this.timeBeforeTurnAround = 0;
+                    }
 
-            if (state.getBlock() instanceof TripWireBlock && DinosExpansionConfig.ACTIVATES_TRIP_WIRE.get()) {
-                if (this.timeBeforeTurnAround > 0 && DinosExpansionConfig.TURN_AROUND_BUTTON.get()) {
-                    this.timeBeforeTurnAround = 0;
+                    if (this.activatedPos == null || !this.activatedPos.equals(pos)) {
+                        this.activatedPos = pos;
+                        state.getBlock().onBlockActivated(state, this.world, pos, player, Hand.MAIN_HAND, (BlockRayTraceResult) raytraceresult.hitInfo);
+                    }
                 }
 
-                if (this.activatedPos == null || !this.activatedPos.equals(pos)) {
-                    this.activatedPos = pos;
-                    state.getBlock().onBlockActivated(state, this.world, pos, player, Hand.MAIN_HAND, (BlockRayTraceResult)raytraceresult.hitInfo);
+                if (state.getBlock() instanceof AbstractButtonBlock && DinosExpansionConfig.ACTIVATES_BUTTONS.get()) {
+                    if (this.timeBeforeTurnAround > 0 && DinosExpansionConfig.TURN_AROUND_BUTTON.get()) {
+                        this.timeBeforeTurnAround = 0;
+                    }
+
+                    if (this.activatedPos == null || !this.activatedPos.equals(pos)) {
+                        this.activatedPos = pos;
+                        state.getBlock().onBlockActivated(state, this.world, pos, player, Hand.MAIN_HAND, (BlockRayTraceResult) raytraceresult.hitInfo);
+                    }
+                }
+
+                if (state.getBlock() instanceof PressurePlateBlock && DinosExpansionConfig.ACTIVATES_PRESSURES_PLATES.get()) {
+                    if (this.timeBeforeTurnAround > 0 && DinosExpansionConfig.TURN_AROUND_BUTTON.get()) {
+                        this.timeBeforeTurnAround = 0;
+                    }
+
+                    if (this.activatedPos == null || !this.activatedPos.equals(pos)) {
+                        this.activatedPos = pos;
+                        state.getBlock().onBlockActivated(state, this.world, pos, player, Hand.MAIN_HAND, (BlockRayTraceResult) raytraceresult.hitInfo);
+                    }
+                }
+
+                if (state.getBlock() instanceof TripWireBlock && DinosExpansionConfig.ACTIVATES_TRIP_WIRE.get()) {
+                    if (this.timeBeforeTurnAround > 0 && DinosExpansionConfig.TURN_AROUND_BUTTON.get()) {
+                        this.timeBeforeTurnAround = 0;
+                    }
+
+                    if (this.activatedPos == null || !this.activatedPos.equals(pos)) {
+                        this.activatedPos = pos;
+                        state.getBlock().onBlockActivated(state, this.world, pos, player, Hand.MAIN_HAND, (BlockRayTraceResult) raytraceresult.hitInfo);
+                    }
                 }
             }
         }
 
-        double newX;
-        double newY;
-        double newZ;
         if (!this.turningAround) {
             Vector3d motionBefore = this.getMotion();
             this.move(MoverType.SELF, motionBefore);
             Vector3d motionAfter = this.getMotion();
-            newX = motionAfter.x;
-            newY = motionAfter.y;
-            newZ = motionAfter.z;
+
+            double newX = motionAfter.x;
+            double newY = motionAfter.y;
+            double newZ = motionAfter.z;
+
             boolean flag = false;
             if (motionAfter.x != motionBefore.x) {
                 newX = -motionBefore.x;
@@ -176,29 +201,29 @@ public abstract class BoomerangEntity extends Entity {
                 this.setMotion((new Vector3d(newX, newY, newZ)).mul(this.bounceFactor, this.bounceFactor, this.bounceFactor));
             }
 
-            this.beforeTurnAround(player);
-            if (this.timeBeforeTurnAround-- <= 0) {
-                this.turningAround = true;
+            if (player != null) {
+                this.beforeTurnAround(player);
+
+                if (timeBeforeTurnAround-- <= 0) {
+                    turningAround = true;
+                }
             }
         } else if (player != null) {
             double x = player.getPosX() - this.getPosX();
-            newX = this.getReturnEntityY(player) - this.getPosY();
-            newY = player.getPosZ() - this.getPosZ();
-            newZ = Math.sqrt(x * x + newX * newX + newY * newY);
-            if (newZ < 1.5D) {
+            double y = this.getReturnEntityY(player) - this.getPosY();
+            double z = player.getPosZ() - this.getPosZ();
+            double d = Math.sqrt(x * x + y * y + z * z);
+            if (d < 1.5D) {
                 this.setEntityDead();
             }
 
-            this.setMotion(0.9D * x / newZ, 0.5D * newX / newZ, 0.9D * newY / newZ);
+            this.setMotion(0.9D * x / d, 0.5D * y / d, 0.9D * z / d);
             this.setPosition(this.getPosX() + this.getMotion().x, this.getPosY() + this.getMotion().y, this.getPosZ() + this.getMotion().z);
         }
 
         this.determineRotation();
         this.prevBoomerangRotation = this.getBoomerangRotation();
-        this.setBoomerangRotation(this.getBoomerangRotation() + 36.0F);
-
-        while(this.getBoomerangRotation() > 360.0F) {
-            this.setBoomerangRotation(this.getBoomerangRotation() - 360.0F);
+        for (this.setBoomerangRotation(this.getBoomerangRotation() + 36F); this.getBoomerangRotation() > 360F; this.setBoomerangRotation(this.getBoomerangRotation() - 360F)) {
         }
 
         List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getBoundingBox().expand(0.5D, 0.5D, 0.5D));
@@ -209,16 +234,20 @@ public abstract class BoomerangEntity extends Entity {
                 if (this.timeBeforeTurnAround > 0 && DinosExpansionConfig.TURN_AROUND_ITEM.get()) {
                     this.timeBeforeTurnAround = 0;
                 }
-            } else if (entity instanceof LivingEntity && entity != player) {
-                this.onEntityHit(entity, player);
-                if (this.timeBeforeTurnAround > 0 && DinosExpansionConfig.TURN_AROUND_MOB.get()) {
-                    this.timeBeforeTurnAround = 0;
-                }
+                continue;
+            }
+            if (!(entity instanceof LivingEntity) || entity == player) {
+                continue;
+            }
+
+            this.onEntityHit(entity, player);
+            if (timeBeforeTurnAround > 0 && DinosExpansionConfig.TURN_AROUND_MOB.get()) {
+                timeBeforeTurnAround = 0;
             }
         }
 
-        for (ItemEntity item : this.itemsPickedUp) {
-            item.setMotion(0.0D, 0.0D, 0.0D);
+        for (ItemEntity item : itemsPickedUp) {
+            item.setMotion(0, 0, 0);
             if (item.isAlive()) {
                 Vector3d pos = this.getPositionVec();
                 item.setPosition(pos.x, pos.y, pos.z);
@@ -232,7 +261,7 @@ public abstract class BoomerangEntity extends Entity {
     }
 
     public void onEntityHit(Entity hitEntity, PlayerEntity player) {
-        hitEntity.attackEntityFrom(this.causeNewDamage(this, player), (float)this.getDamage(hitEntity, player));
+        hitEntity.attackEntityFrom(this.causeNewDamage(this, player), (float) this.getDamage(hitEntity, player));
     }
 
     protected abstract int getDamage(Entity var1, PlayerEntity var2);
@@ -240,18 +269,19 @@ public abstract class BoomerangEntity extends Entity {
     public abstract DamageSource causeNewDamage(BoomerangEntity boomerang, Entity entity);
 
     public void setEntityDead() {
-        if (this.getReturnTo() != null && this.selfStack != null) {
-            if (this.hand == Hand.OFF_HAND) {
-                if (this.getReturnTo().getHeldItemOffhand().isEmpty()) {
-                    this.getReturnTo().setHeldItem(Hand.OFF_HAND, this.selfStack);
+        if (this.getReturnTo() != null) {
+            if (selfStack != null) {
+                if (!this.getReturnTo().getHeldItemMainhand().getItem().equals(Items.AIR)) {
+                    if (!this.getReturnTo().getHeldItemOffhand().getItem().equals(Items.AIR)) {
+                        this.getReturnTo().dropItem(selfStack, true);
+                    } else {
+                        this.getReturnTo().setHeldItem(Hand.OFF_HAND, selfStack);
+                    }
                 } else {
-                    this.getReturnTo().inventory.addItemStackToInventory(this.selfStack);
+                    this.getReturnTo().setHeldItem(Hand.MAIN_HAND, selfStack);
                 }
-            } else {
-                this.getReturnTo().inventory.addItemStackToInventory(this.selfStack);
             }
         }
-
         super.setDead();
     }
 
@@ -294,9 +324,9 @@ public abstract class BoomerangEntity extends Entity {
 
     public void determineRotation() {
         Vector3d motion = this.getMotion();
-        this.rotationYaw = -57.29578F * (float)Math.atan2(motion.x, motion.z);
+        this.rotationYaw = -57.29578F * (float) Math.atan2(motion.x, motion.z);
         double d1 = Math.sqrt(motion.z * motion.z + motion.x * motion.x);
-        this.rotationPitch = -57.29578F * (float)Math.atan2(motion.y, d1);
+        this.rotationPitch = -57.29578F * (float) Math.atan2(motion.y, d1);
     }
 
     @Override
@@ -319,9 +349,9 @@ public abstract class BoomerangEntity extends Entity {
         }
 
         this.selfStack = ItemStack.read(compound.getCompound("SelfStack"));
-        ListNBT itemsGathered = compound.getList("ItemsPickedUp", 10);
+        ListNBT itemsGathered = compound.getList("ItemsPickedUp", Constants.NBT.TAG_COMPOUND);
 
-        for(int i = 0; i < itemsGathered.size(); ++i) {
+        for (int i = 0; i < itemsGathered.size(); ++i) {
             CompoundNBT tag = itemsGathered.getCompound(i);
             ItemEntity item = new ItemEntity(this.world, 0.0D, 0.0D, 0.0D);
             item.readAdditional(tag);
@@ -356,10 +386,10 @@ public abstract class BoomerangEntity extends Entity {
         compound.put("SelfStack", selfStackTag);
         ListNBT itemsGathered = new ListNBT();
 
-        for(int i = 0; i < this.itemsPickedUp.size(); ++i) {
-            if (this.itemsPickedUp.get(i) != null) {
+        for (ItemEntity itemEntity : this.itemsPickedUp) {
+            if (itemEntity != null) {
                 CompoundNBT tag = new CompoundNBT();
-                this.itemsPickedUp.get(i).writeAdditional(compound);
+                itemEntity.writeAdditional(compound);
                 itemsGathered.add(tag);
             }
         }
@@ -375,8 +405,4 @@ public abstract class BoomerangEntity extends Entity {
 
     public abstract ItemStack getRenderedItemStack();
 
-    static {
-        ROTATION = EntityDataManager.createKey(BoomerangEntity.class, DataSerializers.FLOAT);
-        RETURN_UNIQUE_ID = EntityDataManager.createKey(BoomerangEntity.class, DataSerializers.OPTIONAL_UNIQUE_ID);
-    }
 }

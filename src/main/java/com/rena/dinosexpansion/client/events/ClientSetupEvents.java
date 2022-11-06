@@ -1,9 +1,12 @@
 package com.rena.dinosexpansion.client.events;
 
 import com.rena.dinosexpansion.DinosExpansion;
+import com.rena.dinosexpansion.client.model.misc.SteelSpearModel;
 import com.rena.dinosexpansion.client.renderer.entity.EosqualodonRenderer;
 import com.rena.dinosexpansion.client.renderer.entity.MegaPiranhaRenderer;
 import com.rena.dinosexpansion.client.renderer.entity.ParapuzosiaRenderer;
+import com.rena.dinosexpansion.client.renderer.misc.ChakramRenderer;
+import com.rena.dinosexpansion.client.renderer.misc.SpearRenderer;
 import com.rena.dinosexpansion.client.renderer.projectiles.CustomArrowRenderer;
 import com.rena.dinosexpansion.common.entity.aquatic.Eosqualodon;
 import com.rena.dinosexpansion.common.entity.aquatic.MegaPiranha;
@@ -28,6 +31,8 @@ public class ClientSetupEvents {
     @SubscribeEvent
     public static void clientSetup(FMLClientSetupEvent event){
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.CUSTOM_ARROW.get(), CustomArrowRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityInit.CHAKRAM.get(), ChakramRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityInit.SPEAR.get(), SpearRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.PARAPUZOSIA.get(), ParapuzosiaRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.EOSQUALODON.get(), EosqualodonRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.MEGA_PIRANHA.get(), MegaPiranhaRenderer::new);

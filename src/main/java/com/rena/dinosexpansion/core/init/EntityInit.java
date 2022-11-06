@@ -4,6 +4,7 @@ import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.common.entity.aquatic.Eosqualodon;
 import com.rena.dinosexpansion.common.entity.aquatic.MegaPiranha;
 import com.rena.dinosexpansion.common.entity.aquatic.Parapuzosia;
+import com.rena.dinosexpansion.common.entity.misc.ChakramEntity;
 import com.rena.dinosexpansion.common.entity.misc.SpearEntity;
 import com.rena.dinosexpansion.common.entity.projectile.CustomArrow;
 import net.minecraft.entity.Entity;
@@ -23,6 +24,9 @@ public class EntityInit {
             () -> EntityType.Builder.<CustomArrow>create(CustomArrow::new, EntityClassification.MISC).size(0.5F, 0.5F).build(DinosExpansion.modLoc("custom_arrow").toString()));
     public static final RegistryObject<EntityType<SpearEntity>> SPEAR = ENTITY_TYPES.register("spear",
             () -> EntityType.Builder.<SpearEntity>create(SpearEntity::new, EntityClassification.MISC).size(0.5F, 0.5F).build(DinosExpansion.modLoc("spear").toString()));
+    public static final RegistryObject<EntityType<ChakramEntity>> CHAKRAM = ENTITY_TYPES.register("chakram",
+            () -> EntityType.Builder.<ChakramEntity>create(ChakramEntity::new, EntityClassification.MISC).size(0.5F, 0.5F).build(DinosExpansion.modLoc("chakram").toString()));
+
     public static final RegistryObject<EntityType<Parapuzosia>> PARAPUZOSIA = register("parapuzosia", () -> EntityType.Builder.<Parapuzosia>create(Parapuzosia::new, EntityClassification.AMBIENT).size(3f, 2.5f));
     public static final RegistryObject<EntityType<Eosqualodon>> EOSQUALODON = register("eosqualodon",
             () -> EntityType.Builder.<Eosqualodon>create(Eosqualodon::new, EntityClassification.WATER_CREATURE).size(3f, 2.0f));

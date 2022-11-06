@@ -36,8 +36,8 @@ public class CustomArrowRenderer extends ArrowRenderer<CustomArrow> {
         map.put(ItemInit.NETHERITE_ARROW.get(), projectile("netherite_arrow.png"));
     });
 
-    public CustomArrowRenderer(EntityRendererManager p_i46179_1_) {
-        super(p_i46179_1_);
+    public CustomArrowRenderer(EntityRendererManager renderManager) {
+        super(renderManager);
     }
 
     @Override
