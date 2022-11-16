@@ -2,6 +2,7 @@ package com.rena.dinosexpansion.common.item;
 
 import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.core.init.EnchantmentInit;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.LivingEntity;
@@ -12,8 +13,12 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
+import java.util.List;
 import java.util.function.Predicate;
 
 public class TieredBow extends BowItem {
@@ -123,6 +128,18 @@ public class TieredBow extends BowItem {
     @Override
     public int getItemEnchantability() {
         return tier.getEnchantability();
+    }
+
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        double damage = getDamage(stack);
+        double damageBonus = getDamage(stack) + tier.getDamageAddition();
+
+        if(damage != 1){
+            if(damageBonus != 0) tooltip.add(new TranslationTextComponent("tooltip.dinosexpansion.arrow.damage.both" + (isEnchantable(stack) ? ".modified" : ""), ItemStack.DECIMALFORMAT.format(damage), ItemStack.DECIMALFORMAT.format(damageBonus)));
+            else tooltip.add(new TranslationTextComponent("tooltip.dinosexpansion.arrow.damage.mult" + (isEnchantable(stack) ? ".modified" : ""), ItemStack.DECIMALFORMAT.format(damage)));
+        }
+        else if (damageBonus != 0) tooltip.add(new TranslationTextComponent("tooltip.dinosexpansion.arrow.damage.flat" + (isEnchantable(stack) ? ".modified" : ""), ItemStack.DECIMALFORMAT.format(damageBonus)));
     }
 
     public interface BowTier{

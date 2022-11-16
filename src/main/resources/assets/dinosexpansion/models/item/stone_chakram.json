@@ -1,0 +1,6 @@
+{
+  "parent": "dinosexpansion:item/chakram",
+  "textures": {
+    "layer0": "dinosexpansion:item/stone_chakram"
+  }
+}

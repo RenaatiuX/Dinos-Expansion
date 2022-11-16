@@ -100,18 +100,10 @@ public class TieredSpear extends Item implements IVanishable {
     }
 
     @Override
-    public boolean hasEffect(ItemStack stack) {
-        return super.hasEffect(stack) || stack.getOrCreateChildTag("effect").contains("effect");
-    }
-
-    @Override
     public boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        stack.damageItem(1, attacker, (entity) -> entity.sendBreakAnimation(EquipmentSlotType.MAINHAND));
-        final CompoundNBT nbt = stack.getOrCreateChildTag("effect").copy();
-        if (nbt.contains("effect")) {
-            nbt.putByte("Id", (byte) Effect.getId(ForgeRegistries.POTIONS.getValue(new ResourceLocation(nbt.getString("effect")))));
-            target.addPotionEffect(EffectInstance.read(nbt));
-        }
+        stack.damageItem(1, attacker, (entity) -> {
+            entity.sendBreakAnimation(EquipmentSlotType.MAINHAND);
+        });
         return true;
     }
 

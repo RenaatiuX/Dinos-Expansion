@@ -2,7 +2,13 @@ package com.rena.dinosexpansion.common.item;
 
 public enum ChakramTiers implements TieredChakram.ChakramTier {
 
-    WOODEN_CHAKRAM(0.5D, 0.5D, 25, 72);
+    WOODEN_CHAKRAM(0.3D, 0.3D, 25, 72),
+    STONE_CHRAKRAM(0.5D, 0.5D, 20, 135),
+    IRON_CHAKRAM(0.7D, 0.7D, 15, 473),
+    GOLD_CHAKRAM(0.3D, 0.3D, 25, 42),
+    DIAMOND_CHAKRAM(0.9D, 0.9D, 13, 1320),
+    EMERALD_CHAKRAM(1.0D, 1.0D, 10, 1872),
+    NETHERITE_CHAKRAM(1.1D, 1.1D, 15, 2343);
 
     private final double damageAddition, speedAddition;
     private final int enchantability, durability;

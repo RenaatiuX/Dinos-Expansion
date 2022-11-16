@@ -16,7 +16,6 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.EntityRayTraceResult;
@@ -42,6 +41,10 @@ public class SpearEntity extends AbstractArrowEntity {
     public SpearEntity(World world, LivingEntity thrower, ItemStack item) {
         super(EntityInit.SPEAR.get(), thrower, world);
         setArrowStack(item);
+    }
+    @OnlyIn(Dist.CLIENT)
+    public SpearEntity(World worldIn, double x, double y, double z) {
+        super(EntityInit.SPEAR.get(), x, y, z, worldIn);
     }
 
     @Override
@@ -154,9 +157,8 @@ public class SpearEntity extends AbstractArrowEntity {
     public void onCollideWithPlayer(PlayerEntity entityIn) {
         Entity entity = this.getShooter();
         if (entity == null || entity.getUniqueID() == entityIn.getUniqueID()) {
-            return;
+            super.onCollideWithPlayer(entityIn);
         }
-        super.onCollideWithPlayer(entityIn);
     }
 
     @Override
@@ -183,6 +185,14 @@ public class SpearEntity extends AbstractArrowEntity {
     @Override
     protected SoundEvent getHitEntitySound() {
         return SoundEvents.ITEM_TRIDENT_HIT_GROUND;
+    }
+
+    @Override
+    public void func_225516_i_() {
+        int i = loyaltyLevel;
+        if (this.pickupStatus != AbstractArrowEntity.PickupStatus.ALLOWED || i <= 0) {
+            super.func_225516_i_();
+        }
     }
 
     @Override
