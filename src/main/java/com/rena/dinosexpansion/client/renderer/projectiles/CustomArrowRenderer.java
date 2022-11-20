@@ -30,7 +30,7 @@ public class CustomArrowRenderer extends ArrowRenderer<CustomArrow> {
         map.put(ItemInit.DIAMOND_ARROW.get(), projectile("diamond_arrow.png"));
         map.put(ItemInit.EMERALD_ARROW.get(), projectile("emerald_arrow.png"));
         map.put(ItemInit.GOLD_ARROW.get(), projectile("golden_arrow.png"));
-        map.put(ItemInit.IORN_ARROW.get(), projectile("iron_arrow.png"));
+        map.put(ItemInit.IRON_ARROW.get(), projectile("iron_arrow.png"));
         map.put(ItemInit.STONE_ARROW.get(), projectile("stone_arrow.png"));
         map.put(ItemInit.WOODEN_ARROW.get(), projectile("wooden_arrow.png"));
         map.put(ItemInit.NETHERITE_ARROW.get(), projectile("netherite_arrow.png"));

@@ -6,7 +6,7 @@ import net.minecraft.inventory.EquipmentSlotType;
 
 public class AquaticEnchantment extends Enchantment {
 
-    protected AquaticEnchantment() {
+    public AquaticEnchantment() {
         super(Rarity.RARE, ModEnchantmentType.TYPE_THROWING_ITEM, new EquipmentSlotType[]{EquipmentSlotType.MAINHAND, EquipmentSlotType.OFFHAND});
     }
 

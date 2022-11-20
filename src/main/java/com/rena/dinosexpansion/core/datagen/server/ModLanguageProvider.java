@@ -32,6 +32,19 @@ public class ModLanguageProvider extends LanguageProvider {
         add(ModItemGroups.BLOCKS, "Blocks");
         add(ItemInit.PARAPUZOSIA_SPAWN_EGG.get(), "Parapuzosia Spawn Egg");
         add(ItemInit.EOSQUALODON_SPAWN_EGG.get(), "Eosqualodon Spawn Egg");
+        add(EnchantmentInit.AQUATIC_ENCHANT.get(), "Aquatic Throwing");
+        add(ItemInit.COOKED_ANKYLOSAURUS_MEAT.get(), "Cooked Ankylosaurus Meat");
+        add(ItemInit.COOKED_CARNOTAURUS_MEAT.get(), "Cooked Carnotaurus Meat");
+        add(ItemInit.COOKED_GALLIMIMUS_MEAT.get(), "Cooked Gallimimus Meat");
+        add(ItemInit.COOKED_TRICERATOPS_MEAT.get(), "Cooked Triceratops Meat");
+        add(ItemInit.BLOWGUN.get(), "Blowgun");
+        add(ItemInit.DART.get(), "Dart");
+        add(ItemInit.DIAMOND_CHAKRAM.get(), "Diamond Chakram");
+        add(ItemInit.EMERALD_CHAKRAM.get(), "Emerald Chakram");
+        add(ItemInit.WOODEN_CHAKRAM.get(), "Wood Chakram");
+        add(ItemInit.STONE_CHAKRAM.get(), "Stone Chakram");
+        add(ItemInit.IRON_CHAKRAM.get(), "Iron Chakram");
+        add(ItemInit.WOODEN_SPEAR.get(), "Wood Spear");
     }
 
     public void add(ItemGroup group, String key){

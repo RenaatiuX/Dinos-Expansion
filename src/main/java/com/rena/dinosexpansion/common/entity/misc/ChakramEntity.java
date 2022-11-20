@@ -1,5 +1,7 @@
 package com.rena.dinosexpansion.common.entity.misc;
 
+import com.rena.dinosexpansion.DinosExpansion;
+import com.rena.dinosexpansion.core.init.EnchantmentInit;
 import com.rena.dinosexpansion.core.init.EntityInit;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
@@ -66,7 +68,8 @@ public class ChakramEntity extends AbstractArrowEntity {
         if (this.timeInGround > 4) {
             this.dealtDamage = true;
         } else {
-            this.dataManager.set(ROTATION, this.getRotation() + 45.0F);
+            if(timeInGround <= 0)
+                this.dataManager.set(ROTATION, this.getRotation() + 45.0F);
 
             if (!this.hasNoGravity() && !this.getNoClip()) {
                 Vector3d motion = this.getMotion();
@@ -193,6 +196,17 @@ public class ChakramEntity extends AbstractArrowEntity {
         }
 
         this.dealtDamage = compound.getBoolean("DealtDamage");
+    }
+
+    @Override
+    protected float getWaterDrag() {
+        return EnchantmentHelper.getEnchantmentLevel(EnchantmentInit.AQUATIC_ENCHANT.get(), getArrowStack()) > 0 ? 1.0f : super.getWaterDrag();
+    }
+
+    @Override
+    protected float getSpeedFactor() {
+        DinosExpansion.LOGGER.info(EnchantmentHelper.getEnchantmentLevel(EnchantmentInit.AQUATIC_ENCHANT.get(), getArrowStack()) > 0 ? 1.0f : super.getSpeedFactor());
+        return EnchantmentHelper.getEnchantmentLevel(EnchantmentInit.AQUATIC_ENCHANT.get(), getArrowStack()) > 0 ? 1.0f : super.getSpeedFactor();
     }
 
     @Override

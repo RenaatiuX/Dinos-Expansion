@@ -15,6 +15,6 @@ public class DartItem extends ArrowItem {
 
     @Override
     public AbstractArrowEntity createArrow(World world, ItemStack stack, LivingEntity shooter) {
-        return new DartEntity(EntityInit.DART.get(), world, shooter);
+        return new DartEntity(EntityInit.DART.get(), world, shooter, stack);
     }
 }

@@ -1,10 +1,7 @@
 package com.rena.dinosexpansion.core.init;
 
 import com.rena.dinosexpansion.DinosExpansion;
-import com.rena.dinosexpansion.common.enchantments.BetterPiercing;
-import com.rena.dinosexpansion.common.enchantments.BetterQuickCharge;
-import com.rena.dinosexpansion.common.enchantments.ElectricEnchantment;
-import com.rena.dinosexpansion.common.enchantments.IceEnchantment;
+import com.rena.dinosexpansion.common.enchantments.*;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.QuickChargeEnchantment;
 import net.minecraftforge.fml.RegistryObject;
@@ -23,4 +20,5 @@ public class EnchantmentInit {
     //Custom
     public static final RegistryObject<ElectricEnchantment> ELECTRIC_ENCHANTMENT = ENCHANTMENTS.register("electric", ElectricEnchantment::new);
     public static final RegistryObject<IceEnchantment> ICE_ENCHANTMENT = ENCHANTMENTS.register("iced_arrow", IceEnchantment::new);
+    public static final RegistryObject<AquaticEnchantment> AQUATIC_ENCHANT = ENCHANTMENTS.register("aquatic_enchant", AquaticEnchantment::new);
 }

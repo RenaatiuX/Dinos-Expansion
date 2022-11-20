@@ -6,6 +6,9 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.world.World;
 
 public class TinyRockEntity extends CustomArrow{
@@ -19,8 +22,8 @@ public class TinyRockEntity extends CustomArrow{
         this.setPosition(x, y, z);
     }
 
-    public TinyRockEntity(EntityType<CustomArrow> type, LivingEntity shooter, World worldIn) {
-        this(type, shooter.getPosX(), shooter.getPosYEye() - (double)0.1F, shooter.getPosZ(), worldIn);
+    public TinyRockEntity(LivingEntity shooter, World worldIn, ItemStack rock) {
+        super(shooter.getPosX(), shooter.getPosYEye() - (double)0.1F, shooter.getPosZ(), worldIn, rock, 0, 2);
         this.setShooter(shooter);
         if (shooter instanceof PlayerEntity) {
             this.pickupStatus = AbstractArrowEntity.PickupStatus.ALLOWED;
@@ -30,16 +33,11 @@ public class TinyRockEntity extends CustomArrow{
 
     @Override
     public ItemStack getArrowStack() {
-        return new ItemStack(ItemInit.TINY_ROCK.get());
+        return super.getArrowStack().isEmpty() ? new ItemStack(ItemInit.TINY_ROCK.get()) : super.getArrowStack();
     }
 
     @Override
     protected void arrowHit(LivingEntity living) {
         super.arrowHit(living);
-    }
-
-    @Override
-    public int getNarcoticValue() {
-        return 2;
     }
 }

@@ -1,7 +1,7 @@
 package com.rena.dinosexpansion.core.datagen;
 
 import com.rena.dinosexpansion.DinosExpansion;
-import com.rena.dinosexpansion.core.datagen.client.ModBlockSTatesProvider;
+import com.rena.dinosexpansion.core.datagen.client.ModBlockStatesProvider;
 import com.rena.dinosexpansion.core.datagen.client.ModItemModelsProvider;
 import com.rena.dinosexpansion.core.datagen.server.*;
 import net.minecraft.data.DataGenerator;
@@ -32,7 +32,7 @@ public class DataGenerators {
     }
 
     private static void gatherClientData(DataGenerator gen, ExistingFileHelper helper) {
-        gen.addProvider(new ModBlockSTatesProvider(gen, helper));
+        gen.addProvider(new ModBlockStatesProvider(gen, helper));
         gen.addProvider(new ModItemModelsProvider(gen, helper));
     }
 

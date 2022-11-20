@@ -14,6 +14,7 @@ public class ModTags {
     public static class Items{
 
         public static final ITag.INamedTag<Item> COMPOUND_ARROWS = mod("compound_arrows");
+        public static final ITag.INamedTag <Item> AQUATIC_ENCHANT = mod("aquatic_enchant");
 
         public static ITag.INamedTag<Item> mod(String name){
             return ItemTags.makeWrapperTag(DinosExpansion.modLoc(name).toString());

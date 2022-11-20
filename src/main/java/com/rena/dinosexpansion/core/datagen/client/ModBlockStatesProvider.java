@@ -10,8 +10,8 @@ import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
-public class ModBlockSTatesProvider extends BlockStateProvider {
-    public ModBlockSTatesProvider(DataGenerator gen, ExistingFileHelper exFileHelper) {
+public class ModBlockStatesProvider extends BlockStateProvider {
+    public ModBlockStatesProvider(DataGenerator gen, ExistingFileHelper exFileHelper) {
         super(gen, DinosExpansion.MOD_ID, exFileHelper);
     }
 

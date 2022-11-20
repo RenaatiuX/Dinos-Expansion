@@ -1,6 +1,8 @@
 package com.rena.dinosexpansion.common.entity.projectile;
 
+import com.rena.dinosexpansion.core.init.EnchantmentInit;
 import com.rena.dinosexpansion.core.init.EntityInit;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
@@ -17,6 +19,7 @@ public class CustomArrow extends AbstractArrowEntity implements INarcoticProject
     public static final DataParameter<ItemStack> ARROW_STACK = EntityDataManager.createKey(CustomArrow.class, DataSerializers.ITEMSTACK);
 
     private final int narcoticValue;
+    private boolean hasAquaticEnchant = false;
 
     public CustomArrow(EntityType<CustomArrow> type, World world) {
         super(type, world);
@@ -37,6 +40,7 @@ public class CustomArrow extends AbstractArrowEntity implements INarcoticProject
         setDamage(damage);
         this.dataManager.set(ARROW_STACK, countArrow);
         this.narcoticValue = narcoticValue;
+        this.hasAquaticEnchant = EnchantmentHelper.getEnchantmentLevel(EnchantmentInit.AQUATIC_ENCHANT.get(), this.getArrowStack()) > 0;
     }
 
     public CustomArrow(LivingEntity shooter, World world, ItemStack arrow) {
@@ -54,6 +58,14 @@ public class CustomArrow extends AbstractArrowEntity implements INarcoticProject
         setDamage(damage);
         this.dataManager.set(ARROW_STACK, countArrow);
         this.narcoticValue = narcoticValue;
+        this.hasAquaticEnchant = EnchantmentHelper.getEnchantmentLevel(EnchantmentInit.AQUATIC_ENCHANT.get(), this.getArrowStack()) > 0;
+    }
+
+    @Override
+    protected float getSpeedFactor() {
+        if (!hasAquaticEnchant)
+            return super.getSpeedFactor();
+        return 1.0f;
     }
 
     @Override
