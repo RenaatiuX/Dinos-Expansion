@@ -1,9 +1,9 @@
 modLoader="javafml"
 loaderVersion="[36,)"
-license="All rights reserved"
+license="MIT License"
 issueTrackerURL="https://github.com/RenaatiuX/Dinos-Expansion/issues"
 [[mods]]
-    modId="dinosexpansion
+    modId="dinosexpansion"
     version="${file.jarVersion}"
     displayName="Dinos Expansion" #mandatory
     #displayURL="https://change.me.to.your.mods.homepage.example.invalid/"

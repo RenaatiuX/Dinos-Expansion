@@ -351,4 +351,12 @@ public class TieredMultiTool extends ToolItem{
                 Blocks.GRASS_PATH, Blocks.FARMLAND.getDefaultState(), Blocks.DIRT, Blocks.FARMLAND.getDefaultState(),
                 Blocks.COARSE_DIRT, Blocks.DIRT.getDefaultState()));
     }
+
+    public interface MultiToolTier{
+        double getDamageAddition();
+        double getAttackSpeed();
+        int getEnchantability();
+        int getDurability();
+
+    }
 }

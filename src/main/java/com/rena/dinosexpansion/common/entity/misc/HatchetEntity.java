@@ -10,6 +10,7 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.IPacket;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -19,6 +20,9 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 
@@ -181,5 +185,24 @@ public class HatchetEntity extends AbstractArrowEntity {
         super.writeAdditional(compound);
         compound.put("Hatchet", getArrowStack().write(new CompoundNBT()));
         compound.putBoolean("DealtDamage", this.dealtDamage);
+    }
+
+    @Override
+    public void func_225516_i_() {
+        int i = loyaltyLevel;
+        if (this.pickupStatus != AbstractArrowEntity.PickupStatus.ALLOWED || i <= 0) {
+            super.func_225516_i_();
+        }
+    }
+
+    @Override
+    public IPacket<?> createSpawnPacket() {
+        return NetworkHooks.getEntitySpawningPacket(this);
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    @Override
+    public boolean isInRangeToRender3d(double x, double y, double z) {
+        return true;
     }
 }
