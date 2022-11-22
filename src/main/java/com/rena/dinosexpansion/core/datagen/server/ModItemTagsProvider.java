@@ -13,6 +13,7 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.data.ItemTagsProvider;
 import net.minecraft.data.TagsProvider;
 import net.minecraft.item.Item;
+import net.minecraft.item.Items;
 import net.minecraft.tags.ItemTags;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -37,5 +38,7 @@ public class ModItemTagsProvider extends ItemTagsProvider {
             if (item instanceof TieredSpear)
                 builder.add(item);
         }
+        //add more food here
+        getOrCreateBuilder(ModTags.Items.EOSQUALODON_FOOD).add(Items.SALMON);
     }
 }

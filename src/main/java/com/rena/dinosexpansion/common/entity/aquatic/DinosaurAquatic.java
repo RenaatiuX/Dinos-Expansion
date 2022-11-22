@@ -4,16 +4,23 @@ import com.rena.dinosexpansion.common.entity.Dinosaur;
 import com.rena.dinosexpansion.common.entity.ia.helper.ISemiAquatic;
 import com.rena.dinosexpansion.common.entity.ia.movecontroller.AquaticMoveController;
 import com.rena.dinosexpansion.common.entity.ia.navigator.SemiAquaticPathNavigator;
+import net.minecraft.block.Block;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.controller.MovementController;
+import net.minecraft.entity.item.BoatEntity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.pathfinding.PathNavigator;
+import net.minecraft.pathfinding.PathNodeType;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
@@ -38,42 +45,42 @@ public abstract class DinosaurAquatic extends Dinosaur implements ISemiAquatic {
     public DinosaurAquatic(EntityType<? extends Dinosaur> type, World world, DinosaurInfo info, int level) {
         super(type, world, info, level);
         switchNavigator(true);
+        this.setPathPriority(PathNodeType.WATER, 0.0F);
     }
 
     @Override
-    public Iterable<Item> getFood() {
-        return null;
+    public void livingTick() {
+        super.livingTick();
+        int i = this.getAir();
+        if (!canBreathOnLand()) {
+            if (this.isAlive() && !this.isInWater()) {
+                --i;
+                this.setAir(i);
+
+                if (this.getAir() == -40) {
+                    this.setAir(0);
+                    this.attackEntityFrom(DamageSource.DROWN, 2.0F);
+                }
+            } else {
+                this.setAir(500);
+            }
+        }
     }
 
-    @Override
-    protected Rarity getinitialRarity() {
-        return null;
-    }
-
-    @Override
-    protected Gender getInitialGender() {
-        return null;
-    }
-
-    @Nullable
-    @Override
-    public AgeableEntity createChild(ServerWorld world, AgeableEntity mate) {
-        return null;
-    }
-
+    //?
     public boolean doesBreachAttack() {
         return false;
     }
 
-    private void switchNavigator(boolean onLand) {
+    protected void switchNavigator(boolean onLand) {
         if (onLand) {
             this.moveController = new MovementController(this);
-            PathNavigator prevNav = this.navigator;
+            PathNavigator prevNav = this.navigator; //?
             this.navigator = new GroundPathNavigator(this, world);
             this.isLandNavigator = true;
         } else {
             this.moveController = new AquaticMoveController(this, 1F);
-            PathNavigator prevNav = this.navigator;
+            PathNavigator prevNav = this.navigator;//?
             this.navigator = new SemiAquaticPathNavigator(this, world);
             this.isLandNavigator = false;
         }
@@ -128,24 +135,23 @@ public abstract class DinosaurAquatic extends Dinosaur implements ISemiAquatic {
         return false;
     }
 
-    /*public void destroyBoat(Entity sailor) {
+    public void destroyBoat(Entity sailor) {
         if (sailor.getRidingEntity() != null && sailor.getRidingEntity() instanceof BoatEntity && !world.isRemote) {
             BoatEntity boat = (BoatEntity) sailor.getRidingEntity();
             boat.remove();
             if (this.world.getGameRules().getBoolean(GameRules.DO_ENTITY_DROPS)) {
                 for (int i = 0; i < 3; ++i) {
-                    boat.entityDropItem(new ItemStack(Block.getBlockFromItem(ItemTags.PLANKS), 1, boat.getBoatType()), 0.0F);
+                    boat.entityDropItem(new ItemStack(boat.getBoatType().asPlank(), 2), 0);
                 }
                 for (int j = 0; j < 2; ++j) {
                     boat.entityDropItem(Items.STICK, 1);
                 }
             }
         }
-    }*/
+    }
 
-    @Override
-    public void livingTick() {
-        super.livingTick();
+    public boolean isPushedByWater() {
+        return false;
     }
 
     @Override
@@ -183,26 +189,7 @@ public abstract class DinosaurAquatic extends Dinosaur implements ISemiAquatic {
 
     @Override
     public Vector3d getPositionVec() {
-        return new Vector3d(this.getPosX(), this.getPosY() + 0.5D, this.getPosZ());
-    }
-
-    @Override
-    public void baseTick() {
-        int i = this.getAir();
-        super.baseTick();
-        if (!canBreathOnLand()) {
-            if (this.isAlive() && !this.isInWater()) {
-                --i;
-                this.setAir(i);
-
-                if (this.getAir() == -40) {
-                    this.setAir(0);
-                    this.attackEntityFrom(DamageSource.DROWN, 2.0F);
-                }
-            } else {
-                this.setAir(500);
-            }
-        }
+        return super.getPositionVec();
     }
 
     public boolean canBreathOnLand() {
@@ -210,7 +197,7 @@ public abstract class DinosaurAquatic extends Dinosaur implements ISemiAquatic {
     }
 
     public boolean canDinoHunt(Entity target, boolean hunger) {
-        //missing code
+        //TODO missing code
         return true;
     }
 

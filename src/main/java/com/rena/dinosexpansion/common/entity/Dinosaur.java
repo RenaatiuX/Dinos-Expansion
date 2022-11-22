@@ -20,16 +20,31 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import java.util.UUID;
 
 public abstract class Dinosaur extends TameableEntity {
+
+    /**
+     * use this to generate a random level as it already contains all relevant config values
+     * @param minLevel the minimum Level the Dino should have when it spawns(inclusive)
+     * @param maxLevel the maximum level the Dino can have when it spawns(inclusive)
+     * @return the randomly distributed value between max and min
+     */
+    public static final int generateLevelWithinBounds(int minLevel, int maxLevel){
+        int max = Math.min(maxLevel + DinosExpansionConfig.LEVEL_OFFSET.get(), DinosExpansionConfig.MAX_LEVEL.get());
+        int min = Math.max(minLevel + DinosExpansionConfig.LEVEL_OFFSET.get(), 0);
+        return MathHelper.nextInt(new Random(), min, max);
+    }
 
     public static final DataParameter<Integer> LEVEL = EntityDataManager.createKey(Dinosaur.class, DataSerializers.VARINT);
     public static final DataParameter<Integer> XP = EntityDataManager.createKey(Dinosaur.class, DataSerializers.VARINT);
@@ -59,6 +74,9 @@ public abstract class Dinosaur extends TameableEntity {
         this.dataManager.set(GENDER, getInitialGender().ordinal());
         this.dataManager.set(LEVEL, level);
         Rarity rarity = getRarity();
+        this.info = info;
+        //dont do that at home kids
+        this.goalSelector.addGoal(3, new SleepRhythmGoal(this, info.rhythm));
         getAttribute(Attributes.MAX_HEALTH).setBaseValue(getAttribute(Attributes.MAX_HEALTH).getValue() + rarity.healthBonus + DinosExpansionConfig.HEALTH_PER_LEVEL.get() * (double) level);
         getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(getAttribute(Attributes.ATTACK_DAMAGE).getValue() + rarity.attackDamageBonus + DinosExpansionConfig.ATTACK_DAMAGE_PER_LEVEL.get() * (double) level);
         getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(getAttribute(Attributes.MOVEMENT_SPEED).getValue() + rarity.speedBonus);
@@ -69,19 +87,18 @@ public abstract class Dinosaur extends TameableEntity {
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(3, new SleepRhythmGoal(this, this.info.rhythm));
     }
 
     @Override
     protected void registerData() {
         super.registerData();
-        this.dataManager.set(LEVEL, 0);
-        this.dataManager.set(XP, 0);
-        this.dataManager.set(BOOLS, 0);
-        this.dataManager.set(RARITY, Rarity.COMMON.ordinal());
-        this.dataManager.set(GENDER, Gender.MALE.ordinal());
-        this.dataManager.set(KNOCKED_OUT, Optional.empty());
-        this.dataManager.set(NARCOTIC_VALUE, 0);
+        this.dataManager.register(LEVEL, 0);
+        this.dataManager.register(XP, 0);
+        this.dataManager.register(BOOLS, 0);
+        this.dataManager.register(RARITY, Rarity.COMMON.ordinal());
+        this.dataManager.register(GENDER, Gender.MALE.ordinal());
+        this.dataManager.register(KNOCKED_OUT, Optional.empty());
+        this.dataManager.register(NARCOTIC_VALUE, 0);
     }
 
     @Override
@@ -315,7 +332,11 @@ public abstract class Dinosaur extends TameableEntity {
         this.info.gender = this.getGender();
     }
 
-    public abstract Iterable<Item> getFood();
+    public boolean isFood(ItemStack stack){
+        return getFood().contains(stack.getItem());
+    }
+
+    public abstract List<Item> getFood();
 
     protected void setNarcoticValue(int value) {
         this.dataManager.set(NARCOTIC_VALUE, Math.min(value, maxNarcotic));
@@ -419,6 +440,13 @@ public abstract class Dinosaur extends TameableEntity {
 
         public int getLevel() {
             return level;
+        }
+
+        /**
+         * just call it for Debugging as it will print everything relevant in the console
+         */
+        public void print(){
+            DinosExpansion.LOGGER.debug("Level: " + this.level + " | Rarity: " + rarity.name() + " | Gender: " + gender.name());
         }
     }
 }

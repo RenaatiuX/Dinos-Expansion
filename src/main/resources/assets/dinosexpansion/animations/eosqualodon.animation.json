@@ -594,6 +594,57 @@
 					}
 				}
 			}
+		},
+		"Eosqualodon_Knockout.new": {
+			"loop": true,
+			"animation_length": 0.04,
+			"bones": {
+				"Eosqualodon": {
+					"rotation": {
+						"vector": [2.5, 0, 12.5]
+					}
+				},
+				"Torso": {
+					"rotation": {
+						"vector": [-2.5, 0, 0]
+					}
+				},
+				"Head": {
+					"rotation": {
+						"vector": [7.5, 0, 0]
+					}
+				},
+				"Jaw": {
+					"rotation": {
+						"vector": [7.5, 0, 0]
+					}
+				},
+				"LeftFin": {
+					"rotation": {
+						"vector": [0, -12.5, 12.5]
+					}
+				},
+				"RightFin": {
+					"rotation": {
+						"vector": [0, 12.5, -35]
+					}
+				},
+				"Tail": {
+					"rotation": {
+						"vector": [-5, 0, 0]
+					}
+				},
+				"Tail2": {
+					"rotation": {
+						"vector": [-7.5, 0, 0]
+					}
+				},
+				"Tail3": {
+					"rotation": {
+						"vector": [-5, 0, 0]
+					}
+				}
+			}
 		}
 	},
 	"geckolib_format_version": 2

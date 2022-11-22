@@ -7,7 +7,7 @@ public class DinosExpansionConfig {
     public static final ForgeConfigSpec.Builder BUILDER;
     public static final ForgeConfigSpec.IntValue MAX_LEVEL, MAX_XP, XP_INCREASE, NARCOTIC_NEEDED_PERCENT,
             WOOD_BOOMERANG_RANGE, WOOD_BOOMERANG_DAMAGE, IRON_BOOMERANG_RANGE, IRON_BOOMERANG_DAMAGE,
-            DIAMOND_BOOMERANG_RANGE, DIAMOND_BOOMERANG_DAMAGE;
+            DIAMOND_BOOMERANG_RANGE, DIAMOND_BOOMERANG_DAMAGE, LEVEL_OFFSET;
     public static final ForgeConfigSpec.DoubleValue ATTACK_DAMAGE_PER_LEVEL, HEALTH_PER_LEVEL, ARMOR_PER_LEVEL;
     public static final ForgeConfigSpec.BooleanValue TURN_AROUND_ITEM, TURN_AROUND_MOB, TURN_AROUND_BUTTON,
             WOOD_BOOMERANG_FOLLOWS, BREAKS_TORCHES, BREAKS_FLOWERS, BREAKS_GRASS, BREAKS_TALLGRASS,
@@ -19,6 +19,8 @@ public class DinosExpansionConfig {
         builder.push("Dinos");
         builder.comment("this defines the max Level Dios can have");
         MAX_LEVEL = builder.defineInRange("max_level", 50, 10, 450);
+        builder.comment("this defines how many level higher from defaul u want ur Dino to spawn");
+        LEVEL_OFFSET = builder.defineInRange("level_offset", 0, 0, Integer.MAX_VALUE);
         builder.comment("needed xp to increase the level", "one Xp is gained when the dinosaur hits something and 2 Xp are gained when the dinosaur kills/breaks something");
         MAX_XP = builder.defineInRange("max_Xp", 10, 1, Integer.MAX_VALUE);
         builder.comment("this defines how many more xp u need for every level after 0",

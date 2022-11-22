@@ -11,6 +11,7 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
 public class CarnotaurusEntity extends Dinosaur implements IAnimatable {
     public CarnotaurusEntity(EntityType<CarnotaurusEntity> type, World world, DinosaurInfo info, int level) {
@@ -18,7 +19,7 @@ public class CarnotaurusEntity extends Dinosaur implements IAnimatable {
     }
 
     @Override
-    public Iterable<Item> getFood() {
+    public List<Item> getFood() {
         return null;
     }
 
