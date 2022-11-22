@@ -1,5 +1,7 @@
 package com.rena.dinosexpansion.common.entity.misc;
 
+import com.rena.dinosexpansion.DinosExpansion;
+import com.rena.dinosexpansion.core.init.EnchantmentInit;
 import com.rena.dinosexpansion.core.init.EntityInit;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
@@ -168,6 +170,17 @@ public class SpearEntity extends AbstractArrowEntity {
             setArrowStack(ItemStack.read(compound.getCompound("Spear")));
         }
         dealtDamage = compound.getBoolean("damage");
+    }
+
+    @Override
+    protected float getWaterDrag() {
+        return EnchantmentHelper.getEnchantmentLevel(EnchantmentInit.AQUATIC_ENCHANT.get(), getArrowStack()) > 0 ? 1.0f : super.getWaterDrag();
+    }
+
+    @Override
+    protected float getSpeedFactor() {
+        DinosExpansion.LOGGER.info(EnchantmentHelper.getEnchantmentLevel(EnchantmentInit.AQUATIC_ENCHANT.get(), getArrowStack()) > 0 ? 1.0f : super.getSpeedFactor());
+        return EnchantmentHelper.getEnchantmentLevel(EnchantmentInit.AQUATIC_ENCHANT.get(), getArrowStack()) > 0 ? 1.0f : super.getSpeedFactor();
     }
 
     @Override
