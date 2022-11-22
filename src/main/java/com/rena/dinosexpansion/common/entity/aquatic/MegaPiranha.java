@@ -27,13 +27,14 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 public class MegaPiranha extends WaterMobEntity implements IAnimatable {
 
     public static final String CONTROLLER_NAME = "controller";
     public static final String ATTACK_CONTROLLER_NAME = "attack_controller";
 
-    private final AnimationFactory factory = new AnimationFactory(this);
+    private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
     public float prevOnLandProgress;
     public float onLandProgress;
 
@@ -63,8 +64,8 @@ public class MegaPiranha extends WaterMobEntity implements IAnimatable {
         this.goalSelector.addGoal(5, new LookRandomlyGoal(this));
         this.goalSelector.addGoal(6, new FollowBoatGoal(this));
         this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)));
-        this.targetSelector.addGoal(2, new DinosaurAINearestTarget<>(this, AbstractGroupFishEntity.class, 100, false, true, null));
-        this.targetSelector.addGoal(3, new DinosaurAINearestTarget<>(this, PlayerEntity.class, 40, false, true, null));
+        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, AbstractGroupFishEntity.class, 100, false, true, null));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, 40, false, true, null));
 
     }
 

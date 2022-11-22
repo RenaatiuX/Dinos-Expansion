@@ -1,5 +1,6 @@
 package com.rena.dinosexpansion.common.entity.aquatic;
 
+import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.common.entity.ia.DinosaurAINearestTarget;
 import com.rena.dinosexpansion.common.entity.ia.SleepRhythmGoal;
 import com.rena.dinosexpansion.common.entity.ia.movecontroller.AquaticMoveController;
@@ -55,15 +56,10 @@ public class Eosqualodon extends DinosaurAquatic implements IAnimatable {
                 .createMutableAttribute(Attributes.ATTACK_DAMAGE, 5.0F);
     }
 
-    @Override
-    public double swimSpeed() {
-        return 0;
-    }
-
     private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
     public Eosqualodon(EntityType<Eosqualodon> type, World world) {
-        super(type, world, new DinosaurInfo(200, 400, 50, SleepRhythmGoal.SleepRhythm.DIURNAL), generateLevelWithinBounds(20, 100));
+        super(type, world, new DinosaurInfo(200, 100, 50, SleepRhythmGoal.SleepRhythm.DIURNAL), generateLevelWithinBounds(20, 100));
         this.moveController = new AquaticMoveController(this, 1F);
         switchNavigator(false);
         updateInfo();
@@ -84,6 +80,11 @@ public class Eosqualodon extends DinosaurAquatic implements IAnimatable {
         this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)));
         this.targetSelector.addGoal(2, new DinosaurAINearestTarget<>(this, SquidEntity.class, 40, false, true, null));
         this.targetSelector.addGoal(3, new DinosaurAINearestTarget<>(this, AbstractGroupFishEntity.class, 100, false, true, null));
+    }
+
+    @Override
+    public double swimSpeed() {
+        return 0;
     }
 
     @Override
@@ -113,6 +114,8 @@ public class Eosqualodon extends DinosaurAquatic implements IAnimatable {
     @Override
     public ActionResultType applyPlayerInteraction(PlayerEntity player, Vector3d vec, Hand hand) {
         this.getInfo().print();
+        DinosExpansion.LOGGER.debug("Narcotic: [" + getNarcoticValue() + "/" + getInfo().getMaxNarcotic() + "]");
+        DinosExpansion.LOGGER.debug("IsKnockout: " + this.isKnockout());
         return super.applyPlayerInteraction(player, vec, hand);
     }
 
@@ -143,7 +146,7 @@ public class Eosqualodon extends DinosaurAquatic implements IAnimatable {
     @Nullable
     @Override
     public AgeableEntity createChild(ServerWorld world, AgeableEntity mate) {
-        return null;
+        return EntityInit.EOSQUALODON.get().create(world);
     }
 
     @Override
@@ -186,10 +189,8 @@ public class Eosqualodon extends DinosaurAquatic implements IAnimatable {
     }
 
     private PlayState predicate(AnimationEvent<Eosqualodon> event) {
-        if (this.isSwingInProgress) {
-            event.getController().markNeedsReload();
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("eosqualodon_bite"));
-            this.isSwingInProgress = false;
+        if (isKnockout()){
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("eosqualodon_knockout", ILoopType.EDefaultLoopTypes.LOOP));
         }
         else if (event.isMoving() && event.getController().getAnimationState().equals(AnimationState.Stopped)) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("eosqualodon_swim", ILoopType.EDefaultLoopTypes.LOOP));
@@ -198,12 +199,17 @@ public class Eosqualodon extends DinosaurAquatic implements IAnimatable {
     }
 
     private PlayState attackPredicate(AnimationEvent<Eosqualodon> event) {
+        if (!isKnockout() && this.isSwingInProgress && event.getController().getAnimationState().equals(AnimationState.Stopped)) {
+            event.getController().markNeedsReload();
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("eosqualodon_bite"));
+            this.isSwingInProgress = false;
+        }
         return PlayState.CONTINUE;
     }
 
     @Override
     public void registerControllers(AnimationData data) {
-        data.addAnimationController(new AnimationController<>(this, CONTROLLER_NAME, 0, this::predicate));
+        data.addAnimationController(new AnimationController<>(this, CONTROLLER_NAME, 30, this::predicate));
         data.addAnimationController(new AnimationController<>(this, ATTACK_CONTROLLER_NAME, 0, this::attackPredicate));
     }
 

@@ -1,0 +1,35 @@
+{
+  "parent":"forge:item/default",
+  "loader":"forge:separate-perspective",
+  "base": {
+    "parent": "dinosexpansion:item/spear_in_hand",
+    "textures": {
+      "spear": "dinosexpansion:item/emerald_spear"
+    }
+  },
+  "perspectives": {
+    "gui": {
+      "parent": "minecraft:item/generated",
+      "textures": {
+        "layer0": "dinosexpansion:item/emerald_spear"
+      }
+    },
+    "ground": {
+      "parent": "minecraft:item/generated",
+      "textures": {
+        "layer0": "dinosexpansion:item/emerald_spear"
+      }
+    }
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "minecraft:throwing": 1
+      },
+      "model": "dinosexpansion:item/spear_throwing",
+      "textures": {
+        "spear": "dinosexpansion:item/emerald_spear"
+      }
+    }
+  ]
+}

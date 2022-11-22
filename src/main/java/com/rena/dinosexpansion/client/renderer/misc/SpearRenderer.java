@@ -5,7 +5,6 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.client.model.misc.SpearModel;
-import com.rena.dinosexpansion.client.model.misc.SteelSpearModel;
 import com.rena.dinosexpansion.common.entity.misc.SpearEntity;
 import com.rena.dinosexpansion.core.init.ItemInit;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
@@ -31,13 +30,13 @@ public class SpearRenderer extends EntityRenderer<SpearEntity> {
     //public static final ResourceLocation STEEL_SPEAR = DinosExpansion.modLoc("textures/entity/steel_spear.png");
     //private final SteelSpearModel steelSpearModel = new SteelSpearModel();
     public static final ResourceLocation SPEAR = spear("wooden_spear.png");
-    private static final SpearModel spearModel = new SpearModel();
+    private static final SpearModel SPEAR_MODEL = new SpearModel();
 
-    /*public static final Supplier<Map<Item, ResourceLocation>> TEXTURE_REGISTRY = () -> Util.make(Maps.newHashMap(), map -> {
+    public static final Supplier<Map<Item, ResourceLocation>> TEXTURE_REGISTRY = () -> Util.make(Maps.newHashMap(), map -> {
 
         map.put(ItemInit.WOODEN_SPEAR.get(), spear("wooden_spear.png"));
 
-    });*/
+    });
 
     public SpearRenderer(EntityRendererManager renderManager) {
         super(renderManager);
@@ -49,28 +48,32 @@ public class SpearRenderer extends EntityRenderer<SpearEntity> {
         matrixStackIn.rotate(Vector3f.YP.rotationDegrees(MathHelper.lerp(partialTicks, entityIn.prevRotationYaw, entityIn.rotationYaw) - 90.0F));
         matrixStackIn.rotate(Vector3f.ZP.rotationDegrees(MathHelper.lerp(partialTicks, entityIn.prevRotationPitch, entityIn.rotationPitch) + 90.0F));
         IVertexBuilder ivertexbuilder = ItemRenderer.getEntityGlintVertexBuilder(bufferIn, RenderType.getEntityCutout(this.getEntityTexture(entityIn)), false, entityIn.isEnchanted());
-        spearModel.render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        SPEAR_MODEL.render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
         matrixStackIn.pop();
         super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
     }
 
     @Override
     public ResourceLocation getEntityTexture(SpearEntity entity) {
-        return SPEAR;
+        return spear(entity.getArrowStack().getItem().getRegistryName().getPath() + ".png");
     }
 
     public static class SpearItemStackRenderer extends ItemStackTileEntityRenderer {
 
-        public SpearItemStackRenderer(final String name) {
+        protected final String regName;
+        public SpearItemStackRenderer(final String regName) {
+            this.regName = regName;
         }
 
         @Override
         public void func_239207_a_(ItemStack stack, ItemCameraTransforms.TransformType p_239207_2_, MatrixStack matrixStack, IRenderTypeBuffer buffer, int combinedLight, int combinedOverlay) {
-            matrixStack.push();
-            matrixStack.scale(-1.0F, -1.0F, 1.0F);
-            IVertexBuilder vertexBuilder = ItemRenderer.getEntityGlintVertexBuilder(buffer, RenderType.getEntityCutout(SPEAR), false, stack.hasEffect());
-            spearModel.render(matrixStack, vertexBuilder, combinedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
-            matrixStack.pop();
+            if (this.regName.equals(stack.getItem().getRegistryName().toString())) {
+                matrixStack.push();
+                matrixStack.scale(-1.0F, -1.0F, 1.0F);
+                IVertexBuilder vertexBuilder = ItemRenderer.getEntityGlintVertexBuilder(buffer, RenderType.getEntityCutout(spear(regName.substring(regName.indexOf(':') + 1))), false, stack.hasEffect());
+                SPEAR_MODEL.render(matrixStack, vertexBuilder, combinedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+                matrixStack.pop();
+            }
         }
     }
 

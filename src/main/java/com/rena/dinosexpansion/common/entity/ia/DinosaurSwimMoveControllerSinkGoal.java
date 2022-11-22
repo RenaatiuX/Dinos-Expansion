@@ -29,7 +29,7 @@ public class DinosaurSwimMoveControllerSinkGoal extends MovementController {
 
     @Override
     public void tick() {
-        if (dinosaur instanceof ISemiAquatic && ((ISemiAquatic) dinosaur).shouldStopMoving()) {
+        if ((dinosaur instanceof ISemiAquatic && ((ISemiAquatic) dinosaur).shouldStopMoving()) || dinosaur.isMovementDisabled()) {
             this.dinosaur.setAIMoveSpeed(0.0F);
             return;
         }

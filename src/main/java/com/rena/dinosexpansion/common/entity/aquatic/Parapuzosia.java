@@ -30,6 +30,7 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import javax.annotation.Nullable;
 
@@ -52,7 +53,7 @@ public class Parapuzosia extends WaterMobEntity implements IAnimatable {
                 .createMutableAttribute(Attributes.KNOCKBACK_RESISTANCE, 15F);
     }
 
-    private final AnimationFactory factory = new AnimationFactory(this);
+    private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
     public Parapuzosia(EntityType<Parapuzosia> type, World world) {
         super(type, world);
@@ -68,7 +69,7 @@ public class Parapuzosia extends WaterMobEntity implements IAnimatable {
         super.registerGoals();
         this.goalSelector.addGoal(0, new FindWaterGoal(this));
         this.goalSelector.addGoal(2, new ParapuzosiaAiGrab());
-        this.goalSelector.addGoal(3, new DinosaurAISwimBottom(this, 0.8F, 7));
+        //this.goalSelector.addGoal(3, new DinosaurAISwimBottom(this, 0.8F, 7));
         this.goalSelector.addGoal(5, new LookRandomlyGoal(this));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, DrownedEntity.class, true));
     }

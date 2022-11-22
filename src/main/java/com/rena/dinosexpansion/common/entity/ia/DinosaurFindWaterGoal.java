@@ -22,7 +22,7 @@ public class DinosaurFindWaterGoal extends Goal {
 
     @Override
     public boolean shouldExecute() {
-        if (this.dinosaur.isOnGround() && !this.dinosaur.world.getFluidState(this.dinosaur.getPosition()).isTagged(FluidTags.WATER)){
+        if (!dinosaur.isMovementDisabled() && this.dinosaur.isOnGround() && !this.dinosaur.world.getFluidState(this.dinosaur.getPosition()).isTagged(FluidTags.WATER)){
             if(this.dinosaur instanceof ISemiAquatic && ((ISemiAquatic) this.dinosaur).shouldEnterWater() && (this.dinosaur.getAttackTarget() != null || this.dinosaur.getRNG().nextInt(executionChance) == 0)){
                 targetPos = generateTarget();
                 return targetPos != null;

@@ -47,8 +47,8 @@ public class FlyingFollowOwnerGoal extends Goal {
      */
     @Override
     public boolean shouldExecute() {
-        /*LivingEntity livingentity = this.dinosaur.getOwner();
-        if (livingentity == null) {
+        LivingEntity livingentity = this.dinosaur.getOwner();
+        if (livingentity == null || dinosaur.isMovementDisabled()) {
             return false;
         } else if (livingentity.isSpectator()) {
             return false;
@@ -59,8 +59,7 @@ public class FlyingFollowOwnerGoal extends Goal {
         } else {
             this.owner = livingentity;
             return true;
-        }*/
-        return false; //delete this
+        }
     }
 
     /**

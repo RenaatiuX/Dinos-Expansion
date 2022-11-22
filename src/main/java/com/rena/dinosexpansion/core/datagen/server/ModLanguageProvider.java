@@ -45,6 +45,12 @@ public class ModLanguageProvider extends LanguageProvider {
         add(ItemInit.STONE_CHAKRAM.get(), "Stone Chakram");
         add(ItemInit.IRON_CHAKRAM.get(), "Iron Chakram");
         add(ItemInit.WOODEN_SPEAR.get(), "Wood Spear");
+        add(ItemInit.EMERALD_SPEAR.get(), "Emerald Spear");
+        add(ItemInit.NETHERITE_SPEAR.get(), "Netherite Spear");
+        add(ItemInit.IRON_SPEAR.get(), "Iron Spear");
+        add(ItemInit.STONE_SPEAR.get(), "Stone Spear");
+        add(ItemInit.DIAMOND_SPEAR.get(), "Diamond Spear");
+        add(ItemInit.GOLD_SPEAR.get(), "Golden Spear");
     }
 
     public void add(ItemGroup group, String key){

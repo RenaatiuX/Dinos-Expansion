@@ -25,8 +25,13 @@
 					]
 				},
 				{
-					"name": "Head",
+					"name": "HeadSwim",
 					"parent": "Torso",
+					"pivot": [0, 11.4, -16]
+				},
+				{
+					"name": "HeadAttack",
+					"parent": "HeadSwim",
 					"pivot": [0, 11.4, -16],
 					"cubes": [
 						{"origin": [-1.5, 5.1, -39.9], "size": [3, 2, 14], "uv": [22, 87]},
@@ -36,7 +41,12 @@
 				},
 				{
 					"name": "Jaw",
-					"parent": "Head",
+					"parent": "HeadAttack",
+					"pivot": [0, 6.4, -16]
+				},
+				{
+					"name": "JawAttack",
+					"parent": "Jaw",
 					"pivot": [0, 6.4, -16],
 					"cubes": [
 						{"origin": [-4.5, 2.4, -26], "size": [9, 4, 10], "uv": [82, 33]},

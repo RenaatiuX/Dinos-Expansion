@@ -25,7 +25,7 @@ public class SleepRhythmGoal extends Goal {
 
     @Override
     public boolean shouldExecute() {
-        return day != world.isDaytime();
+        return !dino.isKnockout() && day != world.isDaytime();
     }
 
     @Override

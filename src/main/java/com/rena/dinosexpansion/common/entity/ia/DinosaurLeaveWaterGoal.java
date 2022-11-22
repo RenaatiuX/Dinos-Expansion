@@ -24,7 +24,7 @@ public class DinosaurLeaveWaterGoal extends Goal {
 
     @Override
     public boolean shouldExecute() {
-        if (this.dinosaur.world.getFluidState(this.dinosaur.getPosition()).isTagged(FluidTags.WATER) && (this.dinosaur.getAttackTarget() != null || this.dinosaur.getRNG().nextInt(executionChance) == 0)){
+        if (!dinosaur.isMovementDisabled() && this.dinosaur.world.getFluidState(this.dinosaur.getPosition()).isTagged(FluidTags.WATER) && (this.dinosaur.getAttackTarget() != null || this.dinosaur.getRNG().nextInt(executionChance) == 0)){
             if(this.dinosaur instanceof ISemiAquatic && ((ISemiAquatic) this.dinosaur).shouldLeaveWater()){
                 targetPos = generateTarget();
                 return targetPos != null;

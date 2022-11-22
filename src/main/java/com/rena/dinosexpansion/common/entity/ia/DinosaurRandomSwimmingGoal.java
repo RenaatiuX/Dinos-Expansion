@@ -31,7 +31,7 @@ public class DinosaurRandomSwimmingGoal extends RandomWalkingGoal {
 
     @Override
     public boolean shouldExecute() {
-        if (this.dinosaur.isBeingRidden()|| dinosaur.getAttackTarget() != null || !this.dinosaur.isInWater()) {
+        if (dinosaur.isMovementDisabled() || this.dinosaur.isBeingRidden()|| dinosaur.getAttackTarget() != null || !this.dinosaur.isInWater()) {
             return false;
         } else {
             if (!this.mustUpdate) {

@@ -101,7 +101,7 @@ public abstract class DinosaurAquatic extends Dinosaur implements ISemiAquatic {
 
     @Override
     public boolean shouldStopMoving() {
-        return false;
+        return isMovementDisabled();
     }
 
     @Override

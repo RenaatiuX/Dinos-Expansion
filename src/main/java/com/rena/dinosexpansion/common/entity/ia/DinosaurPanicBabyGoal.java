@@ -13,6 +13,6 @@ public class DinosaurPanicBabyGoal extends PanicGoal {
 
     @Override
     public boolean shouldExecute() {
-        return this.dinosaur.isChild() && super.shouldExecute();
+        return !dinosaur.isMovementDisabled() &&this.dinosaur.isChild() && super.shouldExecute();
     }
 }

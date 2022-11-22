@@ -19,6 +19,11 @@ public class DinosaurSwimBottomGoal extends RandomWalkingGoal {
         this.dinosaur = dinosaur;
     }
 
+    @Override
+    public boolean shouldExecute() {
+        return !dinosaur.isMovementDisabled() && super.shouldExecute();
+    }
+
     @Nullable
     @Override
     protected Vector3d getPosition() {

@@ -41,7 +41,7 @@ public abstract class Dinosaur extends TameableEntity {
      * @return the randomly distributed value between max and min
      */
     public static final int generateLevelWithinBounds(int minLevel, int maxLevel){
-        int max = Math.min(maxLevel + DinosExpansionConfig.LEVEL_OFFSET.get(), DinosExpansionConfig.MAX_LEVEL.get());
+        int max = Math.min(maxLevel + DinosExpansionConfig.LEVEL_OFFSET.get(), DinosExpansionConfig.MAX_LEVEL.get() + DinosExpansionConfig.LEVEL_OFFSET.get());
         int min = Math.max(minLevel + DinosExpansionConfig.LEVEL_OFFSET.get(), 0);
         return MathHelper.nextInt(new Random(), min, max);
     }
@@ -171,6 +171,10 @@ public abstract class Dinosaur extends TameableEntity {
     public void setSleeping(boolean sleeping) {
         if (isSleeping() == sleeping)
             return;
+        if (sleeping) {
+            setAttackTarget(null);
+            this.navigator.clearPath();
+        }
         this.dataManager.set(BOOLS, BitUtils.setBit(0, this.dataManager.get(BOOLS), sleeping));
     }
 
@@ -189,39 +193,60 @@ public abstract class Dinosaur extends TameableEntity {
             return;
         int bools = this.dataManager.get(BOOLS);
         this.dataManager.set(BOOLS, BitUtils.setBit(1, bools, knockout));
+        if (knockout) {
+            this.navigator.clearPath();
+            setAttackTarget(null);
+        }
     }
 
+    /**
+     * client synced
+     */
     public boolean isKnockout() {
         return BitUtils.getBit(1, this.dataManager.get(BOOLS)) > 0;
     }
-
+    /**
+     * client synced
+     */
     public boolean isTamed() {
         return BitUtils.getBit(2, this.dataManager.get(BOOLS)) > 0;
     }
-
+    /**
+     * client synced
+     */
     public Rarity getRarity() {
         return Rarity.values()[this.dataManager.get(RARITY)];
     }
-
+    /**
+     * client synced
+     */
     public Gender getGender() {
         return Gender.values()[this.dataManager.get(GENDER)];
     }
-
+    /**
+     * client synced
+     */
     public boolean hasSaddle() {
         return BitUtils.getBit(3, this.dataManager.get(BOOLS)) > 0;
     }
-
+    /**
+     * client synced
+     */
     protected void setSaddle(boolean saddle) {
         if (saddle == hasSaddle())
             return;
         int bools = this.dataManager.get(BOOLS);
         this.dataManager.set(BOOLS, BitUtils.setBit(3, bools, saddle));
     }
-
+    /**
+     * client synced
+     */
     public boolean hasArmor() {
         return BitUtils.getBit(4, this.dataManager.get(BOOLS)) > 0;
     }
-
+    /**
+     * client synced
+     */
     protected void setArmor(boolean armor) {
         if (armor == hasArmor())
             return;
@@ -229,6 +254,9 @@ public abstract class Dinosaur extends TameableEntity {
         this.dataManager.set(BOOLS, BitUtils.setBit(4, bools, armor));
     }
 
+    /**
+     * client synced
+     */
     @Nullable
     public LivingEntity getOwner() {
         try {
@@ -238,19 +266,27 @@ public abstract class Dinosaur extends TameableEntity {
             return null;
         }
     }
-
+    /**
+     * client synced
+     */
     public int getNarcoticValue() {
         return this.dataManager.get(NARCOTIC_VALUE);
     }
-
+    /**
+     * client synced
+     */
     public float getHungerValue() {
         return this.dataManager.get(HUNGER_VALUE);
     }
-
+    /**
+     * client synced
+     */
     protected void setHungerValue(float value) {
         this.dataManager.set(HUNGER_VALUE, Math.min(value, maxHunger));
     }
-
+    /**
+     * client synced
+     */
     public void addHungerValue(ItemStack food, LivingEntity feeder) {
         if (!food.isFood() || !isOwner(feeder))
             return;
@@ -258,11 +294,15 @@ public abstract class Dinosaur extends TameableEntity {
             CriteriaTriggerInit.FEED_DINOSAUR.trigger((ServerPlayerEntity) feeder, food, this);
         setHungerValue(getHungerValue() + food.getItem().getFood().getSaturation());
     }
-
+    /**
+     * client synced
+     */
     protected void addHungerValue(int add) {
         this.dataManager.set(HUNGER_VALUE, Math.min(getHungerValue() + add, maxHunger));
     }
-
+    /**
+     * client synced
+     */
     protected void addNarcoticValue(int add, LivingEntity cause) {
         this.dataManager.set(NARCOTIC_VALUE, Math.max(0, Math.min(getNarcoticValue() + add, this.maxNarcotic)));
         if (getNarcoticValue() >= this.maxNarcotic)
@@ -292,11 +332,13 @@ public abstract class Dinosaur extends TameableEntity {
                 this.setHealth(f1 - f2); // Forge: moved to fix MC-121048
                 this.setAbsorptionAmount(this.getAbsorptionAmount() - f2);
                 if (source.getImmediateSource() instanceof INarcoticProjectile && source.getTrueSource() instanceof LivingEntity)
-                    this.addNarcoticValue(((INarcoticProjectile) source.getTrueSource()).getNarcoticValue(), (LivingEntity) source.getTrueSource());
+                    this.addNarcoticValue(((INarcoticProjectile) source.getImmediateSource()).getNarcoticValue(), (LivingEntity) source.getTrueSource());
             }
         }
     }
-
+    /**
+     * client synced
+     */
     public DinosaurInfo getInfo() {
         this.updateInfo();
         return info;
@@ -323,6 +365,10 @@ public abstract class Dinosaur extends TameableEntity {
         }
     }
 
+    public boolean isMovementDisabled(){
+        return isSleeping() || isKnockout();
+    }
+
     protected void updateInfo() {
         this.info.health = getAttributeValue(Attributes.MAX_HEALTH);
         this.info.armor = getAttributeValue(Attributes.ARMOR);
@@ -337,7 +383,9 @@ public abstract class Dinosaur extends TameableEntity {
     }
 
     public abstract List<Item> getFood();
-
+    /**
+     * client synced
+     */
     protected void setNarcoticValue(int value) {
         this.dataManager.set(NARCOTIC_VALUE, Math.min(value, maxNarcotic));
     }

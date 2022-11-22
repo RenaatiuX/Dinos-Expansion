@@ -97,7 +97,7 @@ public class SpearEntity extends AbstractArrowEntity {
     }
 
     @Override
-    protected ItemStack getArrowStack() {
+    public ItemStack getArrowStack() {
         return this.getDataManager().get(ITEM).copy();
     }
 
@@ -179,7 +179,6 @@ public class SpearEntity extends AbstractArrowEntity {
 
     @Override
     protected float getSpeedFactor() {
-        DinosExpansion.LOGGER.info(EnchantmentHelper.getEnchantmentLevel(EnchantmentInit.AQUATIC_ENCHANT.get(), getArrowStack()) > 0 ? 1.0f : super.getSpeedFactor());
         return EnchantmentHelper.getEnchantmentLevel(EnchantmentInit.AQUATIC_ENCHANT.get(), getArrowStack()) > 0 ? 1.0f : super.getSpeedFactor();
     }
 

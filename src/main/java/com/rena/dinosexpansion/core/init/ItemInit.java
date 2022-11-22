@@ -13,6 +13,8 @@ import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import java.util.function.Supplier;
+
 public class ItemInit {
 
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, DinosExpansion.MOD_ID);
@@ -54,6 +56,25 @@ public class ItemInit {
     public static final RegistryObject<Item> WOODEN_SPEAR = ITEMS.register("wooden_spear",
             () -> new TieredSpear(new Item.Properties().group(ModItemGroups.WEAPONS).setISTER(
                     () -> () -> ClientISTERProvider.bakeSpearISTER("wooden_spear")), SpearTiers.WOODEN_SPEAR));
+    public static final RegistryObject<Item> STONE_SPEAR = ITEMS.register("stone_spear",
+            () -> new TieredSpear(new Item.Properties().group(ModItemGroups.WEAPONS).setISTER(
+                    () -> () -> ClientISTERProvider.bakeSpearISTER("stone_spear")), SpearTiers.STONE_SPEAR));
+    public static final RegistryObject<Item> IRON_SPEAR = ITEMS.register("iron_spear",
+            () -> new TieredSpear(new Item.Properties().group(ModItemGroups.WEAPONS).setISTER(
+                    () -> () -> ClientISTERProvider.bakeSpearISTER("iron_spear")), SpearTiers.IRON_SPEAR));
+    public static final RegistryObject<Item> GOLD_SPEAR = ITEMS.register("golden_spear",
+            () -> new TieredSpear(new Item.Properties().group(ModItemGroups.WEAPONS).setISTER(
+                    () -> () -> ClientISTERProvider.bakeSpearISTER("golden_spear")), SpearTiers.GOLD_SPEAR));
+    public static final RegistryObject<Item> DIAMOND_SPEAR = ITEMS.register("diamond_spear",
+            () -> new TieredSpear(new Item.Properties().group(ModItemGroups.WEAPONS).setISTER(
+                    () -> () -> ClientISTERProvider.bakeSpearISTER("diamond_spear")), SpearTiers.DIAMOND_SPEAR));
+    public static final RegistryObject<Item> NETHERITE_SPEAR = ITEMS.register("netherite_spear",
+            () -> new TieredSpear(new Item.Properties().group(ModItemGroups.WEAPONS).setISTER(
+                    () -> () -> ClientISTERProvider.bakeSpearISTER("netherite_spear")), SpearTiers.NETHERITE_SPEAR));
+    public static final RegistryObject<Item> EMERALD_SPEAR = ITEMS.register("emerald_spear",
+            () -> new TieredSpear(new Item.Properties().group(ModItemGroups.WEAPONS).setISTER(
+                    () -> () -> ClientISTERProvider.bakeSpearISTER("emerald_spear")), SpearTiers.EMERALD_SPEAR));
+
 
     public static final RegistryObject<ForgeSpawnEggItem> PARAPUZOSIA_SPAWN_EGG = ITEMS.register("parapuzosia_spawn_egg",
             () -> new ForgeSpawnEggItem(EntityInit.PARAPUZOSIA, 0x392829, 0x77554c, new Item.Properties().group(ModItemGroups.SPAWN_EGGS)));

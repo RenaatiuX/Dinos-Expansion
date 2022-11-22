@@ -1,5 +1,6 @@
 package com.rena.dinosexpansion.common.entity.ia;
 
+import com.rena.dinosexpansion.common.entity.Dinosaur;
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.ai.goal.RandomWalkingGoal;
@@ -12,7 +13,7 @@ import javax.annotation.Nullable;
 
 public class DinosaurAISwimBottom extends RandomWalkingGoal {
 
-    public DinosaurAISwimBottom(CreatureEntity creatureIn, double speedIn, int chance) {
+    public DinosaurAISwimBottom(Dinosaur creatureIn, double speedIn, int chance) {
         super(creatureIn, speedIn, chance);
     }
 
