@@ -20,11 +20,6 @@ public class Megalodon extends DinosaurAquatic implements IAnimatable {
         super(type, world, info, level);
     }
 
-    @Override
-    public boolean canHuntMobsOnLand() {
-        return false;
-    }
-
     public float getTargetScale() {
         return 2.0F;
     }
@@ -52,11 +47,6 @@ public class Megalodon extends DinosaurAquatic implements IAnimatable {
     @Override
     protected ResourceLocation getLootTable() {
         return super.getLootTable();
-    }
-
-    @Override
-    public double swimSpeed() {
-        return 1D;
     }
 
     public boolean destroyBoats() {

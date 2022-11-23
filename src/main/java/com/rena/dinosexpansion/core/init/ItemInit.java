@@ -80,6 +80,8 @@ public class ItemInit {
             () -> new ForgeSpawnEggItem(EntityInit.PARAPUZOSIA, 0x392829, 0x77554c, new Item.Properties().group(ModItemGroups.SPAWN_EGGS)));
     public static final RegistryObject<ForgeSpawnEggItem> EOSQUALODON_SPAWN_EGG = ITEMS.register("eosqualodon_spawn_egg",
             () -> new ForgeSpawnEggItem(EntityInit.EOSQUALODON, 2239024, 16777215, new Item.Properties().group(ModItemGroups.SPAWN_EGGS)));
+    public static final RegistryObject<ForgeSpawnEggItem> MEGA_PIRANHA_SPAWN_EGG = ITEMS.register("mega_piranha_spawn_egg",
+            () -> new ForgeSpawnEggItem(EntityInit.MEGA_PIRANHA, 799664, 22618693, new Item.Properties().group(ModItemGroups.SPAWN_EGGS)));
 
     //Food
     public static final RegistryObject<Item> RAW_CARNOTAURUS_MEAT = ITEMS.register("raw_carnotaurus_meat",

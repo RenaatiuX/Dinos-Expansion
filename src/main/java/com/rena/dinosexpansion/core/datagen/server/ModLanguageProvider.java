@@ -32,6 +32,7 @@ public class ModLanguageProvider extends LanguageProvider {
         add(ModItemGroups.BLOCKS, "Blocks");
         add(ItemInit.PARAPUZOSIA_SPAWN_EGG.get(), "Parapuzosia Spawn Egg");
         add(ItemInit.EOSQUALODON_SPAWN_EGG.get(), "Eosqualodon Spawn Egg");
+        add(ItemInit.MEGA_PIRANHA_SPAWN_EGG.get(), "MegaPiranha Spawn Egg");
         add(EnchantmentInit.AQUATIC_ENCHANT.get(), "Aquatic Throwing");
         add(ItemInit.COOKED_ANKYLOSAURUS_MEAT.get(), "Cooked Ankylosaurus Meat");
         add(ItemInit.COOKED_CARNOTAURUS_MEAT.get(), "Cooked Carnotaurus Meat");

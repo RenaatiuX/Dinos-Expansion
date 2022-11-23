@@ -14,9 +14,13 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.pathfinding.PathNodeType;
+import net.minecraft.pathfinding.SwimmerPathNavigator;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.vector.Vector3d;
@@ -28,19 +32,14 @@ import javax.annotation.Nullable;
 
 public abstract class DinosaurAquatic extends Dinosaur implements ISemiAquatic {
 
+    private static final DataParameter<Boolean> BEACHED = EntityDataManager.createKey(DinosaurAquatic.class, DataSerializers.BOOLEAN);
+
     private static final int MAX_TIME_ON_LAND = 1000;
     private static final int MAX_TIME_IN_WATER = 1000;
-    public boolean movesOnLand;
-    public float onLandProgress;
     public int timeInWater = 0;
     public int timeOnLand = 0;
     protected boolean isAmphibious = false;
     protected boolean isLandNavigator;
-    protected int breachCooldown = 0;
-    protected boolean isGoingDownAfterBreach = false;
-    protected float jumpX;
-    protected float jumpY;
-    protected float jumpZ;
 
     public DinosaurAquatic(EntityType<? extends Dinosaur> type, World world, DinosaurInfo info, int level) {
         super(type, world, info, level);
@@ -53,10 +52,8 @@ public abstract class DinosaurAquatic extends Dinosaur implements ISemiAquatic {
         super.livingTick();
         int i = this.getAir();
         if (!canBreathOnLand()) {
-            if (this.isAlive() && !this.isInWater()) {
-                --i;
-                this.setAir(i);
-
+            if (this.isAlive() && !this.isInWaterOrBubbleColumn()) {
+                this.setAir(i-1);
                 if (this.getAir() == -40) {
                     this.setAir(0);
                     this.attackEntityFrom(DamageSource.DROWN, 2.0F);
@@ -67,21 +64,14 @@ public abstract class DinosaurAquatic extends Dinosaur implements ISemiAquatic {
         }
     }
 
-    //?
-    public boolean doesBreachAttack() {
-        return false;
-    }
-
     protected void switchNavigator(boolean onLand) {
         if (onLand) {
             this.moveController = new MovementController(this);
-            PathNavigator prevNav = this.navigator; //?
             this.navigator = new GroundPathNavigator(this, world);
             this.isLandNavigator = true;
         } else {
             this.moveController = new AquaticMoveController(this, 1F);
-            PathNavigator prevNav = this.navigator;//?
-            this.navigator = new SemiAquaticPathNavigator(this, world);
+            this.navigator = new SwimmerPathNavigator(this, world);
             this.isLandNavigator = false;
         }
     }
@@ -109,21 +99,10 @@ public abstract class DinosaurAquatic extends Dinosaur implements ISemiAquatic {
         return 20;
     }
 
-    /*protected double getStrongAttack(){
-        return this.getAttributeManager().getAttributeValue(Attributes.ATTACK_DAMAGE);
-    }*/
-
-    public static AttributeModifierMap.MutableAttribute createAttributes(){
-        return MobEntity.func_233666_p_()
-                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.25F);
-    }
-
     @Override
     public boolean canBreatheUnderwater() {
         return true;
     }
-
-    public abstract double swimSpeed();
 
     @Override
     protected boolean canTriggerWalking() {
@@ -155,10 +134,17 @@ public abstract class DinosaurAquatic extends Dinosaur implements ISemiAquatic {
     }
 
     @Override
+    protected void registerData() {
+        super.registerData();
+        this.dataManager.register(BEACHED, false);
+    }
+
+    @Override
     public void writeAdditional(CompoundNBT nbt) {
         super.writeAdditional(nbt);
         nbt.putInt("TimeOnLand", this.timeOnLand);
         nbt.putInt("TimeInWater", this.timeInWater);
+        nbt.putBoolean("Beached", this.isBeached());
     }
 
     @Override
@@ -166,15 +152,20 @@ public abstract class DinosaurAquatic extends Dinosaur implements ISemiAquatic {
         super.readAdditional(nbt);
         this.timeOnLand = nbt.getInt("TimeOnLand");
         this.timeInWater = nbt.getInt("TimeInWater");
+        this.setBeached(nbt.getBoolean("Beached"));
     }
 
-    protected boolean useSwimAI() {
-        return this.isInWater();
+    public boolean isBeached() {
+        return this.dataManager.get(BEACHED);
+    }
+
+    public void setBeached(boolean beached) {
+        this.dataManager.set(BEACHED, beached);
     }
 
     @Override
     public boolean isInWater() {
-        return super.isInWater();
+        return true;
     }
 
     @Override
@@ -196,12 +187,4 @@ public abstract class DinosaurAquatic extends Dinosaur implements ISemiAquatic {
         return true;
     }
 
-    public boolean canDinoHunt(Entity target, boolean hunger) {
-        //TODO missing code
-        return true;
-    }
-
-    public boolean canHuntMobsOnLand() {
-        return true;
-    }
 }

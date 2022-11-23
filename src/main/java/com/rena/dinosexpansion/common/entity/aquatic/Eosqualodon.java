@@ -83,11 +83,6 @@ public class Eosqualodon extends DinosaurAquatic implements IAnimatable {
     }
 
     @Override
-    public double swimSpeed() {
-        return 0;
-    }
-
-    @Override
     public boolean attackEntityFrom(DamageSource source, float amount) {
         if (this.isInvulnerableTo(source)) {
             return false;

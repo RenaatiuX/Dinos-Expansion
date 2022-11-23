@@ -5,7 +5,7 @@
 			"loop": true,
 			"animation_length": 2.08,
 			"bones": {
-				"Jaw": {
+				"JawSwim": {
 					"rotation": {
 						"0.0": {
 							"vector": [0, 0, 0]
@@ -20,7 +20,7 @@
 						}
 					}
 				},
-				"LeftFin": {
+				"LeftFinSwim": {
 					"rotation": {
 						"0.0": {
 							"vector": [0, 0, -22.5]
@@ -43,7 +43,7 @@
 						}
 					}
 				},
-				"Tail": {
+				"TailSwim": {
 					"rotation": {
 						"0.0": {
 							"vector": [0, 17.5, 0]
@@ -58,7 +58,7 @@
 						}
 					}
 				},
-				"RightFin": {
+				"RightFinSwim": {
 					"rotation": {
 						"0.0": {
 							"vector": [0, 0, 22.5]
@@ -84,7 +84,7 @@
 			}
 		},
 		"de.megapiranha.bite": {
-			"animation_length": 0.52,
+			"animation_length": 0.76,
 			"bones": {
 				"Megapiranha": {
 					"rotation": {
@@ -101,7 +101,7 @@
 						}
 					}
 				},
-				"Jaw": {
+				"JawAttack": {
 					"rotation": {
 						"0.0": {
 							"vector": [0, 0, 0]
@@ -116,7 +116,7 @@
 						}
 					}
 				},
-				"RightFin": {
+				"RightFinAttack": {
 					"rotation": {
 						"0.0": {
 							"vector": [0, 0, 22.5]
@@ -131,22 +131,7 @@
 						}
 					}
 				},
-				"LeftFin": {
-					"rotation": {
-						"0.0": {
-							"vector": [0, 0, -22.5]
-						},
-						"0.24": {
-							"vector": [0, 0, 22.5],
-							"easing": "easeInOutSine"
-						},
-						"0.52": {
-							"vector": [0, 0, -22.5],
-							"easing": "easeInOutSine"
-						}
-					}
-				},
-				"Tail": {
+				"TailAttack": {
 					"rotation": {
 						"0.0": {
 							"vector": [0, 17.5, 0]
@@ -157,6 +142,21 @@
 						},
 						"0.52": {
 							"vector": [0, 17.5, 0],
+							"easing": "easeInOutSine"
+						}
+					}
+				},
+				"LeftFinAttack": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, -22.5]
+						},
+						"0.24": {
+							"vector": [0, 0, 22.5],
+							"easing": "easeInOutSine"
+						},
+						"0.52": {
+							"vector": [0, 0, -22.5],
 							"easing": "easeInOutSine"
 						}
 					}
@@ -195,7 +195,7 @@
 						}
 					}
 				},
-				"Jaw": {
+				"JawSwim": {
 					"rotation": {
 						"0.0": {
 							"vector": [0, 0, 0]
@@ -210,7 +210,7 @@
 						}
 					}
 				},
-				"RightFin": {
+				"RightFinSwim": {
 					"rotation": {
 						"0.0": {
 							"vector": [0, 0, 42.5]
@@ -225,7 +225,7 @@
 						}
 					}
 				},
-				"LeftFin": {
+				"LeftFinSwim": {
 					"rotation": {
 						"0.0": {
 							"vector": [0, 0, 42.5]
@@ -240,7 +240,7 @@
 						}
 					}
 				},
-				"Tail": {
+				"TailSwim": {
 					"rotation": {
 						"0.0": {
 							"vector": [0, -30, 0]
