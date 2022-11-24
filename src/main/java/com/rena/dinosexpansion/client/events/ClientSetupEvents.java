@@ -9,11 +9,14 @@ import com.rena.dinosexpansion.client.renderer.misc.ChakramRenderer;
 import com.rena.dinosexpansion.client.renderer.misc.SpearRenderer;
 import com.rena.dinosexpansion.client.renderer.projectiles.CustomArrowRenderer;
 import com.rena.dinosexpansion.client.renderer.projectiles.DartRenderer;
+import com.rena.dinosexpansion.client.screens.TamingScreen;
 import com.rena.dinosexpansion.common.entity.aquatic.Eosqualodon;
 import com.rena.dinosexpansion.common.entity.aquatic.MegaPiranha;
 import com.rena.dinosexpansion.common.entity.aquatic.Parapuzosia;
+import com.rena.dinosexpansion.core.init.ContainerInit;
 import com.rena.dinosexpansion.core.init.EntityInit;
 import com.rena.dinosexpansion.core.init.ItemInit;
+import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.item.ItemModelsProperties;
 import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
@@ -31,6 +34,9 @@ public class ClientSetupEvents {
 
     @SubscribeEvent
     public static void clientSetup(FMLClientSetupEvent event) {
+
+        ScreenManager.registerFactory(ContainerInit.TAMING_CONTAINER.get(), TamingScreen::new);
+
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.CUSTOM_ARROW.get(), CustomArrowRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.DART.get(), DartRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.CHAKRAM.get(), ChakramRenderer::new);

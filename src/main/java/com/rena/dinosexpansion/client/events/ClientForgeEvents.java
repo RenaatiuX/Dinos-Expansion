@@ -3,13 +3,19 @@ package com.rena.dinosexpansion.client.events;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.rena.dinosexpansion.DinosExpansion;
+import com.rena.dinosexpansion.common.config.DinosExpansionConfig;
+import com.rena.dinosexpansion.common.entity.Dinosaur;
 import com.rena.dinosexpansion.common.item.BlowgunItem;
 import com.rena.dinosexpansion.core.init.EffectInit;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.gui.AbstractGui;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.settings.PointOfView;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.player.PlayerEntity;
@@ -17,12 +23,17 @@ import net.minecraft.potion.Effects;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Matrix4f;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.event.RenderNameplateEvent;
 import net.minecraftforge.client.gui.ForgeIngameGui;
+import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.LogManager;
@@ -39,6 +50,48 @@ public class ClientForgeEvents {
     public static final ResourceLocation FROZEN_HEARTS = DinosExpansion.modLoc("textures/overlay/frozen_heart.png");
     public static final Random rand = new Random();
 
+
+    @SubscribeEvent
+    public static final void renderEntityNameAndLevel(RenderNameplateEvent event) {
+        if (event.getEntity() instanceof Dinosaur && DinosExpansionConfig.SHOW_LEVEL_ABOVE_HEAD.get()) {
+            event.setResult(Event.Result.DENY);
+            Dinosaur dino = (Dinosaur) event.getEntity();
+            if (dino.hasCustomName()) {
+                renderNameWithLevel(dino, dino.getDisplayName().deepCopy().appendString("\n").appendString("" + dino.getLevel()), event.getMatrixStack(),
+                        event.getRenderTypeBuffer(), event.getPackedLight(), event.getEntityRenderer().getRenderManager());
+            } else {
+                renderNameWithLevel(dino, new StringTextComponent("" + dino.getLevel()), event.getMatrixStack(), event.getRenderTypeBuffer(), event.getPackedLight(), event.getEntityRenderer().getRenderManager());
+            }
+        }
+    }
+
+    private static void renderNameWithLevel(Dinosaur dino, ITextComponent displayNameIn, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, EntityRendererManager manager) {
+        double d0 = manager.squareDistanceTo(dino);
+        if (net.minecraftforge.client.ForgeHooksClient.isNameplateInRenderDistance(dino, d0)) {
+            boolean flag = !dino.isDiscrete();
+            float f = dino.getHeight() + 0.5F;
+            int i = "deadmau5".equals(displayNameIn.getString()) ? -10 : 0;
+            matrixStackIn.push();
+            matrixStackIn.translate(0.0D, (double) f, 0.0D);
+            matrixStackIn.rotate(manager.getCameraOrientation());
+            matrixStackIn.scale(-0.025F, -0.025F, 0.025F);
+            Matrix4f matrix4f = matrixStackIn.getLast().getMatrix();
+            float f1 = Minecraft.getInstance().gameSettings.getTextBackgroundOpacity(0.25F);
+            int j = (int) (f1 * 255.0F) << 24;
+            FontRenderer fontrenderer = manager.getFontRenderer();
+            float f2 = (float) (-fontrenderer.getStringPropertyWidth(displayNameIn) / 2);
+            fontrenderer.func_243247_a(displayNameIn, f2, (float) i, 553648127, false, matrix4f, bufferIn, flag, j, packedLightIn);
+            if (flag) {
+                fontrenderer.func_243247_a(displayNameIn, f2, (float) i, -1, false, matrix4f, bufferIn, false, 0, packedLightIn);
+            }
+
+            matrixStackIn.pop();
+        }
+    }
+
+    private static boolean canRenderName(Entity entity) {
+        return entity.getAlwaysRenderNameTagForRender();
+    }
 
     @SubscribeEvent
     public static void mouseInput(InputEvent.RawMouseEvent event) {

@@ -11,9 +11,9 @@ import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.passive.SquidEntity;
-import net.minecraft.entity.passive.WaterMobEntity;
 import net.minecraft.entity.passive.fish.AbstractGroupFishEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.item.Item;
 import net.minecraft.network.datasync.DataParameter;
@@ -40,7 +40,6 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import javax.annotation.Nullable;
-import java.util.EnumSet;
 import java.util.List;
 
 public class Eosqualodon extends DinosaurAquatic implements IAnimatable {
@@ -59,7 +58,7 @@ public class Eosqualodon extends DinosaurAquatic implements IAnimatable {
     private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
     public Eosqualodon(EntityType<Eosqualodon> type, World world) {
-        super(type, world, new DinosaurInfo(200, 100, 50, SleepRhythmGoal.SleepRhythm.DIURNAL), generateLevelWithinBounds(20, 100));
+        super(type, world, new DinosaurInfo("eosqualodon", 200, 100, 50, SleepRhythmGoal.SleepRhythm.DIURNAL), generateLevelWithinBounds(20, 100));
         this.moveController = new AquaticMoveController(this, 1F);
         switchNavigator(false);
         updateInfo();
@@ -111,6 +110,11 @@ public class Eosqualodon extends DinosaurAquatic implements IAnimatable {
         this.getInfo().print();
         DinosExpansion.LOGGER.debug("Narcotic: [" + getNarcoticValue() + "/" + getInfo().getMaxNarcotic() + "]");
         DinosExpansion.LOGGER.debug("IsKnockout: " + this.isKnockout());
+        if (!world.isRemote() && hand == Hand.MAIN_HAND){
+            if (player.getHeldItem(hand).isEmpty() && isKnockedOutBy(player)){
+                openTamingGui(this, (ServerPlayerEntity) player);
+            }
+        }
         return super.applyPlayerInteraction(player, vec, hand);
     }
 
@@ -173,6 +177,13 @@ public class Eosqualodon extends DinosaurAquatic implements IAnimatable {
     protected Gender getInitialGender() {
         //bring a bit real life in the random distribution :-)
         return getRNG().nextDouble() <= 0.51 ? Gender.MALE : Gender.FEMALE;
+    }
+
+    @Override
+    protected int reduceNarcotic(int narcoticValue) {
+        if (getRNG().nextDouble() <= 0.05)
+            return narcoticValue - 1;
+        return narcoticValue;
     }
 
     public boolean isAttacking() {

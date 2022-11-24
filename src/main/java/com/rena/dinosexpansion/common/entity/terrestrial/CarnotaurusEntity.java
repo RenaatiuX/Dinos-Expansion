@@ -33,6 +33,11 @@ public class CarnotaurusEntity extends Dinosaur implements IAnimatable {
         return null;
     }
 
+    @Override
+    protected int reduceNarcotic(int narcoticValue) {
+        return narcoticValue;
+    }
+
     @Nullable
     @Override
     public AgeableEntity createChild(ServerWorld world, AgeableEntity mate) {

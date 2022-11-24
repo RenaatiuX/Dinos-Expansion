@@ -52,6 +52,7 @@ public class ModLanguageProvider extends LanguageProvider {
         add(ItemInit.STONE_SPEAR.get(), "Stone Spear");
         add(ItemInit.DIAMOND_SPEAR.get(), "Diamond Spear");
         add(ItemInit.GOLD_SPEAR.get(), "Golden Spear");
+        add(ItemInit.NARCOTICS.get(), "Narcotics");
     }
 
     public void add(ItemGroup group, String key){

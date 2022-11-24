@@ -22,7 +22,7 @@ public class ModItemModelsProvider extends ItemModelProvider {
         simple(ItemInit.COMPOUND_ARROW.get());
         simple(ItemInit.TRANQUILLIZER_ARROW.get());
         spawnEgg(ItemInit.PARAPUZOSIA_SPAWN_EGG.get(), ItemInit.EOSQUALODON_SPAWN_EGG.get(), ItemInit.MEGA_PIRANHA_SPAWN_EGG.get());
-        simple(ItemInit.GOLD_ARROW.get(), ItemInit.STONE_ARROW.get(), ItemInit.BONE_ARROW.get());
+        simple(ItemInit.GOLD_ARROW.get(), ItemInit.STONE_ARROW.get(), ItemInit.BONE_ARROW.get(), ItemInit.NARCOTICS.get());
         simple(ItemInit.DIAMOND_ARROW.get(), ItemInit.EMERALD_ARROW.get(), ItemInit.IRON_ARROW.get(), ItemInit.NETHERITE_ARROW.get(), ItemInit.WOODEN_ARROW.get());
     }
 

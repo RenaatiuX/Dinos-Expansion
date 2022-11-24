@@ -12,7 +12,7 @@ public class DinosExpansionConfig {
     public static final ForgeConfigSpec.BooleanValue TURN_AROUND_ITEM, TURN_AROUND_MOB, TURN_AROUND_BUTTON,
             WOOD_BOOMERANG_FOLLOWS, BREAKS_TORCHES, BREAKS_FLOWERS, BREAKS_GRASS, BREAKS_TALLGRASS,
             ACTIVATES_LEVERS, ACTIVATES_BUTTONS, ACTIVATES_PRESSURES_PLATES, ACTIVATES_TRIP_WIRE,
-            IRON_BOOMERANG_FOLLOWS, DIAMOND_BOOMERANG_FOLLOWS;
+            IRON_BOOMERANG_FOLLOWS, DIAMOND_BOOMERANG_FOLLOWS, SHOW_LEVEL_ABOVE_HEAD;
 
     static {
         ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
@@ -34,6 +34,8 @@ public class DinosExpansionConfig {
         ARMOR_PER_LEVEL = builder.defineInRange("armor_per_level", .1f, 0f, 255f);
         builder.comment("this defines how many narcitocs u will need to make the dinosaur go knocked out.", "this value is in percent so u can just modify it for all entities");
         NARCOTIC_NEEDED_PERCENT = builder.defineInRange("narcotic_percent", 100, 0, 100);
+        builder.comment("this defines whether the level of a dino should be displayed above the head of an Dino");
+        SHOW_LEVEL_ABOVE_HEAD = builder.define("show_level", true);
         builder.pop();
 
         builder.push("Boomerang");

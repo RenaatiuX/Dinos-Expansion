@@ -45,6 +45,11 @@ public class Megalodon extends DinosaurAquatic implements IAnimatable {
     }
 
     @Override
+    protected int reduceNarcotic(int narcoticValue) {
+        return 0;
+    }
+
+    @Override
     protected ResourceLocation getLootTable() {
         return super.getLootTable();
     }

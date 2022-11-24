@@ -7,6 +7,7 @@ import com.rena.dinosexpansion.common.entity.projectile.CustomArrow;
 import com.rena.dinosexpansion.common.item.*;
 import com.rena.dinosexpansion.common.item.arrow.DartItem;
 import com.rena.dinosexpansion.common.item.arrow.TinyRockItem;
+import com.rena.dinosexpansion.common.item.util.BaseNarcoticItem;
 import net.minecraft.item.Item;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.fml.RegistryObject;
@@ -100,4 +101,6 @@ public class ItemInit {
             () -> new Item(new Item.Properties().food(FoodInit.RAW_GALLIMIMUS_MEAT).group(ModItemGroups.ITEMS)));
     public static final RegistryObject<Item> COOKED_GALLIMIMUS_MEAT = ITEMS.register("cooked_gallimimus_meat",
             () -> new Item(new Item.Properties().food(FoodInit.COOKED_GALLIMIMUS_MEAT).group(ModItemGroups.ITEMS)));
+
+    public static final RegistryObject<BaseNarcoticItem> NARCOTICS = ITEMS.register("narcotics", () -> new BaseNarcoticItem(new Item.Properties().group(ModItemGroups.ITEMS), 10));
 }

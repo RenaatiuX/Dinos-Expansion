@@ -42,6 +42,7 @@ public class DinosExpansion
         EnchantmentInit.ENCHANTMENTS.register(bus);
         EffectInit.EFFECTS.register(bus);
         SoundInit.SOUNDS.register(bus);
+        ContainerInit.CONTAINERS.register(bus);
 
 
         // Register ourselves for server and other game events we are interested in
