@@ -119,27 +119,8 @@ public class Eosqualodon extends DinosaurAquatic implements IAnimatable {
     }
 
     @Override
-    public boolean isNotColliding(IWorldReader worldIn) {
-        return worldIn.checkNoEntityCollision(this);
-    }
-
-    @Override
     protected PathNavigator createNavigator(World worldIn) {
         return new SwimmerPathNavigator(this, worldIn);
-    }
-
-    @Override
-    public void travel(Vector3d travelVector) {
-        if (this.isServerWorld() && this.isInWater()) {
-            this.moveRelative(this.getAIMoveSpeed(), travelVector);
-            this.move(MoverType.SELF, this.getMotion());
-            this.setMotion(this.getMotion().scale(0.9D));
-            if (this.getAttackTarget() == null) {
-                this.setMotion(this.getMotion().add(0.0D, -0.005D, 0.0D));
-            }
-        } else {
-            super.travel(travelVector);
-        }
     }
 
     @Nullable

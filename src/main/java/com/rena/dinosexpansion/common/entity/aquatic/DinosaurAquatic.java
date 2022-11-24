@@ -5,11 +5,13 @@ import com.rena.dinosexpansion.common.entity.ia.helper.ISemiAquatic;
 import com.rena.dinosexpansion.common.entity.ia.movecontroller.AquaticMoveController;
 import com.rena.dinosexpansion.common.entity.ia.navigator.SemiAquaticPathNavigator;
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.controller.MovementController;
 import net.minecraft.entity.item.BoatEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -21,14 +23,21 @@ import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.pathfinding.SwimmerPathNavigator;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.GameRules;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nullable;
+
+import static net.minecraftforge.versions.forge.ForgeVersion.getTarget;
 
 public abstract class DinosaurAquatic extends Dinosaur implements ISemiAquatic {
 
@@ -36,6 +45,7 @@ public abstract class DinosaurAquatic extends Dinosaur implements ISemiAquatic {
 
     private static final int MAX_TIME_ON_LAND = 1000;
     private static final int MAX_TIME_IN_WATER = 1000;
+    public boolean movesOnLand;
     public int timeInWater = 0;
     public int timeOnLand = 0;
     protected boolean isAmphibious = false;
@@ -50,10 +60,12 @@ public abstract class DinosaurAquatic extends Dinosaur implements ISemiAquatic {
     @Override
     public void livingTick() {
         super.livingTick();
-        int i = this.getAir();
+    }
+
+    protected void updateAir(int air) {
         if (!canBreathOnLand()) {
             if (this.isAlive() && !this.isInWaterOrBubbleColumn()) {
-                this.setAir(i-1);
+                this.setAir(air - 1);
                 if (this.getAir() == -40) {
                     this.setAir(0);
                     this.attackEntityFrom(DamageSource.DROWN, 2.0F);
@@ -62,6 +74,13 @@ public abstract class DinosaurAquatic extends Dinosaur implements ISemiAquatic {
                 this.setAir(500);
             }
         }
+    }
+
+    @Override
+    public void baseTick() {
+        int i = this.getAir();
+        super.baseTick();
+        this.updateAir(i);
     }
 
     protected void switchNavigator(boolean onLand) {
@@ -78,7 +97,7 @@ public abstract class DinosaurAquatic extends Dinosaur implements ISemiAquatic {
 
     @Override
     public boolean shouldEnterWater() {
-        if(!isAmphibious){
+        if (!isAmphibious) {
             return true;
         }
         return this.timeInWater == 0 && timeOnLand > MAX_TIME_ON_LAND;
@@ -109,6 +128,8 @@ public abstract class DinosaurAquatic extends Dinosaur implements ISemiAquatic {
         return false;
     }
 
+    //public abstract double swimSpeed();
+
     @Override
     public boolean isOnLadder() {
         return false;
@@ -131,6 +152,21 @@ public abstract class DinosaurAquatic extends Dinosaur implements ISemiAquatic {
 
     public boolean isPushedByWater() {
         return false;
+    }
+
+    @Override
+    protected int getExperiencePoints(PlayerEntity player) {
+        return 1 + this.world.rand.nextInt(3);
+    }
+
+    @Override
+    public int getTalkInterval() {
+        return 120;
+    }
+
+    @Override
+    public boolean isNotColliding(IWorldReader worldIn) {
+        return worldIn.checkNoEntityCollision(this);
     }
 
     @Override
@@ -165,7 +201,7 @@ public abstract class DinosaurAquatic extends Dinosaur implements ISemiAquatic {
 
     @Override
     public boolean isInWater() {
-        return true;
+        return super.isInWater() || this.areEyesInFluid(FluidTags.WATER);
     }
 
     @Override
@@ -180,7 +216,7 @@ public abstract class DinosaurAquatic extends Dinosaur implements ISemiAquatic {
 
     @Override
     public Vector3d getPositionVec() {
-        return super.getPositionVec();
+        return new Vector3d(this.getPosX(), this.getPosY() + 0.5D, this.getPosZ());
     }
 
     public boolean canBreathOnLand() {
