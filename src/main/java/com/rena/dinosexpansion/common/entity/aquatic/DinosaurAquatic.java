@@ -3,6 +3,7 @@ package com.rena.dinosexpansion.common.entity.aquatic;
 import com.rena.dinosexpansion.common.entity.Dinosaur;
 import com.rena.dinosexpansion.common.entity.ia.helper.ISemiAquatic;
 import com.rena.dinosexpansion.common.entity.ia.movecontroller.AquaticMoveController;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.controller.MovementController;
 import net.minecraft.entity.item.BoatEntity;
@@ -29,7 +30,6 @@ public abstract class DinosaurAquatic extends Dinosaur implements ISemiAquatic {
 
     private static final int MAX_TIME_ON_LAND = 1000;
     private static final int MAX_TIME_IN_WATER = 1000;
-    public boolean movesOnLand;
     public int timeInWater = 0;
     public int timeOnLand = 0;
     protected boolean isAmphibious = false;
@@ -135,7 +135,7 @@ public abstract class DinosaurAquatic extends Dinosaur implements ISemiAquatic {
     }
 
     public boolean isPushedByWater() {
-        return false;
+        return isBeached();
     }
 
     @Override

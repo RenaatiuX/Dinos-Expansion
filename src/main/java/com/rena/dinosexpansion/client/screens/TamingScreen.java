@@ -26,6 +26,14 @@ public class TamingScreen extends ContainerScreen<TamingContainer> {
     }
 
     @Override
+    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+        this.renderBackground(matrixStack);
+        this.drawGuiContainerBackgroundLayer(matrixStack, partialTicks, mouseX, mouseY);
+        super.render(matrixStack, mouseX, mouseY, partialTicks);
+        this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
+    }
+
+    @Override
     protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int x, int y) {
         RenderSystem.color4f(1f,1f,1f,1f);
         Minecraft.getInstance().textureManager.bindTexture(TEXTURE);

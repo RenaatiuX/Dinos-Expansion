@@ -47,8 +47,6 @@ public class Eosqualodon extends DinosaurAquatic implements IAnimatable {
     public static final String CONTROLLER_NAME = "controller";
     public static final String ATTACK_CONTROLLER_NAME = "attack_controller";
 
-    private static final DataParameter<Boolean> ATTACK = EntityDataManager.createKey(Eosqualodon.class, DataSerializers.BOOLEAN);
-
     public static AttributeModifierMap.MutableAttribute createAttributes() {
         return MobEntity.func_233666_p_().createMutableAttribute(Attributes.MAX_HEALTH, 30F)
                 .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.3F)
@@ -130,12 +128,6 @@ public class Eosqualodon extends DinosaurAquatic implements IAnimatable {
     }
 
     @Override
-    protected void registerData() {
-        super.registerData();
-        this.dataManager.register(ATTACK, false);
-    }
-
-    @Override
     public List<Item> getFood() {
         return ModTags.Items.EOSQUALODON_FOOD.getAllElements();
     }
@@ -156,7 +148,7 @@ public class Eosqualodon extends DinosaurAquatic implements IAnimatable {
 
     @Override
     protected Gender getInitialGender() {
-        //bring a bit real life in the random distribution :-)
+        //bring a bit of real life in the random distribution :-)
         return getRNG().nextDouble() <= 0.51 ? Gender.MALE : Gender.FEMALE;
     }
 
@@ -165,14 +157,6 @@ public class Eosqualodon extends DinosaurAquatic implements IAnimatable {
         if (getRNG().nextDouble() <= 0.05)
             return narcoticValue - 1;
         return narcoticValue;
-    }
-
-    public boolean isAttacking() {
-        return this.dataManager.get(ATTACK);
-    }
-
-    public void setAttacking(boolean running) {
-        this.dataManager.set(ATTACK, running);
     }
 
     private PlayState predicate(AnimationEvent<Eosqualodon> event) {
@@ -203,50 +187,6 @@ public class Eosqualodon extends DinosaurAquatic implements IAnimatable {
     @Override
     public AnimationFactory getFactory() {
         return this.factory;
-    }
-
-    private class EosqualodonAttackGoal extends MeleeAttackGoal {
-
-        private Eosqualodon eosqualodon;
-        private int animCounter = 0;
-        private int animTickLength = 20;
-
-        public EosqualodonAttackGoal(CreatureEntity creature, double speedIn, boolean useLongMemory) {
-            super(creature, speedIn, useLongMemory);
-            eosqualodon = ((Eosqualodon) creature);
-        }
-
-        @Override
-        protected void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr) {
-            if (distToEnemySqr <= this.getAttackReachSqr(enemy) && this.getSwingCooldown() <= 0) {
-                if (eosqualodon != null) {
-                    eosqualodon.setAttacking(true);
-                    animCounter = 0;
-                }
-            }
-
-            super.checkAndPerformAttack(enemy, distToEnemySqr);
-        }
-
-        @Override
-        public void tick() {
-            super.tick();
-            if (eosqualodon.isAttacking()) {
-                animCounter++;
-
-                if (animCounter >= animTickLength) {
-                    animCounter = 0;
-                    eosqualodon.setAttacking(false);
-                }
-            }
-        }
-
-        @Override
-        public void resetTask() {
-            animCounter = 0;
-            eosqualodon.setAttacking(false);
-            super.resetTask();
-        }
     }
 
 }
