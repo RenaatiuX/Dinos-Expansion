@@ -3,16 +3,10 @@ package com.rena.dinosexpansion.common.entity.aquatic;
 import com.rena.dinosexpansion.common.entity.Dinosaur;
 import com.rena.dinosexpansion.common.entity.ia.helper.ISemiAquatic;
 import com.rena.dinosexpansion.common.entity.ia.movecontroller.AquaticMoveController;
-import com.rena.dinosexpansion.common.entity.ia.navigator.SemiAquaticPathNavigator;
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.entity.*;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.controller.MovementController;
 import net.minecraft.entity.item.BoatEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
@@ -20,24 +14,14 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.GroundPathNavigator;
-import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.pathfinding.SwimmerPathNavigator;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
-
-import javax.annotation.Nullable;
-
-import static net.minecraftforge.versions.forge.ForgeVersion.getTarget;
 
 public abstract class DinosaurAquatic extends Dinosaur implements ISemiAquatic {
 
@@ -212,11 +196,6 @@ public abstract class DinosaurAquatic extends Dinosaur implements ISemiAquatic {
     @Override
     public void travel(Vector3d travelVector) {
         super.travel(travelVector);
-    }
-
-    @Override
-    public Vector3d getPositionVec() {
-        return new Vector3d(this.getPosX(), this.getPosY() + 0.5D, this.getPosZ());
     }
 
     public boolean canBreathOnLand() {

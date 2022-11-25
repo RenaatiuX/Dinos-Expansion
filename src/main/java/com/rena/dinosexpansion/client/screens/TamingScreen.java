@@ -31,11 +31,15 @@ public class TamingScreen extends ContainerScreen<TamingContainer> {
         Minecraft.getInstance().textureManager.bindTexture(TEXTURE);
         this.blit(matrixStack, guiLeft, guiTop, 0,0,xSize, ySize);
         Dinosaur dino = this.container.getDinosaur();
-        DinosExpansion.LOGGER.debug(dino.getNarcoticValue());
         if (dino.getNarcoticValue() > 0){
             double percent = (double)dino.getNarcoticValue() / (double)dino.getInfo().getMaxNarcotic();
             int width = (int) (percent * 84d);
             this.blit(matrixStack, guiLeft + 7, guiTop + 73, 0, 202, width, 6);
+        }
+        if (dino.getHungerValue() > 0){
+            double percent = (double) dino.getHungerValue() / (double) dino.getInfo().getMaxHunger();
+            int width = (int) (percent * 84d);
+            this.blit(matrixStack, guiLeft + 7, guiTop + 86, 0,210, width, 6);
         }
     }
 }

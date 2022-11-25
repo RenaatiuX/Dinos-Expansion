@@ -250,9 +250,10 @@ public abstract class Dinosaur extends TameableEntity {
         if (!this.world.isRemote()) {
             if (this.getNarcoticValue() > 0)
                 this.setNarcoticValue(Math.max(0, reduceNarcotic(getNarcoticValue())));
+            if(getNarcoticValue() <= this.info.narcoticThreshold && isKnockout())
+                setKnockout(false);
             reduceHunger();
         }
-        DinosExpansion.LOGGER.debug(getNarcoticValue());
     }
 
     public void setKnockedOutBy(LivingEntity player) {
