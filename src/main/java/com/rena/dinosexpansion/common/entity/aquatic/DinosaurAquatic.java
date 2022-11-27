@@ -125,7 +125,7 @@ public abstract class DinosaurAquatic extends Dinosaur implements ISemiAquatic {
             boat.remove();
             if (this.world.getGameRules().getBoolean(GameRules.DO_ENTITY_DROPS)) {
                 for (int i = 0; i < 3; ++i) {
-                    boat.entityDropItem(new ItemStack(boat.getBoatType().asPlank(), 2), 0);
+                    boat.entityDropItem(new ItemStack(boat.getBoatType().asPlank().asItem(), 2), 0);
                 }
                 for (int j = 0; j < 2; ++j) {
                     boat.entityDropItem(Items.STICK, 1);

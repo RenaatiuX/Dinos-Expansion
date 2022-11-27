@@ -21,7 +21,7 @@ public class EosqualodonRenderer extends GeoEntityRenderer<Eosqualodon> {
 
     @Override
     public RenderType getRenderType(Eosqualodon animatable, float partialTicks, MatrixStack stack, @Nullable IRenderTypeBuffer renderTypeBuffer, @Nullable IVertexBuilder vertexBuilder, int packedLightIn, ResourceLocation textureLocation) {
-        return RenderType.getEntityCutout(textureLocation);
+        return RenderType.getEntityCutoutNoCull(textureLocation);
     }
 
     @Override

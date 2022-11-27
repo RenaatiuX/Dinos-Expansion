@@ -116,11 +116,6 @@ public class Eosqualodon extends DinosaurAquatic implements IAnimatable {
         return super.applyPlayerInteraction(player, vec, hand);
     }
 
-    @Override
-    protected PathNavigator createNavigator(World worldIn) {
-        return new SwimmerPathNavigator(this, worldIn);
-    }
-
     @Nullable
     @Override
     public AgeableEntity createChild(ServerWorld world, AgeableEntity mate) {
