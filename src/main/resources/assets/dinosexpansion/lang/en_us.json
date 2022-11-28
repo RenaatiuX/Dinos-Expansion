@@ -9,7 +9,6 @@
   "block.dinosexpansion.mossy_futuristic_block_2": "Unknown Block",
 
   "_comment": "Items",
-  "item.dinosexpansion.blowgun": "Blowgun",
   "item.dinosexpansion.compound_arrow": "Compound Arrow",
   "item.dinosexpansion.compound_bow": "Compound Bow",
   "item.dinosexpansion.cooked_ankylosaurus_meat": "Cooked Ankylosaurus Meat",
@@ -25,6 +24,12 @@
   "item.dinosexpansion.golden_spear": "Golden Spear",
   "item.dinosexpansion.iron_chakram": "Iron Chakram",
   "item.dinosexpansion.iron_spear": "Iron Spear",
+  "item.dinosexpansion.kibble_basic": "Basic Kibble",
+  "item.dinosexpansion.kibble_exceptional": "Exceptional Kibble",
+  "item.dinosexpansion.kibble_extraordinary": "Extraordinary Kibble",
+  "item.dinosexpansion.kibble_regular": "Regular Kibble",
+  "item.dinosexpansion.kibble_simple": "Simple Kibble",
+  "item.dinosexpansion.kibble_superior": "Superior Kibble",
   "item.dinosexpansion.mega_piranha_spawn_egg": "MegaPiranha Spawn Egg",
   "item.dinosexpansion.narcotics": "Narcotics",
   "item.dinosexpansion.netherite_spear": "Netherite Spear",
@@ -49,6 +54,22 @@
   "_comment": "ItemGroups",
   "itemGroup.dinosexpansion.blocks": "Blocks",
   "itemGroup.dinosexpansion.spawn_eggs": "Spawn Eggs",
-  "itemGroup.dinosexpansion.weapons": "Weapons"
+  "itemGroup.dinosexpansion.weapons": "Weapons",
+
+  "_comment": "Screens",
+  "taming_screen.dinosexpansion.narcotic": "Narcotic: ",
+  "dinosexpansion.taming_gui.eosqualodon": "Eosqualodon",
+
+  "dinosexpansion.gender": "Gender: ",
+  "dinosexpansion.level": "Level: ",
+  "dinosexpansion.sleep_rhythm": "Sleep: ",
+
+  "_comment": "Enums",
+  "gender.dinosexpansion.male": "Male",
+  "gender.dinosexpansion.female": "Female",
+
+  "sleep_rhythm.dinosexpansion.none": "None",
+  "sleep_rhythm.dinosexpansion.diurnal": "Diurnal",
+  "sleep_rhythm.dinosexpansion.nocturnal": "Nocturnal"
 
 }

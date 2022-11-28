@@ -103,4 +103,11 @@ public class ItemInit {
             () -> new Item(new Item.Properties().food(FoodInit.COOKED_GALLIMIMUS_MEAT).group(ModItemGroups.ITEMS)));
 
     public static final RegistryObject<BaseNarcoticItem> NARCOTICS = ITEMS.register("narcotics", () -> new BaseNarcoticItem(new Item.Properties().group(ModItemGroups.ITEMS), 10));
+
+    public static final RegistryObject<Item> KIBBLE_SIMPLE = ITEMS.register("kibble_simple", () -> new Item(new Item.Properties().group(ModItemGroups.ITEMS).food(FoodInit.KIBBLE_SIMPLE)));
+    public static final RegistryObject<Item> KIBBLE_BASIC = ITEMS.register("kibble_basic", () -> new Item(new Item.Properties().group(ModItemGroups.ITEMS).food(FoodInit.KIBBLE_BASIC)));
+    public static final RegistryObject<Item> KIBBLE_REGULAR = ITEMS.register("kibble_regular", () -> new Item(new Item.Properties().group(ModItemGroups.ITEMS).food(FoodInit.KIBBLE_REGULAR)));
+    public static final RegistryObject<Item> KIBBLE_EXCEPTIONAL = ITEMS.register("kibble_exceptional", () -> new Item(new Item.Properties().group(ModItemGroups.ITEMS).food(FoodInit.KIBBLE_EXCEPTIONAL)));
+    public static final RegistryObject<Item> KIBBLE_SUPERIOR = ITEMS.register("kibble_superior", () -> new Item(new Item.Properties().group(ModItemGroups.ITEMS).food(FoodInit.KIBBLE_SUPERIOR)));
+    public static final RegistryObject<Item> KIBBLE_EXTRAORDINARY = ITEMS.register("kibble_extraordinary", () -> new Item(new Item.Properties().group(ModItemGroups.ITEMS).food(FoodInit.KIBBLE_EXTRAORDINARY)));
 }

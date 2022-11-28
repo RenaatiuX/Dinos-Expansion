@@ -1,6 +1,7 @@
 package com.rena.dinosexpansion.common.entity.aquatic;
 
 import com.rena.dinosexpansion.DinosExpansion;
+import com.rena.dinosexpansion.common.entity.Dinosaur;
 import com.rena.dinosexpansion.common.entity.ia.DinosaurAINearestTarget;
 import com.rena.dinosexpansion.common.entity.ia.SleepRhythmGoal;
 import com.rena.dinosexpansion.common.entity.ia.movecontroller.AquaticMoveController;
@@ -28,6 +29,7 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.common.ForgeMod;
 import software.bernie.geckolib3.core.AnimationState;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -50,13 +52,14 @@ public class Eosqualodon extends DinosaurAquatic implements IAnimatable {
     public static AttributeModifierMap.MutableAttribute createAttributes() {
         return MobEntity.func_233666_p_().createMutableAttribute(Attributes.MAX_HEALTH, 30F)
                 .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.3F)
-                .createMutableAttribute(Attributes.ATTACK_DAMAGE, 5.0F);
+                .createMutableAttribute(Attributes.ATTACK_DAMAGE, 5.0F)
+                .createMutableAttribute(ForgeMod.SWIM_SPEED.get(), 1.2f);
     }
 
     private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
     public Eosqualodon(EntityType<Eosqualodon> type, World world) {
-        super(type, world, new DinosaurInfo("eosqualodon", 200, 100, 50, SleepRhythmGoal.SleepRhythm.DIURNAL), generateLevelWithinBounds(20, 100));
+        super(type, world, new DinosaurInfo("eosqualodon", 200, 100, 50, SleepRhythmGoal.SleepRhythm.NONE), generateLevelWithinBounds(20, 100));
         this.moveController = new AquaticMoveController(this, 1F);
         switchNavigator(false);
         updateInfo();
@@ -155,13 +158,18 @@ public class Eosqualodon extends DinosaurAquatic implements IAnimatable {
     }
 
     private PlayState predicate(AnimationEvent<Eosqualodon> event) {
+        if (event.getController().getCurrentAnimation() != null){
+            //DinosExpansion.LOGGER.debug(event.getController().getCurrentAnimation().animationName);
+        }
         if (isKnockout()){
             event.getController().setAnimation(new AnimationBuilder().addAnimation("eosqualodon_knockout", ILoopType.EDefaultLoopTypes.LOOP));
+            return PlayState.CONTINUE;
         }
-        else if (event.isMoving() && event.getController().getAnimationState().equals(AnimationState.Stopped)) {
+        else if (event.isMoving()) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("eosqualodon_swim", ILoopType.EDefaultLoopTypes.LOOP));
+            return PlayState.CONTINUE;
         }
-        return PlayState.CONTINUE;
+        return PlayState.STOP;
     }
 
     private PlayState attackPredicate(AnimationEvent<Eosqualodon> event) {

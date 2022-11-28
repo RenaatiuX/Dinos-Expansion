@@ -62,6 +62,7 @@ public abstract class Dinosaur extends TameableEntity {
     public static final DataParameter<Integer> RARITY = EntityDataManager.createKey(Dinosaur.class, DataSerializers.VARINT);
     public static final DataParameter<Integer> GENDER = EntityDataManager.createKey(Dinosaur.class, DataSerializers.VARINT);
     public static final DataParameter<Integer> NARCOTIC_VALUE = EntityDataManager.createKey(Dinosaur.class, DataSerializers.VARINT);
+    public static final DataParameter<Byte> TAMING_PROGRESS = EntityDataManager.createKey(Dinosaur.class, DataSerializers.BYTE);
     public static final DataParameter<Float> HUNGER_VALUE = EntityDataManager.createKey(Dinosaur.class, DataSerializers.FLOAT);
     public static final DataParameter<Optional<UUID>> KNOCKED_OUT = EntityDataManager.createKey(Dinosaur.class, DataSerializers.OPTIONAL_UNIQUE_ID);
 
@@ -87,6 +88,7 @@ public abstract class Dinosaur extends TameableEntity {
         this.dataManager.set(RARITY, getinitialRarity().ordinal());
         this.dataManager.set(GENDER, getInitialGender().ordinal());
         this.dataManager.set(LEVEL, level);
+        setHungerValue(maxHunger);
         Rarity rarity = getRarity();
         this.info = info;
         //dont do that at home kids
@@ -115,6 +117,7 @@ public abstract class Dinosaur extends TameableEntity {
         this.dataManager.register(KNOCKED_OUT, Optional.empty());
         this.dataManager.register(NARCOTIC_VALUE, 0);
         this.dataManager.register(HUNGER_VALUE, 0f);
+        this.dataManager.register(TAMING_PROGRESS, (byte)0);
     }
 
     @Override
@@ -125,11 +128,14 @@ public abstract class Dinosaur extends TameableEntity {
         this.dataManager.set(BOOLS, nbt.getInt("bools"));
         this.dataManager.set(RARITY, nbt.getInt("rarity"));
         this.dataManager.set(GENDER, nbt.getInt("gender"));
+        this.dataManager.set(NARCOTIC_VALUE, nbt.getInt("narcos"));
+        this.dataManager.set(HUNGER_VALUE, nbt.getFloat("hunger"));
         this.maxNarcotic = nbt.getInt("maxNarcotic");
         this.maxHunger = nbt.getInt("maxHunger");
         this.inventory.deserializeNBT(nbt.getCompound("inventory"));
         if (nbt.contains("knocked_out_player"))
             this.dataManager.set(KNOCKED_OUT, Optional.of(nbt.getUniqueId("knocked_out_player")));
+        this.dataManager.set(TAMING_PROGRESS, nbt.getByte("taming_progress"));
     }
 
     @Override
@@ -140,6 +146,9 @@ public abstract class Dinosaur extends TameableEntity {
         nbt.putInt("bools", this.dataManager.get(BOOLS));
         nbt.putInt("rarity", this.dataManager.get(RARITY));
         nbt.putInt("gender", this.dataManager.get(GENDER));
+        nbt.putFloat("hunger", this.getHungerValue());
+        nbt.putByte("taming_progress", this.dataManager.get(TAMING_PROGRESS));
+        nbt.putInt("narcos", this.getNarcoticValue());
         nbt.putInt("maxNarcotic", this.maxNarcotic);
         nbt.putInt("maxHunger", this.maxHunger);
         nbt.put("inventory", this.inventory.serializeNBT());
@@ -169,12 +178,14 @@ public abstract class Dinosaur extends TameableEntity {
             ItemStack stack = player.getHeldItem(hand);
             if (stack.getItem() instanceof INarcotic && this.isKnockout()) {
                 addNarcoticValue(((INarcotic) stack.getItem()).getNarcoticValue(), player);
-                stack.shrink(1);
+                if (!player.isCreative())
+                    stack.shrink(1);
                 return ActionResultType.SUCCESS;
             }
             if ((isOwner(player) || isKnockedOutBy(player)) && canEat(stack)){
                 this.addHungerValue(stack, player);
-                stack.shrink(1);
+                if (!player.isCreative())
+                    stack.shrink(1);
                 return ActionResultType.SUCCESS;
             }
         }
@@ -218,7 +229,7 @@ public abstract class Dinosaur extends TameableEntity {
         }
         while (!playerItems.isEmpty()){
             ItemStack currentStack = playerItems.poll();
-            if (!currentStack.isFood() || (getHungerValue() + currentStack.getItem().getFood().getSaturation() > this.info.maxHunger))
+            if (!currentStack.isFood() || (getHungerValue() + currentStack.getItem().getFood().getSaturation() > this.getMaxHunger()))
                 break;
             if (!isFood(currentStack))
                 continue;
@@ -267,6 +278,7 @@ public abstract class Dinosaur extends TameableEntity {
         int bools = this.dataManager.get(BOOLS);
         this.dataManager.set(BOOLS, BitUtils.setBit(1, bools, knockout));
         if (knockout) {
+            DinosExpansion.LOGGER.debug("getExecuted");
             this.navigator.clearPath();
             setAttackTarget(null);
         }
@@ -360,12 +372,22 @@ public abstract class Dinosaur extends TameableEntity {
     /**
      * client synced
      */
+    public int getMaxHunger() {
+        return maxHunger;
+    }
+
+    /**
+     * client synced
+     */
     public void addHungerValue(ItemStack food, LivingEntity feeder) {
-        if (!food.isFood() || !isFood(food) || !isOwner(feeder))
+        if (!food.isFood() || !isFood(food) || (!isOwner(feeder) && !isKnockedOutBy(feeder)))
             return;
         if (feeder instanceof ServerPlayerEntity)
             CriteriaTriggerInit.FEED_DINOSAUR.trigger((ServerPlayerEntity) feeder, food, this);
-        setHungerValue(getHungerValue() + food.getItem().getFood().getSaturation());
+        float saturation = food.getItem().getFood().getHealing();
+        setHungerValue(getHungerValue() + saturation);
+        int progress = (int) (saturation * 100f / (float)this.info.getMaxHunger());
+        addTamingProgress((byte) MathHelper.clamp(progress, 0, 100));
     }
     /**
      * client synced
@@ -385,6 +407,8 @@ public abstract class Dinosaur extends TameableEntity {
     }
 
     public boolean isKnockedOutBy(LivingEntity living){
+        if(!isKnockout())
+            return false;
         Optional<UUID> knockOutBy = this.dataManager.get(KNOCKED_OUT);
         if (knockOutBy.isPresent()){
             return living == this.world.getPlayerByUuid(knockOutBy.get());
@@ -492,6 +516,10 @@ public abstract class Dinosaur extends TameableEntity {
      */
     protected abstract int reduceNarcotic(int narcoticValue);
 
+    public int getMaxNarcotic() {
+        return maxNarcotic;
+    }
+
     /**
      * just server side
      * in here hunger is reduced when running and moving, just a little reduced when doing basically nothing
@@ -503,6 +531,18 @@ public abstract class Dinosaur extends TameableEntity {
         }
         if (getRNG().nextDouble() <= 0.001)
             this.addHungerValue(-1);
+    }
+
+    public byte getTamingProgress(){
+        return this.dataManager.get(TAMING_PROGRESS);
+    }
+
+    public void setTamingProgress(byte progress){
+        this.dataManager.set(TAMING_PROGRESS, (byte)Math.max(0, Math.min(100, progress)));
+    }
+
+    public void addTamingProgress(byte toAdd){
+        setTamingProgress((byte) (getTamingProgress() + MathHelper.clamp(toAdd, 0, 100)));
     }
 
 
@@ -539,6 +579,10 @@ public abstract class Dinosaur extends TameableEntity {
 
         Gender(ITextComponent name) {
             this.name = name;
+        }
+
+        public ITextComponent getDisplayName() {
+            return name;
         }
     }
 
@@ -597,6 +641,10 @@ public abstract class Dinosaur extends TameableEntity {
 
         public String getName() {
             return name;
+        }
+
+        public SleepRhythmGoal.SleepRhythm getRhythm() {
+            return rhythm;
         }
 
         /**

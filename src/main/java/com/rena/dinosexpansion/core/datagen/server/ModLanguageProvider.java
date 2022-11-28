@@ -53,6 +53,12 @@ public class ModLanguageProvider extends LanguageProvider {
         add(ItemInit.DIAMOND_SPEAR.get(), "Diamond Spear");
         add(ItemInit.GOLD_SPEAR.get(), "Golden Spear");
         add(ItemInit.NARCOTICS.get(), "Narcotics");
+        add(ItemInit.KIBBLE_BASIC.get(), "Basic Kibble");
+        add(ItemInit.KIBBLE_SIMPLE.get(), "Simple Kibble");
+        add(ItemInit.KIBBLE_REGULAR.get(), "Regular Kibble");
+        add(ItemInit.KIBBLE_SUPERIOR.get(), "Superior Kibble");
+        add(ItemInit.KIBBLE_EXCEPTIONAL.get(), "Exceptional Kibble");
+        add(ItemInit.KIBBLE_EXTRAORDINARY.get(), "Extraordinary Kibble");
     }
 
     public void add(ItemGroup group, String key){
