@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "dinosexpansion:kibble_superior",
+    "dinosexpansion:kibble_regular",
+    "dinosexpansion:kibble_simple",
+    "dinosexpansion:kibble_basic",
+    "dinosexpansion:kibble_exceptional",
+    "dinosexpansion:kibble_extraordinary"
+  ]
+}
