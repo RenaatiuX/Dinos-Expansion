@@ -27,13 +27,16 @@ import net.minecraft.world.World;
 public abstract class DinosaurAquatic extends Dinosaur implements ISemiAquatic {
 
     private static final DataParameter<Boolean> BEACHED = EntityDataManager.createKey(DinosaurAquatic.class, DataSerializers.BOOLEAN);
-
+    private static final DataParameter<Boolean> DESPAWN_BEACH = EntityDataManager.createKey(DinosaurAquatic.class, DataSerializers.BOOLEAN);
     private static final int MAX_TIME_ON_LAND = 1000;
     private static final int MAX_TIME_IN_WATER = 1000;
     public int timeInWater = 0;
     public int timeOnLand = 0;
     protected boolean isAmphibious = false;
     protected boolean isLandNavigator;
+    public float prevBeachedProgress;
+    public float beachedProgress;
+    private int despawnDelay = 47999;
 
     public DinosaurAquatic(EntityType<? extends Dinosaur> type, World world, DinosaurInfo info, int level) {
         super(type, world, info, level);
@@ -42,8 +45,54 @@ public abstract class DinosaurAquatic extends Dinosaur implements ISemiAquatic {
     }
 
     @Override
+    public boolean canDespawn(double distanceToClosestPlayer) {
+        return super.canDespawn(distanceToClosestPlayer);
+    }
+
+    private boolean canDespawn() {
+        return isDespawnBeach();
+    }
+
+    private void tryDespawn() {
+        if (this.canDespawn()) {
+            this.despawnDelay = this.despawnDelay - 1;
+            if (this.despawnDelay <= 0) {
+                this.clearLeashed(true, false);
+                this.remove();
+            }
+        }
+    }
+
+    @Override
     public void livingTick() {
         super.livingTick();
+       /* if (this.isOnGround() && !this.isInWaterOrBubbleColumn()) {
+            this.setBeached(true);
+            this.rotationPitch = 0;
+            this.setSleeping(false);
+        }
+        if (isBeached()) {
+            this.setMotion(this.getMotion().mul(0.5, 0.5, 0.5));
+            this.despawnDelay = 47999;
+            this.setBeached(false);
+        }
+
+        prevBeachedProgress = beachedProgress;
+        if (isBeached() && this.beachedProgress < 10F) {
+            this.beachedProgress++;
+        }
+        if (!isBeached() && this.beachedProgress > 0F) {
+            this.beachedProgress--;
+        }
+        this.rotationYawHead = this.rotationYaw;
+        this.renderYawOffset = this.rotationYaw;
+
+        if (this.isInWater() && !this.areEyesInFluid(FluidTags.WATER) && this.getAir() > 140) {
+            this.setMotion(this.getMotion().add(0, -0.06, 0));
+        }
+        if (!this.world.isRemote) {
+            this.tryDespawn();
+        }*/
     }
 
     protected void updateAir(int air) {
@@ -157,6 +206,7 @@ public abstract class DinosaurAquatic extends Dinosaur implements ISemiAquatic {
     protected void registerData() {
         super.registerData();
         this.dataManager.register(BEACHED, false);
+        this.dataManager.register(DESPAWN_BEACH, Boolean.FALSE);
     }
 
     @Override
@@ -165,6 +215,8 @@ public abstract class DinosaurAquatic extends Dinosaur implements ISemiAquatic {
         nbt.putInt("TimeOnLand", this.timeOnLand);
         nbt.putInt("TimeInWater", this.timeInWater);
         nbt.putBoolean("Beached", this.isBeached());
+        nbt.putBoolean("BeachedDespawnFlag", this.isDespawnBeach());
+        nbt.putInt("DespawnDelay", this.despawnDelay);
     }
 
     @Override
@@ -173,6 +225,10 @@ public abstract class DinosaurAquatic extends Dinosaur implements ISemiAquatic {
         this.timeOnLand = nbt.getInt("TimeOnLand");
         this.timeInWater = nbt.getInt("TimeInWater");
         this.setBeached(nbt.getBoolean("Beached"));
+        this.setDespawnBeach(nbt.getBoolean("BeachedDespawnFlag"));
+        if (nbt.contains("DespawnDelay", 99)) {
+            this.despawnDelay = nbt.getInt("DespawnDelay");
+        }
     }
 
     public boolean isBeached() {
@@ -181,6 +237,14 @@ public abstract class DinosaurAquatic extends Dinosaur implements ISemiAquatic {
 
     public void setBeached(boolean beached) {
         this.dataManager.set(BEACHED, beached);
+    }
+
+    public boolean isDespawnBeach() {
+        return this.dataManager.get(DESPAWN_BEACH);
+    }
+
+    public void setDespawnBeach(boolean despawn) {
+        this.dataManager.set(DESPAWN_BEACH, despawn);
     }
 
     @Override
