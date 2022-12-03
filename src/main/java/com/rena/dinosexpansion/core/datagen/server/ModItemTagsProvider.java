@@ -29,6 +29,7 @@ public class ModItemTagsProvider extends ItemTagsProvider {
     protected void registerTags() {
         getOrCreateBuilder(ItemTags.ARROWS).add(ItemInit.TRANQUILLIZER_ARROW.get(), ItemInit.WOODEN_ARROW.get(), ItemInit.STONE_ARROW.get());
         getOrCreateBuilder(ModTags.Items.COMPOUND_ARROWS).add(ItemInit.COMPOUND_ARROW.get());
+        getOrCreateBuilder(ModTags.Items.KIBBLE).add(ItemInit.KIBBLE_SUPERIOR.get(), ItemInit.KIBBLE_REGULAR.get(), ItemInit.KIBBLE_SIMPLE.get(), ItemInit.KIBBLE_BASIC.get(), ItemInit.KIBBLE_EXCEPTIONAL.get(), ItemInit.KIBBLE_EXTRAORDINARY.get());
         TagsProvider.Builder<Item> builder = getOrCreateBuilder(ModTags.Items.AQUATIC_ENCHANT);
         for (Item item : ForgeRegistries.ITEMS){
             if (item instanceof TieredChakram)

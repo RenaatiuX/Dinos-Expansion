@@ -8,6 +8,7 @@ import com.rena.dinosexpansion.common.entity.ia.SleepRhythmGoal;
 import com.rena.dinosexpansion.common.entity.projectile.INarcoticProjectile;
 import com.rena.dinosexpansion.common.item.util.INarcotic;
 import com.rena.dinosexpansion.core.init.CriteriaTriggerInit;
+import com.rena.dinosexpansion.core.tags.ModTags;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -193,11 +194,7 @@ public abstract class Dinosaur extends TameableEntity {
     }
 
     public boolean canEat(ItemStack stack) {
-        for (Item item : this.getFood()) {
-            if (item == stack.getItem())
-                return true;
-        }
-        return false;
+       return this.isFood(stack);
     }
 
     /**
@@ -484,7 +481,7 @@ public abstract class Dinosaur extends TameableEntity {
     }
 
     public boolean isFood(ItemStack stack){
-        return getFood().contains(stack.getItem());
+        return ModTags.Items.KIBBLE.contains(stack.getItem()) || getFood().contains(stack.getItem());
     }
 
     public abstract List<Item> getFood();
@@ -493,7 +490,7 @@ public abstract class Dinosaur extends TameableEntity {
      * cant exceed the maxNarcotic
      */
     protected void setNarcoticValue(int value) {
-        this.dataManager.set(NARCOTIC_VALUE, Math.min(value, maxNarcotic));
+        this.dataManager.set(NARCOTIC_VALUE, MathHelper.clamp(value,0, maxNarcotic));
     }
 
     /**
