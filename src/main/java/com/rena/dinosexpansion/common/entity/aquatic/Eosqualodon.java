@@ -160,13 +160,15 @@ public class Eosqualodon extends DinosaurAquatic implements IAnimatable, IAnimat
         }
         if (isKnockout()){
             event.getController().setAnimation(new AnimationBuilder().addAnimation("eosqualodon_knockout", ILoopType.EDefaultLoopTypes.LOOP));
-            return PlayState.CONTINUE;
         }
-        else if (event.isMoving()) {
+        if (event.isMoving()) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("eosqualodon_swim", ILoopType.EDefaultLoopTypes.LOOP));
-            return PlayState.CONTINUE;
         }
-        return PlayState.STOP;
+        else {
+            event.getController().clearAnimationCache();
+            return PlayState.STOP;
+        }
+        return PlayState.CONTINUE;
     }
 
     private PlayState attackPredicate(AnimationEvent<Eosqualodon> event) {
