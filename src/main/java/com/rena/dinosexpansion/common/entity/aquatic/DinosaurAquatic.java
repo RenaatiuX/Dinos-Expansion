@@ -219,6 +219,7 @@ public abstract class DinosaurAquatic extends Dinosaur implements ISemiAquatic {
         nbt.putInt("DespawnDelay", this.despawnDelay);
     }
 
+    //this causes the floating and the reason why u cant hit them
     @Override
     public void readAdditional(CompoundNBT nbt) {
         super.readAdditional(nbt);

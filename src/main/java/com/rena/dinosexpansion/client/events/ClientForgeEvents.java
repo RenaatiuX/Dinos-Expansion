@@ -24,9 +24,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Matrix4f;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.text.*;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.client.event.InputEvent;
@@ -57,10 +55,16 @@ public class ClientForgeEvents {
             event.setResult(Event.Result.DENY);
             Dinosaur dino = (Dinosaur) event.getEntity();
             if (dino.hasCustomName()) {
-                renderNameWithLevel(dino, dino.getDisplayName().deepCopy().appendString("\n").appendString("" + dino.getLevel()), event.getMatrixStack(),
+                IFormattableTextComponent name = dino.getDisplayName().deepCopy().appendString("\n").appendString("" + dino.getLevel());
+                if (Minecraft.getInstance().player != null && (dino.isKnockedOutBy(Minecraft.getInstance().player) || dino.isOwner(Minecraft.getInstance().player)))
+                    name = name.mergeStyle(TextFormatting.GREEN);
+                renderNameWithLevel(dino, name, event.getMatrixStack(),
                         event.getRenderTypeBuffer(), event.getPackedLight(), event.getEntityRenderer().getRenderManager());
             } else {
-                renderNameWithLevel(dino, new StringTextComponent("" + dino.getLevel()), event.getMatrixStack(), event.getRenderTypeBuffer(), event.getPackedLight(), event.getEntityRenderer().getRenderManager());
+                IFormattableTextComponent name = new StringTextComponent("" + dino.getLevel());
+                if (Minecraft.getInstance().player != null && (dino.isKnockedOutBy(Minecraft.getInstance().player) || dino.isOwner(Minecraft.getInstance().player)))
+                    name = name.mergeStyle(TextFormatting.GREEN);
+                renderNameWithLevel(dino, name, event.getMatrixStack(), event.getRenderTypeBuffer(), event.getPackedLight(), event.getEntityRenderer().getRenderManager());
             }
         }
     }
