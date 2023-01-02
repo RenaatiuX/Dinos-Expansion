@@ -1,6 +1,6 @@
 package com.rena.dinosexpansion.common.util.enums;
 
-public enum PoopEffect {
+public enum PoopSize {
 
     SMALL(1),
     MEDIUM(2),
@@ -8,7 +8,7 @@ public enum PoopEffect {
 
     final int effectArea;
 
-    PoopEffect(int effectArea) {
+    PoopSize(int effectArea) {
         this.effectArea = effectArea;
     }
 

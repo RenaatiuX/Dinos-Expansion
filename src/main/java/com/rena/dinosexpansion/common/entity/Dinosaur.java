@@ -4,9 +4,12 @@ import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.common.BitUtils;
 import com.rena.dinosexpansion.common.config.DinosExpansionConfig;
 import com.rena.dinosexpansion.common.container.TamingContainer;
+import com.rena.dinosexpansion.common.entity.ia.DinosaurFollowOwnerGoal;
 import com.rena.dinosexpansion.common.entity.ia.SleepRhythmGoal;
 import com.rena.dinosexpansion.common.entity.projectile.INarcoticProjectile;
 import com.rena.dinosexpansion.common.item.util.INarcotic;
+import com.rena.dinosexpansion.common.util.enums.AttackOrder;
+import com.rena.dinosexpansion.common.util.enums.MoveOrder;
 import com.rena.dinosexpansion.core.init.CriteriaTriggerInit;
 import com.rena.dinosexpansion.core.tags.ModTags;
 import net.minecraft.entity.EntityType;
@@ -73,6 +76,8 @@ public abstract class Dinosaur extends TameableEntity {
     public static final DataParameter<Byte> TAMING_PROGRESS = EntityDataManager.createKey(Dinosaur.class, DataSerializers.BYTE);
     public static final DataParameter<Float> HUNGER_VALUE = EntityDataManager.createKey(Dinosaur.class, DataSerializers.FLOAT);
     public static final DataParameter<Optional<UUID>> KNOCKED_OUT = EntityDataManager.createKey(Dinosaur.class, DataSerializers.OPTIONAL_UNIQUE_ID);
+    public static final DataParameter<Byte> MOVE_ORDER = EntityDataManager.createKey(Dinosaur.class, DataSerializers.BYTE);
+    public static final DataParameter<Byte> ATTACK_ORDER = EntityDataManager.createKey(Dinosaur.class, DataSerializers.BYTE);
 
 
     protected int maxNarcotic, maxHunger;
@@ -100,6 +105,7 @@ public abstract class Dinosaur extends TameableEntity {
         Rarity rarity = getRarity();
         this.info = info;
         //dont do that at home kids
+        //normally goals should only be added in the registerGoals method
         if (this.info.rhythm != SleepRhythmGoal.SleepRhythm.NONE)
             this.goalSelector.addGoal(3, new SleepRhythmGoal(this, info.rhythm));
         getAttribute(Attributes.MAX_HEALTH).setBaseValue(getAttribute(Attributes.MAX_HEALTH).getValue() + rarity.healthBonus + DinosExpansionConfig.HEALTH_PER_LEVEL.get() * (double) level);
@@ -109,9 +115,13 @@ public abstract class Dinosaur extends TameableEntity {
         updateInfo();
     }
 
+    /**
+     * Follow Goal has Priority 10
+     */
     @Override
     protected void registerGoals() {
         super.registerGoals();
+        this.goalSelector.addGoal(10, new DinosaurFollowOwnerGoal(this, 0.5, 10f, 2f, false));
     }
 
     @Override
@@ -126,6 +136,8 @@ public abstract class Dinosaur extends TameableEntity {
         this.dataManager.register(NARCOTIC_VALUE, 0);
         this.dataManager.register(HUNGER_VALUE, 0f);
         this.dataManager.register(TAMING_PROGRESS, (byte) 0);
+        this.dataManager.register(MOVE_ORDER, (byte)MoveOrder.FOLLOW.ordinal());
+        this.dataManager.register(ATTACK_ORDER, (byte)AttackOrder.NEUTRAL.ordinal());
     }
 
     @Override
@@ -138,6 +150,8 @@ public abstract class Dinosaur extends TameableEntity {
         this.dataManager.set(GENDER, nbt.getInt("gender"));
         this.dataManager.set(NARCOTIC_VALUE, nbt.getInt("narcos"));
         this.dataManager.set(HUNGER_VALUE, nbt.getFloat("hunger"));
+        this.dataManager.set(MOVE_ORDER, nbt.getByte("move_order"));
+        this.dataManager.set(ATTACK_ORDER, nbt.getByte("attack_order"));
         this.maxNarcotic = nbt.getInt("maxNarcotic");
         this.maxHunger = nbt.getInt("maxHunger");
         this.inventory.deserializeNBT(nbt.getCompound("inventory"));
@@ -156,6 +170,8 @@ public abstract class Dinosaur extends TameableEntity {
         nbt.putInt("gender", this.dataManager.get(GENDER));
         nbt.putFloat("hunger", this.getHungerValue());
         nbt.putByte("taming_progress", this.dataManager.get(TAMING_PROGRESS));
+        nbt.putByte("move_order", this.dataManager.get(MOVE_ORDER));
+        nbt.putByte("attack_order", this.dataManager.get(ATTACK_ORDER));
         nbt.putInt("narcos", this.getNarcoticValue());
         nbt.putInt("maxNarcotic", this.maxNarcotic);
         nbt.putInt("maxHunger", this.maxHunger);
@@ -218,14 +234,12 @@ public abstract class Dinosaur extends TameableEntity {
     }
 
     public void addMaxNarcotic(PlayerInventory inv) {
-
+        //TODO
     }
 
     /**
      * searches threw the inventory of the player and decides greedy which food to feed
      *
-     * @param inv
-     * @param player
      */
     public void addMaxHunger(PlayerInventory inv, PlayerEntity player) {
         PriorityQueue<ItemStack> playerItems = new PriorityQueue<>(Comparator.comparing(stack -> stack.isFood() ? -1 : stack.getItem().getFood().getSaturation()));
@@ -570,6 +584,31 @@ public abstract class Dinosaur extends TameableEntity {
 
     public void addTamingProgress(byte toAdd) {
         setTamingProgress((byte) (getTamingProgress() + MathHelper.clamp(toAdd, 0, 100)));
+    }
+
+    /**
+     * client synced
+     */
+    public void setMoveOrder(MoveOrder order){
+        this.dataManager.set(MOVE_ORDER, (byte) order.ordinal());
+    }
+    /**
+     * client synced
+     */
+    public void setAttackOrder(AttackOrder order){
+        this.dataManager.set(ATTACK_ORDER, (byte) order.ordinal());
+    }
+    /**
+     * client synced
+     */
+    public MoveOrder getMoveOrder(){
+        return MoveOrder.values()[this.dataManager.get(MOVE_ORDER)];
+    }
+    /**
+     * client synced
+     */
+    public AttackOrder getAttackOrder(){
+        return AttackOrder.values()[this.dataManager.get(ATTACK_ORDER)];
     }
 
 

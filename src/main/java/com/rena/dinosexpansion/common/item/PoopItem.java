@@ -1,6 +1,6 @@
 package com.rena.dinosexpansion.common.item;
 
-import com.rena.dinosexpansion.common.util.enums.PoopEffect;
+import com.rena.dinosexpansion.common.util.enums.PoopSize;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.IGrowable;
 import net.minecraft.entity.player.PlayerEntity;
@@ -17,7 +17,7 @@ import static net.minecraftforge.event.ForgeEventFactory.onApplyBonemeal;
 
 public class PoopItem extends Item {
 
-    private static PoopEffect poopEffect;
+    private static PoopSize poopEffect;
     public PoopItem(Properties properties) {
         super(properties);
     }
