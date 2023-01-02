@@ -17,17 +17,12 @@ import net.minecraft.world.World;
 public abstract class DinosaurFlying extends Dinosaur implements IFlyingAnimal {
 
     private static final DataParameter<Boolean> FLYING = EntityDataManager.createKey(DinosaurFlying.class, DataSerializers.BOOLEAN);
-    public BlockPos airTarget;
-    public float flyProgress;
-    private boolean isFlying;
-    private int ticksFlying;
+
     public DinosaurFlying(EntityType<DinosaurFlying> type, World world, DinosaurInfo info, int level) {
         super(type, world, info, level);
         this.setPathPriority(PathNodeType.DANGER_FIRE, -1.0F);
         this.setPathPriority(PathNodeType.WATER, -1.0F);
         this.setPathPriority(PathNodeType.WATER_BORDER, 16.0F);
-        this.setPathPriority(PathNodeType.COCOA, -1.0F);
-        this.setPathPriority(PathNodeType.FENCE, -1.0F);
     }
 
     @Override
@@ -71,8 +66,8 @@ public abstract class DinosaurFlying extends Dinosaur implements IFlyingAnimal {
                 this.getNavigator().clearPath();
             }
             travelVector = Vector3d.ZERO;
-        }
-        super.travel(travelVector);*/
+        }*/
+        super.travel(travelVector);
     }
 
     @Override

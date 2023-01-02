@@ -28,6 +28,7 @@ public abstract class DinosaurAquatic extends Dinosaur implements ISemiAquatic {
 
     private static final DataParameter<Boolean> BEACHED = EntityDataManager.createKey(DinosaurAquatic.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> DESPAWN_BEACH = EntityDataManager.createKey(DinosaurAquatic.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> JUMP = EntityDataManager.createKey(DinosaurAquatic.class, DataSerializers.BOOLEAN);
     private static final int MAX_TIME_ON_LAND = 1000;
     private static final int MAX_TIME_IN_WATER = 1000;
     public int timeInWater = 0;
