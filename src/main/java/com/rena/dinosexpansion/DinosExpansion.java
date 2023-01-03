@@ -2,6 +2,7 @@ package com.rena.dinosexpansion;
 
 import com.rena.dinosexpansion.common.config.DinosExpansionConfig;
 import com.rena.dinosexpansion.core.init.*;
+import com.rena.dinosexpansion.core.network.Network;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
@@ -56,6 +57,7 @@ public class DinosExpansion
     private void setup(final FMLCommonSetupEvent event) {
         event.enqueueWork(() ->  {
             CriteriaTriggerInit.REGISTRY.forEach(CriteriaTriggers::register);
+            Network.register();
         });
     }
 }
