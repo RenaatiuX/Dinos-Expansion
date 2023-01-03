@@ -115,13 +115,9 @@ public abstract class Dinosaur extends TameableEntity {
         updateInfo();
     }
 
-    /**
-     * Follow Goal has Priority 10
-     */
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(10, new DinosaurFollowOwnerGoal(this, 0.5, 10f, 2f, false));
     }
 
     @Override
@@ -136,8 +132,8 @@ public abstract class Dinosaur extends TameableEntity {
         this.dataManager.register(NARCOTIC_VALUE, 0);
         this.dataManager.register(HUNGER_VALUE, 0f);
         this.dataManager.register(TAMING_PROGRESS, (byte) 0);
-        this.dataManager.register(MOVE_ORDER, (byte)MoveOrder.FOLLOW.ordinal());
-        this.dataManager.register(ATTACK_ORDER, (byte)AttackOrder.NEUTRAL.ordinal());
+        this.dataManager.register(MOVE_ORDER, (byte) MoveOrder.FOLLOW.ordinal());
+        this.dataManager.register(ATTACK_ORDER, (byte) AttackOrder.NEUTRAL.ordinal());
     }
 
     @Override
@@ -239,7 +235,6 @@ public abstract class Dinosaur extends TameableEntity {
 
     /**
      * searches threw the inventory of the player and decides greedy which food to feed
-     *
      */
     public void addMaxHunger(PlayerInventory inv, PlayerEntity player) {
         PriorityQueue<ItemStack> playerItems = new PriorityQueue<>(Comparator.comparing(stack -> stack.isFood() ? -1 : stack.getItem().getFood().getSaturation()));
@@ -589,26 +584,49 @@ public abstract class Dinosaur extends TameableEntity {
     /**
      * client synced
      */
-    public void setMoveOrder(MoveOrder order){
-        this.dataManager.set(MOVE_ORDER, (byte) order.ordinal());
+    public void setMoveOrder(MoveOrder order) {
+        if (Arrays.stream(allowedMoveOrders()).anyMatch(o -> o == order))
+            this.dataManager.set(MOVE_ORDER, (byte) order.ordinal());
     }
+
     /**
      * client synced
      */
-    public void setAttackOrder(AttackOrder order){
-        this.dataManager.set(ATTACK_ORDER, (byte) order.ordinal());
+    public void setAttackOrder(AttackOrder order) {
+        if (Arrays.stream(allowedAttackOrders()).anyMatch(o -> o == order))
+            this.dataManager.set(ATTACK_ORDER, (byte) order.ordinal());
     }
+
     /**
      * client synced
      */
-    public MoveOrder getMoveOrder(){
+    public MoveOrder getMoveOrder() {
         return MoveOrder.values()[this.dataManager.get(MOVE_ORDER)];
     }
+
     /**
      * client synced
      */
-    public AttackOrder getAttackOrder(){
+    public AttackOrder getAttackOrder() {
         return AttackOrder.values()[this.dataManager.get(ATTACK_ORDER)];
+    }
+
+    /**
+     * this determines which orders are allowed on this dinosaur
+     *
+     * @return a array of all allowed orders
+     */
+    public AttackOrder[] allowedAttackOrders() {
+        return AttackOrder.values();
+    }
+
+    /**
+     * this determines which orders are allowed on this dinosaur
+     *
+     * @return a array of all allowed orders
+     */
+    public MoveOrder[] allowedMoveOrders() {
+        return MoveOrder.values();
     }
 
 
