@@ -41,6 +41,7 @@ public class DinosExpansion
         BiomeInit.BIOMES.register(bus);
         EnchantmentInit.VANILLA.register(bus);
         EnchantmentInit.ENCHANTMENTS.register(bus);
+        StructureInit.STRUCTURES.register(bus);
         EffectInit.EFFECTS.register(bus);
         SoundInit.SOUNDS.register(bus);
         ContainerInit.CONTAINERS.register(bus);
@@ -58,6 +59,7 @@ public class DinosExpansion
         event.enqueueWork(() ->  {
             CriteriaTriggerInit.REGISTRY.forEach(CriteriaTriggers::register);
             Network.register();
+            StructureInit.setupStructures();
         });
     }
 }
