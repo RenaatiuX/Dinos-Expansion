@@ -2,6 +2,8 @@ package com.rena.dinosexpansion.common.entity.flying;
 
 import com.rena.dinosexpansion.common.entity.Dinosaur;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MoverType;
 import net.minecraft.entity.passive.IFlyingAnimal;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
@@ -18,7 +20,7 @@ public abstract class DinosaurFlying extends Dinosaur implements IFlyingAnimal {
 
     private static final DataParameter<Boolean> FLYING = EntityDataManager.createKey(DinosaurFlying.class, DataSerializers.BOOLEAN);
 
-    public DinosaurFlying(EntityType<DinosaurFlying> type, World world, DinosaurInfo info, int level) {
+    public DinosaurFlying(EntityType<? extends Dinosaur> type, World world, DinosaurInfo info, int level) {
         super(type, world, info, level);
         this.setPathPriority(PathNodeType.DANGER_FIRE, -1.0F);
         this.setPathPriority(PathNodeType.WATER, -1.0F);
@@ -61,13 +63,33 @@ public abstract class DinosaurFlying extends Dinosaur implements IFlyingAnimal {
 
     @Override
     public void travel(Vector3d travelVector) {
-        /*if (this.isSitting()) {
-            if (this.getNavigator().getPath() != null) {
-                this.getNavigator().clearPath();
+        if (this.isInWater()) {
+            this.moveRelative(0.02F, travelVector);
+            this.move(MoverType.SELF, this.getMotion());
+            this.setMotion(this.getMotion().scale((double)0.8F));
+        } else if (this.isInLava()) {
+            this.moveRelative(0.02F, travelVector);
+            this.move(MoverType.SELF, this.getMotion());
+            this.setMotion(this.getMotion().scale(0.5D));
+        } else {
+            BlockPos ground = new BlockPos(this.getPosX(), this.getPosY() - 1.0D, this.getPosZ());
+            float f = 0.91F;
+            if (this.onGround) {
+                f = this.world.getBlockState(ground).getSlipperiness(this.world, ground, this) * 0.91F;
             }
-            travelVector = Vector3d.ZERO;
-        }*/
-        super.travel(travelVector);
+
+            float f1 = 0.16277137F / (f * f * f);
+            f = 0.91F;
+            if (this.onGround) {
+                f = this.world.getBlockState(ground).getSlipperiness(this.world, ground, this) * 0.91F;
+            }
+
+            this.moveRelative(this.onGround ? 0.1F * f1 : 0.02F, travelVector);
+            this.move(MoverType.SELF, this.getMotion());
+            this.setMotion(this.getMotion().scale(f));
+        }
+
+        this.func_233629_a_(this, false);
     }
 
     @Override

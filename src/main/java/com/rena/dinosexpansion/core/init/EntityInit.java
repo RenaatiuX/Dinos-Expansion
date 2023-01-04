@@ -5,6 +5,7 @@ import com.rena.dinosexpansion.common.entity.Hermit;
 import com.rena.dinosexpansion.common.entity.aquatic.Eosqualodon;
 import com.rena.dinosexpansion.common.entity.aquatic.MegaPiranha;
 import com.rena.dinosexpansion.common.entity.aquatic.Parapuzosia;
+import com.rena.dinosexpansion.common.entity.flying.Dimorphodon;
 import com.rena.dinosexpansion.common.entity.misc.ChakramEntity;
 import com.rena.dinosexpansion.common.entity.misc.SpearEntity;
 import com.rena.dinosexpansion.common.entity.projectile.CustomArrow;
@@ -36,6 +37,8 @@ public class EntityInit {
             () -> EntityType.Builder.<Eosqualodon>create(Eosqualodon::new, EntityClassification.WATER_CREATURE).size(3f, 2.0f));
     public static final RegistryObject<EntityType<MegaPiranha>> MEGA_PIRANHA = register("megapiranha",
             () -> EntityType.Builder.<MegaPiranha>create(MegaPiranha::new, EntityClassification.WATER_CREATURE).size(1F, 1F));
+    public static final RegistryObject<EntityType<Dimorphodon>> DIMORPHODON = register("dimorphodon",
+            () -> EntityType.Builder.<Dimorphodon>create(Dimorphodon::new, EntityClassification.WATER_CREATURE).size(1F, 1F));
     public static final RegistryObject<EntityType<Hermit>> HERMIT = register("hermit", () -> EntityType.Builder.create(Hermit::new, EntityClassification.CREATURE));
 
     public static final <T extends Entity> RegistryObject<EntityType<T>> register(String name, Supplier<EntityType.Builder<T>> builder){

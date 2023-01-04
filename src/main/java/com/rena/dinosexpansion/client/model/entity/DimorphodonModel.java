@@ -1,13 +1,25 @@
 package com.rena.dinosexpansion.client.model.entity;
 
+import com.google.common.collect.Maps;
 import com.rena.dinosexpansion.DinosExpansion;
+import com.rena.dinosexpansion.common.entity.Dinosaur;
 import com.rena.dinosexpansion.common.entity.flying.Dimorphodon;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Util;
 import software.bernie.geckolib3.model.AnimatedTickingGeoModel;
+
+import java.util.Map;
 
 public class DimorphodonModel extends AnimatedTickingGeoModel<Dimorphodon> {
 
-
+    private static final Map<Dinosaur.Rarity, ResourceLocation> RARITY = Util.make(Maps.newEnumMap(Dinosaur.Rarity.class),
+            (rarity) -> {
+                        rarity.put(Dinosaur.Rarity.COMMON, DinosExpansion.modLoc("textures/entity/dimorphodon/dimorphodon_common.png"));
+                        rarity.put(Dinosaur.Rarity.UNCOMMON, DinosExpansion.modLoc("textures/entity/dimorphodon/dimorphodon_uncommon.png"));
+                        rarity.put(Dinosaur.Rarity.RARE, DinosExpansion.modLoc("textures/entity/dimorphodon/dimorphodon_rare.png"));
+                        rarity.put(Dinosaur.Rarity.EPIC, DinosExpansion.modLoc("textures/entity/dimorphodon/dimorphodon_epic.png"));
+                        rarity.put(Dinosaur.Rarity.LEGENDARY, DinosExpansion.modLoc("textures/entity/dimorphodon/dimorphodon_legendary.png"));
+            });
 
     @Override
     public ResourceLocation getModelLocation(Dimorphodon object) {
@@ -16,7 +28,7 @@ public class DimorphodonModel extends AnimatedTickingGeoModel<Dimorphodon> {
 
     @Override
     public ResourceLocation getTextureLocation(Dimorphodon object) {
-        return DinosExpansion.modLoc("textures/entity/dimorphodon.png");
+        return RARITY.get(object.getRarity());
     }
 
     @Override
