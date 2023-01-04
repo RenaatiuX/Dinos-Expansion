@@ -56,6 +56,7 @@ public class DinosExpansion
     private void setup(final FMLCommonSetupEvent event) {
         event.enqueueWork(() ->  {
             CriteriaTriggerInit.REGISTRY.forEach(CriteriaTriggers::register);
+            DimensionInit.setupDimension();
         });
     }
 }

@@ -1,4 +1,4 @@
-package com.rena.dinosexpansion.common.world.biome;
+package com.rena.dinosexpansion.common.world.gen;
 
 import com.rena.dinosexpansion.DinosExpansion;
 import net.minecraft.util.ResourceLocation;

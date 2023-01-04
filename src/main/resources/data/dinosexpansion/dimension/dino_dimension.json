@@ -1,0 +1,10 @@
+{
+  "type": "dinosexpansion:dino_dimension",
+  "generator": {
+    "biome_source": {
+      "type": "dinosexpansion:biome_provider"
+    },
+    "settings": "dinosexpansion:dino_dimension",
+    "type": "dinosexpansion:chunk_generator"
+  }
+}
