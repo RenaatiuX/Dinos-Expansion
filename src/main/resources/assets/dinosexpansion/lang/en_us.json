@@ -59,10 +59,13 @@
   "_comment": "Screens",
   "taming_screen.dinosexpansion.narcotic": "Narcotic: ",
   "dinosexpansion.taming_gui.eosqualodon": "Eosqualodon",
+  "dinosexpansion.order_screen.eosqualodon": "Eosqualodon",
 
   "dinosexpansion.gender": "Gender: ",
   "dinosexpansion.level": "Level: ",
   "dinosexpansion.sleep_rhythm": "Sleep: ",
+  "dinosexpansion.move_order": "Move Order: ",
+  "dinosexpansion.attack_order": "Attack Order: ",
 
   "_comment": "Enums",
   "gender.dinosexpansion.male": "Male",
@@ -70,6 +73,16 @@
 
   "sleep_rhythm.dinosexpansion.none": "None",
   "sleep_rhythm.dinosexpansion.diurnal": "Diurnal",
-  "sleep_rhythm.dinosexpansion.nocturnal": "Nocturnal"
+  "sleep_rhythm.dinosexpansion.nocturnal": "Nocturnal",
+
+  "order_type.dinosexpansion.passive": "Passive",
+  "order_type.dinosexpansion.neutral": "Neutral",
+  "order_type.dinosexpansion.protecting": "Protecting",
+  "order_type.dinosexpansion.hostile": "Hostile",
+
+  "order_type.dinosexpansion.wander": "Wander",
+  "order_type.dinosexpansion.sit": "Sit",
+  "order_type.dinosexpansion.follow": "Follow"
+
 
 }

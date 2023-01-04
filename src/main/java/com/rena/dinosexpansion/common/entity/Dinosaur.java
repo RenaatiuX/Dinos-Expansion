@@ -3,14 +3,15 @@ package com.rena.dinosexpansion.common.entity;
 import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.common.BitUtils;
 import com.rena.dinosexpansion.common.config.DinosExpansionConfig;
+import com.rena.dinosexpansion.common.container.OrderContainer;
 import com.rena.dinosexpansion.common.container.TamingContainer;
-import com.rena.dinosexpansion.common.entity.ia.DinosaurFollowOwnerGoal;
 import com.rena.dinosexpansion.common.entity.ia.SleepRhythmGoal;
 import com.rena.dinosexpansion.common.entity.projectile.INarcoticProjectile;
 import com.rena.dinosexpansion.common.item.util.INarcotic;
 import com.rena.dinosexpansion.common.util.enums.AttackOrder;
 import com.rena.dinosexpansion.common.util.enums.MoveOrder;
 import com.rena.dinosexpansion.core.init.CriteriaTriggerInit;
+import com.rena.dinosexpansion.core.network.Network;
 import com.rena.dinosexpansion.core.tags.ModTags;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -22,6 +23,7 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.SimpleNamedContainerProvider;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -35,6 +37,7 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -115,13 +118,9 @@ public abstract class Dinosaur extends TameableEntity {
         updateInfo();
     }
 
-    /**
-     * Follow Goal has Priority 10
-     */
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(10, new DinosaurFollowOwnerGoal(this, 0.5, 10f, 2f, false));
     }
 
     @Override
@@ -136,8 +135,8 @@ public abstract class Dinosaur extends TameableEntity {
         this.dataManager.register(NARCOTIC_VALUE, 0);
         this.dataManager.register(HUNGER_VALUE, 0f);
         this.dataManager.register(TAMING_PROGRESS, (byte) 0);
-        this.dataManager.register(MOVE_ORDER, (byte)MoveOrder.FOLLOW.ordinal());
-        this.dataManager.register(ATTACK_ORDER, (byte)AttackOrder.NEUTRAL.ordinal());
+        this.dataManager.register(MOVE_ORDER, (byte) MoveOrder.FOLLOW.ordinal());
+        this.dataManager.register(ATTACK_ORDER, (byte) AttackOrder.NEUTRAL.ordinal());
     }
 
     @Override
@@ -206,6 +205,13 @@ public abstract class Dinosaur extends TameableEntity {
                     stack.shrink(1);
                 return ActionResultType.SUCCESS;
             }
+            if (player instanceof ServerPlayerEntity && isOwner(player) && player.getHeldItem(hand).getItem() == getOrderItem()){
+                ServerPlayerEntity serverPlayer = (ServerPlayerEntity) player;
+                //sends the packet to the client where it will get executed and then opens the screen
+                NetworkHooks.openGui(serverPlayer, new SimpleNamedContainerProvider((id, inv, p) -> new OrderContainer(id, inv, Dinosaur.this),
+                        new TranslationTextComponent(DinosExpansion.MOD_ID + ".order_screen." + this.getInfo().name)), buf -> buf.writeVarInt(this.getEntityId()));
+                return ActionResultType.SUCCESS;
+            }
             if ((isOwner(player) || isKnockedOutBy(player)) && canEat(stack)) {
                 this.addHungerValue(stack, player);
                 if (!player.isCreative())
@@ -239,7 +245,6 @@ public abstract class Dinosaur extends TameableEntity {
 
     /**
      * searches threw the inventory of the player and decides greedy which food to feed
-     *
      */
     public void addMaxHunger(PlayerInventory inv, PlayerEntity player) {
         PriorityQueue<ItemStack> playerItems = new PriorityQueue<>(Comparator.comparing(stack -> stack.isFood() ? -1 : stack.getItem().getFood().getSaturation()));
@@ -284,9 +289,10 @@ public abstract class Dinosaur extends TameableEntity {
                 setKnockout(false);
             reduceHunger();
             if (getTamingProgress() >= 100) {
-                if (this.dataManager.get(KNOCKED_OUT).isPresent())
+                if (this.dataManager.get(KNOCKED_OUT).isPresent()) {
                     setTamedBy(this.world.getPlayerByUuid(this.dataManager.get(KNOCKED_OUT).get()));
-                else
+                    setTamingProgress((byte) 0);
+                }else
                     throw new IllegalStateException("dinosaur got knocked out by no Player, what went wrong here?");
             }
         }
@@ -589,26 +595,57 @@ public abstract class Dinosaur extends TameableEntity {
     /**
      * client synced
      */
-    public void setMoveOrder(MoveOrder order){
-        this.dataManager.set(MOVE_ORDER, (byte) order.ordinal());
+    public void setMoveOrder(MoveOrder order) {
+        if (Arrays.stream(allowedMoveOrders()).anyMatch(o -> o == order))
+            this.dataManager.set(MOVE_ORDER, (byte) order.ordinal());
     }
+
     /**
      * client synced
      */
-    public void setAttackOrder(AttackOrder order){
-        this.dataManager.set(ATTACK_ORDER, (byte) order.ordinal());
+    public void setAttackOrder(AttackOrder order) {
+        if (Arrays.stream(allowedAttackOrders()).anyMatch(o -> o == order))
+            this.dataManager.set(ATTACK_ORDER, (byte) order.ordinal());
     }
+
     /**
      * client synced
      */
-    public MoveOrder getMoveOrder(){
+    public MoveOrder getMoveOrder() {
         return MoveOrder.values()[this.dataManager.get(MOVE_ORDER)];
     }
+
     /**
      * client synced
      */
-    public AttackOrder getAttackOrder(){
+    public AttackOrder getAttackOrder() {
         return AttackOrder.values()[this.dataManager.get(ATTACK_ORDER)];
+    }
+
+    /**
+     * this determines which orders are allowed on this dinosaur
+     *
+     * @return a array of all allowed orders
+     */
+    public AttackOrder[] allowedAttackOrders() {
+        return AttackOrder.values();
+    }
+
+    /**
+     * this determines which orders are allowed on this dinosaur
+     *
+     * @return a array of all allowed orders
+     */
+    public MoveOrder[] allowedMoveOrders() {
+        return MoveOrder.values();
+    }
+
+    /**
+     * this item is the item the player has to right click on the dino in order to change orders
+     * make sure it isn´t food that the dino can potentially eat
+     */
+    public Item getOrderItem(){
+        return Items.STICK;
     }
 
 

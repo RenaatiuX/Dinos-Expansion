@@ -9,7 +9,9 @@ import com.rena.dinosexpansion.client.renderer.misc.ChakramRenderer;
 import com.rena.dinosexpansion.client.renderer.misc.SpearRenderer;
 import com.rena.dinosexpansion.client.renderer.projectiles.CustomArrowRenderer;
 import com.rena.dinosexpansion.client.renderer.projectiles.DartRenderer;
+import com.rena.dinosexpansion.client.screens.OrderScreen;
 import com.rena.dinosexpansion.client.screens.TamingScreen;
+import com.rena.dinosexpansion.common.entity.Hermit;
 import com.rena.dinosexpansion.common.entity.aquatic.Eosqualodon;
 import com.rena.dinosexpansion.common.entity.aquatic.MegaPiranha;
 import com.rena.dinosexpansion.common.entity.aquatic.Parapuzosia;
@@ -36,6 +38,7 @@ public class ClientSetupEvents {
     public static void clientSetup(FMLClientSetupEvent event) {
 
         ScreenManager.registerFactory(ContainerInit.TAMING_CONTAINER.get(), TamingScreen::new);
+        ScreenManager.registerFactory(ContainerInit.ORDER_CONTAINER.get(), OrderScreen::new);
 
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.CUSTOM_ARROW.get(), CustomArrowRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.DART.get(), DartRenderer::new);
@@ -70,5 +73,6 @@ public class ClientSetupEvents {
         event.put(EntityInit.PARAPUZOSIA.get(), Parapuzosia.createAttributes().create());
         event.put(EntityInit.EOSQUALODON.get(), Eosqualodon.createAttributes().create());
         event.put(EntityInit.MEGA_PIRANHA.get(), MegaPiranha.createAttributes().create());
+        event.put(EntityInit.HERMIT.get(), Hermit.createAttributes());
     }
 }
