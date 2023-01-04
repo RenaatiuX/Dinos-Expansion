@@ -60,6 +60,7 @@ public class DinosExpansion
             CriteriaTriggerInit.REGISTRY.forEach(CriteriaTriggers::register);
             Network.register();
             StructureInit.setupStructures();
+            DimensionInit.setupDimension();
         });
     }
 }
