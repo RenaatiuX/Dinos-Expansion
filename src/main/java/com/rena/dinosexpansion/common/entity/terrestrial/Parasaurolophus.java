@@ -1,4 +1,4 @@
 package com.rena.dinosexpansion.common.entity.terrestrial;
 
-public class TriceratopsEntity {
+public class Parasaurolophus {
 }

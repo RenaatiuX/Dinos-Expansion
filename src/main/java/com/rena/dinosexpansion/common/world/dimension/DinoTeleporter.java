@@ -1,6 +1,5 @@
 package com.rena.dinosexpansion.common.world.dimension;
 
-import com.rena.dinosexpansion.DinosExpansion;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.gen.Heightmap;

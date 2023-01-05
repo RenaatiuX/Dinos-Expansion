@@ -1,4 +1,4 @@
 package com.rena.dinosexpansion.common.entity.terrestrial;
 
-public class StegosaurusEntity {
+public class Ankylosaurus {
 }

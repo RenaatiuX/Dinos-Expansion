@@ -10,9 +10,7 @@ public enum DinoAddIslandLayer implements IBishopTransformer {
     @Override
     public int apply(INoiseRandom context, int x, int southEast, int southWest, int northEast, int northWest) {
         if (!DinoBiomeProvider.isShallowOcean(northWest) || DinoBiomeProvider.isShallowOcean(northEast) && DinoBiomeProvider.isShallowOcean(southWest) && DinoBiomeProvider.isShallowOcean(x) && DinoBiomeProvider.isShallowOcean(southEast)) {
-            if (!DinoBiomeProvider.isShallowOcean(northWest) && (DinoBiomeProvider.isShallowOcean(northEast) || DinoBiomeProvider.isShallowOcean(x) || DinoBiomeProvider.isShallowOcean(southWest) || DinoBiomeProvider.isShallowOcean(southEast)) && context.random(5) == DinoBiomeProvider.LAYERS_BIOME_REGISTRY
-                    .getId(DinoBiomeProvider.LAYERS_BIOME_REGISTRY
-                            .getOrDefault(DinoBiomeProvider.OCEAN))) {
+            if (!DinoBiomeProvider.isShallowOcean(northWest) && (DinoBiomeProvider.isShallowOcean(northEast) || DinoBiomeProvider.isShallowOcean(x) || DinoBiomeProvider.isShallowOcean(southWest) || DinoBiomeProvider.isShallowOcean(southEast)) && context.random(5) == 0) {
                 if (DinoBiomeProvider.isShallowOcean(northEast)) {
                     return northWest == DinoBiomeProvider.LAYERS_BIOME_REGISTRY
                             .getId(DinoBiomeProvider.LAYERS_BIOME_REGISTRY
@@ -51,33 +49,23 @@ public enum DinoAddIslandLayer implements IBishopTransformer {
         } else {
             int i = 1;
             int j = 1;
-            if (!DinoBiomeProvider.isShallowOcean(northEast) && context.random(i++) == DinoBiomeProvider.LAYERS_BIOME_REGISTRY
-                    .getId(DinoBiomeProvider.LAYERS_BIOME_REGISTRY
-                            .getOrDefault(DinoBiomeProvider.OCEAN))) {
+            if (!DinoBiomeProvider.isShallowOcean(northEast) && context.random(i++) == 0) {
                 j = northEast;
             }
 
-            if (!DinoBiomeProvider.isShallowOcean(southWest) && context.random(i++) == DinoBiomeProvider.LAYERS_BIOME_REGISTRY
-                    .getId(DinoBiomeProvider.LAYERS_BIOME_REGISTRY
-                            .getOrDefault(DinoBiomeProvider.OCEAN))) {
+            if (!DinoBiomeProvider.isShallowOcean(southWest) && context.random(i++) == 0) {
                 j = southWest;
             }
 
-            if (!DinoBiomeProvider.isShallowOcean(x) && context.random(i++) == DinoBiomeProvider.LAYERS_BIOME_REGISTRY
-                    .getId(DinoBiomeProvider.LAYERS_BIOME_REGISTRY
-                            .getOrDefault(DinoBiomeProvider.OCEAN))) {
+            if (!DinoBiomeProvider.isShallowOcean(x) && context.random(i++) == 0) {
                 j = x;
             }
 
-            if (!DinoBiomeProvider.isShallowOcean(southEast) && context.random(i++) == DinoBiomeProvider.LAYERS_BIOME_REGISTRY
-                    .getId(DinoBiomeProvider.LAYERS_BIOME_REGISTRY
-                            .getOrDefault(DinoBiomeProvider.OCEAN))) {
+            if (!DinoBiomeProvider.isShallowOcean(southEast) && context.random(i++) == 0) {
                 j = southEast;
             }
 
-            if (context.random(3) == DinoBiomeProvider.LAYERS_BIOME_REGISTRY
-                    .getId(DinoBiomeProvider.LAYERS_BIOME_REGISTRY
-                            .getOrDefault(DinoBiomeProvider.OCEAN))) {
+            if (context.random(3) == 0) {
                 return j;
             } else {
                 return j == DinoBiomeProvider.LAYERS_BIOME_REGISTRY
