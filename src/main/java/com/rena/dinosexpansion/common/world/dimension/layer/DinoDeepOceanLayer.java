@@ -25,7 +25,7 @@ public enum DinoDeepOceanLayer implements ICastleTransformer {
             if (DinoBiomeProvider.isShallowOcean(south)) {
                 ++i;
             }
-            if (i > DinoBiomeProvider.LAYERS_BIOME_REGISTRY.getId(DinoBiomeProvider.LAYERS_BIOME_REGISTRY.getOrDefault(DinoBiomeProvider.MOUNTAIN))) {
+            if (i > 3) {
                 if (center == DinoBiomeProvider.LAYERS_BIOME_REGISTRY
                         .getId(DinoBiomeProvider.LAYERS_BIOME_REGISTRY
                                 .getOrDefault(DinoBiomeProvider.WARM_OCEAN))) {

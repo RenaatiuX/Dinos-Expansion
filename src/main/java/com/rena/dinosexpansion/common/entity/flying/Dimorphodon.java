@@ -57,6 +57,11 @@ public class Dimorphodon extends DinosaurFlying implements IAnimatable, IAnimati
     }
 
     @Override
+    protected void registerGoals() {
+        super.registerGoals();
+    }
+
+    @Override
     public void tick() {
         ++this.rideCooldownCounter;
         super.tick();
@@ -104,8 +109,16 @@ public class Dimorphodon extends DinosaurFlying implements IAnimatable, IAnimati
     }
 
     private PlayState predicate(AnimationEvent<Dimorphodon> event){
-        if (event.isMoving()) {
+        if (event.isMoving() && this.isOnGround()) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.dimorphodon.walk", ILoopType.EDefaultLoopTypes.LOOP));
+        } else if (event.isMoving() && this.isFlying()) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.dimorphodon.fly", ILoopType.EDefaultLoopTypes.LOOP));
+        } else if (this.isSleeping()) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.dimorphodon.sleep", ILoopType.EDefaultLoopTypes.LOOP));
+        } else if (this.isKnockout()) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.dimorphodon.knockout", ILoopType.EDefaultLoopTypes.LOOP));
+        } else if (this.isQueuedToSit()) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.dimorphodon.sit", ILoopType.EDefaultLoopTypes.LOOP));
         }
         event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.dimorphodon.idle", ILoopType.EDefaultLoopTypes.LOOP));
         return PlayState.CONTINUE;

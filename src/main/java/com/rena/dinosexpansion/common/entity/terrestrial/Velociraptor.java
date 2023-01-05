@@ -1,4 +1,4 @@
 package com.rena.dinosexpansion.common.entity.terrestrial;
 
-public class GallimimusEntity {
+public class Velociraptor {
 }

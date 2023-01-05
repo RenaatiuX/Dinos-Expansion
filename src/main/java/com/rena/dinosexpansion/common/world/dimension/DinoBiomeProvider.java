@@ -4,11 +4,11 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.common.world.dimension.layer.*;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SharedSeedRandom;
+import net.minecraft.util.*;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryLookupCodec;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeRegistry;
 import net.minecraft.world.biome.provider.BiomeProvider;
 import net.minecraft.world.gen.IExtendedNoiseRandom;
 import net.minecraft.world.gen.LazyAreaLayerContext;
@@ -64,7 +64,7 @@ public class DinoBiomeProvider extends BiomeProvider {
     private final Registry<Biome> BIOME_REGISTRY;
     public static Registry<Biome> LAYERS_BIOME_REGISTRY;
     public static List<Biome> NONSTANDARD_BIOME = new ArrayList<>();
-    private static int gen;
+    private static int gen = 6;
 
     public DinoBiomeProvider(Registry<Biome> biomeRegistry) {
         this(0, biomeRegistry);
@@ -138,40 +138,39 @@ public class DinoBiomeProvider extends BiomeProvider {
         iareafactory = DinoAddIslandLayer.INSTANCE.apply(contextFactory.apply(2L), iareafactory);
         iareafactory = DinoAddIslandLayer.INSTANCE.apply(contextFactory.apply(50L), iareafactory);
         iareafactory = DinoAddIslandLayer.INSTANCE.apply(contextFactory.apply(70L), iareafactory);
-        //iareafactory = DinoRemoveTooMuchOceanLayer.INSTANCE.apply(contextFactory.apply(2L), iareafactory);
+        iareafactory = DinoRemoveTooMuchOceanLayer.INSTANCE.apply(contextFactory.apply(2L), iareafactory);
 
-        //IAreaFactory<T> iareafactory1 = DinoOceanLayer.INSTANCE.apply(contextFactory.apply(2L));
-        //iareafactory1 = repeat(2001L, ZoomLayer.NORMAL, iareafactory1, 6, contextFactory);
+        IAreaFactory<T> iareafactory1 = DinoOceanLayer.INSTANCE.apply(contextFactory.apply(2L));
+        iareafactory1 = repeat(2001L, ZoomLayer.NORMAL, iareafactory1, 6, contextFactory);
         iareafactory = DinoAddIslandLayer.INSTANCE.apply(contextFactory.apply(3L), iareafactory);
         iareafactory = ZoomLayer.NORMAL.apply(contextFactory.apply(2002L), iareafactory);
         iareafactory = ZoomLayer.NORMAL.apply(contextFactory.apply(2003L), iareafactory);
         iareafactory = DinoAddIslandLayer.INSTANCE.apply(contextFactory.apply(4L), iareafactory);
-        //iareafactory = DinoDeepOceanLayer.INSTANCE.apply(contextFactory.apply(4L), iareafactory);
-        //iareafactory = repeat(1000L, ZoomLayer.NORMAL, iareafactory, 0, contextFactory);
+        iareafactory = DinoDeepOceanLayer.INSTANCE.apply(contextFactory.apply(4L), iareafactory);
+        iareafactory = repeat(1000L, ZoomLayer.NORMAL, iareafactory, 0, contextFactory);
         IAreaFactory<T> iareafactory2 = repeat(1000L, ZoomLayer.NORMAL, iareafactory, 0, contextFactory);
-        iareafactory2 = StartRiverLayer.INSTANCE.apply(contextFactory.apply(100L), iareafactory2);
-        IAreaFactory<T> iareafactory3 = DinoBiomeLayer.INSTANCE.apply(contextFactory.apply(200L), iareafactory);
+        iareafactory2 = DinoStartRiverLayer.INSTANCE.apply(contextFactory.apply(100L), iareafactory2);
+        IAreaFactory<T> iareafactory3 =  DinoBiomeLayer.INSTANCE.apply(contextFactory.apply(200L), iareafactory);
         iareafactory3 = repeat(1000L, ZoomLayer.NORMAL, iareafactory3, 2, contextFactory);
 
-        iareafactory2 = RiverLayer.INSTANCE.apply(contextFactory.apply(1L), iareafactory2);
+        /*iareafactory2 = DinoRiverLayer.INSTANCE.apply(contextFactory.apply(1L), iareafactory2);
         iareafactory2 = SmoothLayer.INSTANCE.apply(contextFactory.apply(1000L), iareafactory2);
 
-        /*for (int i = 0; i < gen; ++i) {
+        for (int i = 0; i < gen; ++i) {
             iareafactory3 = ZoomLayer.NORMAL.apply(contextFactory.apply(1000 + i), iareafactory3);
-            if (i == DinoBiomeProvider.LAYERS_BIOME_REGISTRY.getId(DinoBiomeProvider.LAYERS_BIOME_REGISTRY.getOrDefault(DinoBiomeProvider.OCEAN))) {
+            if (i == 0) {
                 iareafactory3 = DinoAddIslandLayer.INSTANCE.apply(contextFactory.apply(3L), iareafactory3);
             }
 
-            if (i == DinoBiomeProvider.LAYERS_BIOME_REGISTRY.getId(DinoBiomeProvider.LAYERS_BIOME_REGISTRY.getOrDefault(DinoBiomeProvider.GRASSLAND)) || gen == DinoBiomeProvider.LAYERS_BIOME_REGISTRY.getId(DinoBiomeProvider.LAYERS_BIOME_REGISTRY.getOrDefault(DinoBiomeProvider.GRASSLAND))) {
+            if (i == 1 || gen == 1) {
                 iareafactory3 = DinoShoreLayer.INSTANCE.apply(contextFactory.apply(1000L), iareafactory3);
             }
-        }*/
+        }
 
         iareafactory3 = SmoothLayer.INSTANCE.apply(contextFactory.apply(1000L), iareafactory3);
-        iareafactory3 = DinoRiverMixLayer.INSTANCE.apply(contextFactory.apply(100L), iareafactory3, iareafactory2);
-        //iareafactory3 = DinoMixOceansLayer.INSTANCE.apply(contextFactory.apply(100L), iareafactory3, iareafactory1);
+        iareafactory3 = DinoRiverMixLayer.INSTANCE.apply(contextFactory.apply(100L), iareafactory3, iareafactory2);*/
 
-        return iareafactory3;
+        return iareafactory3;//DinoMixOceansLayer.INSTANCE.apply(contextFactory.apply(100L), iareafactory3, iareafactory1);
     }
 
     public static boolean isLand(int biomeIn) {
@@ -268,6 +267,23 @@ public class DinoBiomeProvider extends BiomeProvider {
 
     @Override
     public Biome getNoiseBiome(int x, int y, int z) {
-        return this.genBiomes.func_242936_a(this.BIOME_REGISTRY, x, z);
+        return this.sample(this.BIOME_REGISTRY, x, z);
+    }
+
+    public Biome sample(Registry<Biome> dynamicBiomeRegistry, int x, int z) {
+        int resultBiomeID = this.genBiomes.field_215742_b.getValue(x, z);
+        Biome biome = dynamicBiomeRegistry.getByValue(resultBiomeID);
+        if (biome == null) {
+            if (SharedConstants.developmentMode) {
+                throw Util.pauseDevMode(new IllegalStateException("Unknown biome id: " + resultBiomeID));
+            } else {
+                // Spawn ocean if we can't resolve the biome from the layers.
+                RegistryKey<Biome> backupBiomeKey = BiomeRegistry.getKeyFromID(0);
+                DinosExpansion.LOGGER.warn("Unknown biome id: ${}. Will spawn ${} instead.", resultBiomeID, backupBiomeKey.getLocation());
+                return dynamicBiomeRegistry.getValueForKey(backupBiomeKey);
+            }
+        } else {
+            return biome;
+        }
     }
 }
