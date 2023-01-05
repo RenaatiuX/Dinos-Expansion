@@ -3,6 +3,7 @@ package com.rena.dinosexpansion.core.init;
 import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.common.world.dimension.DinoBiomeProvider;
 import com.rena.dinosexpansion.common.world.dimension.DinoChunkGenerator;
+import net.minecraft.data.BiomeProvider;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;

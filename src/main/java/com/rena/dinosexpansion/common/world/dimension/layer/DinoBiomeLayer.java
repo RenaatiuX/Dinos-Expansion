@@ -40,9 +40,6 @@ public enum DinoBiomeLayer implements IC0Transformer {
 
     @Override
     public int apply(INoiseRandom context, int center) {
-        if (DinoBiomeProvider.isLand(center)){
-            return landIds[context.random(landIds.length)];
-        }
-        return center;
+        return landIds[context.random(landIds.length)];
     }
 }
