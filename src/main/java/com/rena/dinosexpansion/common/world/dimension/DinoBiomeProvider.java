@@ -116,7 +116,7 @@ public class DinoBiomeProvider extends BiomeProvider {
     }
 
     public static Layer buildWorldProcedure(long seed) {
-        IAreaFactory<LazyArea> layerFactory = build((salt) ->
+        IAreaFactory<LazyArea> layerFactory = customTry((salt) ->
                 new LazyAreaLayerContext(25, seed, salt));
         return new Layer(layerFactory);
     }
@@ -179,8 +179,41 @@ public class DinoBiomeProvider extends BiomeProvider {
     }
 
 
-    public static <T extends IArea, C extends IExtendedNoiseRandom<T>> IAreaFactory<T> buildOceanRing(LongFunction<C> contextFactory) {
-        return null;
+    public static <T extends IArea, C extends IExtendedNoiseRandom<T>> IAreaFactory<T> customTry(LongFunction<C> contextFactory) {
+        //creates water and land "dots" in the world noted with 0 = ocean and 1 = land
+        IAreaFactory<T> areaFactory = WaterLandLayer.INSTANCE.apply(contextFactory.apply(1000L));
+        //makes these generated dos bigger
+        areaFactory = repeat(1001L, ZoomLayer.NORMAL, areaFactory, 3, contextFactory);
+        //from here there are little islands over ocean biomes spread, they share as biomeId 2
+        areaFactory = AddSmallIslands.INSTANCE.apply(contextFactory.apply(2001L), areaFactory);
+        //makes the islands bigger without connecting them to land
+       areaFactory = EnlargeIslands.INSTANCE.apply(contextFactory.apply(2002L), areaFactory);
+       areaFactory = AddNotDeepOceanAroundIslands.INSTANCE.apply(contextFactory.apply(2003L), areaFactory);
+       //0 = ocean
+        // 1 = land
+        //2 = island
+        //3 = not deep ocean(sourrounding of the islands so they come on top
+        IAreaFactory<T> temperature = AddTeperature.INSTANCE.apply(contextFactory.apply(2004L), areaFactory);
+        temperature = repeat(2005L, ZoomLayer.NORMAL, temperature, 3, contextFactory);
+        temperature = SmoothLayer.INSTANCE.apply(contextFactory.apply(2100L), temperature);
+
+        //adding rivers to the map and smoothing them out and make the regard temperature
+        IAreaFactory<T> river = DinoStartRiver.INSTANCE.apply(contextFactory.apply(2101L), areaFactory);
+        river = repeat(2200L, ZoomLayer.NORMAL, river, 2, contextFactory);
+        river = RiverLayer.INSTANCE.apply(contextFactory.apply(2299L), river);
+        river = SmoothLayer.INSTANCE.apply(contextFactory.apply(2300L), river);
+        river = RiverTemperatureMixer.INSTANCE.apply(contextFactory.apply(2301L), river, temperature);
+
+        areaFactory = TransformLandAndOcean.INSTANCE.apply(contextFactory.apply(3000L), areaFactory);
+
+        areaFactory = DinoBiomeLayerMixer.INSTANCE.apply(contextFactory.apply(1L), areaFactory, temperature);
+
+        areaFactory = repeat(1001L, ZoomLayer.NORMAL, areaFactory, 3, contextFactory);
+        //just to help to fill with ocean and beach biomes so i can see the generated map
+        //command: /execute in dinosexpansion:dino_dimension run tp ~ ~ ~
+
+
+        return areaFactory;
     }
 
     public static boolean isLand(int biomeIn) {
@@ -212,6 +245,47 @@ public class DinoBiomeProvider extends BiomeProvider {
                         DinoBiomeProvider.LAYERS_BIOME_REGISTRY.getOrDefault(DinoBiomeProvider.REDWOOD_FOREST)) ||
                 biomeIn == DinoBiomeProvider.LAYERS_BIOME_REGISTRY.getId(
                         DinoBiomeProvider.LAYERS_BIOME_REGISTRY.getOrDefault(DinoBiomeProvider.TUNDRA));
+    }
+
+
+    public static int[] getAllOceanBiomes(){
+        return new int[]{
+                getId(OCEAN),
+                getId(WARM_OCEAN),
+                getId(LUKEWARM_OCEAN),
+                getId(COLD_OCEAN),
+                getId(FROZEN_OCEAN),
+                getId(DEEP_OCEAN),
+                getId(DEEP_WARM_OCEAN),
+                getId(DEEP_LUKEWARM_OCEAN),
+                getId(DEEP_COLD_OCEAN),
+                getId(DEEP_FROZEN_OCEAN)
+        };
+    }
+
+    public static int[] getColdOceanBiomes(){
+        return new int[]{
+                getId(DEEP_COLD_OCEAN),
+                getId(DEEP_FROZEN_OCEAN),
+                getId(COLD_OCEAN),
+                getId(FROZEN_OCEAN)
+        };
+    }
+
+    public static int[] getWarmOceanBiomes(){
+        return new int[]{
+                getId(WARM_OCEAN),
+                getId(LUKEWARM_OCEAN),
+                getId(DEEP_WARM_OCEAN),
+                getId(DEEP_LUKEWARM_OCEAN)
+        };
+    }
+
+    public static int[] getNormalOceanBiomes(){
+        return new int[]{
+                getId(OCEAN),
+                getId(DEEP_OCEAN)
+        };
     }
 
     public static boolean isOcean(int biomeIn) {
