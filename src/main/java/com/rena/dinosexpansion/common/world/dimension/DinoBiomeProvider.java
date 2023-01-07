@@ -5,7 +5,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.common.world.dimension.layer.*;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SharedSeedRandom;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryLookupCodec;
 import net.minecraft.world.biome.Biome;
@@ -194,20 +193,30 @@ public class DinoBiomeProvider extends BiomeProvider {
         //2 = island
         //3 = not deep ocean(sourrounding of the islands so they come on top
         IAreaFactory<T> temperature = AddTeperature.INSTANCE.apply(contextFactory.apply(2004L), areaFactory);
-        temperature = repeat(2005L, ZoomLayer.NORMAL, temperature, 3, contextFactory);
+        temperature = repeat(2005L, ZoomLayer.NORMAL, temperature, 4, contextFactory);
         temperature = SmoothLayer.INSTANCE.apply(contextFactory.apply(2100L), temperature);
 
         //adding rivers to the map and smoothing them out and make the regard temperature
         IAreaFactory<T> river = DinoStartRiver.INSTANCE.apply(contextFactory.apply(2101L), areaFactory);
-        river = repeat(2200L, ZoomLayer.NORMAL, river, 2, contextFactory);
-        river = RiverLayer.INSTANCE.apply(contextFactory.apply(2299L), river);
+        //this lets the start of the river grow
+        river = repeat(2200L, DinoRiverGrow.INSTANCE, river, 4, contextFactory);
+        river = CleanRiverLayer.INSTANCE.apply(contextFactory.apply(2250L), river);
         river = SmoothLayer.INSTANCE.apply(contextFactory.apply(2300L), river);
+        //at this point there are actual BiomeIds of the DinoRiver
         river = RiverTemperatureMixer.INSTANCE.apply(contextFactory.apply(2301L), river, temperature);
 
-        areaFactory = TransformLandAndOcean.INSTANCE.apply(contextFactory.apply(3000L), areaFactory);
+        //TODO OCEAN
+        areaFactory = TransformOcean.INSTANCE.apply(contextFactory.apply(3000L), areaFactory);
 
-        areaFactory = DinoBiomeLayerMixer.INSTANCE.apply(contextFactory.apply(1L), areaFactory, temperature);
+        //adding Biomes regarding  the local temperature
+        IAreaFactory<T> biomeFactory = DinoBiomeLayerMixer.INSTANCE.apply(contextFactory.apply(1L), areaFactory, temperature);
+        biomeFactory = repeat(4L, ZoomLayer.NORMAL, biomeFactory, 4, contextFactory);
+        biomeFactory = SmoothLayer.INSTANCE.apply(contextFactory.apply(2L), biomeFactory);
+        //adding the rivers to the biomes
+        biomeFactory = DinoMixRiverAndBiomes.INSTANCE.apply(contextFactory.apply(50L), biomeFactory, river);
 
+        areaFactory = AddBiomesToLayer.INSTANCE.apply(contextFactory.apply(51L), areaFactory, biomeFactory);
+        // -10 has to be transformed to the adjacent biomes
         areaFactory = repeat(1001L, ZoomLayer.NORMAL, areaFactory, 3, contextFactory);
         //just to help to fill with ocean and beach biomes so i can see the generated map
         //command: /execute in dinosexpansion:dino_dimension run tp ~ ~ ~

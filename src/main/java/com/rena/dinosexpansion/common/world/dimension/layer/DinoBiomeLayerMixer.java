@@ -35,6 +35,6 @@ public enum DinoBiomeLayerMixer implements IAreaTransformer2, IDimOffset0Transfo
             List<ResourceLocation> possibleBiomes = NORMAL_LANDBIOMES.get(type);
             return DinoBiomeProvider.getId(possibleBiomes.get(random.random(possibleBiomes.size())));
         }
-        return 0;
+        return -1;
     }
 }

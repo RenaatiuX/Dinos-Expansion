@@ -5,7 +5,7 @@ import com.rena.dinosexpansion.common.world.dimension.DinoBiomeProvider;
 import net.minecraft.world.gen.INoiseRandom;
 import net.minecraft.world.gen.layer.traits.IC0Transformer;
 
-public enum TransformLandAndOcean implements IC0Transformer {
+public enum TransformOcean implements IC0Transformer {
     INSTANCE;
     //TODO transform it into real biomes
 

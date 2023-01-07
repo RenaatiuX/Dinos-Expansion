@@ -14,7 +14,7 @@ public enum RiverTemperatureMixer implements IAreaTransformer2, IDimOffset0Trans
     public int apply(INoiseRandom random, IArea river, IArea temperature, int x, int z) {
         int riverValue = river.getValue(this.getOffsetX(x), this.getOffsetZ(z));
         int temperatureValue = temperature.getValue(this.getOffsetX(x), this.getOffsetZ(z));
-        if (temperatureValue == 0)
+        if (temperatureValue < 0)
             return -1;
         else if (temperatureValue - 100 >= 0 && riverValue == 7){
             BiomeManager.BiomeType type = BiomeManager.BiomeType.values()[temperatureValue - 100];

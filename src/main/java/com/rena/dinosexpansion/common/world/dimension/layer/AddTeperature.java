@@ -11,14 +11,25 @@ public enum AddTeperature implements IC0Transformer {
     //just to land not to islands nor to ocean
     @Override
     public int apply(INoiseRandom context, int value) {
-        if (value == 1) {
+        if (value == 1 ||  value == 2) {
             while (true) {
-                int type = context.random(BiomeManager.BiomeType.values().length);
-                if (BiomeManager.BiomeType.values()[type] == BiomeManager.BiomeType.DESERT_LEGACY)
-                    continue;
-                return type + 100;
+                int icyWeight = DinoBiomeLayerMixer.NORMAL_LANDBIOMES.get(BiomeManager.BiomeType.ICY).size();
+                int coolWeight = DinoBiomeLayerMixer.NORMAL_LANDBIOMES.get(BiomeManager.BiomeType.COOL).size();
+                int warmWeight = DinoBiomeLayerMixer.NORMAL_LANDBIOMES.get(BiomeManager.BiomeType.WARM).size();
+                int desertWeight = DinoBiomeLayerMixer.NORMAL_LANDBIOMES.get(BiomeManager.BiomeType.DESERT).size();
+                int rand = context.random(icyWeight + coolWeight + warmWeight + desertWeight);
+                if (rand < icyWeight){
+                    return BiomeManager.BiomeType.ICY.ordinal() + 100;
+                }
+                if (rand - icyWeight < coolWeight){
+                    return BiomeManager.BiomeType.COOL.ordinal() + 100;
+                }
+                if (rand - icyWeight - coolWeight < warmWeight){
+                    return BiomeManager.BiomeType.WARM.ordinal() + 100;
+                }
+                return BiomeManager.BiomeType.DESERT.ordinal() + 100;
             }
         }
-        return value;
+        return -1;
     }
 }
