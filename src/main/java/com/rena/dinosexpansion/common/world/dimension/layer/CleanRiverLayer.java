@@ -8,6 +8,6 @@ public enum CleanRiverLayer implements IC0Transformer {
 
     @Override
     public int apply(INoiseRandom context, int value) {
-        return value == 7 ? 7 : -1;
+        return value >= 7 ? 7 : -1;
     }
 }

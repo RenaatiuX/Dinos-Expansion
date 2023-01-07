@@ -198,10 +198,9 @@ public class DinoBiomeProvider extends BiomeProvider {
 
         //adding rivers to the map and smoothing them out and make the regard temperature
         IAreaFactory<T> river = DinoStartRiver.INSTANCE.apply(contextFactory.apply(2101L), areaFactory);
-        //this lets the start of the river grow
-        river = repeat(2200L, DinoRiverGrow.INSTANCE, river, 4, contextFactory);
+        river = SmoothLayer.INSTANCE.apply(contextFactory.apply(2251L), river);
+        //this makes everyting above and equal to 7 to 7 and everything else to -1
         river = CleanRiverLayer.INSTANCE.apply(contextFactory.apply(2250L), river);
-        river = SmoothLayer.INSTANCE.apply(contextFactory.apply(2300L), river);
         //at this point there are actual BiomeIds of the DinoRiver
         river = RiverTemperatureMixer.INSTANCE.apply(contextFactory.apply(2301L), river, temperature);
 
@@ -210,14 +209,14 @@ public class DinoBiomeProvider extends BiomeProvider {
 
         //adding Biomes regarding  the local temperature
         IAreaFactory<T> biomeFactory = DinoBiomeLayerMixer.INSTANCE.apply(contextFactory.apply(1L), areaFactory, temperature);
-        biomeFactory = repeat(4L, ZoomLayer.NORMAL, biomeFactory, 4, contextFactory);
+        biomeFactory = repeat(4L, ZoomLayer.NORMAL, biomeFactory, 3, contextFactory);
         biomeFactory = SmoothLayer.INSTANCE.apply(contextFactory.apply(2L), biomeFactory);
         //adding the rivers to the biomes
         biomeFactory = DinoMixRiverAndBiomes.INSTANCE.apply(contextFactory.apply(50L), biomeFactory, river);
 
         areaFactory = AddBiomesToLayer.INSTANCE.apply(contextFactory.apply(51L), areaFactory, biomeFactory);
         // -10 has to be transformed to the adjacent biomes
-        areaFactory = repeat(1001L, ZoomLayer.NORMAL, areaFactory, 3, contextFactory);
+        areaFactory = repeat(1001L, ZoomLayer.NORMAL, areaFactory, 1, contextFactory);
         //just to help to fill with ocean and beach biomes so i can see the generated map
         //command: /execute in dinosexpansion:dino_dimension run tp ~ ~ ~
 
