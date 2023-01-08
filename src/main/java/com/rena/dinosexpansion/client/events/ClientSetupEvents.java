@@ -15,6 +15,7 @@ import com.rena.dinosexpansion.common.entity.aquatic.MegaPiranha;
 import com.rena.dinosexpansion.common.entity.aquatic.Parapuzosia;
 import com.rena.dinosexpansion.common.entity.flying.Dimorphodon;
 import com.rena.dinosexpansion.common.entity.semiaquatic.Astorgosuchus;
+import com.rena.dinosexpansion.common.entity.terrestrial.ambient.Campanile;
 import com.rena.dinosexpansion.core.init.ContainerInit;
 import com.rena.dinosexpansion.core.init.EntityInit;
 import com.rena.dinosexpansion.core.init.ItemInit;
@@ -49,6 +50,7 @@ public class ClientSetupEvents {
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.MEGA_PIRANHA.get(), MegaPiranhaRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.DIMORPHODON.get(), DimorphodonRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.ASTORGOSUCHUS.get(), AstorgosuchusRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityInit.CAMPANILE.get(), CampanileRenderer::new);
 
         registerProperty(ItemInit.COMPOUND_BOW.get(), new ResourceLocation("pull"), (p_239429_0_, p_239429_1_, p_239429_2_) -> {
             if (p_239429_2_ == null) {
@@ -77,6 +79,7 @@ public class ClientSetupEvents {
         event.put(EntityInit.MEGA_PIRANHA.get(), MegaPiranha.createAttributes().create());
         event.put(EntityInit.DIMORPHODON.get(), Dimorphodon.createAttributes().create());
         event.put(EntityInit.ASTORGOSUCHUS.get(), Astorgosuchus.createAttributes().create());
+        event.put(EntityInit.CAMPANILE.get(), Campanile.createAttributes().create());
         event.put(EntityInit.HERMIT.get(), Hermit.createAttributes());
     }
 }

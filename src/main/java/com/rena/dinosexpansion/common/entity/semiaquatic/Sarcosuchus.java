@@ -1,10 +1,12 @@
-package com.rena.dinosexpansion.common.entity.terrestrial;
+package com.rena.dinosexpansion.common.entity.semiaquatic;
 
 import com.rena.dinosexpansion.common.entity.Dinosaur;
+import com.rena.dinosexpansion.common.entity.ia.SleepRhythmGoal;
 import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.item.Item;
+import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -15,9 +17,19 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class Gallimimus extends Dinosaur implements IAnimatable, IAnimationTickable {
-    public Gallimimus(EntityType<Gallimimus> type, World world, DinosaurInfo info, int minLevel, int maxLevel) {
-        super(type, world, info, minLevel, maxLevel);
+public class Sarcosuchus extends Dinosaur implements IAnimatable, IAnimationTickable {
+    public Sarcosuchus(EntityType<? extends TameableEntity> type, World world) {
+        super(type, world, new DinosaurInfo("sarcosuchus", 150, 150, 75, SleepRhythmGoal.SleepRhythm.DIURNAL), generateLevelWithinBounds(20, 100));
+    }
+
+    @Override
+    protected void registerGoals() {
+        super.registerGoals();
+    }
+
+    @Override
+    public boolean isInvulnerableTo(DamageSource source) {
+        return source == DamageSource.DROWN || source == DamageSource.IN_WALL || source == DamageSource.FALLING_BLOCK || super.isInvulnerableTo(source);
     }
 
     @Override

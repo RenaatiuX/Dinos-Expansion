@@ -211,7 +211,7 @@ public class Dryosaurus extends Dinosaur implements IAnimatable, IAnimationTicka
     private PlayState attackPredicate(AnimationEvent<Dryosaurus> event) {
         if (!isKnockout() && this.isSwingInProgress && event.getController().getAnimationState().equals(AnimationState.Stopped)) {
             event.getController().markNeedsReload();
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("eosqualodon_bite"));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("dryosaurus_attack"));
             this.isSwingInProgress = false;
         }
         return PlayState.CONTINUE;
