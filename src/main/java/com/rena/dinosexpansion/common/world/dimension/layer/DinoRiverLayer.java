@@ -9,11 +9,13 @@ public enum DinoRiverLayer implements ICastleTransformer {
     INSTANCE;
     @Override
     public int apply(INoiseRandom context, int north, int west, int south, int east, int center) {
-        if (center != north || center != east || center != south || center != west) {
-            return DinoBiomeProvider.LAYERS_BIOME_REGISTRY.getId(
-                    DinoBiomeProvider.LAYERS_BIOME_REGISTRY.getOrDefault(DinoBiomeProvider.RIVER));
-        }
-        return -1;
+        int i = riverFilter(center);
+        return i == riverFilter(east) && i == riverFilter(north) && i == riverFilter(west) && i == riverFilter(south) ? -1 :
+                DinoBiomeProvider.LAYERS_BIOME_REGISTRY.getId(DinoBiomeProvider.LAYERS_BIOME_REGISTRY.getOrDefault(DinoBiomeProvider.RIVER));
+    }
+
+    private static int riverFilter(int i) {
+        return i >= 2 ? 2 + (i & 1) : i;
     }
 
 }

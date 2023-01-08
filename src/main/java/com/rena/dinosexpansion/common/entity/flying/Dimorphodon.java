@@ -29,7 +29,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 public class Dimorphodon extends DinosaurFlying implements IAnimatable, IAnimationTickable {
-    private int rideCooldownCounter;
+
     public Dimorphodon(EntityType<Dimorphodon> type, World world) {
         super(type, world, new DinosaurInfo("dimorphodon", 50, 20, 10, SleepRhythmGoal.SleepRhythm.DIURNAL), generateLevelWithinBounds(10, 50));
     }
@@ -37,18 +37,6 @@ public class Dimorphodon extends DinosaurFlying implements IAnimatable, IAnimati
         this(EntityInit.DIMORPHODON.get(), world);
     }
     private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
-
-    public boolean func_213439_d(ServerPlayerEntity p_213439_1_) {
-        CompoundNBT compoundnbt = new CompoundNBT();
-        compoundnbt.putString("id", this.getEntityString());
-        this.writeWithoutTypeId(compoundnbt);
-        if (p_213439_1_.addShoulderEntity(compoundnbt)) {
-            this.remove();
-            return true;
-        } else {
-            return false;
-        }
-    }
 
     public static AttributeModifierMap.MutableAttribute createAttributes() {
         return MobEntity.func_233666_p_().createMutableAttribute(Attributes.MAX_HEALTH, 10F)
@@ -59,16 +47,6 @@ public class Dimorphodon extends DinosaurFlying implements IAnimatable, IAnimati
     @Override
     protected void registerGoals() {
         super.registerGoals();
-    }
-
-    @Override
-    public void tick() {
-        ++this.rideCooldownCounter;
-        super.tick();
-    }
-
-    public boolean canSitOnShoulder() {
-        return this.rideCooldownCounter > 100;
     }
 
     @Override

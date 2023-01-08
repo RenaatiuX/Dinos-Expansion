@@ -8,13 +8,14 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.IAnimationTickable;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class Megalodon extends DinosaurAquatic implements IAnimatable {
+public class Megalodon extends DinosaurAquatic implements IAnimatable, IAnimationTickable {
 
     public Megalodon(EntityType<? extends Megalodon> type, World world, DinosaurInfo info, int level) {
         super(type, world, info, level);
@@ -61,6 +62,11 @@ public class Megalodon extends DinosaurAquatic implements IAnimatable {
     @Override
     public void tick() {
         super.tick();
+    }
+
+    @Override
+    public int tickTimer() {
+        return this.ticksExisted;
     }
 
     @Override

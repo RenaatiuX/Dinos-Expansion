@@ -1,12 +1,23 @@
 package com.rena.dinosexpansion.common.world.dimension.layer;
 
+import com.google.common.collect.Lists;
 import com.rena.dinosexpansion.common.world.dimension.DinoBiomeProvider;
+import net.minecraft.util.RegistryKey;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.WeightedRandom;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.INoiseRandom;
+import net.minecraft.world.gen.layer.traits.IAreaTransformer0;
 import net.minecraft.world.gen.layer.traits.IC0Transformer;
+import net.minecraftforge.common.BiomeManager;
 
-public enum DinoBiomeLayer implements IC0Transformer {
+import java.util.List;
 
-    /*private static final int UNCOMMON_BIOME_CHANCE = 8;
+public class DinoBiomeLayer implements IAreaTransformer0 {
+
+
+    private static final int UNCOMMON_BIOME_CHANCE = 8;
     private static final int RARE_BIOME_CHANCE = 16;
     public DinoBiomeLayer() {
 
@@ -56,11 +67,7 @@ public enum DinoBiomeLayer implements IC0Transformer {
             DinoBiomeProvider.LAYERS_BIOME_REGISTRY.getId(
                     DinoBiomeProvider.LAYERS_BIOME_REGISTRY.getOrDefault(DinoBiomeProvider.DUNES)),
             DinoBiomeProvider.LAYERS_BIOME_REGISTRY.getId(
-                    DinoBiomeProvider.LAYERS_BIOME_REGISTRY.getOrDefault(DinoBiomeProvider.REDWOOD_FOREST)),
-            DinoBiomeProvider.LAYERS_BIOME_REGISTRY.getId(
-                    DinoBiomeProvider.LAYERS_BIOME_REGISTRY.getOrDefault(DinoBiomeProvider.FROZEN_OCEAN)),
-            DinoBiomeProvider.LAYERS_BIOME_REGISTRY.getId(
-                    DinoBiomeProvider.LAYERS_BIOME_REGISTRY.getOrDefault(DinoBiomeProvider.DEEP_FROZEN_OCEAN))
+                    DinoBiomeProvider.LAYERS_BIOME_REGISTRY.getOrDefault(DinoBiomeProvider.REDWOOD_FOREST))
     };
 
     @Override
@@ -72,8 +79,8 @@ public enum DinoBiomeLayer implements IC0Transformer {
         } else {
             return commonBiomes[random.random(commonBiomes.length)];
         }
-    }*/
-    INSTANCE;
+    }
+    /*INSTANCE;
     private final int[] landIds;
 
     DinoBiomeLayer() {
@@ -108,5 +115,5 @@ public enum DinoBiomeLayer implements IC0Transformer {
     @Override
     public int apply(INoiseRandom context, int center) {
         return landIds[context.random(landIds.length)];
-    }
+    }*/
 }

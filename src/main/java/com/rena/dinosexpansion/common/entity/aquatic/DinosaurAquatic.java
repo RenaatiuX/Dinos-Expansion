@@ -24,76 +24,16 @@ import net.minecraft.world.GameRules;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 
-public abstract class DinosaurAquatic extends Dinosaur implements ISemiAquatic {
-
-    private static final DataParameter<Boolean> BEACHED = EntityDataManager.createKey(DinosaurAquatic.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<Boolean> DESPAWN_BEACH = EntityDataManager.createKey(DinosaurAquatic.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<Boolean> JUMP = EntityDataManager.createKey(DinosaurAquatic.class, DataSerializers.BOOLEAN);
-    private static final int MAX_TIME_ON_LAND = 1000;
-    private static final int MAX_TIME_IN_WATER = 1000;
-    public int timeInWater = 0;
-    public int timeOnLand = 0;
-    protected boolean isAmphibious = false;
-    protected boolean isLandNavigator;
-    public float prevBeachedProgress;
-    public float beachedProgress;
-    private int despawnDelay = 47999;
+public abstract class DinosaurAquatic extends Dinosaur{
 
     public DinosaurAquatic(EntityType<? extends Dinosaur> type, World world, DinosaurInfo info, int level) {
         super(type, world, info, level);
-        switchNavigator(true);
         this.setPathPriority(PathNodeType.WATER, 0.0F);
-    }
-
-    @Override
-    public boolean canDespawn(double distanceToClosestPlayer) {
-        return super.canDespawn(distanceToClosestPlayer);
-    }
-
-    private boolean canDespawn() {
-        return isDespawnBeach();
-    }
-
-    private void tryDespawn() {
-        if (this.canDespawn()) {
-            this.despawnDelay = this.despawnDelay - 1;
-            if (this.despawnDelay <= 0) {
-                this.clearLeashed(true, false);
-                this.remove();
-            }
-        }
     }
 
     @Override
     public void livingTick() {
         super.livingTick();
-       /* if (this.isOnGround() && !this.isInWaterOrBubbleColumn()) {
-            this.setBeached(true);
-            this.rotationPitch = 0;
-            this.setSleeping(false);
-        }
-        if (isBeached()) {
-            this.setMotion(this.getMotion().mul(0.5, 0.5, 0.5));
-            this.despawnDelay = 47999;
-            this.setBeached(false);
-        }
-
-        prevBeachedProgress = beachedProgress;
-        if (isBeached() && this.beachedProgress < 10F) {
-            this.beachedProgress++;
-        }
-        if (!isBeached() && this.beachedProgress > 0F) {
-            this.beachedProgress--;
-        }
-        this.rotationYawHead = this.rotationYaw;
-        this.renderYawOffset = this.rotationYaw;
-
-        if (this.isInWater() && !this.areEyesInFluid(FluidTags.WATER) && this.getAir() > 140) {
-            this.setMotion(this.getMotion().add(0, -0.06, 0));
-        }
-        if (!this.world.isRemote) {
-            this.tryDespawn();
-        }*/
     }
 
     protected void updateAir(int air) {
@@ -117,41 +57,6 @@ public abstract class DinosaurAquatic extends Dinosaur implements ISemiAquatic {
         this.updateAir(i);
     }
 
-    protected void switchNavigator(boolean onLand) {
-        if (onLand) {
-            this.moveController = new MovementController(this);
-            this.navigator = new GroundPathNavigator(this, world);
-            this.isLandNavigator = true;
-        } else {
-            this.moveController = new AquaticMoveController(this, 1F);
-            this.navigator = new SwimmerPathNavigator(this, world);
-            this.isLandNavigator = false;
-        }
-    }
-
-    @Override
-    public boolean shouldEnterWater() {
-        if (!isAmphibious) {
-            return true;
-        }
-        return this.timeInWater == 0 && timeOnLand > MAX_TIME_ON_LAND;
-    }
-
-    @Override
-    public boolean shouldLeaveWater() {
-        return isAmphibious && this.timeInWater > MAX_TIME_IN_WATER && timeOnLand < MAX_TIME_ON_LAND;
-    }
-
-    @Override
-    public boolean shouldStopMoving() {
-        return isMovementDisabled();
-    }
-
-    @Override
-    public int getWaterSearchRange() {
-        return 20;
-    }
-
     @Override
     public boolean canBreatheUnderwater() {
         return true;
@@ -161,8 +66,6 @@ public abstract class DinosaurAquatic extends Dinosaur implements ISemiAquatic {
     protected boolean canTriggerWalking() {
         return false;
     }
-
-    //public abstract double swimSpeed();
 
     @Override
     public boolean isOnLadder() {
@@ -185,7 +88,7 @@ public abstract class DinosaurAquatic extends Dinosaur implements ISemiAquatic {
     }
 
     public boolean isPushedByWater() {
-        return isBeached();
+        return false;
     }
 
     @Override
@@ -201,52 +104,6 @@ public abstract class DinosaurAquatic extends Dinosaur implements ISemiAquatic {
     @Override
     public boolean isNotColliding(IWorldReader worldIn) {
         return worldIn.checkNoEntityCollision(this);
-    }
-
-    @Override
-    protected void registerData() {
-        super.registerData();
-        this.dataManager.register(BEACHED, false);
-        this.dataManager.register(DESPAWN_BEACH, Boolean.FALSE);
-    }
-
-    @Override
-    public void writeAdditional(CompoundNBT nbt) {
-        super.writeAdditional(nbt);
-        nbt.putInt("TimeOnLand", this.timeOnLand);
-        nbt.putInt("TimeInWater", this.timeInWater);
-        nbt.putBoolean("Beached", this.isBeached());
-        nbt.putBoolean("BeachedDespawnFlag", this.isDespawnBeach());
-        nbt.putInt("DespawnDelay", this.despawnDelay);
-    }
-
-    //this causes the floating and the reason why u cant hit them
-    @Override
-    public void readAdditional(CompoundNBT nbt) {
-        super.readAdditional(nbt);
-        this.timeOnLand = nbt.getInt("TimeOnLand");
-        this.timeInWater = nbt.getInt("TimeInWater");
-        this.setBeached(nbt.getBoolean("Beached"));
-        this.setDespawnBeach(nbt.getBoolean("BeachedDespawnFlag"));
-        if (nbt.contains("DespawnDelay", 99)) {
-            this.despawnDelay = nbt.getInt("DespawnDelay");
-        }
-    }
-
-    public boolean isBeached() {
-        return this.dataManager.get(BEACHED);
-    }
-
-    public void setBeached(boolean beached) {
-        this.dataManager.set(BEACHED, beached);
-    }
-
-    public boolean isDespawnBeach() {
-        return this.dataManager.get(DESPAWN_BEACH);
-    }
-
-    public void setDespawnBeach(boolean despawn) {
-        this.dataManager.set(DESPAWN_BEACH, despawn);
     }
 
     @Override

@@ -9,14 +9,10 @@ public enum DinoIslandLayer implements IAreaTransformer0 {
 
     @Override
     public int apply(INoiseRandom random, int x, int z) {
-        if (random.random(10) < 4) {
-            return DinoBiomeProvider.LAYERS_BIOME_REGISTRY
-                    .getId(DinoBiomeProvider.LAYERS_BIOME_REGISTRY
-                            .getOrDefault(DinoBiomeProvider.GRASSLAND));
+        if (x == 0 && z == 0) {
+            return DinoBiomeProvider.getId(DinoBiomeProvider.GRASSLAND);
         } else {
-            return DinoBiomeProvider.LAYERS_BIOME_REGISTRY
-                    .getId(DinoBiomeProvider.LAYERS_BIOME_REGISTRY
-                            .getOrDefault(DinoBiomeProvider.OCEAN));
+            return random.random(10) == 0 ? DinoBiomeProvider.getId(DinoBiomeProvider.GRASSLAND) : DinoBiomeProvider.getId(DinoBiomeProvider.OCEAN);
         }
     }
 }

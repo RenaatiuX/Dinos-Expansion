@@ -85,7 +85,8 @@ public class ItemInit {
             () -> new ForgeSpawnEggItem(EntityInit.MEGA_PIRANHA, 799664, 22618693, new Item.Properties().group(ModItemGroups.SPAWN_EGGS)));
     public static final RegistryObject<Item> DIMORPHODON_SPAWN_EGG = ITEMS.register("dimorphodon_spawn_egg",
             () -> new ForgeSpawnEggItem(EntityInit.DIMORPHODON, 799664, 22618693, new Item.Properties().group(ModItemGroups.SPAWN_EGGS)));
-
+    public static final RegistryObject<Item> ASTORGOSUCHUS_SPAWN_EGG = ITEMS.register("astorgosuchus_spawn_egg",
+            () -> new ForgeSpawnEggItem(EntityInit.ASTORGOSUCHUS, 799664, 22618693, new Item.Properties().group(ModItemGroups.SPAWN_EGGS)));
     //Food
     public static final RegistryObject<Item> RAW_CARNOTAURUS_MEAT = ITEMS.register("raw_carnotaurus_meat",
             () -> new Item(new Item.Properties().food(FoodInit.RAW_CARNOTAURUS_MEAT).group(ModItemGroups.ITEMS)));

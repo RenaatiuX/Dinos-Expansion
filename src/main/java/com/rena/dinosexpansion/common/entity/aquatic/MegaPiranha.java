@@ -1,6 +1,7 @@
 package com.rena.dinosexpansion.common.entity.aquatic;
 
 import com.rena.dinosexpansion.common.entity.ia.DinosaurAINearestTarget;
+import com.rena.dinosexpansion.common.entity.ia.SleepRhythmGoal;
 import com.rena.dinosexpansion.common.entity.ia.movecontroller.AquaticMoveController;
 import com.rena.dinosexpansion.core.init.EntityInit;
 import net.minecraft.entity.*;
@@ -11,6 +12,7 @@ import net.minecraft.entity.passive.SquidEntity;
 import net.minecraft.entity.passive.WaterMobEntity;
 import net.minecraft.entity.passive.fish.AbstractGroupFishEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -19,7 +21,9 @@ import net.minecraft.pathfinding.SwimmerPathNavigator;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.IAnimationTickable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.builder.ILoopType;
@@ -29,7 +33,10 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
-public class MegaPiranha extends WaterMobEntity implements IAnimatable {
+import javax.annotation.Nullable;
+import java.util.List;
+
+public class MegaPiranha extends DinosaurAquatic implements IAnimatable, IAnimationTickable {
 
     public static final String CONTROLLER_NAME = "controller";
     public static final String ATTACK_CONTROLLER_NAME = "attack_controller";
@@ -41,7 +48,7 @@ public class MegaPiranha extends WaterMobEntity implements IAnimatable {
     private static final DataParameter<Boolean> ATTACK = EntityDataManager.createKey(MegaPiranha.class, DataSerializers.BOOLEAN);
 
     public MegaPiranha(EntityType<MegaPiranha> type, World worldIn) {
-        super(type, worldIn);
+        super(type, worldIn, new DinosaurInfo("mega_piranha", 30, 10, 5, SleepRhythmGoal.SleepRhythm.NONE), generateLevelWithinBounds(10, 50));
         this.moveController = new AquaticMoveController(this, 1F);
     }
 
@@ -88,10 +95,36 @@ public class MegaPiranha extends WaterMobEntity implements IAnimatable {
         }
     }
 
+    @Nullable
+    @Override
+    public AgeableEntity createChild(ServerWorld world, AgeableEntity mate) {
+        return null;
+    }
+
     @Override
     protected void registerData() {
         super.registerData();
         this.dataManager.register(ATTACK, false);
+    }
+
+    @Override
+    public List<Item> getFood() {
+        return null;
+    }
+
+    @Override
+    protected Rarity getinitialRarity() {
+        return null;
+    }
+
+    @Override
+    protected Gender getInitialGender() {
+        return null;
+    }
+
+    @Override
+    protected int reduceNarcotic(int narcoticValue) {
+        return 0;
     }
 
     public boolean isAttacking() {
@@ -112,6 +145,11 @@ public class MegaPiranha extends WaterMobEntity implements IAnimatable {
         if (this.isInWater() && onLandProgress > 0F) {
             onLandProgress--;
         }
+    }
+
+    @Override
+    public int tickTimer() {
+        return this.ticksExisted;
     }
 
     @Override

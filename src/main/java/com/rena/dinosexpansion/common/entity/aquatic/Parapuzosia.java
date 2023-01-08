@@ -1,6 +1,7 @@
 package com.rena.dinosexpansion.common.entity.aquatic;
 
 import com.rena.dinosexpansion.common.entity.ia.DinosaurAISwimBottom;
+import com.rena.dinosexpansion.common.entity.ia.SleepRhythmGoal;
 import com.rena.dinosexpansion.common.entity.ia.movecontroller.AquaticMoveController;
 import com.rena.dinosexpansion.core.init.EntityInit;
 import net.minecraft.entity.*;
@@ -12,6 +13,7 @@ import net.minecraft.entity.monster.GuardianEntity;
 import net.minecraft.entity.passive.WaterMobEntity;
 import net.minecraft.entity.passive.fish.SalmonEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -22,7 +24,9 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.*;
+import net.minecraft.world.server.ServerWorld;
 import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.IAnimationTickable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.builder.ILoopType;
@@ -33,8 +37,9 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
-public class Parapuzosia extends WaterMobEntity implements IAnimatable {
+public class Parapuzosia extends DinosaurAquatic implements IAnimatable, IAnimationTickable {
 
     public static final String CONTROLLER_NAME = "controller";
     public static final String ATTACK_CONTROLLER_NAME = "attack_controller";
@@ -45,7 +50,7 @@ public class Parapuzosia extends WaterMobEntity implements IAnimatable {
     public float prevGrabProgress;
     private int holdTime;
 
-    public static final AttributeModifierMap.MutableAttribute createAttributes(){
+    public static AttributeModifierMap.MutableAttribute createAttributes(){
         return MobEntity.func_233666_p_().createMutableAttribute(Attributes.MAX_HEALTH, 50F)
                 .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.3F)
                 .createMutableAttribute(Attributes.ATTACK_DAMAGE, 4.0F)
@@ -56,7 +61,7 @@ public class Parapuzosia extends WaterMobEntity implements IAnimatable {
     private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
     public Parapuzosia(EntityType<Parapuzosia> type, World world) {
-        super(type, world);
+        super(type, world, new DinosaurInfo("parapuzosia", 100, 100, 50, SleepRhythmGoal.SleepRhythm.NONE), generateLevelWithinBounds(20, 100));
         this.moveController = new AquaticMoveController(this, 1f);
     }
 
@@ -91,6 +96,12 @@ public class Parapuzosia extends WaterMobEntity implements IAnimatable {
         return super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
     }
 
+    @Nullable
+    @Override
+    public AgeableEntity createChild(ServerWorld world, AgeableEntity mate) {
+        return null;
+    }
+
     @Override
     public boolean isNotColliding(IWorldReader worldIn) {
         return worldIn.checkNoEntityCollision(this);
@@ -120,6 +131,26 @@ public class Parapuzosia extends WaterMobEntity implements IAnimatable {
         super.registerData();
         this.dataManager.register(GRABBING, false);
         this.dataManager.register(GRAB_ENTITY, -1);
+    }
+
+    @Override
+    public List<Item> getFood() {
+        return null;
+    }
+
+    @Override
+    protected Rarity getinitialRarity() {
+        return null;
+    }
+
+    @Override
+    protected Gender getInitialGender() {
+        return null;
+    }
+
+    @Override
+    protected int reduceNarcotic(int narcoticValue) {
+        return 0;
     }
 
     @Nullable
@@ -168,6 +199,11 @@ public class Parapuzosia extends WaterMobEntity implements IAnimatable {
         }
     }
 
+    @Override
+    public int tickTimer() {
+        return this.ticksExisted;
+    }
+
     public boolean isGrabbing() {
         return this.dataManager.get(GRABBING);
     }
@@ -178,8 +214,8 @@ public class Parapuzosia extends WaterMobEntity implements IAnimatable {
 
     @Override
     public void registerControllers(AnimationData data) {
-        data.addAnimationController(new AnimationController(this, CONTROLLER_NAME, 0, this::predicate));
-        data.addAnimationController(new AnimationController(this, ATTACK_CONTROLLER_NAME, 0, this::attackPredicate));
+        data.addAnimationController(new AnimationController<>(this, CONTROLLER_NAME, 0, this::predicate));
+        data.addAnimationController(new AnimationController<>(this, ATTACK_CONTROLLER_NAME, 0, this::attackPredicate));
     }
 
     private PlayState predicate(AnimationEvent<Parapuzosia> event){

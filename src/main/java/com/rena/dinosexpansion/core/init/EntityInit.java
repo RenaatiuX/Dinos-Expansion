@@ -10,6 +10,7 @@ import com.rena.dinosexpansion.common.entity.misc.ChakramEntity;
 import com.rena.dinosexpansion.common.entity.misc.SpearEntity;
 import com.rena.dinosexpansion.common.entity.projectile.CustomArrow;
 import com.rena.dinosexpansion.common.entity.projectile.DartEntity;
+import com.rena.dinosexpansion.common.entity.semiaquatic.Astorgosuchus;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
@@ -39,6 +40,8 @@ public class EntityInit {
             () -> EntityType.Builder.<MegaPiranha>create(MegaPiranha::new, EntityClassification.WATER_CREATURE).size(1F, 1F));
     public static final RegistryObject<EntityType<Dimorphodon>> DIMORPHODON = register("dimorphodon",
             () -> EntityType.Builder.<Dimorphodon>create(Dimorphodon::new, EntityClassification.WATER_CREATURE).size(1F, 1F));
+    public static final RegistryObject<EntityType<Astorgosuchus>> ASTORGOSUCHUS = register("astorgosuchus",
+            () -> EntityType.Builder.<Astorgosuchus>create(Astorgosuchus::new, EntityClassification.CREATURE).size(1.0F, 2.0F));
     public static final RegistryObject<EntityType<Hermit>> HERMIT = register("hermit", () -> EntityType.Builder.create(Hermit::new, EntityClassification.CREATURE));
 
     public static final <T extends Entity> RegistryObject<EntityType<T>> register(String name, Supplier<EntityType.Builder<T>> builder){

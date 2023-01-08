@@ -1,15 +1,24 @@
 package com.rena.dinosexpansion.common.entity.semiaquatic;
 
 import com.rena.dinosexpansion.common.entity.Dinosaur;
+import com.rena.dinosexpansion.common.entity.ia.*;
+import com.rena.dinosexpansion.common.entity.ia.helper.ISemiAquatic;
+import com.rena.dinosexpansion.common.entity.ia.movecontroller.AquaticMoveController;
+import com.rena.dinosexpansion.common.entity.ia.navigator.SemiAquaticPathNavigator;
+import com.rena.dinosexpansion.core.init.EntityInit;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.passive.TameableEntity;
+import net.minecraft.entity.ai.controller.MovementController;
+import net.minecraft.entity.ai.goal.*;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
@@ -19,23 +28,35 @@ import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimationTickable;
+import software.bernie.geckolib3.core.PlayState;
+import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.builder.ILoopType;
+import software.bernie.geckolib3.core.controller.AnimationController;
+import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class Astorgosuchus extends Dinosaur implements IAnimatable, IAnimationTickable {
+public class Astorgosuchus extends Dinosaur implements IAnimatable, IAnimationTickable, ISemiAquatic {
     private static final DataParameter<Boolean> HAS_EGG = EntityDataManager.createKey(Astorgosuchus.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> IS_DIGGING = EntityDataManager.createKey(Astorgosuchus.class, DataSerializers.BOOLEAN);
 
-    public Astorgosuchus(EntityType<Astorgosuchus> type, World world, DinosaurInfo info, int minLevel, int maxLevel) {
-        super(type, world, info, minLevel, maxLevel);
+    private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
+
+    public Astorgosuchus(EntityType<Astorgosuchus> type, World world) {
+        super(type, world, new DinosaurInfo("astorgosuchus", 400, 200, 100, SleepRhythmGoal.SleepRhythm.NONE), generateLevelWithinBounds(20, 100));
         this.setPathPriority(PathNodeType.WATER, 0.0F);
         this.setPathPriority(PathNodeType.WATER_BORDER, 0.0F);
     }
 
-    public static AttributeModifierMap.MutableAttribute bakeAttributes() {
+    public Astorgosuchus(World world){
+        this(EntityInit.ASTORGOSUCHUS.get(), world);
+    }
+
+    public static AttributeModifierMap.MutableAttribute createAttributes() {
         return MobEntity.func_233666_p_()
                 .createMutableAttribute(Attributes.MAX_HEALTH, 50.0D)
                 .createMutableAttribute(Attributes.FOLLOW_RANGE, 20)
@@ -43,6 +64,35 @@ public class Astorgosuchus extends Dinosaur implements IAnimatable, IAnimationTi
                 .createMutableAttribute(Attributes.ATTACK_DAMAGE, 10.0D)
                 .createMutableAttribute(Attributes.KNOCKBACK_RESISTANCE, 0.4F)
                 .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.25F);
+    }
+
+    @Override
+    protected void registerGoals() {
+        super.registerGoals();
+        this.goalSelector.addGoal(0, new SitGoal(this));
+        this.goalSelector.addGoal(2, new BreatheAirGoal(this));
+        this.goalSelector.addGoal(2, new DinosaurFindWaterGoal(this));
+        this.goalSelector.addGoal(2, new DinosaurLeaveWaterGoal(this));
+        this.goalSelector.addGoal(4, new CrocodileMeleeGoal(this, 1, true));
+        this.goalSelector.addGoal(5, new CrocodileRandomSwimmingGoal(this, 1.0D, 7));
+        this.goalSelector.addGoal(6, new LookRandomlyGoal(this));
+        this.goalSelector.addGoal(7, new LookAtGoal(this, PlayerEntity.class, 6.0F));
+        this.targetSelector.addGoal(2, new OwnerHurtByTargetGoal(this));
+        this.targetSelector.addGoal(3, new OwnerHurtTargetGoal(this));
+    }
+
+    @Override
+    public boolean attackEntityFrom(DamageSource source, float amount) {
+        if (this.isInvulnerableTo(source)) {
+            return false;
+        } else {
+            Entity entity = source.getTrueSource();
+            this.setSitting(false);
+            if (entity != null && this.isTamed() && !(entity instanceof PlayerEntity) && !(entity instanceof AbstractArrowEntity)) {
+                amount = (amount + 1.0F) / 3.0F;
+            }
+            return super.attackEntityFrom(source, amount);
+        }
     }
 
     @Override
@@ -60,8 +110,8 @@ public class Astorgosuchus extends Dinosaur implements IAnimatable, IAnimationTi
     @Override
     protected void registerData() {
         super.registerData();
-        this.dataManager.register(HAS_EGG, Boolean.valueOf(false));
-        this.dataManager.register(IS_DIGGING, Boolean.valueOf(false));
+        this.dataManager.register(HAS_EGG, Boolean.FALSE);
+        this.dataManager.register(IS_DIGGING, Boolean.FALSE);
     }
 
     @Override
@@ -135,6 +185,7 @@ public class Astorgosuchus extends Dinosaur implements IAnimatable, IAnimationTi
         this.dataManager.set(IS_DIGGING, isDigging);
     }
 
+
     @Override
     public List<Item> getFood() {
         return null;
@@ -142,12 +193,12 @@ public class Astorgosuchus extends Dinosaur implements IAnimatable, IAnimationTi
 
     @Override
     protected Rarity getinitialRarity() {
-        return null;
+        return Rarity.COMMON;
     }
 
     @Override
     protected Gender getInitialGender() {
-        return null;
+        return getRNG().nextDouble() <= 0.51 ? Gender.MALE : Gender.FEMALE;
     }
 
     @Override
@@ -161,18 +212,65 @@ public class Astorgosuchus extends Dinosaur implements IAnimatable, IAnimationTi
         return null;
     }
 
+    private PlayState predicate(AnimationEvent<Astorgosuchus> event) {
+        if (isKnockout()) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("Astorgosuchus_KnockedOut", ILoopType.EDefaultLoopTypes.LOOP));
+        } else if (this.isOnGround()) {
+            if (event.isMoving()) {
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("Astorgosuchus_Walk", ILoopType.EDefaultLoopTypes.LOOP));
+                event.getController().setAnimationSpeed(1.2);
+            } else {
+                if (isInDaylight()) {
+                    event.getController().setAnimation(new AnimationBuilder().addAnimation("Astorgosuchus_SunbathingSleeping", ILoopType.EDefaultLoopTypes.LOOP));
+                }
+            }
+        } else if (this.isInWater()) {
+            if (event.isMoving()) {
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("Astorgosuchus_Swim", ILoopType.EDefaultLoopTypes.LOOP));
+            } else {
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("Astorgosuchus_SwimIdle", ILoopType.EDefaultLoopTypes.LOOP));
+            }
+        } else if (this.isQueuedToSit()) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("Astorgosuchus_Sit", ILoopType.EDefaultLoopTypes.LOOP));
+        }
+        return PlayState.CONTINUE;
+    }
+
     @Override
     public void registerControllers(AnimationData data) {
-
+        data.addAnimationController(new AnimationController<>(this, "controller", 10, this::predicate));
     }
 
     @Override
     public AnimationFactory getFactory() {
-        return null;
+        return this.factory;
     }
 
     @Override
     public int tickTimer() {
-        return 0;
+        return this.ticksExisted;
+    }
+
+    @Override
+    public boolean shouldEnterWater() {
+        if (!this.getPassengers().isEmpty()) {
+            return true;
+        }
+        return this.getAttackTarget() == null && !this.isQueuedToSit() && !shouldLeaveWater();
+    }
+
+    @Override
+    public boolean shouldLeaveWater() {
+        return false;
+    }
+
+    @Override
+    public boolean shouldStopMoving() {
+        return false;
+    }
+
+    @Override
+    public int getWaterSearchRange() {
+        return this.getPassengers().isEmpty() ? 15 : 45;
     }
 }

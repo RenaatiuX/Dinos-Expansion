@@ -22,7 +22,7 @@ public enum DinoBiomeLayerMixer implements IAreaTransformer2, IDimOffset0Transfo
     public static final Map<BiomeManager.BiomeType, List<ResourceLocation>> NORMAL_LANDBIOMES = Util.make(Maps.newHashMap(), map -> {
         map.put(BiomeManager.BiomeType.ICY, Lists.newArrayList(DinoBiomeProvider.ARCTIC));
         map.put(BiomeManager.BiomeType.WARM, Lists.newArrayList(DinoBiomeProvider.BADLANDS, DinoBiomeProvider.GRASSLAND, DinoBiomeProvider.JUNGLE, DinoBiomeProvider.MOUNTAIN, DinoBiomeProvider.REDWOOD_FOREST, DinoBiomeProvider.STONE_SHORE, DinoBiomeProvider.SWAMP));
-        map.put(BiomeManager.BiomeType.DESERT, Lists.newArrayList(DinoBiomeProvider.DUNES, DinoBiomeProvider.HIGH_DESERT, DinoBiomeProvider.LOW_DESERT));
+        map.put(BiomeManager.BiomeType.DESERT, Lists.newArrayList(DinoBiomeProvider.DUNES, DinoBiomeProvider.HIGH_DESERT, DinoBiomeProvider.LOW_DESERT, DinoBiomeProvider.CANYON));
          map.put(BiomeManager.BiomeType.COOL, Lists.newArrayList(DinoBiomeProvider.TUNDRA));
     });
 

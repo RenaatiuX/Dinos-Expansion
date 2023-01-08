@@ -128,7 +128,7 @@ public class DinoBiomeProvider extends BiomeProvider {
         return iareafactory;
     }
 
-    public static <T extends IArea, C extends IExtendedNoiseRandom<T>> IAreaFactory<T> build(LongFunction<C> contextFactory) {
+    /*public static <T extends IArea, C extends IExtendedNoiseRandom<T>> IAreaFactory<T> build(LongFunction<C> contextFactory) {
 
         IAreaFactory<T> iareafactory = DinoIslandLayer.INSTANCE.apply(contextFactory.apply(1L));
         iareafactory = ZoomLayer.FUZZY.apply(contextFactory.apply(2000L), iareafactory);
@@ -175,7 +175,7 @@ public class DinoBiomeProvider extends BiomeProvider {
         iareafactory3 = DinoMixOceansLayer.INSTANCE.apply(contextFactory.apply(100L), iareafactory3, iareafactory);
 
         return iareafactory3;
-    }
+    }*/
 
 
     public static <T extends IArea, C extends IExtendedNoiseRandom<T>> IAreaFactory<T> customTry(LongFunction<C> contextFactory) {

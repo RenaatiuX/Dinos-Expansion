@@ -1,0 +1,1158 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"Astorgosuchus_BiteLand": {
+			"animation_length": 0.84,
+			"bones": {
+				"Body": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.36": {
+							"vector": [-15, 0, 0],
+							"easing": "easeInSine"
+						},
+						"0.52": {
+							"vector": [0, 0, 0],
+							"easing": "easeInSine"
+						}
+					}
+				},
+				"Head": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.36": {
+							"vector": [-25, 0, 0],
+							"easing": "easeInSine"
+						},
+						"0.52": {
+							"vector": [10, 0, 0],
+							"easing": "easeInSine"
+						},
+						"0.84": {
+							"vector": [0, 0, 0],
+							"easing": "easeInSine"
+						}
+					}
+				},
+				"Jaw": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.36": {
+							"vector": [47.5, 0, 0],
+							"easing": "easeInSine"
+						},
+						"0.52": {
+							"vector": [0, 0, 0],
+							"easing": "easeInSine"
+						}
+					}
+				},
+				"Tail": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.36": {
+							"vector": [17.5, 0, 0],
+							"easing": "easeInSine"
+						},
+						"0.52": {
+							"vector": [2.5, 0, 0],
+							"easing": "easeInSine"
+						},
+						"0.84": {
+							"vector": [0, 0, 0],
+							"easing": "easeInSine"
+						}
+					}
+				},
+				"LeftArm": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.36": {
+							"vector": [42.5, 0, 0],
+							"easing": "easeInSine"
+						},
+						"0.52": {
+							"vector": [0, 0, 0],
+							"easing": "easeInSine"
+						}
+					}
+				},
+				"RightArm": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.36": {
+							"vector": [42.5, 0, 0],
+							"easing": "easeInSine"
+						},
+						"0.52": {
+							"vector": [0, 0, 0],
+							"easing": "easeInSine"
+						}
+					}
+				},
+				"LeftLeg": {
+					"rotation": {
+						"vector": [0, 0, 0]
+					}
+				},
+				"RightLeg": {
+					"rotation": {
+						"vector": [0, 0, 0]
+					}
+				}
+			}
+		},
+		"Astorgosuchus_Swim": {
+			"loop": true,
+			"animation_length": 2.08,
+			"bones": {
+				"Astargosuchus": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, -2.5, 0]
+						},
+						"1.04": {
+							"vector": [0, 5, 0],
+							"easing": "easeInOutSine"
+						},
+						"2.08": {
+							"vector": [0, -2.5, 0],
+							"easing": "easeInOutSine"
+						}
+					}
+				},
+				"Head": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 2.5, 0]
+						},
+						"1.04": {
+							"vector": [-2.5, -2.5, 0],
+							"easing": "easeInOutSine"
+						},
+						"2.08": {
+							"vector": [0, 2.5, 0],
+							"easing": "easeInOutSine"
+						}
+					}
+				},
+				"Jaw": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"1.04": {
+							"vector": [2.5, 0, 0],
+							"easing": "easeInOutSine"
+						},
+						"2.08": {
+							"vector": [0, 0, 0],
+							"easing": "easeInOutSine"
+						}
+					}
+				},
+				"Tail": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 22.5, 0]
+						},
+						"1.0": {
+							"vector": [0, -22.5, 0],
+							"easing": "easeInSine"
+						},
+						"1.08": {
+							"vector": [0, -22.5, 0],
+							"easing": "easeInSine"
+						},
+						"2.08": {
+							"vector": [0, 22.5, 0],
+							"easing": "easeInSine"
+						}
+					}
+				},
+				"LeftArm": {
+					"rotation": {
+						"0.0": {
+							"vector": [50, 0, 0]
+						},
+						"1.04": {
+							"vector": [57.5, 0, 0],
+							"easing": "easeInOutSine"
+						},
+						"2.08": {
+							"vector": [50, 0, 0],
+							"easing": "easeInOutSine"
+						}
+					}
+				},
+				"RightArm": {
+					"rotation": {
+						"0.0": {
+							"vector": [50, 0, 0]
+						},
+						"1.04": {
+							"vector": [57.5, 0, 0],
+							"easing": "easeInOutSine"
+						},
+						"2.08": {
+							"vector": [50, 0, 0],
+							"easing": "easeInOutSine"
+						}
+					}
+				},
+				"LeftLeg": {
+					"rotation": {
+						"0.0": {
+							"vector": [50, 0, 0]
+						},
+						"1.04": {
+							"vector": [57.5, 0, 0],
+							"easing": "easeInOutSine"
+						},
+						"2.08": {
+							"vector": [50, 0, 0],
+							"easing": "easeInOutSine"
+						}
+					}
+				},
+				"RightLeg": {
+					"rotation": {
+						"0.0": {
+							"vector": [50, 0, 0]
+						},
+						"1.04": {
+							"vector": [57.5, 0, 0],
+							"easing": "easeInOutSine"
+						},
+						"2.08": {
+							"vector": [50, 0, 0],
+							"easing": "easeInOutSine"
+						}
+					}
+				}
+			}
+		},
+		"Astorgosuchus_BiteSwim": {
+			"animation_length": 1.04,
+			"bones": {
+				"Astargosuchus": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 2.5, 0]
+						},
+						"0.52": {
+							"vector": [0, 0, 0],
+							"easing": "easeInOutSine"
+						},
+						"1.04": {
+							"vector": [0, 2.5, 0],
+							"easing": "easeInOutSine"
+						}
+					}
+				},
+				"Head": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 2.5, 0]
+						},
+						"0.44": {
+							"vector": [-15, 0, -15],
+							"easing": "easeInOutSine"
+						},
+						"0.52": {
+							"vector": [0, 0, 25],
+							"easing": "easeInOutSine"
+						},
+						"1.04": {
+							"vector": [0, 2.5, 0],
+							"easing": "easeInOutSine"
+						}
+					}
+				},
+				"Jaw": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.44": {
+							"vector": [35, 0, 0],
+							"easing": "easeInOutSine"
+						},
+						"0.52": {
+							"vector": [0, 0, 0],
+							"easing": "easeInOutSine"
+						},
+						"0.76": {
+							"vector": [5, 0, 0],
+							"easing": "easeInOutSine"
+						},
+						"1.04": {
+							"vector": [0, 0, 0],
+							"easing": "easeInOutSine"
+						}
+					}
+				},
+				"Tail": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 22.5, 0]
+						},
+						"0.28": {
+							"vector": [0, -22.5, 0],
+							"easing": "easeInSine"
+						},
+						"0.52": {
+							"vector": [0, 22.5, 0],
+							"easing": "easeInSine"
+						},
+						"0.8": {
+							"vector": [0, -22.5, 0],
+							"easing": "easeInSine"
+						},
+						"1.04": {
+							"vector": [0, 22.5, 0],
+							"easing": "easeInSine"
+						}
+					}
+				},
+				"LeftArm": {
+					"rotation": {
+						"0.0": {
+							"vector": [50, 0, -50]
+						},
+						"0.28": {
+							"vector": [50, 0, -30],
+							"easing": "easeInOutSine"
+						},
+						"0.52": {
+							"vector": [50, 0, -50],
+							"easing": "easeInOutSine"
+						},
+						"0.8": {
+							"vector": [50, 0, -30],
+							"easing": "easeInOutSine"
+						},
+						"1.04": {
+							"vector": [50, 0, -50],
+							"easing": "easeInOutSine"
+						}
+					}
+				},
+				"RightArm": {
+					"rotation": {
+						"0.0": {
+							"vector": [50, 0, 50]
+						},
+						"0.28": {
+							"vector": [50, 0, 30],
+							"easing": "easeInOutSine"
+						},
+						"0.52": {
+							"vector": [50, 0, 50],
+							"easing": "easeInOutSine"
+						},
+						"0.8": {
+							"vector": [50, 0, 30],
+							"easing": "easeInOutSine"
+						},
+						"1.04": {
+							"vector": [50, 0, 50],
+							"easing": "easeInOutSine"
+						}
+					}
+				},
+				"LeftLeg": {
+					"rotation": {
+						"0.0": {
+							"vector": [50, 0, -50]
+						},
+						"0.28": {
+							"vector": [50, 0, -30],
+							"easing": "easeInOutSine"
+						},
+						"0.52": {
+							"vector": [50, 0, -50],
+							"easing": "easeInOutSine"
+						},
+						"0.8": {
+							"vector": [50, 0, -30],
+							"easing": "easeInOutSine"
+						},
+						"1.04": {
+							"vector": [50, 0, -50],
+							"easing": "easeInOutSine"
+						}
+					}
+				},
+				"RightLeg": {
+					"rotation": {
+						"0.0": {
+							"vector": [50, 0, 50]
+						},
+						"0.28": {
+							"vector": [50, 0, 30],
+							"easing": "easeInOutSine"
+						},
+						"0.52": {
+							"vector": [50, 0, 50],
+							"easing": "easeInOutSine"
+						},
+						"0.8": {
+							"vector": [50, 0, 30],
+							"easing": "easeInOutSine"
+						},
+						"1.04": {
+							"vector": [50, 0, 50],
+							"easing": "easeInOutSine"
+						}
+					}
+				}
+			}
+		},
+		"Astorgosuchus_KnockedOut": {
+			"loop": true,
+			"animation_length": 2.08,
+			"bones": {
+				"Astargosuchus": {
+					"position": {
+						"vector": [0, -3.5, 0]
+					}
+				},
+				"Body": {
+					"rotation": {
+						"vector": [0, 0, 0]
+					},
+					"position": {
+						"vector": [0, 0, 0]
+					},
+					"scale": {
+						"0.0": {
+							"vector": [1, 1, 1]
+						},
+						"1.04": {
+							"vector": [1, 1.025, 1],
+							"easing": "easeInOutSine"
+						},
+						"2.08": {
+							"vector": [1, 1, 1],
+							"easing": "easeInOutSine"
+						}
+					}
+				},
+				"Head": {
+					"rotation": {
+						"vector": [5, 0, 0]
+					},
+					"position": {
+						"vector": [0, 0, 0]
+					},
+					"scale": {
+						"0.0": {
+							"vector": [1, 1, 1]
+						},
+						"1.04": {
+							"vector": [1, 0.975, 1],
+							"easing": "easeInOutSine"
+						},
+						"2.08": {
+							"vector": [1, 1, 1],
+							"easing": "easeInOutSine"
+						}
+					}
+				},
+				"Jaw": {
+					"rotation": {
+						"vector": [5, 0, 0]
+					}
+				},
+				"Tail": {
+					"rotation": {
+						"vector": [-2.5, 0, 20]
+					},
+					"scale": {
+						"0.0": {
+							"vector": [1, 1, 1]
+						},
+						"1.04": {
+							"vector": [1, 0.975, 1],
+							"easing": "easeInOutSine"
+						},
+						"2.08": {
+							"vector": [1, 1, 1],
+							"easing": "easeInOutSine"
+						}
+					}
+				},
+				"LeftArm": {
+					"rotation": {
+						"vector": [-70, -45, 0]
+					}
+				},
+				"RightArm": {
+					"rotation": {
+						"vector": [-70, 45, 0]
+					}
+				},
+				"LeftLeg": {
+					"rotation": {
+						"vector": [70, 45, 0]
+					}
+				},
+				"RightLeg": {
+					"rotation": {
+						"vector": [70, -45, 0]
+					}
+				}
+			}
+		},
+		"Astorgosuchus_SunbathingSleeping": {
+			"loop": true,
+			"animation_length": 3.12,
+			"bones": {
+				"Astargosuchus": {
+					"rotation": {
+						"vector": [0, 20, 0]
+					},
+					"position": {
+						"vector": [0, -3.5, 0]
+					}
+				},
+				"Body": {
+					"rotation": {
+						"vector": [0, 0, 0]
+					},
+					"position": {
+						"vector": [0, 0, 0]
+					},
+					"scale": {
+						"0.0": {
+							"vector": [1, 1, 1]
+						},
+						"1.56": {
+							"vector": [1, 1.025, 1],
+							"easing": "easeInOutSine"
+						},
+						"3.12": {
+							"vector": [1, 1, 1],
+							"easing": "easeInOutSine"
+						}
+					}
+				},
+				"Head": {
+					"rotation": {
+						"0.0": {
+							"vector": [-40, 0, 0]
+						},
+						"1.56": {
+							"vector": [-40, 0, 0],
+							"easing": "easeInOutSine"
+						}
+					},
+					"position": {
+						"vector": [0, 0, 0]
+					},
+					"scale": {
+						"0.0": {
+							"vector": [1, 1, 1]
+						},
+						"1.56": {
+							"vector": [1, 0.975, 1],
+							"easing": "easeInOutSine"
+						},
+						"3.12": {
+							"vector": [1, 1, 1],
+							"easing": "easeInOutSine"
+						}
+					}
+				},
+				"Jaw": {
+					"rotation": {
+						"0.0": {
+							"vector": [40, 0, 0]
+						},
+						"1.56": {
+							"vector": [42.5, 0, 0],
+							"easing": "easeInOutSine"
+						},
+						"3.12": {
+							"vector": [40, 0, 0],
+							"easing": "easeInOutSine"
+						}
+					}
+				},
+				"Tail": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 65, 0]
+						},
+						"1.56": {
+							"vector": [0, 62.5, 0],
+							"easing": "easeInOutSine"
+						},
+						"3.12": {
+							"vector": [0, 65, 0],
+							"easing": "easeInOutSine"
+						}
+					},
+					"scale": {
+						"0.0": {
+							"vector": [1, 1, 1]
+						},
+						"1.56": {
+							"vector": [1, 0.975, 1],
+							"easing": "easeInOutSine"
+						},
+						"3.12": {
+							"vector": [1, 1, 1],
+							"easing": "easeInOutSine"
+						}
+					}
+				},
+				"LeftArm": {
+					"rotation": {
+						"vector": [-70, -45, 0]
+					}
+				},
+				"RightArm": {
+					"rotation": {
+						"vector": [-70, 45, 0]
+					}
+				},
+				"LeftLeg": {
+					"rotation": {
+						"vector": [70, 45, 0]
+					}
+				},
+				"RightLeg": {
+					"rotation": {
+						"vector": [70, -45, 0]
+					}
+				}
+			}
+		},
+		"Astorgosuchus_Walk": {
+			"loop": true,
+			"animation_length": 1.04,
+			"bones": {
+				"Body": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 2.5]
+						},
+						"0.52": {
+							"vector": [0, 0, -2.5],
+							"easing": "easeInOutSine"
+						},
+						"1.04": {
+							"vector": [0, 0, 2.5],
+							"easing": "easeInOutSine"
+						}
+					},
+					"position": {
+						"vector": [0, 0, 0]
+					}
+				},
+				"Tail": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, -2.5, 0]
+						},
+						"0.52": {
+							"vector": [0, 2.5, 0],
+							"easing": "easeInSine"
+						},
+						"1.04": {
+							"vector": [0, -2.5, 0],
+							"easing": "easeInSine"
+						}
+					}
+				},
+				"LeftArm": {
+					"rotation": {
+						"0.0": {
+							"vector": [32.5, 0, 0]
+						},
+						"0.52": {
+							"vector": [-32.5, 0, 0],
+							"easing": "easeInOutSine"
+						},
+						"1.04": {
+							"vector": [32.5, 0, 0],
+							"easing": "easeInOutSine"
+						}
+					}
+				},
+				"RightArm": {
+					"rotation": {
+						"0.0": {
+							"vector": [-32.5, 0, 0]
+						},
+						"0.52": {
+							"vector": [32.5, 0, 0],
+							"easing": "easeInOutSine"
+						},
+						"1.04": {
+							"vector": [-32.5, 0, 0],
+							"easing": "easeInOutSine"
+						}
+					}
+				},
+				"LeftLeg": {
+					"rotation": {
+						"0.0": {
+							"vector": [-32.5, 0, 0]
+						},
+						"0.52": {
+							"vector": [32.5, 0, 0],
+							"easing": "easeInOutSine"
+						},
+						"1.04": {
+							"vector": [-32.5, 0, 0],
+							"easing": "easeInOutSine"
+						}
+					}
+				},
+				"RightLeg": {
+					"rotation": {
+						"0.0": {
+							"vector": [32.5, 0, 0]
+						},
+						"0.52": {
+							"vector": [-32.5, 0, 0],
+							"easing": "easeInOutSine"
+						},
+						"1.04": {
+							"vector": [32.5, 0, 0],
+							"easing": "easeInOutSine"
+						}
+					}
+				},
+				"Astargosuchus": {
+					"rotation": {
+						"vector": [0, 0, 0]
+					},
+					"position": {
+						"vector": [0, 0, 0]
+					}
+				},
+				"Head": {
+					"rotation": {
+						"vector": [0, 0, 0]
+					},
+					"position": {
+						"vector": [0, 0, 0]
+					}
+				}
+			}
+		},
+		"Astorgosuchus_SwimIdle": {
+			"loop": true,
+			"animation_length": 2.08,
+			"bones": {
+				"Astargosuchus": {
+					"rotation": {
+						"0.0": {
+							"vector": [-5, 0, 0]
+						},
+						"1.04": {
+							"vector": [-5, 0, 0],
+							"easing": "easeInOutSine"
+						},
+						"2.08": {
+							"vector": [-5, 0, 0],
+							"easing": "easeInOutSine"
+						}
+					},
+					"position": {
+						"vector": [0, 0, 0]
+					},
+					"scale": {
+						"vector": [1, 1, 1]
+					}
+				},
+				"Body": {
+					"rotation": {
+						"vector": [0, 0, 0]
+					},
+					"position": {
+						"vector": [0, 0, 0]
+					}
+				},
+				"Head": {
+					"rotation": {
+						"0.0": {
+							"vector": [7.5, 2.5, 0]
+						},
+						"1.04": {
+							"vector": [5, 3.5, 0],
+							"easing": "easeInOutSine"
+						},
+						"2.08": {
+							"vector": [7.5, 2.5, 0],
+							"easing": "easeInOutSine"
+						}
+					},
+					"position": {
+						"vector": [0, 0, 0]
+					}
+				},
+				"Jaw": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"1.04": {
+							"vector": [1.5, 0, 0],
+							"easing": "easeInOutSine"
+						},
+						"2.08": {
+							"vector": [0, 0, 0],
+							"easing": "easeInOutSine"
+						}
+					}
+				},
+				"Tail": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 2.5, 0]
+						},
+						"1.0": {
+							"vector": [0, -2.5, 0],
+							"easing": "easeInSine"
+						},
+						"1.08": {
+							"vector": [0, -2.5, 0],
+							"easing": "easeInSine"
+						},
+						"2.08": {
+							"vector": [0, 2.5, 0],
+							"easing": "easeInSine"
+						}
+					}
+				},
+				"LeftArm": {
+					"rotation": {
+						"0.0": {
+							"vector": [50, 0, 0]
+						},
+						"1.04": {
+							"vector": [55, 0, 0],
+							"easing": "easeInOutSine"
+						},
+						"2.08": {
+							"vector": [50, 0, 0],
+							"easing": "easeInOutSine"
+						}
+					}
+				},
+				"RightArm": {
+					"rotation": {
+						"0.0": {
+							"vector": [50, 0, 0]
+						},
+						"1.04": {
+							"vector": [55, 0, 0],
+							"easing": "easeInOutSine"
+						},
+						"2.08": {
+							"vector": [50, 0, 0],
+							"easing": "easeInOutSine"
+						}
+					}
+				},
+				"LeftLeg": {
+					"rotation": {
+						"0.0": {
+							"vector": [50, 0, 0]
+						},
+						"1.04": {
+							"vector": [55, 0, 0],
+							"easing": "easeInOutSine"
+						},
+						"2.08": {
+							"vector": [50, 0, 0],
+							"easing": "easeInOutSine"
+						}
+					}
+				},
+				"RightLeg": {
+					"rotation": {
+						"0.0": {
+							"vector": [50, 0, 0]
+						},
+						"1.04": {
+							"vector": [55, 0, 0],
+							"easing": "easeInOutSine"
+						},
+						"2.08": {
+							"vector": [50, 0, 0],
+							"easing": "easeInOutSine"
+						}
+					}
+				}
+			}
+		},
+		"Astorgosuchus_GrabSwim": {
+			"loop": true,
+			"animation_length": 2.08,
+			"bones": {
+				"Astargosuchus": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, -2.5, 0]
+						},
+						"1.04": {
+							"vector": [0, 5, 0],
+							"easing": "easeInOutSine"
+						},
+						"2.08": {
+							"vector": [0, -2.5, 0],
+							"easing": "easeInOutSine"
+						}
+					}
+				},
+				"Head": {
+					"rotation": {
+						"0.0": {
+							"vector": [-20, 2.5, 0]
+						},
+						"1.04": {
+							"vector": [-20, -2.5, 0],
+							"easing": "easeInOutSine"
+						},
+						"2.08": {
+							"vector": [-20, 2.5, 0],
+							"easing": "easeInOutSine"
+						}
+					}
+				},
+				"Jaw": {
+					"rotation": {
+						"0.0": {
+							"vector": [30, 0, 0]
+						},
+						"1.04": {
+							"vector": [31, 0, 0],
+							"easing": "easeInOutSine"
+						},
+						"2.08": {
+							"vector": [30, 0, 0],
+							"easing": "easeInOutSine"
+						}
+					}
+				},
+				"Tail": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 22.5, 0]
+						},
+						"1.0": {
+							"vector": [0, -22.5, 0],
+							"easing": "easeInSine"
+						},
+						"1.08": {
+							"vector": [0, -22.5, 0],
+							"easing": "easeInSine"
+						},
+						"2.08": {
+							"vector": [0, 22.5, 0],
+							"easing": "easeInSine"
+						}
+					}
+				},
+				"LeftArm": {
+					"rotation": {
+						"0.0": {
+							"vector": [50, 0, 0]
+						},
+						"1.04": {
+							"vector": [57.5, 0, 0],
+							"easing": "easeInOutSine"
+						},
+						"2.08": {
+							"vector": [50, 0, 0],
+							"easing": "easeInOutSine"
+						}
+					}
+				},
+				"RightArm": {
+					"rotation": {
+						"0.0": {
+							"vector": [50, 0, 0]
+						},
+						"1.04": {
+							"vector": [57.5, 0, 0],
+							"easing": "easeInOutSine"
+						},
+						"2.08": {
+							"vector": [50, 0, 0],
+							"easing": "easeInOutSine"
+						}
+					}
+				},
+				"LeftLeg": {
+					"rotation": {
+						"0.0": {
+							"vector": [50, 0, 0]
+						},
+						"1.04": {
+							"vector": [57.5, 0, 0],
+							"easing": "easeInOutSine"
+						},
+						"2.08": {
+							"vector": [50, 0, 0],
+							"easing": "easeInOutSine"
+						}
+					}
+				},
+				"RightLeg": {
+					"rotation": {
+						"0.0": {
+							"vector": [50, 0, 0]
+						},
+						"1.04": {
+							"vector": [57.5, 0, 0],
+							"easing": "easeInOutSine"
+						},
+						"2.08": {
+							"vector": [50, 0, 0],
+							"easing": "easeInOutSine"
+						}
+					}
+				}
+			}
+		},
+		"Astorgosuchus_Sit": {
+			"loop": true,
+			"animation_length": 3.12,
+			"bones": {
+				"Astargosuchus": {
+					"rotation": {
+						"vector": [0, 0, 0]
+					},
+					"position": {
+						"vector": [0, -3.5, 0]
+					}
+				},
+				"Body": {
+					"rotation": {
+						"vector": [0, 0, 0]
+					},
+					"position": {
+						"vector": [0, 0, 0]
+					},
+					"scale": {
+						"0.0": {
+							"vector": [1, 1, 1]
+						},
+						"1.56": {
+							"vector": [1, 1.025, 1],
+							"easing": "easeInOutSine"
+						},
+						"3.12": {
+							"vector": [1, 1, 1],
+							"easing": "easeInOutSine"
+						}
+					}
+				},
+				"Head": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"1.56": {
+							"vector": [-0.5, 0, 0],
+							"easing": "easeInOutSine"
+						},
+						"3.12": {
+							"vector": [0, 0, 0],
+							"easing": "easeInOutSine"
+						}
+					},
+					"position": {
+						"vector": [0, 0, 0]
+					},
+					"scale": {
+						"0.0": {
+							"vector": [1, 1, 1]
+						},
+						"1.56": {
+							"vector": [1, 0.975, 1],
+							"easing": "easeInOutSine"
+						},
+						"3.12": {
+							"vector": [1, 1, 1],
+							"easing": "easeInOutSine"
+						}
+					}
+				},
+				"Jaw": {
+					"rotation": {
+						"vector": [0, 0, 0]
+					}
+				},
+				"Tail": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"1.56": {
+							"vector": [1.5, 0, 0],
+							"easing": "easeInOutSine"
+						},
+						"3.12": {
+							"vector": [0, 0, 0],
+							"easing": "easeInOutSine"
+						}
+					},
+					"scale": {
+						"0.0": {
+							"vector": [1, 1, 1]
+						},
+						"1.56": {
+							"vector": [1, 0.975, 1],
+							"easing": "easeInOutSine"
+						},
+						"3.12": {
+							"vector": [1, 1, 1],
+							"easing": "easeInOutSine"
+						}
+					}
+				},
+				"LeftArm": {
+					"rotation": {
+						"vector": [-70, -45, 0]
+					}
+				},
+				"RightArm": {
+					"rotation": {
+						"vector": [-70, 45, 0]
+					}
+				},
+				"LeftLeg": {
+					"rotation": {
+						"vector": [70, 45, 0]
+					}
+				},
+				"RightLeg": {
+					"rotation": {
+						"vector": [70, -45, 0]
+					}
+				}
+			}
+		}
+	},
+	"geckolib_format_version": 2
+}

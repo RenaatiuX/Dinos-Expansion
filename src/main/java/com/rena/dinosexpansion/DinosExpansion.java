@@ -45,6 +45,7 @@ public class DinosExpansion
         EffectInit.EFFECTS.register(bus);
         SoundInit.SOUNDS.register(bus);
         ContainerInit.CONTAINERS.register(bus);
+        SurfaceBuilderInit.SURFACE_BUILDERS.register(bus);
 
 
         // Register ourselves for server and other game events we are interested in

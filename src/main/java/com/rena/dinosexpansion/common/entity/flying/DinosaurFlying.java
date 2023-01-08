@@ -1,14 +1,17 @@
 package com.rena.dinosexpansion.common.entity.flying;
 
 import com.rena.dinosexpansion.common.entity.Dinosaur;
+import com.rena.dinosexpansion.common.entity.ia.movecontroller.FlightMoveController;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MoverType;
+import net.minecraft.entity.ai.controller.MovementController;
 import net.minecraft.entity.passive.IFlyingAnimal;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
@@ -17,7 +20,6 @@ import net.minecraft.world.World;
 
 
 public abstract class DinosaurFlying extends Dinosaur implements IFlyingAnimal {
-
     private static final DataParameter<Boolean> FLYING = EntityDataManager.createKey(DinosaurFlying.class, DataSerializers.BOOLEAN);
 
     public DinosaurFlying(EntityType<? extends Dinosaur> type, World world, DinosaurInfo info, int level) {
@@ -42,6 +44,12 @@ public abstract class DinosaurFlying extends Dinosaur implements IFlyingAnimal {
     public void readAdditional(CompoundNBT nbt) {
         super.readAdditional(nbt);
         this.setFlying(nbt.getBoolean("Flying"));
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+
     }
 
     public boolean isFlying() {
