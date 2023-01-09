@@ -205,7 +205,6 @@ public class DinoBiomeProvider extends BiomeProvider {
         river = RiverTemperatureMixer.INSTANCE.apply(contextFactory.apply(2301L), river, temperature);
 
         //TODO OCEAN
-        areaFactory = TransformOcean.INSTANCE.apply(contextFactory.apply(3000L), areaFactory);
 
         //adding Biomes regarding  the local temperature
         IAreaFactory<T> biomeFactory = DinoBiomeLayerMixer.INSTANCE.apply(contextFactory.apply(1L), areaFactory, temperature);
@@ -215,8 +214,12 @@ public class DinoBiomeProvider extends BiomeProvider {
         biomeFactory = DinoMixRiverAndBiomes.INSTANCE.apply(contextFactory.apply(50L), biomeFactory, river);
 
         areaFactory = AddBiomesToLayer.INSTANCE.apply(contextFactory.apply(51L), areaFactory, biomeFactory);
-        // -10 has to be transformed to the adjacent biomes
-        areaFactory = repeat(1001L, ZoomLayer.NORMAL, areaFactory, 1, contextFactory);
+        areaFactory = repeat(5001L, CleanUpLayer.INSTANCE, areaFactory, 10, contextFactory);
+        areaFactory = repeat(1001L, ZoomLayer.NORMAL, areaFactory, 2, contextFactory);
+        areaFactory = repeat(5001L, SmoothLayer.INSTANCE, areaFactory, 2, contextFactory);
+
+        areaFactory = TransformOcean.INSTANCE.apply(contextFactory.apply(3000L), areaFactory);
+
         //just to help to fill with ocean and beach biomes so i can see the generated map
         //command: /execute in dinosexpansion:dino_dimension run tp ~ ~ ~
 
