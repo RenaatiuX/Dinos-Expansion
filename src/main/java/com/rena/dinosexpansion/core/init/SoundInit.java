@@ -28,8 +28,8 @@ public class SoundInit {
             DRYOSAURUS_AMBIENT4
     );
     public static final RegistryObject<SoundEvent> DRYOSAURUS_HURT1 = create("dryosaurus_hurt1");
-    public static final RegistryObject<SoundEvent> DRYOSAURUS_HURT2 = create("dryosaurus_hurt1");
-    public static final RegistryObject<SoundEvent> DRYOSAURUS_HURT3 = create("dryosaurus_hurt1");
+    public static final RegistryObject<SoundEvent> DRYOSAURUS_HURT2 = create("dryosaurus_hurt2");
+    public static final RegistryObject<SoundEvent> DRYOSAURUS_HURT3 = create("dryosaurus_hurt3");
     public static final ImmutableList<Supplier<SoundEvent>> DRYOSAURUS_HURT = ImmutableList.of(
             DRYOSAURUS_HURT1,
             DRYOSAURUS_HURT2,

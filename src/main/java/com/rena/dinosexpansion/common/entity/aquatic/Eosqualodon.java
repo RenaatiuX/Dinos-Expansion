@@ -55,7 +55,7 @@ public class Eosqualodon extends DinosaurAquatic implements IAnimatable, IAnimat
     public Eosqualodon(EntityType<Eosqualodon> type, World world) {
         super(type, world, new DinosaurInfo("eosqualodon", 200, 100, 50, SleepRhythmGoal.SleepRhythm.NONE), generateLevelWithinBounds(20, 100));
         this.moveController = new AquaticMoveController(this, 1F);
-        switchNavigator(false);
+        //switchNavigator(false);
         updateInfo();
     }
 
