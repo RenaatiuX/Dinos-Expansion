@@ -15,7 +15,7 @@ public enum AddBiomesToLayer implements IAreaTransformer2, IDimOffset0Transforme
         //basically adding all the biomes to the layer or the islands
         if(areaLayerValue == 1 || areaLayerValue == 2){
             //just for safety so there isnt a are where the layer says land but the biomes doesnt have value
-            if (biomesValue > 0)
+            if (biomesValue >= 0)
                 return biomesValue;
             else
                 return -10;

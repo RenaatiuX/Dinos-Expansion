@@ -9,9 +9,9 @@ public enum DinoStartRiver implements IC0Transformer {
     @Override
     public int apply(INoiseRandom context, int value) {
         if (value == 0 || value == 2)
-            return value;
-        if (context.random(2) == 0)
+            return -1;
+        if (context.random(3) == 0)
             return 7;
-        return value;
+        return -1;
     }
 }
