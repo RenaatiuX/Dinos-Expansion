@@ -4,10 +4,14 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.common.world.dimension.layer.*;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SharedConstants;
+import net.minecraft.util.Util;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryLookupCodec;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeRegistry;
 import net.minecraft.world.biome.provider.BiomeProvider;
 import net.minecraft.world.gen.IExtendedNoiseRandom;
 import net.minecraft.world.gen.LazyAreaLayerContext;
@@ -363,6 +367,26 @@ public class DinoBiomeProvider extends BiomeProvider {
 
     @Override
     public Biome getNoiseBiome(int x, int y, int z) {
-        return this.genBiomes.func_242936_a(this.BIOME_REGISTRY, x, z);
+        return this.sample(this.BIOME_REGISTRY, x, z);
+    }
+
+    //TODO Don't delete this, the reason for this is because the original
+    // sample method vanilla uses is bugged with json biomes. This version is safer
+    // and wont throw errors in console about unknown biomes
+    public Biome sample(Registry<Biome> dynamicBiomeRegistry, int x, int z) {
+        int resultBiomeID = this.genBiomes.field_215742_b.getValue(x, z);
+        Biome biome = dynamicBiomeRegistry.getByValue(resultBiomeID);
+        if (biome == null) {
+            if (SharedConstants.developmentMode) {
+                throw Util.pauseDevMode(new IllegalStateException("Unknown biome id: " + resultBiomeID));
+            } else {
+                // Spawn ocean if we can't resolve the biome from the layers.
+                RegistryKey<Biome> backupBiomeKey = BiomeRegistry.getKeyFromID(0);
+                DinosExpansion.LOGGER.warn("Unknown biome id: ${}. Will spawn ${} instead.", resultBiomeID, backupBiomeKey.getLocation());
+                return dynamicBiomeRegistry.getValueForKey(backupBiomeKey);
+            }
+        } else {
+            return biome;
+        }
     }
 }

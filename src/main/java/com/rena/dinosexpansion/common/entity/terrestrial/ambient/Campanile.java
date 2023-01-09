@@ -38,7 +38,7 @@ public class Campanile extends CreatureEntity implements IAnimatable, IAnimation
         super(type, world);
     }
 
-    public Campanile(World world){
+    public Campanile(World world) {
         this(EntityInit.CAMPANILE.get(), world);
     }
 
@@ -47,15 +47,36 @@ public class Campanile extends CreatureEntity implements IAnimatable, IAnimation
         super.registerGoals();
         this.goalSelector.addGoal(0, new SwimGoal(this));
         this.goalSelector.addGoal(1, new PanicGoal(this, 2.0D));
-        this.goalSelector.addGoal(5, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
-        this.goalSelector.addGoal(6, new LookAtGoal(this, PlayerEntity.class, 6.0F));
-        this.goalSelector.addGoal(7, new LookRandomlyGoal(this));
+        this.goalSelector.addGoal(5, new WaterAvoidingRandomWalkingGoal(this, 1.0D){
+            @Override
+            public boolean shouldExecute() {
+                return !Campanile.this.isInShell() && super.shouldExecute();
+            }
+        });
+        this.goalSelector.addGoal(6, new LookAtGoal(this, PlayerEntity.class, 6.0F){
+            @Override
+            public boolean shouldExecute() {
+                return !Campanile.this.isInShell() && super.shouldExecute();
+            }
+        });
+        this.goalSelector.addGoal(7, new LookRandomlyGoal(this){
+            @Override
+            public boolean shouldExecute() {
+                return !Campanile.this.isInShell() && super.shouldExecute();
+            }
+        });
     }
 
     public static AttributeModifierMap.MutableAttribute createAttributes() {
         return MobEntity.func_233666_p_()
                 .createMutableAttribute(Attributes.MAX_HEALTH, 10.0D)
                 .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.1D);
+    }
+
+    @Override
+    protected void registerData() {
+        super.registerData();
+        this.dataManager.register(IS_IN_SHELL, false);
     }
 
     @Override
@@ -146,13 +167,13 @@ public class Campanile extends CreatureEntity implements IAnimatable, IAnimation
     private PlayState predicate(AnimationEvent<Campanile> event) {
         if (this.isInShell()) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("campanile.hidein", ILoopType.EDefaultLoopTypes.HOLD_ON_LAST_FRAME));
-        } else if (this.isOnGround()) {
-            if (event.isMoving()) {
-                event.getController().setAnimation(new AnimationBuilder().addAnimation("campanile.move", ILoopType.EDefaultLoopTypes.LOOP));
-            } else {
-                event.getController().setAnimation(new AnimationBuilder().addAnimation("campanile.idle", ILoopType.EDefaultLoopTypes.LOOP));
-            }
+            return PlayState.CONTINUE;
         }
+        if (event.isMoving()) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("campanile.move", ILoopType.EDefaultLoopTypes.LOOP));
+            return PlayState.CONTINUE;
+        }
+        event.getController().setAnimation(new AnimationBuilder().addAnimation("campanile.idle", ILoopType.EDefaultLoopTypes.LOOP));
         return PlayState.CONTINUE;
     }
 
