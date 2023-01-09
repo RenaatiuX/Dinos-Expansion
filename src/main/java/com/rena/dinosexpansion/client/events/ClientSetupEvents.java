@@ -16,10 +16,13 @@ import com.rena.dinosexpansion.common.entity.aquatic.Parapuzosia;
 import com.rena.dinosexpansion.common.entity.flying.Dimorphodon;
 import com.rena.dinosexpansion.common.entity.semiaquatic.Astorgosuchus;
 import com.rena.dinosexpansion.common.entity.terrestrial.ambient.Campanile;
+import com.rena.dinosexpansion.core.init.BlockInit;
 import com.rena.dinosexpansion.core.init.ContainerInit;
 import com.rena.dinosexpansion.core.init.EntityInit;
 import com.rena.dinosexpansion.core.init.ItemInit;
 import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.item.ItemModelsProperties;
 import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
@@ -37,6 +40,8 @@ public class ClientSetupEvents {
 
     @SubscribeEvent
     public static void clientSetup(FMLClientSetupEvent event) {
+
+        registerPlantsRenderer();
 
         ScreenManager.registerFactory(ContainerInit.TAMING_CONTAINER.get(), TamingScreen::new);
         ScreenManager.registerFactory(ContainerInit.ORDER_CONTAINER.get(), OrderScreen::new);
@@ -81,5 +86,28 @@ public class ClientSetupEvents {
         event.put(EntityInit.ASTORGOSUCHUS.get(), Astorgosuchus.createAttributes().create());
         event.put(EntityInit.CAMPANILE.get(), Campanile.createAttributes().create());
         event.put(EntityInit.HERMIT.get(), Hermit.createAttributes());
+    }
+
+    public static void registerPlantsRenderer(){
+        RenderTypeLookup.setRenderLayer(BlockInit.LAVENDER.get(), RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(BlockInit.LEMON_VERBENA.get(), RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(BlockInit.ARCHAEOSIGILLARIA.get(), RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(BlockInit.CEPHALOTAXUS.get(), RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(BlockInit.DILLHOFFIA.get(), RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(BlockInit.EPHEDRA.get(), RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(BlockInit.OSMUNDA.get(), RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(BlockInit.SARRACENIA.get(), RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(BlockInit.VACCINIUM.get(), RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(BlockInit.ZAMITES.get(), RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(BlockInit.WELWITSCHIA.get(), RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(BlockInit.PACHYPODA.get(), RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(BlockInit.HORSETAIL.get(), RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(BlockInit.FOOZIA.get(), RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(BlockInit.DUISBERGIA.get(), RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(BlockInit.BENNETTITALES.get(), RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(BlockInit.CRATAEGUS.get(), RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(BlockInit.FLORISSANTIA.get(), RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(BlockInit.AMORPHOPHALLUS.get(), RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(BlockInit.TEMPSKYA.get(), RenderType.getCutout());
     }
 }

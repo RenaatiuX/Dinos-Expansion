@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "half=lower": {
+      "model": "dinosexpansion:block/bennettitales_bottom"
+    },
+    "half=upper": {
+      "model": "dinosexpansion:block/bennettitales_top"
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "height=0": {
+      "model": "dinosexpansion:block/tempskya_0"
+    },
+    "height=1": {
+      "model": "dinosexpansion:block/tempskya_1"
+    },
+    "height=2": {
+      "model": "dinosexpansion:block/tempskya_2"
+    }
+  }
+}

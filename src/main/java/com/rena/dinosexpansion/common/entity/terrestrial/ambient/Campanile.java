@@ -47,7 +47,7 @@ public class Campanile extends CreatureEntity implements IAnimatable, IAnimation
         super.registerGoals();
         this.goalSelector.addGoal(0, new SwimGoal(this));
         this.goalSelector.addGoal(1, new PanicGoal(this, 2.0D));
-        this.goalSelector.addGoal(5, new WaterAvoidingRandomWalkingGoal(this, 1.0D){
+        this.goalSelector.addGoal(5, new WaterAvoidingRandomWalkingGoal(this, 0.5D){
             @Override
             public boolean shouldExecute() {
                 return !Campanile.this.isInShell() && super.shouldExecute();
@@ -146,7 +146,7 @@ public class Campanile extends CreatureEntity implements IAnimatable, IAnimation
         if (entity instanceof Dinosaur) {
             return true;
         }
-        return entity.getWidth() >= 1.2;
+        return entity.getWidth() >= 1.5;
     }
 
     @Override
@@ -169,7 +169,7 @@ public class Campanile extends CreatureEntity implements IAnimatable, IAnimation
             event.getController().setAnimation(new AnimationBuilder().addAnimation("campanile.hidein", ILoopType.EDefaultLoopTypes.HOLD_ON_LAST_FRAME));
             return PlayState.CONTINUE;
         }
-        if (event.isMoving()) {
+        else if (event.isMoving()) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("campanile.move", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }

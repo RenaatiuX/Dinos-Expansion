@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "half=lower": {
+      "model": "dinosexpansion:block/crataegus_bottom"
+    },
+    "half=upper": {
+      "model": "dinosexpansion:block/crataegus_top"
+    }
+  }
+}

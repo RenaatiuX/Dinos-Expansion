@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "half=lower": {
+      "model": "dinosexpansion:block/horsetail_bottom"
+    },
+    "half=upper": {
+      "model": "dinosexpansion:block/horsetail_top"
+    }
+  }
+}

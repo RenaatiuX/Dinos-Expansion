@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "half=lower": {
+      "model": "dinosexpansion:block/amorphophallus_bottom"
+    },
+    "half=upper": {
+      "model": "dinosexpansion:block/amorphophallus_top"
+    }
+  }
+}

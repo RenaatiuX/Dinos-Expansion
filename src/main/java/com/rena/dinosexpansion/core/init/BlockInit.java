@@ -1,8 +1,9 @@
 package com.rena.dinosexpansion.core.init;
 
 import com.rena.dinosexpansion.DinosExpansion;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Block;
+import com.rena.dinosexpansion.common.block.plant.SinglePlantBlock;
+import com.rena.dinosexpansion.common.block.plant.TriplePlantBlock;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -26,7 +27,51 @@ public class BlockInit {
     public static final RegistryObject<Block> MOSSY_FUTURISTIC_BLOCK1 = register("mossy_futuristic_block_1", () -> new Block(AbstractBlock.Properties.create(Material.ROCK).hardnessAndResistance(100f, 2400f).harvestTool(ToolType.PICKAXE).harvestLevel(3).setRequiresTool()), ModItemGroups.BLOCKS);
     public static final RegistryObject<Block> MOSSY_FUTURISTIC_BLOCK2 = register("mossy_futuristic_block_2", () -> new Block(AbstractBlock.Properties.create(Material.ROCK).hardnessAndResistance(100f, 2400f).harvestTool(ToolType.PICKAXE).harvestLevel(3).setRequiresTool()), ModItemGroups.BLOCKS);
 
+    //Plants
+    public static final RegistryObject<Block> LAVENDER = register("lavender",
+            ()-> new SinglePlantBlock(AbstractBlock.Properties.create(Material.PLANTS).doesNotBlockMovement().zeroHardnessAndResistance().sound(SoundType.PLANT)), ModItemGroups.BLOCKS);
+    public static final RegistryObject<Block> LEMON_VERBENA = register("lemon_verbena",
+            ()-> new SinglePlantBlock(AbstractBlock.Properties.create(Material.PLANTS).doesNotBlockMovement().zeroHardnessAndResistance().sound(SoundType.PLANT)), ModItemGroups.BLOCKS);
+    public static final RegistryObject<Block> ARCHAEOSIGILLARIA = register("archaeosigillaria",
+            ()-> new SinglePlantBlock(AbstractBlock.Properties.create(Material.PLANTS).doesNotBlockMovement().zeroHardnessAndResistance().sound(SoundType.PLANT)), ModItemGroups.BLOCKS);
+    public static final RegistryObject<Block> CEPHALOTAXUS = register("cephalotaxus",
+            ()-> new SinglePlantBlock(AbstractBlock.Properties.create(Material.PLANTS).doesNotBlockMovement().zeroHardnessAndResistance().sound(SoundType.PLANT)), ModItemGroups.BLOCKS);
+    public static final RegistryObject<Block> DILLHOFFIA = register("dillhoffia",
+            ()-> new SinglePlantBlock(AbstractBlock.Properties.create(Material.PLANTS).doesNotBlockMovement().zeroHardnessAndResistance().sound(SoundType.PLANT)), ModItemGroups.BLOCKS);
+    public static final RegistryObject<Block> EPHEDRA = register("ephedra",
+            ()-> new SinglePlantBlock(AbstractBlock.Properties.create(Material.PLANTS).doesNotBlockMovement().zeroHardnessAndResistance().sound(SoundType.PLANT)), ModItemGroups.BLOCKS);
+    public static final RegistryObject<Block> OSMUNDA = register("osmunda",
+            ()-> new SinglePlantBlock(AbstractBlock.Properties.create(Material.PLANTS).doesNotBlockMovement().zeroHardnessAndResistance().sound(SoundType.PLANT)), ModItemGroups.BLOCKS);
+    public static final RegistryObject<Block> SARRACENIA = register("sarracenia",
+            ()-> new SinglePlantBlock(AbstractBlock.Properties.create(Material.PLANTS).doesNotBlockMovement().zeroHardnessAndResistance().sound(SoundType.PLANT)), ModItemGroups.BLOCKS);
+    public static final RegistryObject<Block> VACCINIUM = register("vaccinium",
+            ()-> new SinglePlantBlock(AbstractBlock.Properties.create(Material.PLANTS).doesNotBlockMovement().zeroHardnessAndResistance().sound(SoundType.PLANT)), ModItemGroups.BLOCKS);
+    public static final RegistryObject<Block> ZAMITES = register("zamites",
+            ()-> new SinglePlantBlock(AbstractBlock.Properties.create(Material.PLANTS).doesNotBlockMovement().zeroHardnessAndResistance().sound(SoundType.PLANT)), ModItemGroups.BLOCKS);
+    public static final RegistryObject<Block> WELWITSCHIA = register("welwitschia",
+            ()-> new SinglePlantBlock(AbstractBlock.Properties.create(Material.PLANTS).doesNotBlockMovement().zeroHardnessAndResistance().sound(SoundType.PLANT)), ModItemGroups.BLOCKS);
+    public static final RegistryObject<Block> PACHYPODA = register("pachypoda",
+            ()-> new SinglePlantBlock(AbstractBlock.Properties.create(Material.PLANTS).doesNotBlockMovement().zeroHardnessAndResistance().sound(SoundType.PLANT)), ModItemGroups.BLOCKS);
 
+    //Double Tall Flower
+    public static final RegistryObject<Block> HORSETAIL = register("horsetail",
+            ()-> new DoublePlantBlock(AbstractBlock.Properties.create(Material.PLANTS).doesNotBlockMovement().zeroHardnessAndResistance().sound(SoundType.PLANT)), ModItemGroups.BLOCKS);
+    public static final RegistryObject<Block> FOOZIA = register("foozia",
+            ()-> new DoublePlantBlock(AbstractBlock.Properties.create(Material.PLANTS).doesNotBlockMovement().zeroHardnessAndResistance().sound(SoundType.PLANT)), ModItemGroups.BLOCKS);
+    public static final RegistryObject<Block> DUISBERGIA = register("duisbergia",
+            ()-> new DoublePlantBlock(AbstractBlock.Properties.create(Material.PLANTS).doesNotBlockMovement().zeroHardnessAndResistance().sound(SoundType.PLANT)), ModItemGroups.BLOCKS);
+    public static final RegistryObject<Block> BENNETTITALES = register("bennettitales",
+            ()-> new DoublePlantBlock(AbstractBlock.Properties.create(Material.PLANTS).doesNotBlockMovement().zeroHardnessAndResistance().sound(SoundType.PLANT)), ModItemGroups.BLOCKS);
+    public static final RegistryObject<Block> CRATAEGUS = register("crataegus",
+            ()-> new DoublePlantBlock(AbstractBlock.Properties.create(Material.PLANTS).doesNotBlockMovement().zeroHardnessAndResistance().sound(SoundType.PLANT)), ModItemGroups.BLOCKS);
+    public static final RegistryObject<Block> FLORISSANTIA = register("florissantia",
+            ()-> new DoublePlantBlock(AbstractBlock.Properties.create(Material.PLANTS).doesNotBlockMovement().zeroHardnessAndResistance().sound(SoundType.PLANT)), ModItemGroups.BLOCKS);
+    public static final RegistryObject<Block> AMORPHOPHALLUS = register("amorphophallus",
+            ()-> new DoublePlantBlock(AbstractBlock.Properties.create(Material.PLANTS).doesNotBlockMovement().zeroHardnessAndResistance().sound(SoundType.PLANT)), ModItemGroups.BLOCKS);
+
+    //Triple Tall Flower
+    public static final RegistryObject<Block> TEMPSKYA = register("tempskya",
+            ()-> new TriplePlantBlock(AbstractBlock.Properties.create(Material.PLANTS).doesNotBlockMovement().zeroHardnessAndResistance().sound(SoundType.PLANT)), ModItemGroups.BLOCKS);
 
     public static final <T extends Block> RegistryObject<T> register(String name, Supplier<T> blockSupplier, ItemGroup tab){
         return register(name, blockSupplier, () -> new Item.Properties().group(tab));

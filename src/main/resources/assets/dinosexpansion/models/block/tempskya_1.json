@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "dinosexpansion:block/tempskya_center"
+  }
+}
