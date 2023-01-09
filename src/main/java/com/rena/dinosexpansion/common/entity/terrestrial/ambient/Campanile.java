@@ -11,6 +11,8 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.world.World;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimationTickable;
@@ -126,8 +128,19 @@ public class Campanile extends CreatureEntity implements IAnimatable, IAnimation
         return entity.getWidth() >= 1.2;
     }
 
-    public boolean isInsideCampanileShell() {
-        return this.isInShell();
+    @Override
+    public boolean attackEntityFrom(DamageSource source, float amount) {
+        if (amount > 0 && this.isInShell() && source.getTrueSource() != null) {
+            this.playSound(SoundEvents.ENTITY_ITEM_BREAK, 1, this.getRNG().nextFloat() + 0.8F);
+            if (this.getRidingEntity() != null) {
+                return super.attackEntityFrom(source, amount);
+            }
+            return false;
+        }
+        if (!this.isInShell()) {
+            this.setInShell(true);
+        }
+        return super.attackEntityFrom(source, amount);
     }
 
     private PlayState predicate(AnimationEvent<Campanile> event) {
