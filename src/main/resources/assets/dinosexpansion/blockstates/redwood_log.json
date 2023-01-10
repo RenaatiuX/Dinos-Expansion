@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=y": {
+      "model": "dinosexpansion:block/redwood_log"
+    },
+    "axis=z": {
+      "model": "dinosexpansion:block/redwood_log",
+      "x": 90
+    },
+    "axis=x": {
+      "model": "dinosexpansion:block/redwood_log",
+      "x": 90,
+      "y": 90
+    }
+  }
+}

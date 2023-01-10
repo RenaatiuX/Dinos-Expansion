@@ -26,6 +26,7 @@ public class DinosExpansion
 
     // Directly reference a log4j logger.
     public static final Logger LOGGER = LogManager.getLogger();
+    public static boolean ENABLE_OVERWORLD_TREES = true;
 
     public DinosExpansion() {
 
@@ -45,6 +46,7 @@ public class DinosExpansion
         EffectInit.EFFECTS.register(bus);
         SoundInit.SOUNDS.register(bus);
         ContainerInit.CONTAINERS.register(bus);
+        FeatureInit.FEATURES.register(bus);
         SurfaceBuilderInit.SURFACE_BUILDERS.register(bus);
 
 
@@ -60,6 +62,7 @@ public class DinosExpansion
         event.enqueueWork(() ->  {
             CriteriaTriggerInit.REGISTRY.forEach(CriteriaTriggers::register);
             Network.register();
+            FeatureInit.registerConfiguredFeatures();
             StructureInit.setupStructures();
             DimensionInit.setupDimension();
         });

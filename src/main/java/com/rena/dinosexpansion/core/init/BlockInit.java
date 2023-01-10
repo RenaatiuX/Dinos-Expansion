@@ -1,10 +1,13 @@
 package com.rena.dinosexpansion.core.init;
 
 import com.rena.dinosexpansion.DinosExpansion;
+import com.rena.dinosexpansion.common.block.BaseSaplingBlock;
 import com.rena.dinosexpansion.common.block.plant.SinglePlantBlock;
 import com.rena.dinosexpansion.common.block.plant.TriplePlantBlock;
+import com.rena.dinosexpansion.common.world.gen.trees.ModTreeSpawners;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.trees.OakTree;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -73,15 +76,23 @@ public class BlockInit {
     public static final RegistryObject<Block> TEMPSKYA = register("tempskya",
             ()-> new TriplePlantBlock(AbstractBlock.Properties.create(Material.PLANTS).doesNotBlockMovement().zeroHardnessAndResistance().sound(SoundType.PLANT)), ModItemGroups.BLOCKS);
 
-    public static final <T extends Block> RegistryObject<T> register(String name, Supplier<T> blockSupplier, ItemGroup tab){
+    //Tree
+    public static final RegistryObject<Block> REDWOOD_LEAVES = register("redwood_leaves",
+            ()-> new LeavesBlock(AbstractBlock.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).tickRandomly().sound(SoundType.PLANT).notSolid()
+                    .setBlocksVision((state, world, pos) -> false).setSuffocates((state, world, pos) -> false).harvestTool(ToolType.HOE)), ModItemGroups.BLOCKS);
+    public static final RegistryObject<Block> REDWOOD_LOG = register("redwood_log",
+            ()-> new RotatedPillarBlock((AbstractBlock.Properties.create(Material.WOOD).sound(SoundType.WOOD).hardnessAndResistance(2.0F))), ModItemGroups.BLOCKS);
+    public static final RegistryObject<Block> REDWOOD_SAPLING = register("redwood_sapling",
+            ()-> new BaseSaplingBlock(ModTreeSpawners.REDWOOD, AbstractBlock.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().zeroHardnessAndResistance().sound(SoundType.PLANT)), ModItemGroups.BLOCKS);
+    public static <T extends Block> RegistryObject<T> register(String name, Supplier<T> blockSupplier, ItemGroup tab){
         return register(name, blockSupplier, () -> new Item.Properties().group(tab));
     }
 
-    public static final <T extends Block> RegistryObject<T> register(String name, Supplier<T> blockSupplier, Supplier<Item.Properties> properties){
+    public static <T extends Block> RegistryObject<T> register(String name, Supplier<T> blockSupplier, Supplier<Item.Properties> properties){
         return register(name, blockSupplier, b -> new BlockItem(b, properties.get()));
     }
 
-    public static final <T extends Block> RegistryObject<T> register(String name, Supplier<T> blockSupplier, Function<Block, Item> blockItemFunction){
+    public static <T extends Block> RegistryObject<T> register(String name, Supplier<T> blockSupplier, Function<Block, Item> blockItemFunction){
         RegistryObject<T> block = BLOCKS.register(name, blockSupplier);
         ItemInit.ITEMS.register(name, () -> blockItemFunction.apply(block.get()));
         return block;
