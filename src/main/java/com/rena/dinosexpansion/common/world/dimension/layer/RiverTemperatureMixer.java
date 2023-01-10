@@ -19,6 +19,7 @@ public enum RiverTemperatureMixer implements IAreaTransformer2, IDimOffset0Trans
         else if (temperatureValue - 100 >= 0 && riverValue == 7){
             BiomeManager.BiomeType type = BiomeManager.BiomeType.values()[temperatureValue - 100];
             switch (type){
+                case COOL:
                 case ICY:
                     return DinoBiomeProvider.getId(DinoBiomeProvider.FROZEN_RIVER);
                 default:
