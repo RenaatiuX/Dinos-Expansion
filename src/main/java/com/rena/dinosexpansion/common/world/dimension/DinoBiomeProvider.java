@@ -196,13 +196,13 @@ public class DinoBiomeProvider extends BiomeProvider {
         // 1 = land
         //2 = island
         //3 = not deep ocean(sourrounding of the islands so they come on top
-        IAreaFactory<T> temperature = AddTeperature.INSTANCE.apply(contextFactory.apply(2004L), areaFactory);
+        IAreaFactory<T> temperature = AddTemperature.INSTANCE.apply(contextFactory.apply(2004L));
         temperature = repeat(2005L, ZoomLayer.NORMAL, temperature, 4, contextFactory);
-        temperature = SmoothLayer.INSTANCE.apply(contextFactory.apply(2100L), temperature);
+        temperature = repeat(2005L, SmoothLayer.INSTANCE, temperature, 10, contextFactory);
 
         //adding rivers to the map and smoothing them out and make the regard temperature
         IAreaFactory<T> river = DinoStartRiver.INSTANCE.apply(contextFactory.apply(2101L), areaFactory);
-        river = SmoothLayer.INSTANCE.apply(contextFactory.apply(2251L), river);
+        river = repeat(2102L, DinoRiverGrow.INSTANCE, river,3,  contextFactory);
         //this makes everyting above and equal to 7 to 7 and everything else to -1
         river = CleanRiverLayer.INSTANCE.apply(contextFactory.apply(2250L), river);
         //at this point there are actual BiomeIds of the DinoRiver
@@ -211,18 +211,13 @@ public class DinoBiomeProvider extends BiomeProvider {
         //TODO OCEAN
 
         //adding Biomes regarding  the local temperature
-        IAreaFactory<T> biomeFactory = DinoBiomeLayerMixer.INSTANCE.apply(contextFactory.apply(1L), areaFactory, temperature);
-        biomeFactory = repeat(4L, ZoomLayer.NORMAL, biomeFactory, 3, contextFactory);
-        biomeFactory = SmoothLayer.INSTANCE.apply(contextFactory.apply(2L), biomeFactory);
-        //adding the rivers to the biomes
-        biomeFactory = DinoMixRiverAndBiomes.INSTANCE.apply(contextFactory.apply(50L), biomeFactory, river);
-
-        areaFactory = AddBiomesToLayer.INSTANCE.apply(contextFactory.apply(51L), areaFactory, biomeFactory);
-        areaFactory = repeat(5001L, CleanUpLayer.INSTANCE, areaFactory, 10, contextFactory);
-        areaFactory = repeat(1001L, ZoomLayer.NORMAL, areaFactory, 2, contextFactory);
-        areaFactory = repeat(5001L, SmoothLayer.INSTANCE, areaFactory, 2, contextFactory);
+        areaFactory = DinoBiomeLayerMixer.INSTANCE.apply(contextFactory.apply(1L), areaFactory, temperature);
 
         areaFactory = TransformOcean.INSTANCE.apply(contextFactory.apply(3000L), areaFactory);
+        areaFactory = MakeBeaches.INSTANCE.apply(contextFactory.apply(3001L), areaFactory);
+        areaFactory = repeat(1001L, ZoomLayer.NORMAL, areaFactory, 4, contextFactory);
+        areaFactory = repeat(5001L, SmoothLayer.INSTANCE, areaFactory, 2, contextFactory);
+        //areaFactory = DinoMixRiverIntoArea.INSTANCE.apply(contextFactory.apply(6000L), areaFactory, river);
 
         //just to help to fill with ocean and beach biomes so i can see the generated map
         //command: /execute in dinosexpansion:dino_dimension run tp ~ ~ ~
@@ -352,6 +347,10 @@ public class DinoBiomeProvider extends BiomeProvider {
                 biomeIn == DinoBiomeProvider.LAYERS_BIOME_REGISTRY
                         .getId(DinoBiomeProvider.LAYERS_BIOME_REGISTRY
                                 .getOrDefault(DinoBiomeProvider.FROZEN_OCEAN));
+    }
+
+    public static boolean isBeach(int id){
+        return id == getId(BEACH) || id == getId(SNOW_BEACH);
     }
 
     public static int getId(ResourceLocation biome){

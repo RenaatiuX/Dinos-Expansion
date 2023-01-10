@@ -30,11 +30,11 @@ public enum DinoBiomeLayerMixer implements IAreaTransformer2, IDimOffset0Transfo
     public int apply(INoiseRandom random, IArea area, IArea temperature, int x, int z) {
         int areaValue = area.getValue(this.getOffsetX(x), this.getOffsetZ(z));
         int temperatureValue = temperature.getValue(this.getOffsetX(x), this.getOffsetZ(z));
-        if ((areaValue == 1 || areaValue == 2)) {
+        if (areaValue == 1 || areaValue == 2) {
             BiomeManager.BiomeType type = BiomeManager.BiomeType.values()[temperatureValue - 100];
             List<ResourceLocation> possibleBiomes = NORMAL_LANDBIOMES.get(type);
             return DinoBiomeProvider.getId(possibleBiomes.get(random.random(possibleBiomes.size())));
         }
-        return -1;
+        return areaValue;
     }
 }

@@ -1,16 +1,18 @@
 package com.rena.dinosexpansion.common.world.dimension.layer;
 
 import net.minecraft.world.gen.INoiseRandom;
+import net.minecraft.world.gen.layer.traits.IAreaTransformer0;
 import net.minecraft.world.gen.layer.traits.IC0Transformer;
 import net.minecraftforge.common.BiomeManager;
 
-public enum AddTeperature implements IC0Transformer {
+public enum AddTemperature implements IAreaTransformer0 {
     INSTANCE;
 
     //adds BiomeTypes with an offset of 100
     //add temperature values all over the place
+    //this is weighted so the more biomes are in one zone the more of these zones will spawn
     @Override
-    public int apply(INoiseRandom context, int value) {
+    public int apply(INoiseRandom context, int x, int z) {
         int icyWeight = DinoBiomeLayerMixer.NORMAL_LANDBIOMES.get(BiomeManager.BiomeType.ICY).size();
         int coolWeight = DinoBiomeLayerMixer.NORMAL_LANDBIOMES.get(BiomeManager.BiomeType.COOL).size();
         int warmWeight = DinoBiomeLayerMixer.NORMAL_LANDBIOMES.get(BiomeManager.BiomeType.WARM).size();

@@ -10,7 +10,7 @@ public enum DinoStartRiver implements IC0Transformer {
     public int apply(INoiseRandom context, int value) {
         if (value == 0 || value == 2)
             return -1;
-        if (context.random(3) == 0)
+        if (context.random(30) == 0)
             return 7;
         return -1;
     }
