@@ -1,6 +1,8 @@
 package com.rena.dinosexpansion.common.entity;
 
+import com.rena.dinosexpansion.common.world.util.CompoundNbtUtil;
 import com.rena.dinosexpansion.core.init.EntityInit;
+import com.rena.dinosexpansion.core.init.ModVillagerTrades;
 import net.minecraft.block.BedBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
@@ -12,11 +14,14 @@ import net.minecraft.entity.effect.LightningBoltEntity;
 import net.minecraft.entity.item.ExperienceOrbEntity;
 import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
 import net.minecraft.entity.merchant.villager.VillagerData;
+import net.minecraft.entity.merchant.villager.VillagerTrades;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.MerchantOffer;
+import net.minecraft.item.MerchantOffers;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -26,6 +31,7 @@ import net.minecraft.potion.Effects;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
+import net.minecraft.util.ObjectIntIdentityMap;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
@@ -38,6 +44,7 @@ import net.minecraftforge.event.entity.player.SleepingLocationCheckEvent;
 import net.minecraftforge.eventbus.api.Event;
 
 import javax.annotation.Nullable;
+import java.util.Arrays;
 
 public class Hermit extends AbstractVillagerEntity implements IRangedAttackMob {
 
@@ -86,7 +93,7 @@ public class Hermit extends AbstractVillagerEntity implements IRangedAttackMob {
     protected void registerData() {
         super.registerData();
         this.dataManager.register(LEVEL, 1);
-        this.dataManager.register(REPUTATION, (byte) 50);
+        this.dataManager.register(REPUTATION, (byte) 100);
     }
 
     @Override
@@ -96,10 +103,12 @@ public class Hermit extends AbstractVillagerEntity implements IRangedAttackMob {
             if (hand == Hand.MAIN_HAND) {
                 playerIn.addStat(Stats.TALKED_TO_VILLAGER);
             }
+            System.out.println(getReputation());
             if (!this.getOffers().isEmpty() && getReputation() >= 10) {
                 if (!this.world.isRemote) {
                     this.setCustomer(playerIn);
-                    this.openMerchantContainer(playerIn, this.getDisplayName(), 1);
+                    this.openMerchantContainer(playerIn, this.getDisplayName(), getLevel());
+                    System.out.println("should open");
                 }
 
             } else if (getReputation() < 10) {
@@ -132,6 +141,36 @@ public class Hermit extends AbstractVillagerEntity implements IRangedAttackMob {
     }
 
     @Override
+    public void writeAdditional(CompoundNBT compound) {
+        super.writeAdditional(compound);
+        compound.putLong("lastRestock", this.lastRestock);
+        compound.putInt("restocksToday", this.restocksToday);
+        compound.putInt("hermitxp", this.xp);
+        compound.putBoolean("hasLeveledUp", this.leveledUp);
+        compound.putInt("timeUntilReset", this.timeUntilReset);
+        compound.putInt("hermitLevel", getLevel());
+        compound.putByte("hermitReputation", this.dataManager.get(REPUTATION));
+        if (bedPos != null)
+            compound.put("bedPos", CompoundNbtUtil.saveBlockPos(bedPos));
+    }
+
+    @Override
+    public void readAdditional(CompoundNBT compound) {
+        super.readAdditional(compound);
+        this.lastRestock = compound.getLong("lastRestock");
+        this.restocksToday = compound.getInt("restocksToday");
+        this.xp = compound.getInt("hermitxp");
+        this.leveledUp = compound.getBoolean("hasLeveledUp");
+        this.timeUntilReset = compound.getInt("timeUntilReset");
+        //this.dataManager.set(LEVEL, compound.getInt("hermitLevel"));
+        //this.dataManager.set(REPUTATION, compound.getByte("hermitReputation"));
+        if (compound.contains("bedPos")){
+            this.bedPos = CompoundNbtUtil.readBlockPos(compound.getCompound("bedPos"));
+        }
+
+    }
+
+    @Override
     protected void onVillagerTrade(MerchantOffer offer) {
         int i = 3 + this.rand.nextInt(4);
         this.xp += offer.getGivenExp();
@@ -159,7 +198,13 @@ public class Hermit extends AbstractVillagerEntity implements IRangedAttackMob {
 
     @Override
     protected void populateTradeData() {
-
+        System.out.println(this.getLevel());
+        VillagerTrades.ITrade[] trades = ModVillagerTrades.HERMIT_TRADES.get(this.getLevel());
+        System.out.println(Arrays.toString(trades));
+        if (trades != null) {
+            MerchantOffers merchantoffers = this.getOffers();
+            this.addTrades(merchantoffers, trades, 2);
+        }
     }
 
     @Nullable
@@ -194,6 +239,7 @@ public class Hermit extends AbstractVillagerEntity implements IRangedAttackMob {
     @Override
     public void setRevengeTarget(@Nullable LivingEntity livingBase) {
         if (livingBase != null) {
+            System.out.println("reduced");
             this.dataManager.set(REPUTATION, (byte) Math.max(0, getReputation() - 20));
         }
         super.setRevengeTarget(livingBase);
@@ -250,7 +296,7 @@ public class Hermit extends AbstractVillagerEntity implements IRangedAttackMob {
     @Override
     public void attackEntityWithRangedAttack(LivingEntity target, float distanceFactor) {
         target.addPotionEffect(new EffectInstance(Effects.BLINDNESS, 100, 1));
-        target.addPotionEffect(new EffectInstance(Effects.SLOWNESS, 100, 2));
+        target.addPotionEffect(new EffectInstance(Effects.SLOWNESS, 100, 3));
         LightningBoltEntity lightningboltentity = EntityType.LIGHTNING_BOLT.create(this.world);
         lightningboltentity.moveForced(Vector3d.copyCenteredHorizontally(target.getPosition()));
         this.world.addEntity(lightningboltentity);

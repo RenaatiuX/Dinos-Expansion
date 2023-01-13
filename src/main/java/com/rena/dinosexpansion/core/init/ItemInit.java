@@ -9,6 +9,7 @@ import com.rena.dinosexpansion.common.item.arrow.DartItem;
 import com.rena.dinosexpansion.common.item.arrow.TinyRockItem;
 import com.rena.dinosexpansion.common.item.util.BaseNarcoticItem;
 import net.minecraft.item.Item;
+import net.minecraft.item.Rarity;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
@@ -113,4 +114,6 @@ public class ItemInit {
     public static final RegistryObject<Item> KIBBLE_EXCEPTIONAL = ITEMS.register("kibble_exceptional", () -> new Item(new Item.Properties().group(ModItemGroups.ITEMS).food(FoodInit.KIBBLE_EXCEPTIONAL)));
     public static final RegistryObject<Item> KIBBLE_SUPERIOR = ITEMS.register("kibble_superior", () -> new Item(new Item.Properties().group(ModItemGroups.ITEMS).food(FoodInit.KIBBLE_SUPERIOR)));
     public static final RegistryObject<Item> KIBBLE_EXTRAORDINARY = ITEMS.register("kibble_extraordinary", () -> new Item(new Item.Properties().group(ModItemGroups.ITEMS).food(FoodInit.KIBBLE_EXTRAORDINARY)));
+
+    public static final RegistryObject<Item> DINOPEDIA = ITEMS.register("dinopedia", () -> new Item(new Item.Properties().group(ModItemGroups.ITEMS).rarity(Rarity.RARE)));
 }

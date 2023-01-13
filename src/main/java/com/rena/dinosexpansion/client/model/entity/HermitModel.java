@@ -4,6 +4,8 @@ import com.google.common.collect.Lists;
 import com.rena.dinosexpansion.common.entity.Hermit;
 import net.minecraft.client.renderer.entity.model.SegmentedModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
+import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
+import net.minecraft.util.math.MathHelper;
 
 public class HermitModel extends SegmentedModel<Hermit> {
 
@@ -62,6 +64,26 @@ public class HermitModel extends SegmentedModel<Hermit> {
 
     @Override
     public void setRotationAngles(Hermit entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-        
+        boolean flag = false;
+        if (entityIn instanceof AbstractVillagerEntity) {
+            flag = ((AbstractVillagerEntity)entityIn).getShakeHeadTicks() > 0;
+        }
+
+        this.villagerHead.rotateAngleY = netHeadYaw * ((float)Math.PI / 180F);
+        this.villagerHead.rotateAngleX = headPitch * ((float)Math.PI / 180F);
+        if (flag) {
+            this.villagerHead.rotateAngleZ = 0.3F * MathHelper.sin(0.45F * ageInTicks);
+            this.villagerHead.rotateAngleX = 0.4F;
+        } else {
+            this.villagerHead.rotateAngleZ = 0.0F;
+        }
+
+        this.villagerArms.rotationPointY = 3.0F;
+        this.villagerArms.rotationPointZ = -1.0F;
+        this.villagerArms.rotateAngleX = -0.75F;
+        this.rightVillagerLeg.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount * 0.5F;
+        this.leftVillagerLeg.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.4F * limbSwingAmount * 0.5F;
+        this.rightVillagerLeg.rotateAngleY = 0.0F;
+        this.leftVillagerLeg.rotateAngleY = 0.0F;
     }
 }
