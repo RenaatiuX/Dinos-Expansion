@@ -1,0 +1,6 @@
+{
+  "parent": "block/cross",
+  "textures": {
+    "cross": "dinosexpansion:block/prototaxites/prototaxites_top"
+  }
+}

@@ -1,6 +1,5 @@
 package com.rena.dinosexpansion.common.entity.aquatic;
 
-import com.rena.dinosexpansion.common.entity.ia.DinosaurAISwimBottom;
 import com.rena.dinosexpansion.common.entity.ia.SleepRhythmGoal;
 import com.rena.dinosexpansion.common.entity.ia.movecontroller.AquaticMoveController;
 import com.rena.dinosexpansion.core.init.EntityInit;
@@ -9,10 +8,6 @@ import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.monster.DrownedEntity;
-import net.minecraft.entity.monster.GuardianEntity;
-import net.minecraft.entity.passive.WaterMobEntity;
-import net.minecraft.entity.passive.fish.SalmonEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
@@ -74,7 +69,7 @@ public class Parapuzosia extends DinosaurAquatic implements IAnimatable, IAnimat
         super.registerGoals();
         this.goalSelector.addGoal(0, new FindWaterGoal(this));
         this.goalSelector.addGoal(2, new ParapuzosiaAiGrab());
-        //this.goalSelector.addGoal(3, new DinosaurAISwimBottom(this, 0.8F, 7));
+        //this.goalSelector.addGoal(3, new DinosaurSwimBottomGoal(this, 0.8F, 7));
         this.goalSelector.addGoal(5, new LookRandomlyGoal(this));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, DrownedEntity.class, true));
     }

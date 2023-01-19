@@ -3,27 +3,22 @@ package com.rena.dinosexpansion.common.block.plant;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.BushBlock;
-import net.minecraft.block.IGrowable;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.DoubleBlockHalf;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nullable;
-import java.util.Random;
 
-public class TriplePlantBlock extends BushBlock {
-    public static final IntegerProperty HEIGHT = IntegerProperty.create("height", 0, 2);
-    public TriplePlantBlock(Properties properties) {
+public class QuadruplePlantBlock extends BushBlock {
+    public static final IntegerProperty HEIGHT = IntegerProperty.create("height", 0, 3);
+    public QuadruplePlantBlock(Properties properties) {
         super(properties);
     }
 
@@ -47,9 +42,10 @@ public class TriplePlantBlock extends BushBlock {
 
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
-        worldIn.setBlockState(pos, this.getDefaultState().with(HEIGHT, 0), 2);
+        worldIn.setBlockState(pos, this.getDefaultState().with(HEIGHT, 0), 3);
         worldIn.setBlockState(pos.up(), this.getDefaultState().with(HEIGHT, 1), 2);
-        worldIn.setBlockState(pos.up(2), this.getDefaultState().with(HEIGHT, 2), 2);
+        worldIn.setBlockState(pos.up(2), this.getDefaultState().with(HEIGHT, 2), 3);
+        worldIn.setBlockState(pos.up(3), this.getDefaultState().with(HEIGHT, 3), 3);
     }
 
     @Override
@@ -59,27 +55,45 @@ public class TriplePlantBlock extends BushBlock {
                 worldIn.destroyBlock(pos, true);
                 worldIn.destroyBlock(pos.up(), false);
                 worldIn.destroyBlock(pos.up(2), false);
+                worldIn.destroyBlock(pos.up(3), false);
             } else {
                 worldIn.destroyBlock(pos, false);
                 worldIn.destroyBlock(pos.up(), false);
                 worldIn.destroyBlock(pos.up(2), false);
+                worldIn.destroyBlock(pos.up(3), false);
             }
         } else if (state.get(HEIGHT) == 1) {
             if(!player.isCreative()) {
                 worldIn.destroyBlock(pos.down(), true);
                 worldIn.destroyBlock(pos, false);
                 worldIn.destroyBlock(pos.up(), false);
+                worldIn.destroyBlock(pos.up(2), false);
             } else {
                 worldIn.destroyBlock(pos.down(), false);
                 worldIn.destroyBlock(pos, false);
                 worldIn.destroyBlock(pos.up(), false);
+                worldIn.destroyBlock(pos.up(2), false);
             }
         } else if (state.get(HEIGHT) == 2) {
             if(!player.isCreative()) {
                 worldIn.destroyBlock(pos.down(2), true);
                 worldIn.destroyBlock(pos.down(), false);
                 worldIn.destroyBlock(pos, false);
+                worldIn.destroyBlock(pos.up(), false);
             } else {
+                worldIn.destroyBlock(pos.down(2), false);
+                worldIn.destroyBlock(pos.down(), false);
+                worldIn.destroyBlock(pos, false);
+                worldIn.destroyBlock(pos.up(), false);
+            }
+        }else if (state.get(HEIGHT) == 3) {
+            if(!player.isCreative()) {
+                worldIn.destroyBlock(pos.down(3), true);
+                worldIn.destroyBlock(pos.down(2), false);
+                worldIn.destroyBlock(pos.down(), false);
+                worldIn.destroyBlock(pos, false);
+            } else {
+                worldIn.destroyBlock(pos.down(3), false);
                 worldIn.destroyBlock(pos.down(2), false);
                 worldIn.destroyBlock(pos.down(), false);
                 worldIn.destroyBlock(pos, false);
@@ -87,6 +101,7 @@ public class TriplePlantBlock extends BushBlock {
         }
         super.onBlockHarvested(worldIn, pos, state, player);
     }
+
 
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
@@ -97,5 +112,6 @@ public class TriplePlantBlock extends BushBlock {
         worldIn.setBlockState(pos, this.getDefaultState().with(HEIGHT, 0), 0);
         worldIn.setBlockState(pos.up(1), this.getDefaultState().with(HEIGHT, 1), 1);
         worldIn.setBlockState(pos.up(2), this.getDefaultState().with(HEIGHT, 2), 2);
+        worldIn.setBlockState(pos.up(3), this.getDefaultState().with(HEIGHT, 3), 3);
     }
 }

@@ -20,6 +20,7 @@ public class ModTags {
         //Dinosaur Food
         public static final ITag.INamedTag<Item> EOSQUALODON_FOOD = mod("eosqualodon_food");
         public static final ITag.INamedTag<Item> XIPHACTINUS_FOOD = mod("xiphactinus_food");
+        //public static final ITag.INamedTag<Item> DIMORPHODON_FOOD = mod("dimorphodon_food");
 
         public static ITag.INamedTag<Item> mod(String name){
             return ItemTags.makeWrapperTag(DinosExpansion.modLoc(name).toString());

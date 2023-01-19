@@ -2,8 +2,13 @@ package com.rena.dinosexpansion.core.init;
 
 import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.common.block.BaseSaplingBlock;
+import com.rena.dinosexpansion.common.block.GeyserBlock;
+import com.rena.dinosexpansion.common.block.plant.QuadruplePlantBlock;
 import com.rena.dinosexpansion.common.block.plant.SinglePlantBlock;
 import com.rena.dinosexpansion.common.block.plant.TriplePlantBlock;
+import com.rena.dinosexpansion.common.block.plant.growable.GrowDoublePlantBlock;
+import com.rena.dinosexpansion.common.block.plant.growable.GrowQuadruplePlantBlock;
+import com.rena.dinosexpansion.common.block.plant.growable.GrowTriplePlantBlock;
 import com.rena.dinosexpansion.common.world.gen.trees.ModTreeSpawners;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
@@ -76,6 +81,16 @@ public class BlockInit {
     public static final RegistryObject<Block> TEMPSKYA = register("tempskya",
             ()-> new TriplePlantBlock(AbstractBlock.Properties.create(Material.PLANTS).doesNotBlockMovement().zeroHardnessAndResistance().sound(SoundType.PLANT)), ModItemGroups.BLOCKS);
 
+    //Quadruple Tall Flower
+    public static final RegistryObject<Block> PROTOTAXITES = register("prototaxites_1",
+            ()-> new GrowQuadruplePlantBlock(AbstractBlock.Properties.create(Material.TALL_PLANTS).doesNotBlockMovement().zeroHardnessAndResistance().sound(SoundType.PLANT)),  ModItemGroups.BLOCKS);
+    public static final RegistryObject<Block> PROTOTAXITES_2 = register("prototaxites_2",
+            ()-> new GrowQuadruplePlantBlock(AbstractBlock.Properties.create(Material.TALL_PLANTS).doesNotBlockMovement().zeroHardnessAndResistance().sound(SoundType.PLANT)),  ModItemGroups.BLOCKS);
+    public static final RegistryObject<Block> PROTOTAXITES_3 = register("prototaxites_3",
+            ()-> new GrowQuadruplePlantBlock(AbstractBlock.Properties.create(Material.TALL_PLANTS).doesNotBlockMovement().zeroHardnessAndResistance().sound(SoundType.PLANT)),  ModItemGroups.BLOCKS);
+    public static final RegistryObject<Block> PROTOTAXITES_4 = register("prototaxites_4",
+            ()-> new GrowQuadruplePlantBlock(AbstractBlock.Properties.create(Material.TALL_PLANTS).doesNotBlockMovement().zeroHardnessAndResistance().sound(SoundType.PLANT)),  ModItemGroups.BLOCKS);
+
     //Tree
     public static final RegistryObject<Block> REDWOOD_LEAVES = register("redwood_leaves",
             ()-> new LeavesBlock(AbstractBlock.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).tickRandomly().sound(SoundType.PLANT).notSolid()
@@ -84,6 +99,10 @@ public class BlockInit {
             ()-> new RotatedPillarBlock((AbstractBlock.Properties.create(Material.WOOD).sound(SoundType.WOOD).hardnessAndResistance(2.0F))), ModItemGroups.BLOCKS);
     public static final RegistryObject<Block> REDWOOD_SAPLING = register("redwood_sapling",
             ()-> new BaseSaplingBlock(ModTreeSpawners.REDWOOD, AbstractBlock.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().zeroHardnessAndResistance().sound(SoundType.PLANT)), ModItemGroups.BLOCKS);
+
+    //Blocks
+    public static final RegistryObject<Block> GEYSER = register("geyser",
+            ()-> new GeyserBlock(AbstractBlock.Properties.create(Material.ROCK).zeroHardnessAndResistance().sound(SoundType.GROUND).tickRandomly().notSolid()), ModItemGroups.BLOCKS);
     public static <T extends Block> RegistryObject<T> register(String name, Supplier<T> blockSupplier, ItemGroup tab){
         return register(name, blockSupplier, () -> new Item.Properties().group(tab));
     }

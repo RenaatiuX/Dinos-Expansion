@@ -1,7 +1,6 @@
 package com.rena.dinosexpansion.common.entity.aquatic;
 
 import com.rena.dinosexpansion.DinosExpansion;
-import com.rena.dinosexpansion.common.entity.Dinosaur;
 import com.rena.dinosexpansion.common.entity.ia.*;
 import com.rena.dinosexpansion.common.entity.ia.movecontroller.AquaticMoveController;
 import com.rena.dinosexpansion.core.init.EntityInit;
@@ -73,8 +72,8 @@ public class Eosqualodon extends DinosaurAquatic implements IAnimatable, IAnimat
         this.goalSelector.addGoal(5, new DinosaurLookRandomGoal(this));
         this.goalSelector.addGoal(6, new FollowBoatGoal(this));
         this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)));
-        this.targetSelector.addGoal(2, new DinosaurAINearestTarget<>(this, SquidEntity.class, 40, false, true, null));
-        this.targetSelector.addGoal(3, new DinosaurAINearestTarget<>(this, AbstractGroupFishEntity.class, 100, false, true, null));
+        this.targetSelector.addGoal(2, new DinosaurNearestTargetGoal<>(this, SquidEntity.class, 40, false, true, null));
+        this.targetSelector.addGoal(3, new DinosaurNearestTargetGoal<>(this, AbstractGroupFishEntity.class, 100, false, true, null));
     }
 
     @Override
