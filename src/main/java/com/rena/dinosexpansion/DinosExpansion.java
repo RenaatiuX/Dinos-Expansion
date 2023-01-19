@@ -5,6 +5,7 @@ import com.rena.dinosexpansion.core.init.*;
 import com.rena.dinosexpansion.core.network.Network;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.datafix.fixes.VillagerTrades;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModList;
@@ -65,6 +66,7 @@ public class DinosExpansion
             FeatureInit.registerConfiguredFeatures();
             StructureInit.setupStructures();
             DimensionInit.setupDimension();
+            ModVillagerTrades.addHermitTrades();
         });
     }
 }

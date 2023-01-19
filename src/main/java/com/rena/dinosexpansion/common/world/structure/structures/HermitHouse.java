@@ -78,6 +78,8 @@ public class HermitHouse extends Structure<NoFeatureConfig> {
                             10), AbstractVillagePiece::new, chunkGenerator, templateManagerIn,
                     blockpos, this.components, this.rand,false,true);
 
+            this.components.forEach(box -> box.offset(0,1,0));
+
             LogManager.getLogger().log(Level.DEBUG, "House at " +
                     this.components.get(0).getBoundingBox().minX + " " +
                     this.components.get(0).getBoundingBox().minY + " " +
