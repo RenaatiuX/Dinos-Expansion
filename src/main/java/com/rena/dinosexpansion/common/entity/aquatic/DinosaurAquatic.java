@@ -1,20 +1,13 @@
 package com.rena.dinosexpansion.common.entity.aquatic;
 
 import com.rena.dinosexpansion.common.entity.Dinosaur;
-import com.rena.dinosexpansion.common.entity.ia.helper.ISemiAquatic;
 import com.rena.dinosexpansion.common.entity.ia.movecontroller.AquaticMoveController;
-import net.minecraft.block.Blocks;
 import net.minecraft.entity.*;
-import net.minecraft.entity.ai.controller.MovementController;
 import net.minecraft.entity.item.BoatEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.pathfinding.GroundPathNavigator;
+import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.pathfinding.SwimmerPathNavigator;
 import net.minecraft.tags.FluidTags;
@@ -29,11 +22,12 @@ public abstract class DinosaurAquatic extends Dinosaur{
     public DinosaurAquatic(EntityType<? extends Dinosaur> type, World world, DinosaurInfo info, int level) {
         super(type, world, info, level);
         this.setPathPriority(PathNodeType.WATER, 0.0F);
+        this.moveController = new AquaticMoveController(this, 1.0F);
     }
 
     @Override
-    public void livingTick() {
-        super.livingTick();
+    protected PathNavigator createNavigator(World worldIn) {
+        return new SwimmerPathNavigator(this, worldIn);
     }
 
     protected void updateAir(int air) {
@@ -132,6 +126,26 @@ public abstract class DinosaurAquatic extends Dinosaur{
 
     public boolean canBreathOnLand() {
         return true;
+    }
+
+    @Override
+    protected Rarity getinitialRarity() {
+        double rand = this.getRNG().nextDouble();
+        if (rand <= 0.05)
+            return Rarity.LEGENDARY;
+        if (rand <= 0.1)
+            return Rarity.EPIC;
+        if (rand < 0.2)
+            return Rarity.RARE;
+        if (rand <= 0.5)
+            return Rarity.UNCOMMON;
+        return Rarity.COMMON;
+    }
+
+    @Override
+    protected Gender getInitialGender() {
+        //bring a bit of real life in the random distribution :-)
+        return getRNG().nextDouble() <= 0.51 ? Gender.MALE : Gender.FEMALE;
     }
 
 }

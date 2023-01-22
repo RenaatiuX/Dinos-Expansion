@@ -1,5 +1,6 @@
 package com.rena.dinosexpansion.common.entity.aquatic;
 
+import com.rena.dinosexpansion.common.entity.ia.DinosaurSwimBottomGoal;
 import com.rena.dinosexpansion.common.entity.ia.SleepRhythmGoal;
 import com.rena.dinosexpansion.common.entity.ia.movecontroller.AquaticMoveController;
 import com.rena.dinosexpansion.core.init.EntityInit;
@@ -57,7 +58,7 @@ public class Parapuzosia extends DinosaurAquatic implements IAnimatable, IAnimat
 
     public Parapuzosia(EntityType<Parapuzosia> type, World world) {
         super(type, world, new DinosaurInfo("parapuzosia", 100, 100, 50, SleepRhythmGoal.SleepRhythm.NONE), generateLevelWithinBounds(20, 100));
-        this.moveController = new AquaticMoveController(this, 1f);
+        this.moveController = new AquaticMoveController(this, 1F);
     }
 
     public Parapuzosia(World world){
@@ -69,7 +70,7 @@ public class Parapuzosia extends DinosaurAquatic implements IAnimatable, IAnimat
         super.registerGoals();
         this.goalSelector.addGoal(0, new FindWaterGoal(this));
         this.goalSelector.addGoal(2, new ParapuzosiaAiGrab());
-        //this.goalSelector.addGoal(3, new DinosaurSwimBottomGoal(this, 0.8F, 7));
+        this.goalSelector.addGoal(3, new DinosaurSwimBottomGoal(this, 0.8F, 10));
         this.goalSelector.addGoal(5, new LookRandomlyGoal(this));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, DrownedEntity.class, true));
     }
@@ -98,30 +99,6 @@ public class Parapuzosia extends DinosaurAquatic implements IAnimatable, IAnimat
     }
 
     @Override
-    public boolean isNotColliding(IWorldReader worldIn) {
-        return worldIn.checkNoEntityCollision(this);
-    }
-
-    @Override
-    protected PathNavigator createNavigator(World worldIn) {
-        return new SwimmerPathNavigator(this, worldIn);
-    }
-
-    @Override
-    public void travel(Vector3d travelVector) {
-        if (this.isServerWorld() && this.isInWater()) {
-            this.moveRelative(this.getAIMoveSpeed(), travelVector);
-            this.move(MoverType.SELF, this.getMotion());
-            this.setMotion(this.getMotion().mul(0.9D, 0.6D, 0.9D));
-            if (this.getAttackTarget() == null) {
-                this.setMotion(this.getMotion().add(0.0D, -0.005D, 0.0D));
-            }
-        } else {
-            super.travel(travelVector);
-        }
-    }
-
-    @Override
     protected void registerData() {
         super.registerData();
         this.dataManager.register(GRABBING, false);
@@ -130,16 +107,6 @@ public class Parapuzosia extends DinosaurAquatic implements IAnimatable, IAnimat
 
     @Override
     public List<Item> getFood() {
-        return null;
-    }
-
-    @Override
-    protected Rarity getinitialRarity() {
-        return null;
-    }
-
-    @Override
-    protected Gender getInitialGender() {
         return null;
     }
 

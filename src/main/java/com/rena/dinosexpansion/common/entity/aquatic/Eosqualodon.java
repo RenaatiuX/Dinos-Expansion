@@ -54,7 +54,6 @@ public class Eosqualodon extends DinosaurAquatic implements IAnimatable, IAnimat
     public Eosqualodon(EntityType<Eosqualodon> type, World world) {
         super(type, world, new DinosaurInfo("eosqualodon", 200, 100, 50, SleepRhythmGoal.SleepRhythm.NONE), generateLevelWithinBounds(20, 100));
         this.moveController = new AquaticMoveController(this, 1F);
-        //switchNavigator(false);
         updateInfo();
     }
 
@@ -68,7 +67,7 @@ public class Eosqualodon extends DinosaurAquatic implements IAnimatable, IAnimat
         this.goalSelector.addGoal(1, new FindWaterGoal(this));
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.2D, false));
         this.goalSelector.addGoal(3, new DinosaurFollowOwnerGoal(this, 0.5, 10f, 2f, false));
-        this.goalSelector.addGoal(4, new DinosaurRandomSwimmingGoal(this, 0.8F, 3, 10));
+        this.goalSelector.addGoal(4, new RandomSwimmingGoal(this, 0.8F, 10));
         this.goalSelector.addGoal(5, new DinosaurLookRandomGoal(this));
         this.goalSelector.addGoal(6, new FollowBoatGoal(this));
         this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)));
@@ -85,7 +84,6 @@ public class Eosqualodon extends DinosaurAquatic implements IAnimatable, IAnimat
             if (entity != null && !(entity instanceof PlayerEntity) && !(entity instanceof AbstractArrowEntity)) {
                 amount = (amount + 1.0F) / 2.0F;
             }
-
             return super.attackEntityFrom(source, amount);
         }
     }
@@ -96,7 +94,6 @@ public class Eosqualodon extends DinosaurAquatic implements IAnimatable, IAnimat
         if (flag) {
             this.applyEnchantments(this, entityIn);
         }
-
         return flag;
     }
 
@@ -125,26 +122,6 @@ public class Eosqualodon extends DinosaurAquatic implements IAnimatable, IAnimat
     }
 
     @Override
-    protected Rarity getinitialRarity() {
-        double rand = this.getRNG().nextDouble();
-        if (rand <= 0.05)
-            return Rarity.LEGENDARY;
-        if (rand <= 0.1)
-            return Rarity.EPIC;
-        if (rand < 0.2)
-            return Rarity.RARE;
-        if (rand <= 0.5)
-            return Rarity.UNCOMMON;
-        return Rarity.COMMON;
-    }
-
-    @Override
-    protected Gender getInitialGender() {
-        //bring a bit of real life in the random distribution :-)
-        return getRNG().nextDouble() <= 0.51 ? Gender.MALE : Gender.FEMALE;
-    }
-
-    @Override
     protected int reduceNarcotic(int narcoticValue) {
         if (getRNG().nextDouble() <= 0.05)
             return narcoticValue - 1;
@@ -158,12 +135,8 @@ public class Eosqualodon extends DinosaurAquatic implements IAnimatable, IAnimat
         if (isKnockout()){
             event.getController().setAnimation(new AnimationBuilder().addAnimation("eosqualodon_knockout", ILoopType.EDefaultLoopTypes.LOOP));
         }
-        if (event.isMoving()) {
+        if (this.isInWater()) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("eosqualodon_swim", ILoopType.EDefaultLoopTypes.LOOP));
-        }
-        else {
-            event.getController().clearAnimationCache();
-            return PlayState.STOP;
         }
         return PlayState.CONTINUE;
     }
