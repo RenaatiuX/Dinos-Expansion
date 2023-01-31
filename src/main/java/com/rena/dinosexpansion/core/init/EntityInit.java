@@ -34,17 +34,18 @@ public class EntityInit {
     public static final RegistryObject<EntityType<DartEntity>> DART = ENTITY_TYPES.register("dart",
             () -> EntityType.Builder.<DartEntity>create(DartEntity::new, EntityClassification.MISC).size(0.5F, 0.5F).build(DinosExpansion.modLoc("dart").toString()));
 
-    public static final RegistryObject<EntityType<Parapuzosia>> PARAPUZOSIA = register("parapuzosia", () -> EntityType.Builder.<Parapuzosia>create(Parapuzosia::new, EntityClassification.AMBIENT).size(3f, 2.5f));
+    public static final RegistryObject<EntityType<Parapuzosia>> PARAPUZOSIA = register("parapuzosia",
+            () -> EntityType.Builder.<Parapuzosia>create(Parapuzosia::new, EntityClassification.WATER_CREATURE).size(1.5F, 1.7F));
     public static final RegistryObject<EntityType<Eosqualodon>> EOSQUALODON = register("eosqualodon",
-            () -> EntityType.Builder.<Eosqualodon>create(Eosqualodon::new, EntityClassification.WATER_CREATURE).size(3f, 2.0f));
+            () -> EntityType.Builder.<Eosqualodon>create(Eosqualodon::new, EntityClassification.WATER_CREATURE).size(1.5F, 1.0F));
     public static final RegistryObject<EntityType<MegaPiranha>> MEGA_PIRANHA = register("megapiranha",
-            () -> EntityType.Builder.<MegaPiranha>create(MegaPiranha::new, EntityClassification.WATER_CREATURE).size(1F, 1F));
+            () -> EntityType.Builder.<MegaPiranha>create(MegaPiranha::new, EntityClassification.WATER_CREATURE).size(0.5F, 0.75F));
     public static final RegistryObject<EntityType<Dimorphodon>> DIMORPHODON = register("dimorphodon",
             () -> EntityType.Builder.<Dimorphodon>create(Dimorphodon::new, EntityClassification.WATER_CREATURE).size(1F, 1F));
     public static final RegistryObject<EntityType<Astorgosuchus>> ASTORGOSUCHUS = register("astorgosuchus",
             () -> EntityType.Builder.<Astorgosuchus>create(Astorgosuchus::new, EntityClassification.CREATURE).size(1.0F, 2.0F));
     public static final RegistryObject<EntityType<Campanile>> CAMPANILE = register("campanile",
-            () -> EntityType.Builder.<Campanile>create(Campanile::new, EntityClassification.AMBIENT).size(1.0F, 1.0F));
+            () -> EntityType.Builder.<Campanile>create(Campanile::new, EntityClassification.AMBIENT).size(0.5F, 1.0F));
     public static final RegistryObject<EntityType<Hermit>> HERMIT = register("hermit", () -> EntityType.Builder.create(Hermit::new, EntityClassification.CREATURE));
 
     public static final <T extends Entity> RegistryObject<EntityType<T>> register(String name, Supplier<EntityType.Builder<T>> builder){

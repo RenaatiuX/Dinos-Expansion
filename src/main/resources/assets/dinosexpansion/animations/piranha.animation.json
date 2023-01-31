@@ -5,7 +5,7 @@
 			"loop": true,
 			"animation_length": 2.08,
 			"bones": {
-				"JawSwim": {
+				"JawSwin": {
 					"rotation": {
 						"0.0": {
 							"vector": [0, 0, 0]
@@ -20,7 +20,7 @@
 						}
 					}
 				},
-				"LeftFinSwim": {
+				"LeftFinSwin": {
 					"rotation": {
 						"0.0": {
 							"vector": [0, 0, -22.5]
@@ -43,7 +43,7 @@
 						}
 					}
 				},
-				"TailSwim": {
+				"TailSwin": {
 					"rotation": {
 						"0.0": {
 							"vector": [0, 17.5, 0]
@@ -58,7 +58,7 @@
 						}
 					}
 				},
-				"RightFinSwim": {
+				"RightFinSwin": {
 					"rotation": {
 						"0.0": {
 							"vector": [0, 0, 22.5]
@@ -195,7 +195,7 @@
 						}
 					}
 				},
-				"JawSwim": {
+				"JawSwin": {
 					"rotation": {
 						"0.0": {
 							"vector": [0, 0, 0]
@@ -210,7 +210,7 @@
 						}
 					}
 				},
-				"RightFinSwim": {
+				"RightFinSwin": {
 					"rotation": {
 						"0.0": {
 							"vector": [0, 0, 42.5]
@@ -225,7 +225,7 @@
 						}
 					}
 				},
-				"LeftFinSwim": {
+				"LeftFinSwin": {
 					"rotation": {
 						"0.0": {
 							"vector": [0, 0, 42.5]
@@ -240,7 +240,7 @@
 						}
 					}
 				},
-				"TailSwim": {
+				"TailSwin": {
 					"rotation": {
 						"0.0": {
 							"vector": [0, -30, 0]

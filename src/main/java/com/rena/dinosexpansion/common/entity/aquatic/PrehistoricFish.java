@@ -1,7 +1,6 @@
 package com.rena.dinosexpansion.common.entity.aquatic;
 
 import com.rena.dinosexpansion.common.entity.Dinosaur;
-import com.rena.dinosexpansion.common.entity.ia.movecontroller.AquaticMoveController;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.AgeableEntity;
@@ -19,6 +18,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.PathNavigator;
+import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.pathfinding.SwimmerPathNavigator;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
@@ -32,12 +32,10 @@ import java.util.List;
 
 public abstract class PrehistoricFish extends Dinosaur {
     private static final DataParameter<Boolean> FROM_BUCKET = EntityDataManager.createKey(PrehistoricFish.class, DataSerializers.BOOLEAN);
-    public boolean outOfWater;
     public PrehistoricFish(EntityType<? extends TameableEntity> type, World world, DinosaurInfo info, int level) {
         super(type, world, info, level);
-        this.moveController = new AquaticMoveController(this, 1F);
+        this.setPathPriority(PathNodeType.WATER, 0.0F);
     }
-
 
     @Override
     public boolean preventDespawn() {
@@ -98,14 +96,13 @@ public abstract class PrehistoricFish extends Dinosaur {
 
     @Override
     public void livingTick() {
-        super.livingTick();
-        if (!isInWater() && this.onGround && this.collidedVertically) {
-            this.setMotion(this.getMotion().add((this.rand.nextFloat() * 2.0F - 1.0F) * 0.05F, 0.4F, (this.rand.nextFloat() * 2.0F - 1.0F) * 0.05F));
+        if (!this.isInWater() && this.onGround && this.collidedVertically) {
+            this.setMotion(this.getMotion().add((this.rand.nextFloat() * 2.0F - 1.0F) * 0.05F, (double) 0.4F, (double) ((this.rand.nextFloat() * 2.0F - 1.0F) * 0.05F)));
             this.onGround = false;
             this.isAirBorne = true;
             this.playSound(this.getFlopSound(), this.getSoundVolume(), this.getSoundPitch());
         }
-        outOfWater = world.isRemote && !isInWater();
+        super.livingTick();
     }
 
     protected void updateAir(int p_209207_1_) {

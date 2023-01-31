@@ -1,6 +1,7 @@
 package com.rena.dinosexpansion.common.entity.aquatic;
 
 import com.rena.dinosexpansion.common.entity.ia.DinosaurSwimBottomGoal;
+import com.rena.dinosexpansion.common.entity.ia.DinosaurSwimMoveControllerSinkGoal;
 import com.rena.dinosexpansion.common.entity.ia.SleepRhythmGoal;
 import com.rena.dinosexpansion.common.entity.ia.movecontroller.AquaticMoveController;
 import com.rena.dinosexpansion.core.init.EntityInit;
@@ -46,7 +47,7 @@ public class Parapuzosia extends DinosaurAquatic implements IAnimatable, IAnimat
     public float prevGrabProgress;
     private int holdTime;
 
-    public static AttributeModifierMap.MutableAttribute createAttributes(){
+    public static AttributeModifierMap.MutableAttribute createAttributes() {
         return MobEntity.func_233666_p_().createMutableAttribute(Attributes.MAX_HEALTH, 50F)
                 .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.3F)
                 .createMutableAttribute(Attributes.ATTACK_DAMAGE, 4.0F)
@@ -58,10 +59,11 @@ public class Parapuzosia extends DinosaurAquatic implements IAnimatable, IAnimat
 
     public Parapuzosia(EntityType<Parapuzosia> type, World world) {
         super(type, world, new DinosaurInfo("parapuzosia", 100, 100, 50, SleepRhythmGoal.SleepRhythm.NONE), generateLevelWithinBounds(20, 100));
-        this.moveController = new AquaticMoveController(this, 1F);
+        this.moveController = new AquaticMoveController(this, 1.2F, 5);
+        updateInfo();
     }
 
-    public Parapuzosia(World world){
+    public Parapuzosia(World world) {
         this(EntityInit.PARAPUZOSIA.get(), world);
     }
 
@@ -70,14 +72,15 @@ public class Parapuzosia extends DinosaurAquatic implements IAnimatable, IAnimat
         super.registerGoals();
         this.goalSelector.addGoal(0, new FindWaterGoal(this));
         this.goalSelector.addGoal(2, new ParapuzosiaAiGrab());
-        this.goalSelector.addGoal(3, new DinosaurSwimBottomGoal(this, 0.8F, 10));
+        this.goalSelector.addGoal(3, new DinosaurSwimBottomGoal(this, 0.8F, 7));
+        this.goalSelector.addGoal(4, new RandomSwimmingGoal(this, 0.8F, 3));
         this.goalSelector.addGoal(5, new LookRandomlyGoal(this));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, DrownedEntity.class, true));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, DrownedEntity.class,  20, true, true, null));
     }
 
     private void doInitialPosing(IWorld world) {
         BlockPos down = this.getPosition();
-        while(!world.getFluidState(down).isEmpty() && down.getY() > 1){
+        while (!world.getFluidState(down).isEmpty() && down.getY() > 1) {
             down = down.down();
         }
         this.setPosition(down.getX() + 0.5F, down.getY() + 1, down.getZ() + 0.5F);
@@ -128,7 +131,7 @@ public class Parapuzosia extends DinosaurAquatic implements IAnimatable, IAnimat
     public void tick() {
         super.tick();
         prevGrabProgress = grabProgress;
-        if(this.ticksExisted % 100 == 0){
+        if (this.ticksExisted % 100 == 0) {
             this.heal(2);
         }
         if (this.isGrabbing() && grabProgress < 5F) {
@@ -139,7 +142,7 @@ public class Parapuzosia extends DinosaurAquatic implements IAnimatable, IAnimat
         }
         if (this.isGrabbing()) {
             Entity target = getGrabbedEntity();
-            if(!world.isRemote && target != null){
+            if (!world.isRemote && target != null) {
                 this.dataManager.set(GRAB_ENTITY, target.getEntityId());
                 if (holdTime % 20 == 0 && holdTime > 30) {
                     target.attackEntityFrom(DamageSource.causeMobDamage(this), 3 + rand.nextInt(5));
@@ -176,22 +179,24 @@ public class Parapuzosia extends DinosaurAquatic implements IAnimatable, IAnimat
 
     @Override
     public void registerControllers(AnimationData data) {
+        data.setResetSpeedInTicks(10);
         data.addAnimationController(new AnimationController<>(this, CONTROLLER_NAME, 0, this::predicate));
-        data.addAnimationController(new AnimationController<>(this, ATTACK_CONTROLLER_NAME, 0, this::attackPredicate));
+        //data.addAnimationController(new AnimationController<>(this, ATTACK_CONTROLLER_NAME, 0, this::attackPredicate));
     }
 
-    private PlayState predicate(AnimationEvent<Parapuzosia> event){
-        if (isInWater()){
+    private PlayState predicate(AnimationEvent<Parapuzosia> event) {
+        if (isInWater()) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Parapuzosia.Swim", ILoopType.EDefaultLoopTypes.LOOP));
-            return PlayState.CONTINUE;
+        }
+        if (isGrabbing()) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Parapuzosia.Catch", ILoopType.EDefaultLoopTypes.HOLD_ON_LAST_FRAME));
         }
         return PlayState.CONTINUE;
     }
 
-    private PlayState attackPredicate(AnimationEvent<Parapuzosia> event){
+    private PlayState attackPredicate(AnimationEvent<Parapuzosia> event) {
         if (isGrabbing()) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Parapuzosia.Catch", ILoopType.EDefaultLoopTypes.HOLD_ON_LAST_FRAME));
-            return PlayState.CONTINUE;
         }
         return PlayState.CONTINUE;
     }
@@ -214,12 +219,18 @@ public class Parapuzosia extends DinosaurAquatic implements IAnimatable, IAnimat
             Parapuzosia parapuzosia = Parapuzosia.this;
             LivingEntity target = Parapuzosia.this.getAttackTarget();
             double dist = parapuzosia.getDistanceSq(target);
-            if (parapuzosia.canEntityBeSeen(target) && dist < 1.0F) {
+            if (parapuzosia.canEntityBeSeen(target) && dist < 2.0F) {
                 parapuzosia.setGrabbing(true);
             } else {
                 Vector3d moveBodyTo = target.getPositionVec();
                 parapuzosia.getNavigator().tryMoveToXYZ(moveBodyTo.x, moveBodyTo.y, moveBodyTo.z, 1.0F);
             }
+        }
+
+        @Override
+        public void resetTask() {
+            super.resetTask();
+            Parapuzosia.this.setGrabbing(false);
         }
     }
 }

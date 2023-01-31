@@ -4,6 +4,7 @@ import com.rena.dinosexpansion.common.entity.ia.DinosaurMeleeAttackGoal;
 import com.rena.dinosexpansion.common.entity.ia.SleepRhythmGoal;
 import com.rena.dinosexpansion.common.entity.ia.movecontroller.AquaticMoveController;
 import com.rena.dinosexpansion.core.init.EntityInit;
+import com.rena.dinosexpansion.core.init.ItemInit;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -46,7 +47,7 @@ public class MegaPiranha extends PrehistoricFish implements IAnimatable, IAnimat
 
     public MegaPiranha(EntityType<MegaPiranha> type, World worldIn) {
         super(type, worldIn, new DinosaurInfo("mega_piranha", 30, 10, 5, SleepRhythmGoal.SleepRhythm.NONE), generateLevelWithinBounds(10, 50));
-        this.moveController = new AquaticMoveController(this, 1F);
+        this.moveController = new AquaticMoveController(this, 1.0F);
     }
 
     public MegaPiranha(World world) {
@@ -55,7 +56,7 @@ public class MegaPiranha extends PrehistoricFish implements IAnimatable, IAnimat
 
     public static AttributeModifierMap.MutableAttribute createAttributes() {
         return MobEntity.func_233666_p_().createMutableAttribute(Attributes.MAX_HEALTH, 20F)
-                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.3F)
+                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.25F)
                 .createMutableAttribute(Attributes.ATTACK_DAMAGE, 8.0F);
     }
 
@@ -63,38 +64,23 @@ public class MegaPiranha extends PrehistoricFish implements IAnimatable, IAnimat
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(1, new FindWaterGoal(this));
-        this.goalSelector.addGoal(2, new DinosaurMeleeAttackGoal(this, 1.5D, false));
-        this.goalSelector.addGoal(4, new RandomSwimmingGoal(this, 0.8F, 10));
+        this.goalSelector.addGoal(2, new DinosaurMeleeAttackGoal(this, 1.2D, false));
+        this.goalSelector.addGoal(4, new RandomSwimmingGoal(this, 1.0F, 10));
         this.goalSelector.addGoal(5, new LookRandomlyGoal(this));
         this.goalSelector.addGoal(6, new FollowBoatGoal(this));
         this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)));
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, AbstractGroupFishEntity.class, 100, false, true, null));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, 40, false, true, null));
-
+        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, AbstractGroupFishEntity.class, false));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true));
     }
 
     @Override
-    protected PathNavigator createNavigator(World worldIn) {
-        return new SwimmerPathNavigator(this, worldIn);
-    }
-
-    @Override
-    public void travel(Vector3d travelVector) {
-        if (this.isServerWorld() && this.isInWater()) {
-            this.moveRelative(this.getAIMoveSpeed(), travelVector);
-            this.move(MoverType.SELF, this.getMotion());
-            this.setMotion(this.getMotion().scale(0.9D));
-            if (this.getAttackTarget() == null) {
-                this.setMotion(this.getMotion().add(0.0D, -0.005D, 0.0D));
-            }
-        } else {
-            super.travel(travelVector);
-        }
+    protected float getStandingEyeHeight(Pose poseIn, EntitySize sizeIn) {
+        return 0.7F;
     }
 
     @Override
     protected ItemStack getFishBucket() {
-        return null;
+        return new ItemStack(ItemInit.MEGA_PIRANHA_BUCKET.get());
     }
 
     @Override
@@ -109,7 +95,8 @@ public class MegaPiranha extends PrehistoricFish implements IAnimatable, IAnimat
 
     @Override
     public void registerControllers(AnimationData data) {
-        data.addAnimationController(new AnimationController<>(this, CONTROLLER_NAME, 0, this::predicate));
+        data.setResetSpeedInTicks(10);
+        data.addAnimationController(new AnimationController<>(this, CONTROLLER_NAME, 10, this::predicate));
         data.addAnimationController(new AnimationController<>(this, ATTACK_CONTROLLER_NAME, 0, this::attackPredicate));
     }
 
@@ -117,7 +104,7 @@ public class MegaPiranha extends PrehistoricFish implements IAnimatable, IAnimat
         if (isInWater()) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("de.megapiranha.swim", ILoopType.EDefaultLoopTypes.LOOP));
         } else {
-            if (this.outOfWater) {
+            if (this.isOnGround()) {
                 event.getController().setAnimation(new AnimationBuilder().addAnimation("de.megapiranha.outofwater", ILoopType.EDefaultLoopTypes.LOOP));
             }
         }

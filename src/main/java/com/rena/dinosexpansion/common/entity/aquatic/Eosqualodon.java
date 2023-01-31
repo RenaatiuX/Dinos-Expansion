@@ -43,11 +43,10 @@ public class Eosqualodon extends DinosaurAquatic implements IAnimatable, IAnimat
     public static final String ATTACK_CONTROLLER_NAME = "attack_controller";
 
     public static AttributeModifierMap.MutableAttribute createAttributes() {
-        return MobEntity.func_233666_p_().createMutableAttribute(Attributes.MAX_HEALTH, 30F)
+        return MobEntity.func_233666_p_()
+                .createMutableAttribute(Attributes.MAX_HEALTH, 30F)
                 .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.3F)
-                .createMutableAttribute(Attributes.ATTACK_DAMAGE, 5.0F)
-                .createMutableAttribute(ForgeMod.SWIM_SPEED.get(), 1.2f);
-    }
+                .createMutableAttribute(Attributes.ATTACK_DAMAGE, 5.0F);}
 
     private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
@@ -65,7 +64,7 @@ public class Eosqualodon extends DinosaurAquatic implements IAnimatable, IAnimat
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(1, new FindWaterGoal(this));
-        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.2D, false));
+        this.goalSelector.addGoal(2, new DinosaurMeleeAttackGoal(this, 1.2D, false));
         this.goalSelector.addGoal(3, new DinosaurFollowOwnerGoal(this, 0.5, 10f, 2f, false));
         this.goalSelector.addGoal(4, new RandomSwimmingGoal(this, 0.8F, 10));
         this.goalSelector.addGoal(5, new DinosaurLookRandomGoal(this));
@@ -76,25 +75,8 @@ public class Eosqualodon extends DinosaurAquatic implements IAnimatable, IAnimat
     }
 
     @Override
-    public boolean attackEntityFrom(DamageSource source, float amount) {
-        if (this.isInvulnerableTo(source)) {
-            return false;
-        } else {
-            Entity entity = source.getTrueSource();
-            if (entity != null && !(entity instanceof PlayerEntity) && !(entity instanceof AbstractArrowEntity)) {
-                amount = (amount + 1.0F) / 2.0F;
-            }
-            return super.attackEntityFrom(source, amount);
-        }
-    }
-
-    @Override
-    public boolean attackEntityAsMob(Entity entityIn) {
-        boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), (float) ((int) this.getAttributeValue(Attributes.ATTACK_DAMAGE)));
-        if (flag) {
-            this.applyEnchantments(this, entityIn);
-        }
-        return flag;
+    protected float getStandingEyeHeight(Pose poseIn, EntitySize sizeIn) {
+        return 0.90F;
     }
 
     @Override
@@ -152,6 +134,7 @@ public class Eosqualodon extends DinosaurAquatic implements IAnimatable, IAnimat
 
     @Override
     public void registerControllers(AnimationData data) {
+        data.setResetSpeedInTicks(10);
         data.addAnimationController(new AnimationController<>(this, CONTROLLER_NAME, 30, this::predicate));
         data.addAnimationController(new AnimationController<>(this, ATTACK_CONTROLLER_NAME, 0, this::attackPredicate));
     }

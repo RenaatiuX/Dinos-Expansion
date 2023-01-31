@@ -20,9 +20,11 @@ import com.rena.dinosexpansion.core.init.BlockInit;
 import com.rena.dinosexpansion.core.init.ContainerInit;
 import com.rena.dinosexpansion.core.init.EntityInit;
 import com.rena.dinosexpansion.core.init.ItemInit;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
+import net.minecraft.client.util.InputMappings;
 import net.minecraft.item.ItemModelsProperties;
 import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
@@ -117,5 +119,14 @@ public class ClientSetupEvents {
 
         RenderTypeLookup.setRenderLayer(BlockInit.REDWOOD_SAPLING.get(), RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(BlockInit.REDWOOD_LEAVES.get(), RenderType.getCutout());
+    }
+
+    public static boolean shouldSeeJournalContents() {
+        return InputMappings.isKeyDown(Minecraft.getInstance().getMainWindow().getHandle(), 340) || InputMappings.isKeyDown(Minecraft.getInstance().getMainWindow().getHandle(), 344);
+    }
+
+    @SuppressWarnings("resource")
+    public static Object getFontRenderer() {
+        return Minecraft.getInstance().fontRenderer;
     }
 }

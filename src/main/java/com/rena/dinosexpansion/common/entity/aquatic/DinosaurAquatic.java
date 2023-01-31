@@ -1,10 +1,11 @@
 package com.rena.dinosexpansion.common.entity.aquatic;
 
 import com.rena.dinosexpansion.common.entity.Dinosaur;
-import com.rena.dinosexpansion.common.entity.ia.movecontroller.AquaticMoveController;
 import net.minecraft.entity.*;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.item.BoatEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.pathfinding.PathNavigator;
@@ -22,7 +23,6 @@ public abstract class DinosaurAquatic extends Dinosaur{
     public DinosaurAquatic(EntityType<? extends Dinosaur> type, World world, DinosaurInfo info, int level) {
         super(type, world, info, level);
         this.setPathPriority(PathNodeType.WATER, 0.0F);
-        this.moveController = new AquaticMoveController(this, 1.0F);
     }
 
     @Override
@@ -122,6 +122,28 @@ public abstract class DinosaurAquatic extends Dinosaur{
         } else {
             super.travel(travelVector);
         }
+    }
+
+    @Override
+    public boolean attackEntityFrom(DamageSource source, float amount) {
+        if (this.isInvulnerableTo(source)) {
+            return false;
+        } else {
+            Entity entity = source.getTrueSource();
+            if (entity != null && !(entity instanceof PlayerEntity) && !(entity instanceof AbstractArrowEntity)) {
+                amount = (amount + 1.0F) / 2.0F;
+            }
+            return super.attackEntityFrom(source, amount);
+        }
+    }
+
+    @Override
+    public boolean attackEntityAsMob(Entity entityIn) {
+        boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), (float) ((int) this.getAttributeValue(Attributes.ATTACK_DAMAGE)));
+        if (flag) {
+            this.applyEnchantments(this, entityIn);
+        }
+        return flag;
     }
 
     public boolean canBreathOnLand() {

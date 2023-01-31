@@ -1,12 +1,14 @@
 package com.rena.dinosexpansion.common.entity.terrestrial.ambient;
 
 import com.rena.dinosexpansion.common.entity.Dinosaur;
+import com.rena.dinosexpansion.common.entity.ia.SleepRhythmGoal;
 import com.rena.dinosexpansion.core.init.EntityInit;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -14,6 +16,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimationTickable;
 import software.bernie.geckolib3.core.PlayState;
@@ -25,41 +28,43 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
-public class Campanile extends CreatureEntity implements IAnimatable, IAnimationTickable {
+public class Campanile extends AmbientDinosaur implements IAnimatable, IAnimationTickable {
     private static final DataParameter<Boolean> IS_IN_SHELL = EntityDataManager.createKey(Campanile.class, DataSerializers.BOOLEAN);
     private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
-    public boolean isInShell;
     public int ticksToShell;
     public float shellProgress;
 
     public Campanile(EntityType<Campanile> type, World world) {
-        super(type, world);
+        super(type, world, new DinosaurInfo("campanile", 20, 20, 10, SleepRhythmGoal.SleepRhythm.NONE), generateLevelWithinBounds(20, 50));
+        updateInfo();
     }
 
     public Campanile(World world) {
         this(EntityInit.CAMPANILE.get(), world);
     }
 
+
     @Override
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(0, new SwimGoal(this));
         this.goalSelector.addGoal(1, new PanicGoal(this, 2.0D));
-        this.goalSelector.addGoal(5, new WaterAvoidingRandomWalkingGoal(this, 0.5D){
+        this.goalSelector.addGoal(5, new WaterAvoidingRandomWalkingGoal(this, 0.5D) {
             @Override
             public boolean shouldExecute() {
                 return !Campanile.this.isInShell() && super.shouldExecute();
             }
         });
-        this.goalSelector.addGoal(6, new LookAtGoal(this, PlayerEntity.class, 6.0F){
+        this.goalSelector.addGoal(6, new LookAtGoal(this, PlayerEntity.class, 6.0F) {
             @Override
             public boolean shouldExecute() {
                 return !Campanile.this.isInShell() && super.shouldExecute();
             }
         });
-        this.goalSelector.addGoal(7, new LookRandomlyGoal(this){
+        this.goalSelector.addGoal(7, new LookRandomlyGoal(this) {
             @Override
             public boolean shouldExecute() {
                 return !Campanile.this.isInShell() && super.shouldExecute();
@@ -70,7 +75,14 @@ public class Campanile extends CreatureEntity implements IAnimatable, IAnimation
     public static AttributeModifierMap.MutableAttribute createAttributes() {
         return MobEntity.func_233666_p_()
                 .createMutableAttribute(Attributes.MAX_HEALTH, 10.0D)
-                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.1D);
+                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.1D)
+                .createMutableAttribute(Attributes.ATTACK_DAMAGE, 0.1D);
+    }
+
+    @Nullable
+    @Override
+    public AgeableEntity createChild(ServerWorld world, AgeableEntity mate) {
+        return null;
     }
 
     @Override
@@ -82,7 +94,7 @@ public class Campanile extends CreatureEntity implements IAnimatable, IAnimation
     @Override
     public void writeAdditional(CompoundNBT compound) {
         super.writeAdditional(compound);
-        compound.putBoolean("InShell", this.isInShell);
+        compound.putBoolean("InShell", this.isInShell());
         compound.putInt("ShellTick", this.ticksToShell);
     }
 
@@ -94,19 +106,11 @@ public class Campanile extends CreatureEntity implements IAnimatable, IAnimation
     }
 
     public boolean isInShell() {
-        if (world.isRemote) {
-            boolean isSleeping = this.dataManager.get(IS_IN_SHELL);
-            this.isInShell = isSleeping;
-            return isSleeping;
-        }
-        return isInShell;
+        return this.dataManager.get(IS_IN_SHELL);
     }
 
     public void setInShell(boolean inShell) {
         this.dataManager.set(IS_IN_SHELL, inShell);
-        if (!world.isRemote) {
-            this.isInShell = inShell;
-        }
     }
 
     @Override
@@ -132,6 +136,16 @@ public class Campanile extends CreatureEntity implements IAnimatable, IAnimation
                 }
             }
         }
+    }
+
+    @Override
+    public List<Item> getFood() {
+        return null;
+    }
+
+    @Override
+    protected int reduceNarcotic(int narcoticValue) {
+        return 0;
     }
 
     public boolean isThereNearbyMobs() {
@@ -166,12 +180,9 @@ public class Campanile extends CreatureEntity implements IAnimatable, IAnimation
 
     private PlayState predicate(AnimationEvent<Campanile> event) {
         if (this.isInShell()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("campanile.hidein", ILoopType.EDefaultLoopTypes.HOLD_ON_LAST_FRAME));
-            return PlayState.CONTINUE;
-        }
-        else if (event.isMoving()) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("campanile.hiding", ILoopType.EDefaultLoopTypes.LOOP));
+        } else if (event.isMoving()) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("campanile.move", ILoopType.EDefaultLoopTypes.LOOP));
-            return PlayState.CONTINUE;
         }
         event.getController().setAnimation(new AnimationBuilder().addAnimation("campanile.idle", ILoopType.EDefaultLoopTypes.LOOP));
         return PlayState.CONTINUE;
@@ -179,6 +190,7 @@ public class Campanile extends CreatureEntity implements IAnimatable, IAnimation
 
     @Override
     public void registerControllers(AnimationData data) {
+        data.setResetSpeedInTicks(10);
         data.addAnimationController(new AnimationController<>(this, "controller", 20, this::predicate));
     }
 
