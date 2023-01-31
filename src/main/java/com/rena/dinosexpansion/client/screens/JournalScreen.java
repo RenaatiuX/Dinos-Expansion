@@ -6,7 +6,7 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.client.StatCollector;
-import com.rena.dinosexpansion.client.events.ClientSetupEvents;
+import com.rena.dinosexpansion.client.events.ClientEvents;
 import com.rena.dinosexpansion.client.screens.widgets.ChangePageButton;
 import com.rena.dinosexpansion.client.screens.widgets.IndexPageButton;
 import com.rena.dinosexpansion.common.item.util.JournalPages;
@@ -53,7 +53,7 @@ public class JournalScreen extends Screen {
     protected ItemStack journal;
     protected boolean index;
     protected FontRenderer font = getFont();
-    protected JournalScreen(ItemStack journal) {
+    public JournalScreen(ItemStack journal) {
         super(new TranslationTextComponent("explorer_journal_gui"));
         this.journal = journal;
         @SuppressWarnings("unused")
@@ -74,7 +74,7 @@ public class JournalScreen extends Screen {
         if (!Minecraft.getInstance().gameSettings.language.equalsIgnoreCase("en_us")) {
             font = Minecraft.getInstance().fontRenderer;
         } else {
-            font = (FontRenderer) ClientSetupEvents.getFontRenderer();
+            font = (FontRenderer) ClientEvents.getFontRenderer();
         }
         return font;
     }
@@ -87,28 +87,24 @@ public class JournalScreen extends Screen {
             if ((this.index ? this.indexPages > 0 : this.pageType != null)) {
                 if (this.index) {
                     this.indexPages--;
-                    Minecraft.getInstance().getSoundHandler().play(SimpleSound.master(SoundEvents.ITEM_BOOK_PAGE_TURN, 1.0F));
                 } else {
                     if (this.bookPages > 0) {
                         this.bookPages--;
-                        Minecraft.getInstance().getSoundHandler().play(SimpleSound.master(SoundEvents.ITEM_BOOK_PAGE_TURN, 1.0F));
                     } else {
                         this.index = true;
                     }
                 }
             }
-        }));
+        }, true));
         this.addButton(this.nextPage = new ChangePageButton(centerX + 347, centerY + 215, true, bookPages, 0, (p_214132_1_) -> {
             if ((this.index ? this.indexPages < this.indexPagesTotal - 1 : this.pageType != null && this.bookPages < this.pageType.pages)) {
                 if (this.index) {
                     this.indexPages++;
-                    Minecraft.getInstance().getSoundHandler().play(SimpleSound.master(SoundEvents.ITEM_BOOK_PAGE_TURN, 1.0F));
                 } else {
                     this.bookPages++;
-                    Minecraft.getInstance().getSoundHandler().play(SimpleSound.master(SoundEvents.ITEM_BOOK_PAGE_TURN, 1.0F));
                 }
             }
-        }));
+        }, true));
         if (!allPageTypes.isEmpty()) {
             for (int i = 0; i < allPageTypes.size(); i++) {
                 int xIndex = i % -2;
@@ -116,12 +112,11 @@ public class JournalScreen extends Screen {
                 int id = 2 + i;
                 IndexPageButton button = new IndexPageButton(id, centerX + 15 + (xIndex * 200), centerY + 10 + (yIndex * 20) - (xIndex == 1 ? 20 : 0), new TranslationTextComponent("explorer_journal." + JournalPages.values()[allPageTypes.get(i).ordinal()].toString().toLowerCase()), (p_214132_1_) -> {
                     if (this.indexButtons.get(id - 2) != null && allPageTypes.get(id - 2) != null) {
-                        Minecraft.getInstance().getSoundHandler().play(SimpleSound.master(SoundEvents.ITEM_BOOK_PAGE_TURN, 1.0F));
                         this.index = false;
                         this.bookPages = 0;
                         this.pageType = allPageTypes.get(id - 2);
                     }
-                });
+                }, true);
                 this.indexButtons.add(button);
                 this.addButton(button);
             }

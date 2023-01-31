@@ -81,7 +81,7 @@ public class ClientSetupEvents {
     }
 
     @SubscribeEvent
-    public static final void registerEntityAttributes(EntityAttributeCreationEvent event) {
+    public static void registerEntityAttributes(EntityAttributeCreationEvent event) {
         event.put(EntityInit.PARAPUZOSIA.get(), Parapuzosia.createAttributes().create());
         event.put(EntityInit.EOSQUALODON.get(), Eosqualodon.createAttributes().create());
         event.put(EntityInit.MEGA_PIRANHA.get(), MegaPiranha.createAttributes().create());
@@ -119,14 +119,5 @@ public class ClientSetupEvents {
 
         RenderTypeLookup.setRenderLayer(BlockInit.REDWOOD_SAPLING.get(), RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(BlockInit.REDWOOD_LEAVES.get(), RenderType.getCutout());
-    }
-
-    public static boolean shouldSeeJournalContents() {
-        return InputMappings.isKeyDown(Minecraft.getInstance().getMainWindow().getHandle(), 340) || InputMappings.isKeyDown(Minecraft.getInstance().getMainWindow().getHandle(), 344);
-    }
-
-    @SuppressWarnings("resource")
-    public static Object getFontRenderer() {
-        return Minecraft.getInstance().fontRenderer;
     }
 }

@@ -1,6 +1,6 @@
 package com.rena.dinosexpansion.common.item;
 
-import com.rena.dinosexpansion.client.events.ClientSetupEvents;
+import com.rena.dinosexpansion.client.events.ClientEvents;
 import com.rena.dinosexpansion.common.item.util.JournalPages;
 import com.rena.dinosexpansion.core.init.ItemInit;
 import net.minecraft.client.util.ITooltipFlag;
@@ -53,7 +53,7 @@ public class ExplorerJournalItem extends Item {
     public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
         ItemStack itemStackIn = playerIn.getHeldItem(handIn);
         if (worldIn.isRemote) {
-
+            ClientEvents.openExplorerJournal(itemStackIn);
         }
         return new ActionResult<>(ActionResultType.PASS, itemStackIn);
     }
@@ -69,7 +69,7 @@ public class ExplorerJournalItem extends Item {
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         if (stack.getTag() != null) {
-            if (ClientSetupEvents.shouldSeeJournalContents()) {
+            if (ClientEvents.shouldSeeJournalContents()) {
                 tooltip.add(new TranslationTextComponent("journal.contains").mergeStyle(TextFormatting.GRAY));
                 List<JournalPages> pages = JournalPages.containedPages(JournalPages.toList(stack.getTag().getIntArray("Pages")));
                 for (JournalPages page : pages) {

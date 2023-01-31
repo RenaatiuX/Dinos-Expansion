@@ -3,22 +3,26 @@ package com.rena.dinosexpansion.client.screens.widgets;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.rena.dinosexpansion.DinosExpansion;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.SimpleSound;
+import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.gui.widget.button.Button;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.text.StringTextComponent;
 
 public class ChangePageButton extends Button {
 
     private final boolean right;
-    public int lastpage = 1;
     @SuppressWarnings("unused")
     private int page;
     private int color;
+    private final boolean playTurnSound;
 
-    public ChangePageButton(int x, int y, boolean right, int bookpage, int color, IPressable press) {
+    public ChangePageButton(int x, int y, boolean right, int bookpage, int color, IPressable press, boolean playTurnSound) {
         super(x, y, 23, 10, new StringTextComponent(""), press);
         this.right = right;
         page = bookpage;
         this.color = color;
+        this.playTurnSound = playTurnSound;
     }
 
     @Override
@@ -41,4 +45,10 @@ public class ChangePageButton extends Button {
         }
     }
 
+    @Override
+    public void playDownSound(SoundHandler handler) {
+        if (this.playTurnSound) {
+            handler.play(SimpleSound.master(SoundEvents.ITEM_BOOK_PAGE_TURN, 1.0F));
+        }
+    }
 }
