@@ -23,6 +23,10 @@ public class FoodInit {
             .saturation(0.3F).meat().build();
     public static final Food COOKED_GALLIMIMUS_MEAT = new Food.Builder().hunger(8)
             .saturation(0.8F).meat().build();
+    public static final Food RAW_DIMORPHODON_MEAT = new Food.Builder().hunger(3)
+            .saturation(0.3F).meat().build();
+    public static final Food COOKED_DIMORPHODON_MEAT = new Food.Builder().hunger(5)
+            .saturation(0.5F).meat().build();
 
     public static final Food KIBBLE_BASIC = kibbleEffects(new Food.Builder().hunger(10).saturation(0)).build();
     public static final Food KIBBLE_SIMPLE = kibbleEffects(new Food.Builder().hunger(15).saturation(0)).build();

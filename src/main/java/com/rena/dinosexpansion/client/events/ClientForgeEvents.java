@@ -7,6 +7,7 @@ import com.rena.dinosexpansion.common.config.DinosExpansionConfig;
 import com.rena.dinosexpansion.common.entity.Dinosaur;
 import com.rena.dinosexpansion.common.item.BlowgunItem;
 import com.rena.dinosexpansion.core.init.EffectInit;
+import com.rena.dinosexpansion.core.init.EnchantmentInit;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
@@ -15,15 +16,23 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.settings.PointOfView;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.ArmorItem;
+import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Effects;
+import net.minecraft.stats.Stats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Util;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Matrix4f;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.*;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.FOVUpdateEvent;
@@ -31,12 +40,14 @@ import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderNameplateEvent;
 import net.minecraftforge.client.gui.ForgeIngameGui;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.LogManager;
 import software.bernie.shadowed.eliotlash.mclib.math.functions.limit.Min;
 
+import java.util.Map;
 import java.util.Random;
 
 import static net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType.HEALTH;
@@ -47,7 +58,9 @@ public class ClientForgeEvents {
     public static final ResourceLocation FREEZE_OVERLAY = DinosExpansion.modLoc("textures/overlay/ice_overlay.png");
     public static final ResourceLocation FROZEN_HEARTS = DinosExpansion.modLoc("textures/overlay/frozen_heart.png");
     public static final Random rand = new Random();
-
+    private static boolean canJump;
+    private static boolean hasReleasedJumpKey;
+    private static int jumpsLeft;
 
     @SubscribeEvent
     public static final void renderEntityNameAndLevel(RenderNameplateEvent event) {
@@ -121,6 +134,7 @@ public class ClientForgeEvents {
     }
 
     @SubscribeEvent
+    @SuppressWarnings("unused")
     public static void renderOverlayPre(RenderGameOverlayEvent.Pre event) {
         //this is just there to cancel vanilla heart rendering, so I can render our own hearts
         if (event.getType() == RenderGameOverlayEvent.ElementType.HEALTH) {
@@ -215,4 +229,30 @@ public class ClientForgeEvents {
         RenderSystem.disableBlend();
     }
 
+    @SubscribeEvent
+    @SuppressWarnings("unused")
+    public static void onJump(TickEvent.PlayerTickEvent event) {
+        ClientPlayerEntity player = Minecraft.getInstance().player;
+        if (event.phase == TickEvent.Phase.END && player != null && player.movementInput != null) {
+            ItemStack boots = player.getItemStackFromSlot(EquipmentSlotType.FEET);
+            if (!boots.isEmpty() && boots.getItem() instanceof ArmorItem) {
+                int jumpLevel = EnchantmentHelper.getEnchantmentLevel(EnchantmentInit.BETTER_JUMP.get(), boots);
+                if ((player.isOnGround() || player.isOnLadder()) && !player.isInWater()) {
+                    hasReleasedJumpKey = false;
+                    canJump = true;
+                } else if (!player.movementInput.jump) {
+                    hasReleasedJumpKey = true;
+                } else if (!player.abilities.isFlying && canJump && hasReleasedJumpKey) {
+                    canJump = false;
+                    if (jumpLevel == 1) {
+                        player.jump();
+                    } else if (jumpLevel == 2) {
+                        //TODO need review
+                        player.jump();
+                        player.jump();
+                    }
+                }
+            }
+        }
+    }
 }

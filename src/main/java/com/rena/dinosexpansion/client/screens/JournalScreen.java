@@ -12,7 +12,6 @@ import com.rena.dinosexpansion.client.screens.widgets.IndexPageButton;
 import com.rena.dinosexpansion.common.item.util.JournalPages;
 import com.rena.dinosexpansion.core.init.ItemInit;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.SimpleSound;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.Widget;
@@ -26,7 +25,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.resources.IResource;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvents;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.io.IOUtils;
@@ -174,7 +172,7 @@ public class JournalScreen extends Screen {
         writeFromTxt(ms);
     }
 
-    @SuppressWarnings({ "resource", "rawtypes", "unused" })
+    @SuppressWarnings({"rawtypes", "unused" })
     public void imageFromTxt(MatrixStack ms) {
         String fileName = this.pageType.toString().toLowerCase(Locale.ROOT) + "_" + this.bookPages + ".txt";
         ResourceLocation fileLoc = DinosExpansion.modLoc("lang/explorer_journal/" + Minecraft.getInstance().gameSettings.language + "_0/" + fileName);
@@ -273,7 +271,7 @@ public class JournalScreen extends Screen {
 
     }
 
-    @SuppressWarnings({ "rawtypes", "resource" })
+    @SuppressWarnings({ "rawtypes"})
     public void writeFromTxt(MatrixStack ms) {
         String fileName = this.pageType.toString().toLowerCase(Locale.ROOT) + "_" + this.bookPages + ".txt";
         ResourceLocation fileLoc = DinosExpansion.modLoc("lang/explorer_journal/" + Minecraft.getInstance().gameSettings.language + "_0/" + fileName);
@@ -322,7 +320,6 @@ public class JournalScreen extends Screen {
         ms.pop();
     }
 
-    @SuppressWarnings("resource")
     private boolean usingVanillaFont() {
         return font == Minecraft.getInstance().fontRenderer;
     }

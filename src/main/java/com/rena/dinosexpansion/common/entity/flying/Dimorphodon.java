@@ -3,6 +3,7 @@ package com.rena.dinosexpansion.common.entity.flying;
 import com.rena.dinosexpansion.common.entity.ia.DinosaurFlyingMeleeAttackGoal;
 import com.rena.dinosexpansion.common.entity.ia.SleepRhythmGoal;
 import com.rena.dinosexpansion.core.init.EntityInit;
+import com.rena.dinosexpansion.core.init.ItemInit;
 import com.rena.dinosexpansion.core.init.SoundInit;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
@@ -10,13 +11,13 @@ import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.RangedInteger;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.TickRangeConverter;
+import net.minecraft.util.*;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
@@ -39,14 +40,17 @@ import java.util.UUID;
 public class Dimorphodon extends DinosaurFlying implements IAnimatable, IAnimationTickable, IAngerable {
     private static final DataParameter<Integer> ANGER_TIME = EntityDataManager.createKey(Dimorphodon.class, DataSerializers.VARINT);
     private static final RangedInteger ANGER_TIME_RANGE = TickRangeConverter.convertRange(20, 39);
-    @Nullable
     private UUID persistentAngerTarget;
+    public int timeUntilNextEgg = this.rand.nextInt(6000) + 6000;
+
     public Dimorphodon(EntityType<Dimorphodon> type, World world) {
         super(type, world, new DinosaurInfo("dimorphodon", 50, 20, 10, SleepRhythmGoal.SleepRhythm.DIURNAL), generateLevelWithinBounds(10, 50));
     }
+
     public Dimorphodon(World world) {
         this(EntityInit.DIMORPHODON.get(), world);
     }
+
     private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
     public static AttributeModifierMap.MutableAttribute createAttributes() {
@@ -87,6 +91,7 @@ public class Dimorphodon extends DinosaurFlying implements IAnimatable, IAnimati
     public void setAngerTime(int time) {
         this.dataManager.set(ANGER_TIME, time);
     }
+
     @Nullable
     @Override
     public UUID getAngerTarget() {
@@ -97,32 +102,15 @@ public class Dimorphodon extends DinosaurFlying implements IAnimatable, IAnimati
     public void setAngerTarget(@Nullable UUID target) {
         this.persistentAngerTarget = target;
     }
+
     @Override
     public void func_230258_H__() {
         this.setAngerTime(ANGER_TIME_RANGE.getRandomWithinRange(this.rand));
     }
+
     @Override
     public List<Item> getFood() {
         return null;
-    }
-
-    @Override
-    protected Rarity getinitialRarity() {
-        double rand = this.getRNG().nextDouble();
-        if (rand <= 0.05)
-            return Rarity.LEGENDARY;
-        if (rand <= 0.1)
-            return Rarity.EPIC;
-        if (rand < 0.2)
-            return Rarity.RARE;
-        if (rand <= 0.5)
-            return Rarity.UNCOMMON;
-        return Rarity.COMMON;
-    }
-
-    @Override
-    protected Gender getInitialGender() {
-        return getRNG().nextDouble() <= 0.51 ? Gender.MALE : Gender.FEMALE;
     }
 
     @Override
@@ -132,16 +120,46 @@ public class Dimorphodon extends DinosaurFlying implements IAnimatable, IAnimati
         return narcoticValue;
     }
 
+    @Override
+    public void livingTick() {
+        super.livingTick();
+        if (!this.world.isRemote && this.isAlive() && !this.isChild() && --this.timeUntilNextEgg <= 0 && this.getRarity() != Rarity.LEGENDARY) {
+            this.playSound(SoundEvents.ENTITY_CHICKEN_EGG, 1.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
+            //this.entityDropItem(Items.EGG);
+            this.timeUntilNextEgg = this.rand.nextInt(6000) + 6000;
+        }
+    }
+
+    @Override
+    public void readAdditional(CompoundNBT compound) {
+        super.readAdditional(compound);
+        if (compound.contains("EggLayTime")) {
+            this.timeUntilNextEgg = compound.getInt("EggLayTime");
+        }
+
+    }
+
+    @Override
+    public void writeAdditional(CompoundNBT compound) {
+        super.writeAdditional(compound);
+        compound.putInt("EggLayTime", this.timeUntilNextEgg);
+    }
+
     @Nullable
     @Override
     public AgeableEntity createChild(ServerWorld world, AgeableEntity mate) {
-        return null;
+        if (this.getRarity() != Rarity.LEGENDARY) {
+            return EntityInit.DIMORPHODON.get().create(world);
+        } else {
+            return null;
+        }
     }
 
     @Override
     public int getMaxSpawnedInChunk() {
         return 6;
     }
+
     @Override
     public boolean isMaxGroupSize(int sizeIn) {
         return false;
@@ -177,6 +195,41 @@ public class Dimorphodon extends DinosaurFlying implements IAnimatable, IAnimati
         return null;
     }
 
+    @Override
+    protected void spawnDrops(DamageSource damageSourceIn) {
+        if (this.getRarity() == Rarity.LEGENDARY) {
+            float probability = rand.nextFloat();
+            if (probability <= 0.2F) {
+                float itemCount = rand.nextInt(3) + 1;
+                for (int i = 0; i < itemCount; i++) {
+                    this.entityDropItem(new ItemStack(ItemInit.ELECTRONICS_PARTS.get()));
+                }
+            }
+            probability = rand.nextFloat();
+            if (probability <= 0.3F) {
+                float itemCount = rand.nextInt(3) + 1;
+                for (int i = 0; i < itemCount; i++) {
+                    this.entityDropItem(new ItemStack(ItemInit.OIL.get()));
+                }
+            }
+            probability = rand.nextFloat();
+            if (probability <= 0.6F) {
+                float itemCount = rand.nextInt(3) + 1;
+                for (int i = 0; i < itemCount; i++) {
+                    this.entityDropItem(new ItemStack(ItemInit.SCRAP.get()));
+                }
+            }
+        } else if (this.getRarity() != Rarity.LEGENDARY) {
+            float probability = rand.nextFloat();
+            if (probability <= 0.8F) {
+                int itemCount = rand.nextInt(3) + 1;
+                for (int i = 0; i < itemCount; i++) {
+                    this.entityDropItem(new ItemStack(ItemInit.RAW_DIMORPHODON_MEAT.get()));
+                }
+            }
+        }
+    }
+
     private PlayState predicate(AnimationEvent<Dimorphodon> event) {
         if (this.isOnGround()) {
             if (horizontalMag(this.getMotion()) > 1.0E-6) {
@@ -196,8 +249,8 @@ public class Dimorphodon extends DinosaurFlying implements IAnimatable, IAnimati
         return PlayState.CONTINUE;
     }
 
-    private PlayState attackPredicate(AnimationEvent<Dimorphodon> event){
-        if (this.isSwingInProgress && event.getController().getAnimationState().equals(AnimationState.Stopped)){
+    private PlayState attackPredicate(AnimationEvent<Dimorphodon> event) {
+        if (this.isSwingInProgress && event.getController().getAnimationState().equals(AnimationState.Stopped)) {
             event.getController().markNeedsReload();
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.dimorphodon.attack"));
             this.isSwingInProgress = false;
@@ -207,6 +260,7 @@ public class Dimorphodon extends DinosaurFlying implements IAnimatable, IAnimati
 
     @Override
     public void registerControllers(AnimationData data) {
+        data.setResetSpeedInTicks(10);
         data.addAnimationController(new AnimationController<>(this, "controller", 10, this::predicate));
         data.addAnimationController(new AnimationController<>(this, "attackController", 0, this::attackPredicate));
     }

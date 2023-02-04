@@ -488,28 +488,6 @@
 		"animation.dimorphodon.attack": {
 			"animation_length": 0.64,
 			"bones": {
-				"neck": {
-					"rotation": {
-						"0.0": {
-							"vector": [0, 0, 0]
-						},
-						"0.12": {
-							"vector": [-5, 0, 0]
-						},
-						"0.24": {
-							"vector": [-10, 0, 0]
-						},
-						"0.36": {
-							"vector": [4.17, 0, 0]
-						},
-						"0.48": {
-							"vector": [9.17, 0, 0]
-						},
-						"0.64": {
-							"vector": [0, 0, 0]
-						}
-					}
-				},
 				"head": {
 					"rotation": {
 						"0.0": {
@@ -565,6 +543,28 @@
 				"LeftEyelid": {
 					"scale": {
 						"vector": [1, 0, 1]
+					}
+				},
+				"neck_attack": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.12": {
+							"vector": [-5, 0, 0]
+						},
+						"0.24": {
+							"vector": [-10, 0, 0]
+						},
+						"0.36": {
+							"vector": [4.17, 0, 0]
+						},
+						"0.48": {
+							"vector": [9.17, 0, 0]
+						},
+						"0.64": {
+							"vector": [0, 0, 0]
+						}
 					}
 				}
 			}

@@ -21,4 +21,6 @@ public class EnchantmentInit {
     public static final RegistryObject<ElectricEnchantment> ELECTRIC_ENCHANTMENT = ENCHANTMENTS.register("electric", ElectricEnchantment::new);
     public static final RegistryObject<IceEnchantment> ICE_ENCHANTMENT = ENCHANTMENTS.register("iced_arrow", IceEnchantment::new);
     public static final RegistryObject<AquaticEnchantment> AQUATIC_ENCHANT = ENCHANTMENTS.register("aquatic_enchant", AquaticEnchantment::new);
+    public static final RegistryObject<BlessingUnknownEnchantment> BLESSING_UNKNOWN = ENCHANTMENTS.register("blessing_unknown", BlessingUnknownEnchantment::new);
+    public static final RegistryObject<BetterJump> BETTER_JUMP = ENCHANTMENTS.register("better_jump", BetterJump::new);
 }

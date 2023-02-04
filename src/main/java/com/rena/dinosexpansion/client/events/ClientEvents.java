@@ -1,6 +1,7 @@
 package com.rena.dinosexpansion.client.events;
 
 import com.rena.dinosexpansion.DinosExpansion;
+import com.rena.dinosexpansion.client.screens.DinopediaScreen;
 import com.rena.dinosexpansion.client.screens.JournalScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.InputMappings;
@@ -22,6 +23,10 @@ public class ClientEvents {
 
     public static void openExplorerJournal(ItemStack book) {
         Minecraft.getInstance().displayGuiScreen(new JournalScreen(book));
+    }
+
+    public static void openDinopedia(ItemStack book){
+        Minecraft.getInstance().displayGuiScreen(new DinopediaScreen());
     }
 
 }

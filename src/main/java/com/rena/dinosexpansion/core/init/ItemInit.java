@@ -106,6 +106,10 @@ public class ItemInit {
             () -> new Item(new Item.Properties().food(FoodInit.RAW_GALLIMIMUS_MEAT).group(ModItemGroups.ITEMS)));
     public static final RegistryObject<Item> COOKED_GALLIMIMUS_MEAT = ITEMS.register("cooked_gallimimus_meat",
             () -> new Item(new Item.Properties().food(FoodInit.COOKED_GALLIMIMUS_MEAT).group(ModItemGroups.ITEMS)));
+    public static final RegistryObject<Item> RAW_DIMORPHODON_MEAT = ITEMS.register("raw_dimorphodon_meat",
+            () -> new Item(new Item.Properties().food(FoodInit.RAW_DIMORPHODON_MEAT).group(ModItemGroups.ITEMS)));
+    public static final RegistryObject<Item> COOKED_DIMORPHODON_MEAT = ITEMS.register("cooked_dimorphodon_meat",
+            () -> new Item(new Item.Properties().food(FoodInit.COOKED_DIMORPHODON_MEAT).group(ModItemGroups.ITEMS)));
 
     public static final RegistryObject<Item> NARCOTICS = ITEMS.register("narcotics",
             () -> new BaseNarcoticItem(new Item.Properties().group(ModItemGroups.ITEMS), 10));
@@ -131,7 +135,7 @@ public class ItemInit {
     public static final RegistryObject<Item> ELECTRONICS_PARTS = ITEMS.register("electronics_parts",
             () -> new Item(new Item.Properties().group(ModItemGroups.ITEMS)));
     public static final RegistryObject<Item> OIL = ITEMS.register("oil",
-            () -> new Item(new Item.Properties().group(ModItemGroups.ITEMS)));
+            () -> new TestItem(new Item.Properties().group(ModItemGroups.ITEMS).maxDamage(100)));
     public static final RegistryObject<Item> SCRAP = ITEMS.register("scrap",
             () -> new Item(new Item.Properties().group(ModItemGroups.ITEMS)));
     public static final RegistryObject<Item> EXPLORER_JOURNAL = ITEMS.register("explorer_journal",

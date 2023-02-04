@@ -41,7 +41,7 @@ public class EntityInit {
     public static final RegistryObject<EntityType<MegaPiranha>> MEGA_PIRANHA = register("megapiranha",
             () -> EntityType.Builder.<MegaPiranha>create(MegaPiranha::new, EntityClassification.WATER_CREATURE).size(0.5F, 0.75F));
     public static final RegistryObject<EntityType<Dimorphodon>> DIMORPHODON = register("dimorphodon",
-            () -> EntityType.Builder.<Dimorphodon>create(Dimorphodon::new, EntityClassification.WATER_CREATURE).size(1F, 1F));
+            () -> EntityType.Builder.<Dimorphodon>create(Dimorphodon::new, EntityClassification.WATER_CREATURE).size(0.5F, 0.7F));
     public static final RegistryObject<EntityType<Astorgosuchus>> ASTORGOSUCHUS = register("astorgosuchus",
             () -> EntityType.Builder.<Astorgosuchus>create(Astorgosuchus::new, EntityClassification.CREATURE).size(1.0F, 2.0F));
     public static final RegistryObject<EntityType<Campanile>> CAMPANILE = register("campanile",

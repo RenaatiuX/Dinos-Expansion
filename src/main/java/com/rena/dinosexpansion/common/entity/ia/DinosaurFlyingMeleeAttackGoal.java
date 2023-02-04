@@ -4,6 +4,7 @@ import com.rena.dinosexpansion.common.entity.flying.DinosaurFlying;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -28,6 +29,7 @@ public class DinosaurFlyingMeleeAttackGoal extends Goal {
         }
         return dinosaurFlying.getAttackTarget() != null;
     }
+
     @Override
     public void startExecuting() {
         clockwise = dinosaurFlying.getRNG().nextBoolean();
