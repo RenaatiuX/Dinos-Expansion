@@ -1,5 +1,6 @@
 package com.rena.dinosexpansion.common.enchantments;
 
+import com.rena.dinosexpansion.common.enchantments.util.ModEnchantmentType;
 import com.rena.dinosexpansion.common.item.TieredBow;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentType;
@@ -14,7 +15,7 @@ public class BetterPiercing extends Enchantment {
     }
 
     public BetterPiercing(){
-        this(Rarity.UNCOMMON, EnchantmentType.create("tiered_bows", item -> EnchantmentType.CROSSBOW.canEnchantItem(item) || item instanceof TieredBow), EquipmentSlotType.MAINHAND);
+        this(Rarity.UNCOMMON, ModEnchantmentType.TIERED_BOWS, EquipmentSlotType.MAINHAND);
     }
 
     public int getMinEnchantability(int enchantmentLevel) {

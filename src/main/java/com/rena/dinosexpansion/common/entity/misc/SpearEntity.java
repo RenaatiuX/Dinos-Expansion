@@ -1,6 +1,5 @@
 package com.rena.dinosexpansion.common.entity.misc;
 
-import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.core.init.EnchantmentInit;
 import com.rena.dinosexpansion.core.init.EntityInit;
 import net.minecraft.enchantment.EnchantmentHelper;

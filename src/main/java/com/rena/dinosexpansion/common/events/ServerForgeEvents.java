@@ -1,52 +1,29 @@
 package com.rena.dinosexpansion.common.events;
 
-
 import com.rena.dinosexpansion.DinosExpansion;
-import com.rena.dinosexpansion.common.item.util.JournalPages;
 import com.rena.dinosexpansion.core.init.DamageSourceInit;
 import com.rena.dinosexpansion.core.init.EffectInit;
 import com.rena.dinosexpansion.core.init.EnchantmentInit;
-import com.rena.dinosexpansion.core.init.ItemInit;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.TieredItem;
-import net.minecraft.item.ToolItem;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.item.*;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.potion.PotionUtils;
-import net.minecraft.stats.Stats;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.ProjectileImpactEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingHealEvent;
 import net.minecraftforge.event.entity.living.PotionEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.entity.player.ArrowLooseEvent;
+import net.minecraftforge.event.entity.player.ArrowNockEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-
-import java.util.Map;
-import java.util.Random;
 
 @Mod.EventBusSubscriber(modid = DinosExpansion.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ServerForgeEvents {
@@ -124,6 +101,28 @@ public class ServerForgeEvents {
                     if (level > 0) {
                         itemStack.setDamage(itemStack.getDamage() - 1);
                     }
+                }
+            }
+        }
+    }
+
+    //TODO need review
+
+    /**
+     * If the condition is met, the arrow is not consumed when fired
+     * @param event
+     */
+    @SubscribeEvent
+    public static void onArrowShot(ArrowLooseEvent event) {
+        PlayerEntity player = event.getPlayer();
+        ItemStack bow = event.getBow();
+        Item arrow = bow.getItem();
+        int level = EnchantmentHelper.getEnchantmentLevel(EnchantmentInit.AMMO_RESERVATION.get(), bow);
+        if (level > 0) {
+            if (arrow instanceof ArrowItem) {
+                float chance = (1.0F - 0.1F * level);
+                if (player.getRNG().nextFloat() > chance) {
+                    event.setCanceled(true);
                 }
             }
         }

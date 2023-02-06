@@ -17,14 +17,10 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.UseAction;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectInstance;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.registries.ForgeRegistries;
 
 public class TieredSpear extends Item implements IVanishable {
 
@@ -79,14 +75,14 @@ public class TieredSpear extends Item implements IVanishable {
         stack.damageItem(1, thrower, e -> e.sendBreakAnimation(thrower.getActiveHand()));
         SpearEntity spear = new SpearEntity(world, thrower, stack);
         spear.setDirectionAndMovement(thrower, thrower.rotationPitch, thrower.rotationYaw, 0.0F, 2.25F, 1.0F);
-        // set pickup status and remove the itemstack
+        // set pickup status and remove the itemStack
         if (thrower.abilities.isCreativeMode) {
             spear.pickupStatus = AbstractArrowEntity.PickupStatus.CREATIVE_ONLY;
         } else {
             thrower.inventory.deleteStack(stack);
         }
         if (this.spearTier.canPierce())
-            //u can maximum pierce 10 enemies, i think thats enough
+            //u can maximum pierce 10 enemies, I think that's enough
             spear.setPierceLevel((byte)10);
         world.addEntity(spear);
         world.playMovingSound(null, spear, SoundEvents.ITEM_TRIDENT_THROW, SoundCategory.PLAYERS, 1.0F, 1.0F);

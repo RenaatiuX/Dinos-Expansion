@@ -58,6 +58,6 @@ public class Gallimimus extends Dinosaur implements IAnimatable, IAnimationTicka
 
     @Override
     public int tickTimer() {
-        return 0;
+        return this.ticksExisted;
     }
 }

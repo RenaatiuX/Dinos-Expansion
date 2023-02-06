@@ -21,7 +21,7 @@ public class ModItemModelsProvider extends ItemModelProvider {
     protected void registerModels() {
         simple(ItemInit.COMPOUND_ARROW.get());
         simple(ItemInit.TRANQUILLIZER_ARROW.get());
-        spawnEgg(ItemInit.PARAPUZOSIA_SPAWN_EGG.get(), ItemInit.EOSQUALODON_SPAWN_EGG.get(), ItemInit.MEGA_PIRANHA_SPAWN_EGG.get());
+        spawnEgg(ItemInit.PARAPUZOSIA_SPAWN_EGG.get(), ItemInit.EOSQUALODON_SPAWN_EGG.get(), ItemInit.MEGA_PIRANHA_SPAWN_EGG.get(), ItemInit.DIMORPHODON_SPAWN_EGG.get(), ItemInit.ASTORGOSUCHUS_SPAWN_EGG.get());
         simple(ItemInit.GOLD_ARROW.get(), ItemInit.STONE_ARROW.get(), ItemInit.BONE_ARROW.get(), ItemInit.NARCOTICS.get());
         simple(ItemInit.DIAMOND_ARROW.get(), ItemInit.EMERALD_ARROW.get(), ItemInit.IRON_ARROW.get(), ItemInit.NETHERITE_ARROW.get(), ItemInit.WOODEN_ARROW.get());
         simple(ItemInit.KIBBLE_SIMPLE.get(), ItemInit.KIBBLE_BASIC.get(), ItemInit.KIBBLE_REGULAR.get(), ItemInit.KIBBLE_SUPERIOR.get(), ItemInit.KIBBLE_EXCEPTIONAL.get(), ItemInit.KIBBLE_EXTRAORDINARY.get());

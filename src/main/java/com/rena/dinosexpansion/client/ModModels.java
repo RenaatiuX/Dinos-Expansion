@@ -23,8 +23,7 @@ import java.util.Random;
 public class ModModels {
 
     public static final String[] HAND_MODEL_ITEMS = new String[] {
-            "steel_spear"};
-
+            "steel_spear", "wooden_spear"};
     @SubscribeEvent
     public static void onModelBakeEvent(ModelBakeEvent event) {
         Map<ResourceLocation, IBakedModel> map = event.getModelRegistry();
@@ -32,7 +31,6 @@ public class ModModels {
         for (String item : HAND_MODEL_ITEMS) {
             ResourceLocation modelInventory = new ModelResourceLocation("dinosexpansion:" + item, "inventory");
             ResourceLocation modelHand = new ModelResourceLocation("dinosexpansion:" + item + "_in_hand", "inventory");
-
             IBakedModel bakedModelDefault = map.get(modelInventory);
             IBakedModel bakedModelHand = map.get(modelHand);
             IBakedModel modelWrapper = new IBakedModel() {
@@ -83,6 +81,7 @@ public class ModModels {
             };
             map.put(modelInventory, modelWrapper);
         }
+
     }
 
     @SubscribeEvent
@@ -90,7 +89,5 @@ public class ModModels {
         for (String item : ModModels.HAND_MODEL_ITEMS) {
             ModelLoader.addSpecialModel(new ModelResourceLocation(DinosExpansion.MOD_ID + ":" + item + "_in_hand", "inventory"));
         }
-
     }
-
 }

@@ -60,7 +60,7 @@ public class ClientForgeEvents {
     public static final Random rand = new Random();
     private static boolean canJump;
     private static boolean hasReleasedJumpKey;
-    private static int jumpsLeft;
+    private static int jumpCount = 0;
 
     @SubscribeEvent
     public static final void renderEntityNameAndLevel(RenderNameplateEvent event) {
@@ -230,29 +230,41 @@ public class ClientForgeEvents {
     }
 
     @SubscribeEvent
-    @SuppressWarnings("unused")
-    public static void onJump(TickEvent.PlayerTickEvent event) {
-        ClientPlayerEntity player = Minecraft.getInstance().player;
-        if (event.phase == TickEvent.Phase.END && player != null && player.movementInput != null) {
-            ItemStack boots = player.getItemStackFromSlot(EquipmentSlotType.FEET);
-            if (!boots.isEmpty() && boots.getItem() instanceof ArmorItem) {
-                int jumpLevel = EnchantmentHelper.getEnchantmentLevel(EnchantmentInit.BETTER_JUMP.get(), boots);
-                if ((player.isOnGround() || player.isOnLadder()) && !player.isInWater()) {
-                    hasReleasedJumpKey = false;
-                    canJump = true;
-                } else if (!player.movementInput.jump) {
-                    hasReleasedJumpKey = true;
-                } else if (!player.abilities.isFlying && canJump && hasReleasedJumpKey) {
-                    canJump = false;
-                    if (jumpLevel == 1) {
-                        player.jump();
-                    } else if (jumpLevel == 2) {
-                        //TODO need review
-                        player.jump();
-                        player.jump();
-                    }
-                }
+    public static void onPlayerJump(TickEvent.ClientTickEvent event){
+        ClientPlayerEntity pl = Minecraft.getInstance().player;
+        if (event.phase != TickEvent.Phase.END || pl == null) return;
+
+        doJump(pl);
+    }
+
+    public static void doJump(ClientPlayerEntity player) {
+
+        Vector3d pos = player.getPositionVec();
+        Vector3d motion = player.getMotion();
+
+        AxisAlignedBB box = new AxisAlignedBB(pos.x, pos.y + (player.getEyeHeight() * .8), pos.z, pos.x, pos.y + player.getHeight(), pos.z);
+        if (player.isOnGround() || player.world.containsAnyLiquid(box) || player.isPassenger() || player.abilities.allowFlying) {
+            jumpCount = appleAdditionalJumps(player);
+        } else if (player.movementInput.jump) {
+            if (!hasReleasedJumpKey && jumpCount > 0 && motion.y < 0.333 && player.getFoodStats().getFoodLevel() > 0) {
+                player.jump();
+                jumpCount--;
+                player.fallDistance = 0.0F;
             }
+            hasReleasedJumpKey = true;
+        } else {
+            hasReleasedJumpKey = false;
         }
+    }
+
+    private static int appleAdditionalJumps(PlayerEntity player) {
+        int jumpCount = 0;
+        ItemStack stack = player.getItemStackFromSlot(EquipmentSlotType.FEET);
+        if (!stack.isEmpty()) {
+            Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(stack);
+            if (enchantments.containsKey(EnchantmentInit.BETTER_JUMP.get()))
+                jumpCount += enchantments.get(EnchantmentInit.BETTER_JUMP.get());
+        }
+        return jumpCount;
     }
 }
