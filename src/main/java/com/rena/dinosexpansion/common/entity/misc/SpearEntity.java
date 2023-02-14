@@ -1,5 +1,6 @@
 package com.rena.dinosexpansion.common.entity.misc;
 
+import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.core.init.EnchantmentInit;
 import com.rena.dinosexpansion.core.init.EntityInit;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -62,7 +63,7 @@ public class SpearEntity extends AbstractArrowEntity {
 
         Entity entity = this.getShooter();
         if ((this.dealtDamage || this.getNoClip()) && entity != null) {
-            if (loyaltyLevel > 0 && !this.shouldReturnToThrower()) {
+            if (loyaltyLevel > 0 && !shouldReturnToThrower()) {
                 if (!this.world.isRemote && this.pickupStatus == AbstractArrowEntity.PickupStatus.ALLOWED) {
                     this.entityDropItem(this.getArrowStack(), 0.1F);
                 }
@@ -115,7 +116,8 @@ public class SpearEntity extends AbstractArrowEntity {
             this.enchanted = stack.hasEffect();
         }
     }
-
+    //if u leave that as default it will apply piercing, but when u did override this method and didn´t call the super the piercing basically didn´t got applied
+    /*
     @Override
     protected void onEntityHit(EntityRayTraceResult result) {
         Entity entity = result.getEntity();
@@ -147,6 +149,8 @@ public class SpearEntity extends AbstractArrowEntity {
         setMotion(getMotion().mul(-0.01D, -0.1D, -0.01D));
         playSound(sound, 1.0F, 1.0F);
     }
+
+     */
 
     @Nullable
     @Override
