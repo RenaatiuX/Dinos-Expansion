@@ -1,35 +1,48 @@
 {
-  "parent":"forge:item/default",
-  "loader":"forge:separate-perspective",
-  "base": {
-    "parent": "dinosexpansion:item/spear_in_hand",
-    "textures": {
-      "spear": "dinosexpansion:item/iron_spear"
-    }
+  "parent": "builtin/entity",
+  "gui_light": "front",
+  "ambientocclusion": true,
+  "textures": {
+    "particle": "#spear"
   },
-  "perspectives": {
+  "display": {
+    "thirdperson_righthand": {
+      "rotation": [ 0, 60, 0 ],
+      "translation": [ 0, 9, 1.25],
+      "scale": [ 1, 1, 1 ]
+    },
+    "thirdperson_lefthand": {
+      "rotation": [ 0, 60, 0 ],
+      "translation": [ 0, 9, 1.25],
+      "scale": [ 1, 1, 1 ]
+    },
+    "firstperson_righthand": {
+      "rotation": [ 0, -90, 25 ],
+      "translation": [ 1, 7, 1.5 ],
+      "scale": [ 0.7, 0.7, 0.7 ]
+    },
+    "firstperson_lefthand": {
+      "rotation": [ 0, 90, -25 ],
+      "translation": [ 1, 7, 1.5 ],
+      "scale": [ 0.7, 0.7, 0.7 ]
+    },
     "gui": {
-      "parent": "minecraft:item/generated",
-      "textures": {
-        "layer0": "dinosexpansion:item/iron_spear"
-      }
+      "translation": [ 0, 0.0, 0.0]
+    },
+    "fixed": {
+      "translation": [ 0, 0.0, 0.0]
     },
     "ground": {
-      "parent": "minecraft:item/generated",
-      "textures": {
-        "layer0": "dinosexpansion:item/iron_spear"
-      }
+      "translation": [ 0, 0.0, 0.0]
     }
   },
+
   "overrides": [
     {
       "predicate": {
         "minecraft:throwing": 1
       },
-      "model": "dinosexpansion:item/spear_throwing",
-      "textures": {
-        "spear": "dinosexpansion:item/iron_spear"
-      }
+      "model": "dinosexpansion:item/iron_spear_throwing"
     }
   ]
 }

@@ -146,7 +146,7 @@ public class ChakramEntity extends AbstractArrowEntity {
     @Override
     protected void onEntityHit(EntityRayTraceResult result) {
         Entity entity = result.getEntity();
-        float f = 8.0F;
+        float f = 4.0F;
         if (entity instanceof LivingEntity) {
             LivingEntity livingentity = (LivingEntity) entity;
             f += EnchantmentHelper.getModifierForCreature(this.getArrowStack(), livingentity.getCreatureAttribute());

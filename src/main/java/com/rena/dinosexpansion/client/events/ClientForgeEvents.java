@@ -58,7 +58,6 @@ public class ClientForgeEvents {
     public static final ResourceLocation FREEZE_OVERLAY = DinosExpansion.modLoc("textures/overlay/ice_overlay.png");
     public static final ResourceLocation FROZEN_HEARTS = DinosExpansion.modLoc("textures/overlay/frozen_heart.png");
     public static final Random rand = new Random();
-    private static boolean canJump;
     private static boolean hasReleasedJumpKey;
     private static int jumpCount = 0;
 

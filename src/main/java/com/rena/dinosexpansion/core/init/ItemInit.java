@@ -13,6 +13,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.Rarity;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -59,25 +60,38 @@ public class ItemInit {
     public static final RegistryObject<Item> WOODEN_SPEAR = ITEMS.register("wooden_spear",
             () -> new TieredSpear(new Item.Properties().group(ModItemGroups.WEAPONS).setISTER(
                     () -> () -> ClientISTERProvider.bakeSpearISTER("wooden_spear")), SpearTiers.WOODEN_SPEAR));
+    public static final RegistryObject<Item> WOODEN_SPEAR_INVENTORY = ITEMS.register("wooden_spear_inventory",
+            () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> STONE_SPEAR = ITEMS.register("stone_spear",
             () -> new TieredSpear(new Item.Properties().group(ModItemGroups.WEAPONS).setISTER(
                     () -> () -> ClientISTERProvider.bakeSpearISTER("stone_spear")), SpearTiers.STONE_SPEAR));
+    public static final RegistryObject<Item> STONE_SPEAR_INVENTORY = ITEMS.register("stone_spear_inventory",
+            () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> IRON_SPEAR = ITEMS.register("iron_spear",
             () -> new TieredSpear(new Item.Properties().group(ModItemGroups.WEAPONS).setISTER(
                     () -> () -> ClientISTERProvider.bakeSpearISTER("iron_spear")), SpearTiers.IRON_SPEAR));
+    public static final RegistryObject<Item> IRON_SPEAR_INVENTORY = ITEMS.register("iron_spear_inventory",
+            () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> GOLD_SPEAR = ITEMS.register("golden_spear",
             () -> new TieredSpear(new Item.Properties().group(ModItemGroups.WEAPONS).setISTER(
                     () -> () -> ClientISTERProvider.bakeSpearISTER("golden_spear")), SpearTiers.GOLD_SPEAR));
+    public static final RegistryObject<Item> GOLD_SPEAR_INVENTORY = ITEMS.register("golden_spear_inventory",
+            () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> DIAMOND_SPEAR_INVENTORY = ITEMS.register("diamond_spear_inventory",
+            () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> DIAMOND_SPEAR = ITEMS.register("diamond_spear",
             () -> new TieredSpear(new Item.Properties().group(ModItemGroups.WEAPONS).setISTER(
                     () -> () -> ClientISTERProvider.bakeSpearISTER("diamond_spear")), SpearTiers.DIAMOND_SPEAR));
     public static final RegistryObject<Item> NETHERITE_SPEAR = ITEMS.register("netherite_spear",
             () -> new TieredSpear(new Item.Properties().group(ModItemGroups.WEAPONS).setISTER(
                     () -> () -> ClientISTERProvider.bakeSpearISTER("netherite_spear")), SpearTiers.NETHERITE_SPEAR));
+    public static final RegistryObject<Item> NETHERITE_SPEAR_INVENTORY = ITEMS.register("netherite_spear_inventory",
+            () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> EMERALD_SPEAR = ITEMS.register("emerald_spear",
             () -> new TieredSpear(new Item.Properties().group(ModItemGroups.WEAPONS).setISTER(
                     () -> () -> ClientISTERProvider.bakeSpearISTER("emerald_spear")), SpearTiers.EMERALD_SPEAR));
-
+    public static final RegistryObject<Item> EMERALD_SPEAR_INVENTORY = ITEMS.register("emerald_spear_inventory",
+            () -> new Item(new Item.Properties()));
 
     public static final RegistryObject<Item> PARAPUZOSIA_SPAWN_EGG = ITEMS.register("parapuzosia_spawn_egg",
             () -> new ForgeSpawnEggItem(EntityInit.PARAPUZOSIA, 0x392829, 0x77554c, new Item.Properties().group(ModItemGroups.SPAWN_EGGS)));
@@ -144,4 +158,8 @@ public class ItemInit {
             () -> new ExplorerJournalItem(new Item.Properties().group(ModItemGroups.ITEMS)));
     public static final RegistryObject<Item> EXPLORER_JOURNAL_PAGE = ITEMS.register("explorer_journal_page",
             () -> new Item(new Item.Properties().group(ModItemGroups.ITEMS)));
+    public static final RegistryObject<Item> QUICKSAND_BUCKET = ITEMS.register("quicksand_bucket",
+            () -> new CustomBlockBucket(new Item.Properties().group(ModItemGroups.ITEMS).maxStackSize(1), BlockInit.QUICKSAND));
+    public static final RegistryObject<Item> GLOW_STICK = ITEMS.register("glowstick",
+            () -> new GlowStickItem(new Item.Properties().group(ModItemGroups.ITEMS)));
 }

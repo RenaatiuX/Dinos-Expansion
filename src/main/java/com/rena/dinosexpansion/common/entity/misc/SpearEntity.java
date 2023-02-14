@@ -120,17 +120,17 @@ public class SpearEntity extends AbstractArrowEntity {
     protected void onEntityHit(EntityRayTraceResult result) {
         Entity entity = result.getEntity();
         dealtDamage = true;
-
+        float f = 8.0F;
         if (entity instanceof LivingEntity) {
             LivingEntity living = (LivingEntity) entity;
-            this.setDamage(this.getDamage() + EnchantmentHelper.getModifierForCreature(this.getArrowStack(), living.getCreatureAttribute()));
+            this.setDamage(f + EnchantmentHelper.getModifierForCreature(this.getArrowStack(), living.getCreatureAttribute()));
         }
 
         Entity thrower = getShooter();
         DamageSource source = DamageSource.causeTridentDamage(this, (thrower == null) ? this : thrower);
         SoundEvent sound = SoundEvents.ITEM_TRIDENT_HIT;
 
-        if (entity.attackEntityFrom(source, (float) this.getDamage())) {
+        if (entity.attackEntityFrom(source, f)) {
             if (entity.getType() == EntityType.ENDERMAN) {
                 return;
             }
@@ -172,6 +172,13 @@ public class SpearEntity extends AbstractArrowEntity {
     }
 
     @Override
+    public void writeAdditional(CompoundNBT compound) {
+        super.writeAdditional(compound);
+        compound.put("Spear", getArrowStack().write(new CompoundNBT()));
+        compound.putBoolean("damage", this.dealtDamage);
+    }
+
+    @Override
     protected float getWaterDrag() {
         return EnchantmentHelper.getEnchantmentLevel(EnchantmentInit.AQUATIC_ENCHANT.get(), getArrowStack()) > 0 ? 1.0f : super.getWaterDrag();
     }
@@ -179,13 +186,6 @@ public class SpearEntity extends AbstractArrowEntity {
     @Override
     protected float getSpeedFactor() {
         return EnchantmentHelper.getEnchantmentLevel(EnchantmentInit.AQUATIC_ENCHANT.get(), getArrowStack()) > 0 ? 1.0f : super.getSpeedFactor();
-    }
-
-    @Override
-    public void writeAdditional(CompoundNBT compound) {
-        super.writeAdditional(compound);
-        compound.put("Spear", getArrowStack().write(new CompoundNBT()));
-        compound.putBoolean("damage", this.dealtDamage);
     }
 
     @Override

@@ -22,8 +22,7 @@ import java.util.Random;
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, modid = DinosExpansion.MOD_ID, value = Dist.CLIENT)
 public class ModModels {
 
-    public static final String[] HAND_MODEL_ITEMS = new String[] {
-            "steel_spear", "wooden_spear"};
+    public static final String[] HAND_MODEL_ITEMS = new String[] {};
     @SubscribeEvent
     public static void onModelBakeEvent(ModelBakeEvent event) {
         Map<ResourceLocation, IBakedModel> map = event.getModelRegistry();

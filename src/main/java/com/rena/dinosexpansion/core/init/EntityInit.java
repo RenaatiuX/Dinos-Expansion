@@ -6,8 +6,7 @@ import com.rena.dinosexpansion.common.entity.aquatic.Eosqualodon;
 import com.rena.dinosexpansion.common.entity.aquatic.MegaPiranha;
 import com.rena.dinosexpansion.common.entity.aquatic.Parapuzosia;
 import com.rena.dinosexpansion.common.entity.flying.Dimorphodon;
-import com.rena.dinosexpansion.common.entity.misc.ChakramEntity;
-import com.rena.dinosexpansion.common.entity.misc.SpearEntity;
+import com.rena.dinosexpansion.common.entity.misc.*;
 import com.rena.dinosexpansion.common.entity.projectile.CustomArrow;
 import com.rena.dinosexpansion.common.entity.projectile.DartEntity;
 import com.rena.dinosexpansion.common.entity.semiaquatic.Astorgosuchus;
@@ -33,6 +32,8 @@ public class EntityInit {
             () -> EntityType.Builder.<ChakramEntity>create(ChakramEntity::new, EntityClassification.MISC).size(0.5F, 0.5F).build(DinosExpansion.modLoc("chakram").toString()));
     public static final RegistryObject<EntityType<DartEntity>> DART = ENTITY_TYPES.register("dart",
             () -> EntityType.Builder.<DartEntity>create(DartEntity::new, EntityClassification.MISC).size(0.5F, 0.5F).build(DinosExpansion.modLoc("dart").toString()));
+    public static final RegistryObject<EntityType<GlowStickEntity>> GLOW_STICK = ENTITY_TYPES.register("glowstick",
+            () -> EntityType.Builder.<GlowStickEntity>create(GlowStickEntity::new, EntityClassification.MISC).size(0.5F, 0.5F).build(DinosExpansion.modLoc("glowstick").toString()));
 
     public static final RegistryObject<EntityType<Parapuzosia>> PARAPUZOSIA = register("parapuzosia",
             () -> EntityType.Builder.<Parapuzosia>create(Parapuzosia::new, EntityClassification.WATER_CREATURE).size(1.5F, 1.7F));

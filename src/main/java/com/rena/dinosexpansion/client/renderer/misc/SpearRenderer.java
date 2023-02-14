@@ -19,7 +19,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3f;
 
 public class SpearRenderer extends EntityRenderer<SpearEntity> {
-    private static final SpearModel SPEAR_MODEL = new SpearModel();
+    private final SpearModel SPEAR_MODEL = new SpearModel();
 
     public SpearRenderer(EntityRendererManager renderManager) {
         super(renderManager);
@@ -39,24 +39,6 @@ public class SpearRenderer extends EntityRenderer<SpearEntity> {
     @Override
     public ResourceLocation getEntityTexture(SpearEntity entity) {
         return spear(entity.getArrowStack().getItem().getRegistryName().getPath() + ".png");
-    }
-
-    public static class SpearItemStackRenderer extends ItemStackTileEntityRenderer {
-
-        final ResourceLocation texture;
-
-        public SpearItemStackRenderer(final String regName) {
-            texture = spear(regName + ".png");
-        }
-
-        @Override
-        public void func_239207_a_(ItemStack stack, ItemCameraTransforms.TransformType p_239207_2_, MatrixStack matrixStack, IRenderTypeBuffer buffer, int combinedLight, int combinedOverlay) {
-                matrixStack.push();
-                matrixStack.scale(-1.0F, -1.0F, 1.0F);
-                IVertexBuilder vertexBuilder = ItemRenderer.getEntityGlintVertexBuilder(buffer, RenderType.getEntityCutout(texture), false, stack.hasEffect());
-                SPEAR_MODEL.render(matrixStack, vertexBuilder, combinedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
-                matrixStack.pop();
-        }
     }
 
     private static ResourceLocation spear(String name){

@@ -3,16 +3,15 @@ package com.rena.dinosexpansion.core.init;
 import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.common.block.BaseSaplingBlock;
 import com.rena.dinosexpansion.common.block.GeyserBlock;
-import com.rena.dinosexpansion.common.block.plant.QuadruplePlantBlock;
+import com.rena.dinosexpansion.common.block.GlowStickBlock;
+import com.rena.dinosexpansion.common.block.QuicksandBlock;
 import com.rena.dinosexpansion.common.block.plant.SinglePlantBlock;
 import com.rena.dinosexpansion.common.block.plant.TriplePlantBlock;
-import com.rena.dinosexpansion.common.block.plant.growable.GrowDoublePlantBlock;
 import com.rena.dinosexpansion.common.block.plant.growable.GrowQuadruplePlantBlock;
-import com.rena.dinosexpansion.common.block.plant.growable.GrowTriplePlantBlock;
 import com.rena.dinosexpansion.common.world.gen.trees.ModTreeSpawners;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.trees.OakTree;
+import net.minecraft.block.material.MaterialColor;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -34,6 +33,8 @@ public class BlockInit {
     public static final RegistryObject<Block> FUTURISTIC_BLOCK_ON2 = register("futuristic_block_on_2", () -> new Block(AbstractBlock.Properties.create(Material.ROCK).hardnessAndResistance(100f, 2400f).harvestTool(ToolType.PICKAXE).harvestLevel(3).setRequiresTool().setLightLevel(state -> 10)), ModItemGroups.BLOCKS);
     public static final RegistryObject<Block> MOSSY_FUTURISTIC_BLOCK1 = register("mossy_futuristic_block_1", () -> new Block(AbstractBlock.Properties.create(Material.ROCK).hardnessAndResistance(100f, 2400f).harvestTool(ToolType.PICKAXE).harvestLevel(3).setRequiresTool()), ModItemGroups.BLOCKS);
     public static final RegistryObject<Block> MOSSY_FUTURISTIC_BLOCK2 = register("mossy_futuristic_block_2", () -> new Block(AbstractBlock.Properties.create(Material.ROCK).hardnessAndResistance(100f, 2400f).harvestTool(ToolType.PICKAXE).harvestLevel(3).setRequiresTool()), ModItemGroups.BLOCKS);
+    public static final RegistryObject<Block> QUICKSAND = register("quicksand", () -> new QuicksandBlock(AbstractBlock.Properties.create(Material.SAND, MaterialColor.SAND).hardnessAndResistance(0.5F).sound(SoundType.SAND).doesNotBlockMovement().harvestTool(ToolType.SHOVEL)), ModItemGroups.BLOCKS);
+    public static final RegistryObject<Block> GLOW_STICK = BLOCKS.register("glowstick", () -> (new GlowStickBlock(AbstractBlock.Properties.create(Material.CARPET).doesNotBlockMovement().setLightLevel((state) -> 12).zeroHardnessAndResistance())));
 
     //Plants
     public static final RegistryObject<Block> LAVENDER = register("lavender",

@@ -1,11 +1,8 @@
 package com.rena.dinosexpansion.common.entity.misc;
 
-import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.common.config.DinosExpansionConfig;
-import com.rena.dinosexpansion.core.init.EnchantmentInit;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -22,7 +19,6 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.*;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
@@ -46,7 +42,7 @@ public abstract class BoomerangEntity extends Entity {
     private static final DataParameter<Float> ROTATION = EntityDataManager.createKey(BoomerangEntity.class, DataSerializers.FLOAT);
     private static final DataParameter<Optional<UUID>> RETURN_UNIQUE_ID = EntityDataManager.createKey(BoomerangEntity.class, DataSerializers.OPTIONAL_UNIQUE_ID);
 
-    public BoomerangEntity(EntityType<BoomerangEntity> entityTypeIn, World worldIn) {
+    public BoomerangEntity(EntityType<? extends BoomerangEntity> entityTypeIn, World worldIn) {
         super(entityTypeIn, worldIn);
         this.bounceFactor = 0.85D;
         this.turningAround = false;
@@ -55,7 +51,7 @@ public abstract class BoomerangEntity extends Entity {
         this.hand = Hand.MAIN_HAND;
     }
 
-    public BoomerangEntity(EntityType<BoomerangEntity> type, World worldIn, PlayerEntity entity, ItemStack itemstack, Hand hand) {
+    public BoomerangEntity(EntityType<? extends BoomerangEntity> type, World worldIn, PlayerEntity entity, ItemStack itemstack, Hand hand) {
         this(type, worldIn);
         this.selfStack = itemstack;
         this.setRotation(entity.rotationYaw, entity.rotationPitch);

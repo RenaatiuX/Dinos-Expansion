@@ -82,7 +82,7 @@ public class TieredSpear extends Item implements IVanishable {
             thrower.inventory.deleteStack(stack);
         }
         if (this.spearTier.canPierce())
-            //u can maximum pierce 10 enemies, I think that's enough
+            //u can maxpierce 10 enemies, I think that's enoughimum
             spear.setPierceLevel((byte)10);
         world.addEntity(spear);
         world.playMovingSound(null, spear, SoundEvents.ITEM_TRIDENT_THROW, SoundCategory.PLAYERS, 1.0F, 1.0F);
