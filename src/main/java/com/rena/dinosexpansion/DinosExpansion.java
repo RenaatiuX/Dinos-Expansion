@@ -4,6 +4,7 @@ import com.rena.dinosexpansion.common.config.DinosExpansionConfig;
 import com.rena.dinosexpansion.core.init.*;
 import com.rena.dinosexpansion.core.network.Network;
 import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;

@@ -1,8 +1,11 @@
 package com.rena.dinosexpansion.common.entity.misc;
 
+import com.google.common.collect.Lists;
 import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.core.init.EnchantmentInit;
 import com.rena.dinosexpansion.core.init.EntityInit;
+import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
+import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
@@ -17,10 +20,12 @@ import net.minecraft.network.IPacket;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.network.play.server.SChangeGameStatePacket;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.EntityRayTraceResult;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -28,6 +33,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
+import java.util.Arrays;
 
 public class SpearEntity extends AbstractArrowEntity {
     protected static final DataParameter<ItemStack> ITEM = EntityDataManager.createKey(SpearEntity.class, DataSerializers.ITEMSTACK);
@@ -35,6 +41,8 @@ public class SpearEntity extends AbstractArrowEntity {
     protected boolean enchanted;
     protected int loyaltyLevel;
     protected int returningTicks;
+    protected double damage = 2d;
+    protected double knockbackStrength;
 
     public SpearEntity(EntityType<SpearEntity> type, World worldIn) {
         super(type, worldIn);
@@ -44,6 +52,7 @@ public class SpearEntity extends AbstractArrowEntity {
         super(EntityInit.SPEAR.get(), thrower, world);
         setArrowStack(item);
     }
+
     @OnlyIn(Dist.CLIENT)
     public SpearEntity(World worldIn, double x, double y, double z) {
         super(EntityInit.SPEAR.get(), x, y, z, worldIn);
@@ -110,47 +119,111 @@ public class SpearEntity extends AbstractArrowEntity {
     @Override
     public void notifyDataManagerChange(DataParameter<?> key) {
         super.notifyDataManagerChange(key);
-        if(key.equals(ITEM)) {
+        if (key.equals(ITEM)) {
             ItemStack stack = getArrowStack();
             this.loyaltyLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.LOYALTY, stack);
             this.enchanted = stack.hasEffect();
         }
     }
+
     //if u leave that as default it will apply piercing, but when u did override this method and didn´t call the super the piercing basically didn´t got applied
-    /*
     @Override
     protected void onEntityHit(EntityRayTraceResult result) {
         Entity entity = result.getEntity();
-        dealtDamage = true;
-        float f = 8.0F;
-        if (entity instanceof LivingEntity) {
-            LivingEntity living = (LivingEntity) entity;
-            this.setDamage(f + EnchantmentHelper.getModifierForCreature(this.getArrowStack(), living.getCreatureAttribute()));
-        }
+        float f = (float) this.getMotion().length();
+        int i = MathHelper.ceil(MathHelper.clamp((double) f * damage, 0.0D, 2.147483647E9D));
+        if (this.getPierceLevel() > 0) {
+            if (this.piercedEntities == null) {
+                this.piercedEntities = new IntOpenHashSet(10);
+            }
 
-        Entity thrower = getShooter();
-        DamageSource source = DamageSource.causeTridentDamage(this, (thrower == null) ? this : thrower);
-        SoundEvent sound = SoundEvents.ITEM_TRIDENT_HIT;
+            if (this.hitEntities == null) {
+                this.hitEntities = Lists.newArrayListWithCapacity(10);
+            }
 
-        if (entity.attackEntityFrom(source, f)) {
-            if (entity.getType() == EntityType.ENDERMAN) {
+            if (this.piercedEntities.size() >= this.getPierceLevel() + 1) {
+                this.setMotion(this.getMotion().mul(-0.01D, -0.1D, -0.01D));
                 return;
             }
-            if (entity instanceof LivingEntity) {
-                LivingEntity living = (LivingEntity) entity;
-                if (thrower instanceof LivingEntity) {
-                    EnchantmentHelper.applyThornEnchantments(living, thrower);
-                    EnchantmentHelper.applyArthropodEnchantments((LivingEntity) thrower, living);
-                }
-                arrowHit(living);
+
+            this.piercedEntities.add(entity.getEntityId());
+        }
+
+        if (this.getIsCritical()) {
+            long j = this.rand.nextInt(i / 2 + 2);
+            i = (int) Math.min(j + (long) i, 2147483647L);
+        }
+
+        Entity entity1 = this.getShooter();
+        DamageSource damagesource;
+        if (entity1 == null) {
+            damagesource = DamageSource.causeArrowDamage(this, this);
+        } else {
+            damagesource = DamageSource.causeArrowDamage(this, entity1);
+            if (entity1 instanceof LivingEntity) {
+                ((LivingEntity) entity1).setLastAttackedEntity(entity);
             }
         }
 
-        setMotion(getMotion().mul(-0.01D, -0.1D, -0.01D));
-        playSound(sound, 1.0F, 1.0F);
-    }
+        boolean flag = entity.getType() == EntityType.ENDERMAN;
+        if (this.isBurning() && !flag) {
+            entity.setFire(5);
+        }
 
-     */
+        if (entity.attackEntityFrom(damagesource, (float) i)) {
+            if (flag) {
+                return;
+            }
+
+            if (entity instanceof LivingEntity) {
+                LivingEntity livingentity = (LivingEntity) entity;
+                if (!this.world.isRemote && this.getPierceLevel() <= 0) {
+                    livingentity.setArrowCountInEntity(livingentity.getArrowCountInEntity() + 1);
+                }
+
+                if (this.knockbackStrength > 0) {
+                    Vector3d vector3d = this.getMotion().mul(1.0D, 0.0D, 1.0D).normalize().scale(this.knockbackStrength * 0.6D);
+                    if (vector3d.lengthSquared() > 0.0D) {
+                        livingentity.addVelocity(vector3d.x, 0.1D, vector3d.z);
+                    }
+                }
+
+                if (!this.world.isRemote && entity1 instanceof LivingEntity) {
+                    EnchantmentHelper.applyThornEnchantments(livingentity, entity1);
+                    EnchantmentHelper.applyArthropodEnchantments((LivingEntity) entity1, livingentity);
+                }
+
+                this.arrowHit(livingentity);
+                if (entity1 != null && livingentity != entity1 && livingentity instanceof PlayerEntity && entity1 instanceof ServerPlayerEntity && !this.isSilent()) {
+                    ((ServerPlayerEntity) entity1).connection.sendPacket(new SChangeGameStatePacket(SChangeGameStatePacket.HIT_PLAYER_ARROW, 0.0F));
+                }
+
+                if (!entity.isAlive() && this.hitEntities != null) {
+                    this.hitEntities.add(livingentity);
+                }
+
+                if (!this.world.isRemote && entity1 instanceof ServerPlayerEntity) {
+                    ServerPlayerEntity serverplayerentity = (ServerPlayerEntity) entity1;
+                    //TODO maybe add our own criteria Triggers here
+                    /*
+                    if (this.hitEntities != null && this.getShotFromCrossbow()) {
+                        CriteriaTriggers.KILLED_BY_CROSSBOW.test(serverplayerentity, this.hitEntities);
+                    } else if (!entity.isAlive() && this.getShotFromCrossbow()) {
+                        CriteriaTriggers.KILLED_BY_CROSSBOW.test(serverplayerentity, Arrays.asList(entity));
+                    }
+
+                     */
+                }
+            }
+
+            this.playSound(SoundEvents.ITEM_TRIDENT_HIT, 1.0F, 1.2F / (this.rand.nextFloat() * 0.2F + 0.9F));
+            if (this.getPierceLevel() <= 0) {
+                this.setMotion(this.getMotion().mul(-0.01D, -0.1D, -0.01D));
+            }
+        } else {
+            this.setMotion(this.getMotion().mul(-0.01D, -0.1D, -0.01D));
+        }
+    }
 
     @Nullable
     @Override
@@ -173,6 +246,8 @@ public class SpearEntity extends AbstractArrowEntity {
             setArrowStack(ItemStack.read(compound.getCompound("Spear")));
         }
         dealtDamage = compound.getBoolean("damage");
+        this.damage = compound.getDouble("SpearDamage");
+        this.knockbackStrength = compound.getDouble("knockbackStrength");
     }
 
     @Override
@@ -180,6 +255,8 @@ public class SpearEntity extends AbstractArrowEntity {
         super.writeAdditional(compound);
         compound.put("Spear", getArrowStack().write(new CompoundNBT()));
         compound.putBoolean("damage", this.dealtDamage);
+        compound.putDouble("SpearDamage", this.damage);
+        compound.putDouble("knockbackStrength", this.knockbackStrength);
     }
 
     @Override
@@ -200,6 +277,25 @@ public class SpearEntity extends AbstractArrowEntity {
     @Override
     protected SoundEvent getHitEntitySound() {
         return SoundEvents.ITEM_TRIDENT_HIT_GROUND;
+    }
+
+    @Override
+    public void setDamage(double damage) {
+        this.damage = damage;
+    }
+
+    @Override
+    public double getDamage() {
+        return damage;
+    }
+
+
+    public void setKnockbackStrengthD(double knockbackStrength) {
+        this.knockbackStrength = knockbackStrength;
+    }
+
+    public double getKnockbackStrengthD() {
+        return knockbackStrength;
     }
 
     @Override

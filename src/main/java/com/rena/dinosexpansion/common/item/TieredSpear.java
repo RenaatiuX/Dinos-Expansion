@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import com.rena.dinosexpansion.common.entity.misc.SpearEntity;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.enchantment.IVanishable;
@@ -20,7 +21,13 @@ import net.minecraft.item.UseAction;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ToolType;
+
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Set;
 
 public class TieredSpear extends Item implements IVanishable {
 
@@ -84,6 +91,9 @@ public class TieredSpear extends Item implements IVanishable {
         if (this.spearTier.canPierce())
             //u can maxpierce 10 enemies, I think that's enoughimum
             spear.setPierceLevel((byte)10);
+        //sets the damage of the thrown spear to 80% of the actual damage
+        spear.setDamage(this.spearTier.getDamageAddition() * 0.8);
+        spear.setKnockbackStrengthD(this.spearTier.getKnockback());
         world.addEntity(spear);
         world.playMovingSound(null, spear, SoundEvents.ITEM_TRIDENT_THROW, SoundCategory.PLAYERS, 1.0F, 1.0F);
     }
@@ -139,6 +149,12 @@ public class TieredSpear extends Item implements IVanishable {
 
         double getDamageAddition();
         double getAttackSpeed();
+
+        /**
+         *
+         * @return the knockback this spear should do not that 1 equals the knockback of Punch 1 and so on
+         */
+        double getKnockback();
         int getEnchantability();
         int getDurability();
         boolean canPierce();
