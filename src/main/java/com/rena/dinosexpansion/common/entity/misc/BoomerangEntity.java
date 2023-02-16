@@ -47,7 +47,7 @@ public abstract class BoomerangEntity extends Entity {
         this.bounceFactor = 0.85D;
         this.turningAround = false;
         this.timeBeforeTurnAround = 30;
-        this.itemsPickedUp = new ArrayList<ItemEntity>();
+        this.itemsPickedUp = new ArrayList<>();
         this.hand = Hand.MAIN_HAND;
     }
 

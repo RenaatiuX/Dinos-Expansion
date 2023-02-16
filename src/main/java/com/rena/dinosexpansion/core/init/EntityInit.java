@@ -30,6 +30,8 @@ public class EntityInit {
             () -> EntityType.Builder.<SpearEntity>create(SpearEntity::new, EntityClassification.MISC).size(0.5F, 0.5F).build(DinosExpansion.modLoc("spear").toString()));
     public static final RegistryObject<EntityType<ChakramEntity>> CHAKRAM = ENTITY_TYPES.register("chakram",
             () -> EntityType.Builder.<ChakramEntity>create(ChakramEntity::new, EntityClassification.MISC).size(0.5F, 0.5F).build(DinosExpansion.modLoc("chakram").toString()));
+    public static final RegistryObject<EntityType<HatchetEntity>> HATCHET = ENTITY_TYPES.register("hatchet",
+            () -> EntityType.Builder.<HatchetEntity>create(HatchetEntity::new, EntityClassification.MISC).size(0.5F, 0.5F).build(DinosExpansion.modLoc("hatchet").toString()));
     public static final RegistryObject<EntityType<DartEntity>> DART = ENTITY_TYPES.register("dart",
             () -> EntityType.Builder.<DartEntity>create(DartEntity::new, EntityClassification.MISC).size(0.5F, 0.5F).build(DinosExpansion.modLoc("dart").toString()));
     public static final RegistryObject<EntityType<GlowStickEntity>> GLOW_STICK = ENTITY_TYPES.register("glowstick",

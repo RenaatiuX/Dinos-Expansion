@@ -2,22 +2,22 @@ package com.rena.dinosexpansion.core.init;
 
 import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.client.renderer.ClientISTERProvider;
-import com.rena.dinosexpansion.common.entity.misc.ChakramEntity;
 import com.rena.dinosexpansion.common.entity.projectile.CustomArrow;
 import com.rena.dinosexpansion.common.item.*;
 import com.rena.dinosexpansion.common.item.arrow.DartItem;
 import com.rena.dinosexpansion.common.item.arrow.TinyRockItem;
+import com.rena.dinosexpansion.common.item.enums.BowTiers;
+import com.rena.dinosexpansion.common.item.enums.ChakramTiers;
+import com.rena.dinosexpansion.common.item.enums.HatchetTiers;
+import com.rena.dinosexpansion.common.item.enums.SpearTiers;
 import com.rena.dinosexpansion.common.item.util.BaseNarcoticItem;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.Item;
 import net.minecraft.item.Rarity;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.fml.RegistryObject;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-
-import java.util.function.Supplier;
 
 public class ItemInit {
 
@@ -56,7 +56,8 @@ public class ItemInit {
             () -> new TieredChakram(new Item.Properties().group(ModItemGroups.WEAPONS), ChakramTiers.EMERALD_CHAKRAM));
     public static final RegistryObject<Item> NETHERITE_CHAKRAM = ITEMS.register("netherite_chakram",
             () -> new TieredChakram(new Item.Properties().group(ModItemGroups.WEAPONS), ChakramTiers.NETHERITE_CHAKRAM));
-
+    public static final RegistryObject<Item> WOODEN_HATCHET = ITEMS.register("wooden_hatchet",
+            () -> new TieredHatchet(new Item.Properties().group(ModItemGroups.WEAPONS), HatchetTiers.WOODEN_HATCHET));
     public static final RegistryObject<Item> WOODEN_SPEAR = ITEMS.register("wooden_spear",
             () -> new TieredSpear(new Item.Properties().group(ModItemGroups.WEAPONS).setISTER(
                     () -> () -> ClientISTERProvider.bakeSpearISTER("wooden_spear")), SpearTiers.WOODEN_SPEAR));

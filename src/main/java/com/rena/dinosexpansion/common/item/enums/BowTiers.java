@@ -1,5 +1,6 @@
-package com.rena.dinosexpansion.common.item;
+package com.rena.dinosexpansion.common.item.enums;
 
+import com.rena.dinosexpansion.common.item.TieredBow;
 import com.rena.dinosexpansion.core.init.ItemInit;
 import com.rena.dinosexpansion.core.tags.ModTags;
 import net.minecraft.item.Item;

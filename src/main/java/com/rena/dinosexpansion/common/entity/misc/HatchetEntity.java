@@ -2,6 +2,7 @@ package com.rena.dinosexpansion.common.entity.misc;
 
 import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.core.init.EnchantmentInit;
+import com.rena.dinosexpansion.core.init.EntityInit;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
@@ -17,6 +18,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.EntityRayTraceResult;
@@ -31,34 +33,45 @@ import javax.annotation.Nullable;
 public class HatchetEntity extends AbstractArrowEntity {
 
     protected static final DataParameter<ItemStack> ITEM = EntityDataManager.createKey(HatchetEntity.class, DataSerializers.ITEMSTACK);
-
+    protected static final DataParameter<Float> PREV_ROTATION = EntityDataManager.createKey(HatchetEntity.class, DataSerializers.FLOAT);
+    protected static final DataParameter<Float> ROTATION = EntityDataManager.createKey(HatchetEntity.class, DataSerializers.FLOAT);
     protected boolean dealtDamage;
     protected boolean enchanted;
     protected int loyaltyLevel;
     protected int returningTicks;
 
-    protected HatchetEntity(EntityType<HatchetEntity> type, World worldIn) {
+    public HatchetEntity(EntityType<? extends HatchetEntity> type, World worldIn) {
         super(type, worldIn);
     }
-
-    protected HatchetEntity(EntityType<HatchetEntity> type, double x, double y, double z, World worldIn) {
-        super(type, x, y, z, worldIn);
+    public HatchetEntity(LivingEntity shooter, World worldIn, ItemStack thrownStackIn) {
+        super(EntityInit.HATCHET.get(), shooter, worldIn);
+        setArrowStack(thrownStackIn);
     }
-
-    protected HatchetEntity(EntityType<HatchetEntity> type, LivingEntity shooter, World worldIn) {
-        super(type, shooter, worldIn);
+    @OnlyIn(Dist.CLIENT)
+    public HatchetEntity(double x, double y, double z, World worldIn) {
+        super(EntityInit.HATCHET.get(), x, y, z, worldIn);
     }
 
     @Override
     protected void registerData() {
         super.registerData();
         this.dataManager.register(ITEM, ItemStack.EMPTY);
+        this.dataManager.register(ROTATION, 0.0F);
+        this.dataManager.register(PREV_ROTATION, 0.0F);
     }
 
     @Override
     public void tick() {
+        this.dataManager.set(PREV_ROTATION, this.getRotation());
         if (this.timeInGround > 4) {
             this.dealtDamage = true;
+        } else {
+            this.dataManager.set(ROTATION, this.getRotation() + 45.0F);
+            if (this.dataManager.get(ROTATION) % 360.0F == 0.0F) {
+                this.world.playSound(null, this.getPosition(), SoundEvents.BLOCK_WOOD_BREAK, SoundCategory.PLAYERS, 1.0F, 1.0F);
+            } else if (this.dataManager.get(ROTATION) % 360.0F == 180.0F) {
+                this.world.playSound(null, this.getPosition(), SoundEvents.BLOCK_WOOD_BREAK, SoundCategory.PLAYERS, 1.0F, 1.0F);
+            }
         }
 
         Entity entity = this.getShooter();
@@ -101,7 +114,7 @@ public class HatchetEntity extends AbstractArrowEntity {
     }
 
     @Override
-    protected ItemStack getArrowStack() {
+    public ItemStack getArrowStack() {
         return this.getDataManager().get(ITEM).copy();
     }
 
@@ -130,7 +143,7 @@ public class HatchetEntity extends AbstractArrowEntity {
     @Override
     protected void onEntityHit(EntityRayTraceResult result) {
         Entity entity = result.getEntity();
-        float f = 8.0F;
+        float f = 5.0F;
         if (entity instanceof LivingEntity) {
             LivingEntity livingentity = (LivingEntity) entity;
             f += EnchantmentHelper.getModifierForCreature(this.getArrowStack(), livingentity.getCreatureAttribute());
@@ -198,6 +211,14 @@ public class HatchetEntity extends AbstractArrowEntity {
         super.writeAdditional(compound);
         compound.put("Hatchet", getArrowStack().write(new CompoundNBT()));
         compound.putBoolean("DealtDamage", this.dealtDamage);
+    }
+
+    public float getRotation() {
+        return this.dataManager.get(ROTATION);
+    }
+
+    public float getPrevRotation() {
+        return this.dataManager.get(PREV_ROTATION);
     }
 
     @Override

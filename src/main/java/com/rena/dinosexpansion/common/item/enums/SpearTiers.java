@@ -1,4 +1,6 @@
-package com.rena.dinosexpansion.common.item;
+package com.rena.dinosexpansion.common.item.enums;
+
+import com.rena.dinosexpansion.common.item.TieredSpear;
 
 public enum SpearTiers implements TieredSpear.SpearTier {
 
