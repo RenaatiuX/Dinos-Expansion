@@ -130,8 +130,10 @@ public class SpearEntity extends AbstractArrowEntity {
     @Override
     protected void onEntityHit(EntityRayTraceResult result) {
         Entity entity = result.getEntity();
-        float f = (float) this.getMotion().length();
-        int i = MathHelper.ceil(MathHelper.clamp((double) f * damage, 0.0D, 2.147483647E9D));
+        float totalDamage = (float) ((float) this.getMotion().length() * damage);
+        if (entity instanceof LivingEntity)
+            totalDamage += EnchantmentHelper.getModifierForCreature(this.getArrowStack(), ((LivingEntity)entity).getCreatureAttribute());
+        int i = MathHelper.ceil(MathHelper.clamp(totalDamage, 0.0D, 2.147483647E9D));
         if (this.getPierceLevel() > 0) {
             if (this.piercedEntities == null) {
                 this.piercedEntities = new IntOpenHashSet(10);

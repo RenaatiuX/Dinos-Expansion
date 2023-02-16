@@ -143,7 +143,7 @@ public class HatchetEntity extends AbstractArrowEntity {
     @Override
     protected void onEntityHit(EntityRayTraceResult result) {
         Entity entity = result.getEntity();
-        float f = 5.0F;
+        float f = (float) getDamage();
         if (entity instanceof LivingEntity) {
             LivingEntity livingentity = (LivingEntity) entity;
             f += EnchantmentHelper.getModifierForCreature(this.getArrowStack(), livingentity.getCreatureAttribute());

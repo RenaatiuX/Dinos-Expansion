@@ -6,8 +6,10 @@ import com.rena.dinosexpansion.common.entity.misc.SpearEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.enchantment.IVanishable;
+import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -91,8 +93,9 @@ public class TieredSpear extends Item implements IVanishable {
         if (this.spearTier.canPierce())
             //u can maxpierce 10 enemies, I think that's enoughimum
             spear.setPierceLevel((byte)10);
-        //sets the damage of the thrown spear to 80% of the actual damage
-        spear.setDamage(this.spearTier.getDamageAddition() * 0.8);
+        //sets the damage of the thrown spear to 50% of the actual damage, included playerAttribute and enchantments
+        //note that this damage also increases the more i charge it so it get back to over 100%
+        spear.setDamage(getTotalAttackDamageForPlayer(thrower) * 0.5d);
         spear.setKnockbackStrengthD(this.spearTier.getKnockback());
         world.addEntity(spear);
         world.playMovingSound(null, spear, SoundEvents.ITEM_TRIDENT_THROW, SoundCategory.PLAYERS, 1.0F, 1.0F);
@@ -131,9 +134,22 @@ public class TieredSpear extends Item implements IVanishable {
         return equipmentSlot == EquipmentSlotType.MAINHAND ? this.spearAttributes : super.getAttributeModifiers(equipmentSlot);
     }
 
+     public double getAttackDamage(){
+        return this.spearAttributes.get(Attributes.ATTACK_DAMAGE).stream().mapToDouble(AttributeModifier::getAmount).sum();
+     }
+
+    /**
+     *
+     * @param player the player who throws the spear
+     * @return the attack damage that was set in the tier + a base value + the players attack damage which takes stuff like strength into account
+     */
+     public double getTotalAttackDamageForPlayer(PlayerEntity player){
+        return getAttackDamage() + player.getBaseAttributeValue(Attributes.ATTACK_DAMAGE);
+     }
+
     @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
-        return super.canApplyAtEnchantingTable(stack, enchantment) || enchantment == Enchantments.LOYALTY;
+        return super.canApplyAtEnchantingTable(stack, enchantment) || enchantment == Enchantments.LOYALTY || enchantment == Enchantments.SHARPNESS;
     }
 
     @Override
