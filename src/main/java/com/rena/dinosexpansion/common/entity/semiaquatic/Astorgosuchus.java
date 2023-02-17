@@ -1,5 +1,6 @@
 package com.rena.dinosexpansion.common.entity.semiaquatic;
 
+import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.common.entity.Dinosaur;
 import com.rena.dinosexpansion.common.entity.ia.*;
 import com.rena.dinosexpansion.common.entity.ia.helper.ISemiAquatic;
@@ -65,6 +66,7 @@ public class Astorgosuchus extends Dinosaur implements IAnimatable, IAnimationTi
 
     public Astorgosuchus(EntityType<Astorgosuchus> type, World world) {
         super(type, world, new DinosaurInfo("astorgosuchus", 400, 200, 100, SleepRhythmGoal.SleepRhythm.NONE), generateLevelWithinBounds(20, 100));
+        DinosExpansion.LOGGER.debug("why the hell ist this then just Client side");
         this.setPathPriority(PathNodeType.WATER, 0.0F);
         this.setPathPriority(PathNodeType.WATER_BORDER, 0.0F);
         switchNavigator(false);

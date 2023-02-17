@@ -3,14 +3,18 @@ package com.rena.dinosexpansion.common.item;
 import com.rena.dinosexpansion.common.util.enums.PoopSize;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.IGrowable;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import software.bernie.shadowed.eliotlash.mclib.math.functions.limit.Min;
 
 import static net.minecraftforge.common.util.FakePlayerFactory.getMinecraft;
 import static net.minecraftforge.event.ForgeEventFactory.onApplyBonemeal;
@@ -25,6 +29,15 @@ public class PoopItem extends Item {
     @Override
     public ActionResultType onItemUse(ItemUseContext context) {
         return super.onItemUse(context);
+    }
+
+    @Override
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
+        if (worldIn.isRemote) {
+            Minecraft mc = Minecraft.getInstance();
+            mc.gameSettings.smoothCamera = !mc.gameSettings.smoothCamera;
+        }
+        return super.onItemRightClick(worldIn, playerIn, handIn);
     }
 
     @Deprecated //Forge: Use Player/Hand version

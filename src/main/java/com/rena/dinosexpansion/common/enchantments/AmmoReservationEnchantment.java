@@ -8,7 +8,7 @@ import net.minecraft.item.ItemStack;
 public class AmmoReservationEnchantment extends Enchantment {
 
     public AmmoReservationEnchantment() {
-        super(Rarity.UNCOMMON, ModEnchantmentType.TIERED_BOWS, new EquipmentSlotType[]{EquipmentSlotType.MAINHAND});
+        super(Rarity.UNCOMMON, ModEnchantmentType.TYPE_THROWING_ITEM, new EquipmentSlotType[]{EquipmentSlotType.MAINHAND});
     }
 
     @Override
@@ -29,15 +29,5 @@ public class AmmoReservationEnchantment extends Enchantment {
     @Override
     public int getMaxLevel() {
         return 5;
-    }
-
-    @Override
-    public boolean canApply(ItemStack stack) {
-        return stack.getItem() instanceof BowItem;
-    }
-
-    @Override
-    public boolean canApplyAtEnchantingTable(ItemStack stack) {
-        return this.canApply(stack);
     }
 }

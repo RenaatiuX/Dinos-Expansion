@@ -56,7 +56,9 @@ public abstract class Dinosaur extends TameableEntity {
     public static final int generateLevelWithinBounds(int minLevel, int maxLevel) {
         int max = Math.min(maxLevel + DinosExpansionConfig.LEVEL_OFFSET.get(), DinosExpansionConfig.MAX_LEVEL.get() + DinosExpansionConfig.LEVEL_OFFSET.get());
         int min = Math.max(minLevel + DinosExpansionConfig.LEVEL_OFFSET.get(), 0);
-        return MathHelper.nextInt(new Random(), min, max);
+        int levl = MathHelper.nextInt(new Random(), min, max);
+        DinosExpansion.LOGGER.debug("level: " + levl);
+        return levl;
     }
 
     /**
@@ -101,9 +103,9 @@ public abstract class Dinosaur extends TameableEntity {
         super(type, world);
         this.maxNarcotic = (int) ((float) info.maxNarcotic * (float) DinosExpansionConfig.NARCOTIC_NEEDED_PERCENT.get() / 100f);
         this.maxHunger = info.maxHunger;
-        this.dataManager.set(RARITY, getinitialRarity().ordinal());
-        this.dataManager.set(GENDER, getInitialGender().ordinal());
-        this.dataManager.set(LEVEL, level);
+        this.dataManager.register(RARITY, getinitialRarity().ordinal());
+        this.dataManager.register(GENDER, getInitialGender().ordinal());
+        this.dataManager.register(LEVEL, level);
         setHungerValue(maxHunger);
         Rarity rarity = getRarity();
         this.info = info;
@@ -126,11 +128,8 @@ public abstract class Dinosaur extends TameableEntity {
     @Override
     protected void registerData() {
         super.registerData();
-        this.dataManager.register(LEVEL, 0);
         this.dataManager.register(XP, 0);
         this.dataManager.register(BOOLS, 0);
-        this.dataManager.register(RARITY, Rarity.COMMON.ordinal());
-        this.dataManager.register(GENDER, Gender.MALE.ordinal());
         this.dataManager.register(KNOCKED_OUT, Optional.empty());
         this.dataManager.register(NARCOTIC_VALUE, 0);
         this.dataManager.register(HUNGER_VALUE, 0f);

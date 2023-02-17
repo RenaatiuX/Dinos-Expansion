@@ -92,9 +92,9 @@ public class ClientSetupEvents {
         RenderTypeLookup.setRenderLayer(BlockInit.AMORPHOPHALLUS.get(), RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(BlockInit.TEMPSKYA.get(), RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(BlockInit.PROTOTAXITES.get(), RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(BlockInit.PROTOTAXITES_2.get(), RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(BlockInit.PROTOTAXITES_3.get(), RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(BlockInit.PROTOTAXITES_4.get(), RenderType.getCutout());
+        //RenderTypeLookup.setRenderLayer(BlockInit.PROTOTAXITES_2.get(), RenderType.getCutout());
+        //RenderTypeLookup.setRenderLayer(BlockInit.PROTOTAXITES_3.get(), RenderType.getCutout());
+        //RenderTypeLookup.setRenderLayer(BlockInit.PROTOTAXITES_4.get(), RenderType.getCutout());
 
         RenderTypeLookup.setRenderLayer(BlockInit.REDWOOD_SAPLING.get(), RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(BlockInit.REDWOOD_LEAVES.get(), RenderType.getCutout());

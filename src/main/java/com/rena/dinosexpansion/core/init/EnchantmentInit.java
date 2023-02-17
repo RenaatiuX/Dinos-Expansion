@@ -4,6 +4,7 @@ import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.common.enchantments.*;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.QuickChargeEnchantment;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -14,8 +15,7 @@ public class EnchantmentInit {
     public static final DeferredRegister<Enchantment> ENCHANTMENTS = DeferredRegister.create(ForgeRegistries.ENCHANTMENTS, DinosExpansion.MOD_ID);
 
     //Vanilla
-    public static final RegistryObject<BetterQuickCharge> BETTER_QUICK_CHARGE = VANILLA.register("quick_charge", BetterQuickCharge::new);
-    public static final RegistryObject<BetterPiercing> BETTER_PIERCING = VANILLA.register("piercing", BetterPiercing::new);
+   /**overriding vanilla enchants is a big nono, use {@link net.minecraftforge.common.extensions.IForgeItem#canApplyAtEnchantingTable(ItemStack, Enchantment)}*/
 
     //Custom
     public static final RegistryObject<ElectricEnchantment> ELECTRIC_ENCHANTMENT = ENCHANTMENTS.register("electric", ElectricEnchantment::new);

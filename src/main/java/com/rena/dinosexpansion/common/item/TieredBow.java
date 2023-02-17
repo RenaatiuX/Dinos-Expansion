@@ -3,6 +3,7 @@ package com.rena.dinosexpansion.common.item;
 import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.core.init.EnchantmentInit;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.LivingEntity;
@@ -13,15 +14,24 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
+import net.minecraft.util.Util;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Predicate;
 
 public class TieredBow extends BowItem {
+
+    //the bow enchants are already included
+    public static final Set<Enchantment> ALLOWED_ENCHANTMENTS = Util.make(new HashSet<>(), set -> {
+        set.add(Enchantments.PIERCING);
+        set.add(Enchantments.QUICK_CHARGE);
+    });
 
     private final BowTier tier;
 
@@ -62,7 +72,7 @@ public class TieredBow extends BowItem {
                             abstractarrowentity.setIsCritical(true);
                         }
                         if (f >= (1f + tier.getSpeedAddition()) * 0.9){
-                            abstractarrowentity.setPierceLevel((byte) EnchantmentHelper.getEnchantmentLevel(EnchantmentInit.BETTER_QUICK_CHARGE.get(), stack));
+                            abstractarrowentity.setPierceLevel((byte) EnchantmentHelper.getEnchantmentLevel(Enchantments.PIERCING, stack));
                         }
 
                         int j = EnchantmentHelper.getEnchantmentLevel(Enchantments.POWER, stack);
@@ -122,7 +132,12 @@ public class TieredBow extends BowItem {
 
     @Override
     public int getUseDuration(ItemStack stack) {
-        return super.getUseDuration(stack) - 15 * EnchantmentHelper.getEnchantmentLevel(EnchantmentInit.BETTER_QUICK_CHARGE.get(), stack);
+        return super.getUseDuration(stack) - 15 * EnchantmentHelper.getEnchantmentLevel(Enchantments.QUICK_CHARGE, stack);
+    }
+
+    @Override
+    public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
+        return super.canApplyAtEnchantingTable(stack, enchantment) || ALLOWED_ENCHANTMENTS.contains(enchantment);
     }
 
     @Override

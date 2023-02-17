@@ -16,14 +16,21 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.UseAction;
 import net.minecraft.stats.Stats;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class TieredChakram extends Item implements IVanishable {
+
+    public static final Set<Enchantment> ALLOWED_ENCHANTMENTS = Util.make(new HashSet<>(), set-> {
+       set.add(Enchantments.FLAME);
+       set.add(Enchantments.LOYALTY);
+       set.add(Enchantments.POWER);
+       set.add(Enchantments.PUNCH);
+    });
 
     private final ChakramTier chakramTier;
 
@@ -125,7 +132,7 @@ public class TieredChakram extends Item implements IVanishable {
 
     @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
-        return super.canApplyAtEnchantingTable(stack, enchantment) || enchantment == Enchantments.LOYALTY;
+        return super.canApplyAtEnchantingTable(stack, enchantment) || ALLOWED_ENCHANTMENTS.contains(enchantment);
     }
 
     @Override

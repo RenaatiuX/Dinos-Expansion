@@ -8,5 +8,4 @@ import net.minecraft.enchantment.EnchantmentType;
 
 public class ModEnchantmentType{
     public static final EnchantmentType TYPE_THROWING_ITEM = EnchantmentType.create("throwing_item", ModTags.Items.AQUATIC_ENCHANT::contains);
-    public static final EnchantmentType TIERED_BOWS = EnchantmentType.create("tiered_bows", item -> EnchantmentType.CROSSBOW.canEnchantItem(item) || item instanceof TieredBow);
 }
