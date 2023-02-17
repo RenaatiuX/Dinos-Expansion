@@ -263,7 +263,7 @@ public abstract class BoomerangEntity extends Entity {
         hitEntity.attackEntityFrom(this.causeNewDamage(this, player), (float) this.getDamage(hitEntity, player));
     }
 
-    protected abstract int getDamage(Entity var1, PlayerEntity var2);
+    protected abstract int getDamage(Entity entity, PlayerEntity player);
 
     public abstract DamageSource causeNewDamage(BoomerangEntity boomerang, Entity entity);
 

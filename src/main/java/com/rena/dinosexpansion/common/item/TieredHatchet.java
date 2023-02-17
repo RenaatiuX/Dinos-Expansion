@@ -3,9 +3,7 @@ package com.rena.dinosexpansion.common.item;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.ImmutableMultimap.Builder;
-import com.google.common.collect.Sets;
 import com.rena.dinosexpansion.common.entity.misc.HatchetEntity;
-import com.sun.tools.classfile.Opcode;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
@@ -94,7 +92,7 @@ public class TieredHatchet extends Item {
         int j = EnchantmentHelper.getEnchantmentLevel(Enchantments.SHARPNESS, stack);
         if (j > 0) {
             //add the base damage up with the sharpness addition calculated like vanilla sharpness damage
-            //all reduced by 50% so when thrown fast u can get more then 100% but when u just throw it quickly the damage will drop of
+            //all reduced by 50% so when thrown fast u can get more than 100% but when u just throw it quickly the damage will drop of
             hatchet.setDamage((this.attackDamage + (double) j * 1.25d + 1D) * .5d);
         }
         int k = EnchantmentHelper.getEnchantmentLevel(Enchantments.PUNCH, stack);

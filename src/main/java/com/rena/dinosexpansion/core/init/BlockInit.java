@@ -5,9 +5,9 @@ import com.rena.dinosexpansion.common.block.BaseSaplingBlock;
 import com.rena.dinosexpansion.common.block.GeyserBlock;
 import com.rena.dinosexpansion.common.block.GlowStickBlock;
 import com.rena.dinosexpansion.common.block.QuicksandBlock;
+import com.rena.dinosexpansion.common.block.plant.GrowQuadruplePlantBlock;
 import com.rena.dinosexpansion.common.block.plant.SinglePlantBlock;
 import com.rena.dinosexpansion.common.block.plant.TriplePlantBlock;
-import com.rena.dinosexpansion.common.block.plant.growable.GrowQuadruplePlantBlock;
 import com.rena.dinosexpansion.common.world.gen.trees.ModTreeSpawners;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
@@ -84,12 +84,6 @@ public class BlockInit {
 
     //Quadruple Tall Flower
     public static final RegistryObject<Block> PROTOTAXITES = register("prototaxites_1",
-            ()-> new GrowQuadruplePlantBlock(AbstractBlock.Properties.create(Material.TALL_PLANTS).doesNotBlockMovement().zeroHardnessAndResistance().sound(SoundType.PLANT)),  ModItemGroups.BLOCKS);
-    public static final RegistryObject<Block> PROTOTAXITES_2 = register("prototaxites_2",
-            ()-> new GrowQuadruplePlantBlock(AbstractBlock.Properties.create(Material.TALL_PLANTS).doesNotBlockMovement().zeroHardnessAndResistance().sound(SoundType.PLANT)),  ModItemGroups.BLOCKS);
-    public static final RegistryObject<Block> PROTOTAXITES_3 = register("prototaxites_3",
-            ()-> new GrowQuadruplePlantBlock(AbstractBlock.Properties.create(Material.TALL_PLANTS).doesNotBlockMovement().zeroHardnessAndResistance().sound(SoundType.PLANT)),  ModItemGroups.BLOCKS);
-    public static final RegistryObject<Block> PROTOTAXITES_4 = register("prototaxites_4",
             ()-> new GrowQuadruplePlantBlock(AbstractBlock.Properties.create(Material.TALL_PLANTS).doesNotBlockMovement().zeroHardnessAndResistance().sound(SoundType.PLANT)),  ModItemGroups.BLOCKS);
 
     //Tree
