@@ -6,10 +6,7 @@ import com.rena.dinosexpansion.common.entity.projectile.CustomArrow;
 import com.rena.dinosexpansion.common.item.*;
 import com.rena.dinosexpansion.common.item.arrow.DartItem;
 import com.rena.dinosexpansion.common.item.arrow.TinyRockItem;
-import com.rena.dinosexpansion.common.item.enums.BowTiers;
-import com.rena.dinosexpansion.common.item.enums.ChakramTiers;
-import com.rena.dinosexpansion.common.item.enums.HatchetTiers;
-import com.rena.dinosexpansion.common.item.enums.SpearTiers;
+import com.rena.dinosexpansion.common.item.enums.*;
 import com.rena.dinosexpansion.common.item.util.BaseNarcoticItem;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.Item;
@@ -41,6 +38,9 @@ public class ItemInit {
             () -> new DartItem(new Item.Properties().group(ModItemGroups.WEAPONS)));
     public static final RegistryObject<Item> TINY_ROCK = ITEMS.register("tiny_rock",
             () -> new TinyRockItem(new Item.Properties().group(ModItemGroups.WEAPONS)));
+
+    public static final RegistryObject<TieredBoomerang> WOOD_BOOMERANG = ITEMS.register("wood_boomerang", () -> new TieredBoomerang(new Item.Properties().group(ModItemGroups.WEAPONS), BoomerangTiers.WOOD));
+
 
     public static final RegistryObject<Item> WOODEN_CHAKRAM = ITEMS.register("wooden_chakram",
             () -> new TieredChakram(new Item.Properties().group(ModItemGroups.WEAPONS), ChakramTiers.WOODEN_CHAKRAM));

@@ -1,6 +1,7 @@
 package com.rena.dinosexpansion.common.entity.misc;
 
 import com.rena.dinosexpansion.common.config.DinosExpansionConfig;
+import com.rena.dinosexpansion.core.init.EntityInit;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -19,6 +20,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
+import net.minecraft.util.IndirectEntityDamageSource;
 import net.minecraft.util.math.*;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
@@ -28,7 +30,12 @@ import net.minecraftforge.fml.network.NetworkHooks;
 import javax.annotation.Nullable;
 import java.util.*;
 
-public abstract class BoomerangEntity extends Entity {
+public class BoomerangEntity extends Entity {
+
+    private static final DataParameter<Float> ROTATION = EntityDataManager.createKey(BoomerangEntity.class, DataSerializers.FLOAT);
+    private static final DataParameter<Optional<UUID>> RETURN_UNIQUE_ID = EntityDataManager.createKey(BoomerangEntity.class, DataSerializers.OPTIONAL_UNIQUE_ID);
+    private static final DataParameter<ItemStack> BOOMERANG_STACK = EntityDataManager.createKey(BoomerangEntity.class, DataSerializers.ITEMSTACK);
+
 
     private BlockPos activatedPos;
     protected boolean isBouncing;
@@ -39,10 +46,10 @@ public abstract class BoomerangEntity extends Entity {
     List<ItemEntity> itemsPickedUp;
     private ItemStack selfStack;
     private Hand hand;
-    private static final DataParameter<Float> ROTATION = EntityDataManager.createKey(BoomerangEntity.class, DataSerializers.FLOAT);
-    private static final DataParameter<Optional<UUID>> RETURN_UNIQUE_ID = EntityDataManager.createKey(BoomerangEntity.class, DataSerializers.OPTIONAL_UNIQUE_ID);
+    private double damage;
+    private double speed = 1.0d;
 
-    public BoomerangEntity(EntityType<? extends BoomerangEntity> entityTypeIn, World worldIn) {
+    public BoomerangEntity(EntityType<BoomerangEntity> entityTypeIn, World worldIn) {
         super(entityTypeIn, worldIn);
         this.bounceFactor = 0.85D;
         this.turningAround = false;
@@ -51,9 +58,16 @@ public abstract class BoomerangEntity extends Entity {
         this.hand = Hand.MAIN_HAND;
     }
 
-    public BoomerangEntity(EntityType<? extends BoomerangEntity> type, World worldIn, PlayerEntity entity, ItemStack itemstack, Hand hand) {
-        this(type, worldIn);
-        this.selfStack = itemstack;
+    /**
+     *
+     * @param worldIn
+     * @param entity
+     * @param boomerang has to be from type {@link com.rena.dinosexpansion.common.item.BoomerangItem}
+     * @param hand
+     */
+    public BoomerangEntity(World worldIn, PlayerEntity entity, ItemStack boomerang, Hand hand) {
+        this(EntityInit.BOOMERANG.get(), worldIn);
+        this.dataManager.set(BOOMERANG_STACK, boomerang);
         this.setRotation(entity.rotationYaw, entity.rotationPitch);
         double x = -MathHelper.sin(entity.rotationYaw * 3.141593F / 180.0F);
         double z = MathHelper.cos(entity.rotationYaw * 3.141593F / 180.0F);
@@ -77,13 +91,26 @@ public abstract class BoomerangEntity extends Entity {
     }
 
     public void setEntityDeadWithPlayerDeadOrMissing() {
-        if (selfStack != null && !this.world.isRemote) {
+        if (getRenderedItemStack() != null && !this.world.isRemote) {
             ItemEntity itementity = new ItemEntity(world, this.getPosX(), this.getPosY(), this.getPosZ(), selfStack);
             itementity.setDefaultPickupDelay();
             itementity.setMotion(itementity.getMotion().add((world.rand.nextFloat() - world.rand.nextFloat()) * 0.1F, (double) (world.rand.nextFloat() * 0.05F), (double) ((world.rand.nextFloat() - world.rand.nextFloat()) * 0.1F)));
             world.addEntity(itementity);
         }
         super.setDead();
+    }
+
+    @Override
+    public void setMotion(Vector3d motionIn) {
+        super.setMotion(motionIn.mul(speed, speed, speed));
+    }
+
+    public void setDamage(double damage) {
+        this.damage = damage;
+    }
+
+    public void setSpeed(double speed) {
+        this.speed = speed;
     }
 
     @Override
@@ -222,6 +249,7 @@ public abstract class BoomerangEntity extends Entity {
 
         this.determineRotation();
         this.prevBoomerangRotation = this.getBoomerangRotation();
+        //crazy for loop
         for (this.setBoomerangRotation(this.getBoomerangRotation() + 36F); this.getBoomerangRotation() > 360F; this.setBoomerangRotation(this.getBoomerangRotation() - 360F)) {
         }
 
@@ -257,27 +285,32 @@ public abstract class BoomerangEntity extends Entity {
     }
 
     public void beforeTurnAround(PlayerEntity player) {
+
     }
 
     public void onEntityHit(Entity hitEntity, PlayerEntity player) {
         hitEntity.attackEntityFrom(this.causeNewDamage(this, player), (float) this.getDamage(hitEntity, player));
     }
 
-    protected abstract int getDamage(Entity entity, PlayerEntity player);
+    protected double getDamage(Entity entity, PlayerEntity player){
+        return this.damage;
+    }
 
-    public abstract DamageSource causeNewDamage(BoomerangEntity boomerang, Entity entity);
+    public DamageSource causeNewDamage(BoomerangEntity boomerang, Entity entity){
+        return new IndirectEntityDamageSource("boomerang", boomerang, entity).setProjectile();
+    }
 
     public void setEntityDead() {
         if (this.getReturnTo() != null) {
-            if (selfStack != null) {
+            if (getRenderedItemStack() != null) {
                 if (!this.getReturnTo().getHeldItemMainhand().getItem().equals(Items.AIR)) {
                     if (!this.getReturnTo().getHeldItemOffhand().getItem().equals(Items.AIR)) {
-                        this.getReturnTo().dropItem(selfStack, true);
+                        this.getReturnTo().dropItem(getRenderedItemStack(), true);
                     } else {
-                        this.getReturnTo().setHeldItem(Hand.OFF_HAND, selfStack);
+                        this.getReturnTo().setHeldItem(Hand.OFF_HAND, getRenderedItemStack());
                     }
                 } else {
-                    this.getReturnTo().setHeldItem(Hand.MAIN_HAND, selfStack);
+                    this.getReturnTo().setHeldItem(Hand.MAIN_HAND, getRenderedItemStack());
                 }
             }
         }
@@ -288,6 +321,7 @@ public abstract class BoomerangEntity extends Entity {
     protected void registerData() {
         this.dataManager.register(ROTATION, 0.0F);
         this.dataManager.register(RETURN_UNIQUE_ID, Optional.empty());
+        this.dataManager.register(BOOMERANG_STACK, ItemStack.EMPTY);
     }
 
     public float getBoomerangRotation() {
@@ -330,6 +364,8 @@ public abstract class BoomerangEntity extends Entity {
 
     @Override
     protected void readAdditional(CompoundNBT compound) {
+        this.damage = compound.getDouble("damage");
+        this.speed = compound.getDouble("speed");
         this.isBouncing = compound.getBoolean("IsBouncing");
         this.bounceFactor = compound.getDouble("BounceFactor");
         this.prevBoomerangRotation = compound.getFloat("PrevBoomerangRotation");
@@ -362,6 +398,8 @@ public abstract class BoomerangEntity extends Entity {
 
     @Override
     protected void writeAdditional(CompoundNBT compound) {
+        compound.putDouble("damage", this.damage);
+        compound.putDouble("speed", this.speed);
         compound.putBoolean("IsBouncing", this.isBouncing);
         compound.putDouble("BounceFactor", this.bounceFactor);
         compound.putFloat("PrevBoomerangRotation", this.prevBoomerangRotation);
@@ -402,6 +440,8 @@ public abstract class BoomerangEntity extends Entity {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
-    public abstract ItemStack getRenderedItemStack();
+    public ItemStack getRenderedItemStack(){
+        return this.dataManager.get(BOOMERANG_STACK);
+    }
 
 }

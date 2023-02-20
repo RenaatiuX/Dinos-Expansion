@@ -8,22 +8,15 @@ import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 
 public enum BoomerangTiers implements TieredBoomerang.BoomerangTier {
-    ;
+    WOOD(5, 5, 100);
 
-    private final BoomerangEntity boomerang;
     private final double damageAddition;
     private final int enchantability, durability;
 
-    BoomerangTiers(BoomerangEntity boomerang, double damageAddition, int enchantability, int durability) {
-        this.boomerang = boomerang;
+    BoomerangTiers(double damageAddition, int enchantability, int durability) {
         this.damageAddition = damageAddition;
         this.enchantability = enchantability;
         this.durability = durability;
-    }
-
-    @Override
-    public BoomerangEntity createBoomerang(World world, PlayerEntity player, ItemStack stack, Hand hand) {
-        return this.boomerang;
     }
 
     @Override

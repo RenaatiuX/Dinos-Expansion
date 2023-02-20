@@ -2,6 +2,7 @@ package com.rena.dinosexpansion.client.events;
 
 import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.client.renderer.entity.*;
+import com.rena.dinosexpansion.client.renderer.misc.BoomerangRenderer;
 import com.rena.dinosexpansion.client.renderer.misc.ChakramRenderer;
 import com.rena.dinosexpansion.client.renderer.misc.HatchetRenderer;
 import com.rena.dinosexpansion.client.renderer.misc.SpearRenderer;
@@ -57,6 +58,7 @@ public class ClientSetupEvents {
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.ASTORGOSUCHUS.get(), AstorgosuchusRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.CAMPANILE.get(), CampanileRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.HERMIT.get(), HermitRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityInit.BOOMERANG.get(), BoomerangRenderer::new);
     }
 
     @SubscribeEvent

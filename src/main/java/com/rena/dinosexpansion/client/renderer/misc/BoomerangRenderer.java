@@ -13,6 +13,7 @@ import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -24,7 +25,7 @@ public class BoomerangRenderer extends EntityRenderer<BoomerangEntity> {
 
     private final ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
 
-    protected BoomerangRenderer(EntityRendererManager renderManager) {
+    public BoomerangRenderer(EntityRendererManager renderManager) {
         super(renderManager);
     }
 
@@ -46,6 +47,6 @@ public class BoomerangRenderer extends EntityRenderer<BoomerangEntity> {
 
     @Override
     public ResourceLocation getEntityTexture(BoomerangEntity entity) {
-        return AtlasTexture.LOCATION_BLOCKS_TEXTURE;
+        return PlayerContainer.LOCATION_BLOCKS_TEXTURE;
     }
 }

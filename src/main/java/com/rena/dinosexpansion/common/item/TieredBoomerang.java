@@ -21,7 +21,8 @@ public class TieredBoomerang extends Item {
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
         ItemStack stack = playerIn.getHeldItem(handIn);
-        BoomerangEntity boom = boomerangTier.createBoomerang(worldIn, playerIn, playerIn.getHeldItem(handIn), handIn);
+        BoomerangEntity boom = new BoomerangEntity(worldIn, playerIn, playerIn.getHeldItem(handIn), handIn);
+        boom.setDamage(boomerangTier.getDamageAddition());
         BlockPos currentPos = playerIn.getPosition();
         //worldIn.playSound(null, currentPos.getX(), currentPos.getY(), currentPos.getZ(), SoundInit.BOOMERANG_THROW.get(), SoundCategory.PLAYERS, 0.6F, 1.0F);
         worldIn.addEntity(boom);
@@ -32,8 +33,12 @@ public class TieredBoomerang extends Item {
 
         return ActionResult.resultSuccess(playerIn.getHeldItem(handIn));    }
 
+    @Override
+    public int getItemEnchantability() {
+        return boomerangTier.getEnchantability();
+    }
+
     public interface BoomerangTier{
-        BoomerangEntity createBoomerang(World world, PlayerEntity player, ItemStack stack, Hand hand);
         double getDamageAddition();
         int getEnchantability();
         int getDurability();
