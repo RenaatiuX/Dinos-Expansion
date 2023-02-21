@@ -61,6 +61,9 @@ public class SoundInit {
     );
     public static final RegistryObject<SoundEvent> DRYOSAURUS_DEATH = create("dryosaurus_death");
 
+    public static final RegistryObject<SoundEvent> BOOMERANG_THROW = create("item.boomerang_throw");
+    public static final RegistryObject<SoundEvent> BOOMERANG_LOOP = create("item.boomerang_loop");
+
 
     private static RegistryObject<SoundEvent> create(String name) {
         return SOUNDS.register(name, () -> new SoundEvent(new ResourceLocation(DinosExpansion.MOD_ID, name)));

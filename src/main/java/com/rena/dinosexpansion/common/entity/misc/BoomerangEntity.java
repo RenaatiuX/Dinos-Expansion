@@ -1,9 +1,12 @@
 package com.rena.dinosexpansion.common.entity.misc;
 
 import com.rena.dinosexpansion.common.config.DinosExpansionConfig;
+import com.rena.dinosexpansion.core.init.EnchantmentInit;
 import com.rena.dinosexpansion.core.init.EntityInit;
+import com.rena.dinosexpansion.core.init.SoundInit;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -21,6 +24,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.IndirectEntityDamageSource;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.*;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
@@ -109,8 +113,8 @@ public class BoomerangEntity extends Entity {
         this.damage = damage;
     }
 
-    public void setSpeed(double speed) {
-        this.speed = speed;
+    public void setRange(int range){
+        this.timeBeforeTurnAround = range;
     }
 
     @Override
@@ -127,7 +131,7 @@ public class BoomerangEntity extends Entity {
 
         if (this.ticksExisted % 11 == 0) {
             BlockPos currentPos = this.getPosition();
-            //this.world.playSound(null, currentPos.getX(), currentPos.getY(), currentPos.getZ(), SoundInit.BOOMERANG_LOOP.get(), SoundCategory.PLAYERS, 0.4F, 1.0F);
+            this.world.playSound(null, currentPos.getX(), currentPos.getY(), currentPos.getZ(), SoundInit.BOOMERANG_LOOP.get(), SoundCategory.PLAYERS, 0.4F, 1.0F);
         }
 
         Vector3d vec3d1 = this.getPositionVec();
@@ -285,7 +289,15 @@ public class BoomerangEntity extends Entity {
     }
 
     public void beforeTurnAround(PlayerEntity player) {
+        if (!isBouncing && EnchantmentHelper.getEnchantmentLevel(EnchantmentInit.GUIDANCE_ENCHANTMENT.get(), this.getRenderedItemStack()) > 0) {
+            double x = -MathHelper.sin((player.rotationYaw * 3.141593F) / 180F);
+            double z = MathHelper.cos((player.rotationYaw * 3.141593F) / 180F);
 
+            double motionX = 0.5D * x * (double) MathHelper.cos((player.rotationPitch / 180F) * 3.141593F);
+            double motionY = -0.5D * (double) MathHelper.sin((player.rotationPitch / 180F) * 3.141593F);
+            double motionZ = 0.5D * z * (double) MathHelper.cos((player.rotationPitch / 180F) * 3.141593F);
+            this.setMotion(motionX, motionY, motionZ);
+        }
     }
 
     public void onEntityHit(Entity hitEntity, PlayerEntity player) {
