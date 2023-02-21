@@ -10,9 +10,9 @@ public class DinosExpansionConfig {
             DIAMOND_BOOMERANG_RANGE, DIAMOND_BOOMERANG_DAMAGE, LEVEL_OFFSET;
     public static final ForgeConfigSpec.DoubleValue ATTACK_DAMAGE_PER_LEVEL, HEALTH_PER_LEVEL, ARMOR_PER_LEVEL;
     public static final ForgeConfigSpec.BooleanValue TURN_AROUND_ITEM, TURN_AROUND_MOB, TURN_AROUND_BUTTON,
-            WOOD_BOOMERANG_FOLLOWS, BREAKS_TORCHES, BREAKS_FLOWERS, BREAKS_GRASS, BREAKS_TALLGRASS,
+            BREAKS_TORCHES, BREAKS_FLOWERS, BREAKS_GRASS, BREAKS_TALLGRASS,
             ACTIVATES_LEVERS, ACTIVATES_BUTTONS, ACTIVATES_PRESSURES_PLATES, ACTIVATES_TRIP_WIRE,
-            IRON_BOOMERANG_FOLLOWS, DIAMOND_BOOMERANG_FOLLOWS, SHOW_LEVEL_ABOVE_HEAD;
+            SHOW_LEVEL_ABOVE_HEAD;
 
     static {
         ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
@@ -44,13 +44,10 @@ public class DinosExpansionConfig {
         TURN_AROUND_BUTTON = builder.comment("Comes back to player after hitting a button.").define("turnAroundButton", true);
         WOOD_BOOMERANG_RANGE = builder.comment("The maximum range of travel before returning to player.").defineInRange("WoodBoomerangRange", 30, 1, 200);
         WOOD_BOOMERANG_DAMAGE = builder.comment("The amount of damage that is done when hitting any living entity.").defineInRange("WoodBoomerangDamage", 4, 1, 500);
-        WOOD_BOOMERANG_FOLLOWS = builder.comment("The Wood Boomerang will follow your mouse till it hits it's range limit.").define("WoodBoomerangFollows", true);
-        IRON_BOOMERANG_RANGE = builder.comment("The maximum range of travel before returning to player.").defineInRange("IronBoomerangRange", 30, 1, 200);
+        IRON_BOOMERANG_RANGE = builder.comment("The maximum range of travel before returning to player.").defineInRange("IronBoomerangRange", 35, 1, 200);
         IRON_BOOMERANG_DAMAGE = builder.comment("The amount of damage that is done when hitting any living entity.").defineInRange("IronBoomerangDamage", 6, 1, 500);
-        IRON_BOOMERANG_FOLLOWS = builder.comment("The Iron Boomerang will follow your mouse till it hits it's range limit.").define("IronBoomerangFollows", true);
-        DIAMOND_BOOMERANG_RANGE = builder.comment("The maximum range of travel before returning to player.").defineInRange("DiamondBoomerangRange", 30, 1, 200);
+        DIAMOND_BOOMERANG_RANGE = builder.comment("The maximum range of travel before returning to player.").defineInRange("DiamondBoomerangRange", 40, 1, 200);
         DIAMOND_BOOMERANG_DAMAGE = builder.comment("The amount of damage that is done when hitting any living entity.").defineInRange("DiamondBoomerangDamage", 7, 1, 500);
-        DIAMOND_BOOMERANG_FOLLOWS = builder.comment("The Diamond Boomerang will follow your mouse till it hits it's range limit.").define("DiamondBoomerangFollows", true);
         BREAKS_TORCHES = builder.comment("Can boomerang break torches.").define("breaksTorches", true);
         BREAKS_FLOWERS = builder.comment("Can boomerang break Flowers.").define("breaksFlowers", true);
         BREAKS_GRASS = builder.comment("Can boomerang break Grass.").define("breaksGrass", true);

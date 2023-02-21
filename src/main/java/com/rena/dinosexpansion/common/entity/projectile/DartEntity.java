@@ -8,7 +8,6 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.IPacket;
 import net.minecraft.network.datasync.DataParameter;
@@ -21,7 +20,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class DartEntity extends ArrowEntity {
+public class DartEntity extends AbstractArrowEntity {
     public static final DataParameter<ItemStack> DART_STACK = EntityDataManager.createKey(DartEntity.class, DataSerializers.ITEMSTACK);
     public DartEntity(EntityType<DartEntity> type, World world) {
         super(type, world);

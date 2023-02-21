@@ -1,0 +1,6 @@
+{
+  "parent": "dinosexpansion:item/slingshot",
+  "textures": {
+    "layer0": "dinosexpansion:item/slingshot_pulling_0"
+  }
+}

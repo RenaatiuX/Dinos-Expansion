@@ -1,5 +1,7 @@
 package com.rena.dinosexpansion.common.item.arrow;
 
+import com.rena.dinosexpansion.common.entity.projectile.TinyRockEntity;
+import com.rena.dinosexpansion.core.init.EntityInit;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.item.ArrowItem;
@@ -13,6 +15,6 @@ public class TinyRockItem extends ArrowItem {
 
     @Override
     public AbstractArrowEntity createArrow(World worldIn, ItemStack stack, LivingEntity shooter) {
-        return super.createArrow(worldIn, stack, shooter);
+        return new TinyRockEntity(EntityInit.TINY_ROCK.get(), worldIn, shooter, stack);
     }
 }

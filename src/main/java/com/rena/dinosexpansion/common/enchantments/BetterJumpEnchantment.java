@@ -4,8 +4,8 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentType;
 import net.minecraft.inventory.EquipmentSlotType;
 
-public class BetterJump extends Enchantment {
-    public BetterJump() {
+public class BetterJumpEnchantment extends Enchantment {
+    public BetterJumpEnchantment() {
         super(Rarity.RARE, EnchantmentType.ARMOR_FEET, new EquipmentSlotType[]{EquipmentSlotType.FEET});
     }
     @Override

@@ -8,6 +8,7 @@ import com.rena.dinosexpansion.client.renderer.misc.HatchetRenderer;
 import com.rena.dinosexpansion.client.renderer.misc.SpearRenderer;
 import com.rena.dinosexpansion.client.renderer.projectiles.CustomArrowRenderer;
 import com.rena.dinosexpansion.client.renderer.projectiles.DartRenderer;
+import com.rena.dinosexpansion.client.renderer.projectiles.TinyRockRenderer;
 import com.rena.dinosexpansion.client.screens.OrderScreen;
 import com.rena.dinosexpansion.client.screens.TamingScreen;
 import com.rena.dinosexpansion.common.entity.villagers.Hermit;
@@ -48,6 +49,7 @@ public class ClientSetupEvents {
 
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.CUSTOM_ARROW.get(), CustomArrowRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.DART.get(), DartRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityInit.TINY_ROCK.get(), TinyRockRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.CHAKRAM.get(), ChakramRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.HATCHET.get(), HatchetRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.SPEAR.get(), SpearRenderer::new);
@@ -120,5 +122,14 @@ public class ClientSetupEvents {
         registerProperty(ItemInit.DIAMOND_SPEAR.get(), new ResourceLocation("throwing"), (p_239428_0_, p_239428_1_, p_239428_2_) -> p_239428_2_ != null && p_239428_2_.isHandActive() && p_239428_2_.getActiveItemStack() == p_239428_0_ ? 1.0F : 0.0F);
         registerProperty(ItemInit.NETHERITE_SPEAR.get(), new ResourceLocation("throwing"), (p_239428_0_, p_239428_1_, p_239428_2_) -> p_239428_2_ != null && p_239428_2_.isHandActive() && p_239428_2_.getActiveItemStack() == p_239428_0_ ? 1.0F : 0.0F);
         registerProperty(ItemInit.EMERALD_SPEAR.get(), new ResourceLocation("throwing"), (p_239428_0_, p_239428_1_, p_239428_2_) -> p_239428_2_ != null && p_239428_2_.isHandActive() && p_239428_2_.getActiveItemStack() == p_239428_0_ ? 1.0F : 0.0F);
+
+        registerProperty(ItemInit.SLINGSHOT.get(), new ResourceLocation("pull"), (p_239429_0_, p_239429_1_, p_239429_2_) -> {
+            if (p_239429_2_ == null) {
+                return 0.0F;
+            } else {
+                return p_239429_2_.getActiveItemStack() != p_239429_0_ ? 0.0F : (float) (p_239429_0_.getUseDuration() - p_239429_2_.getItemInUseCount()) / 20.0F;
+            }
+        });
+        registerProperty(ItemInit.SLINGSHOT.get(), new ResourceLocation("pulling"), (p_239428_0_, p_239428_1_, p_239428_2_) -> p_239428_2_ != null && p_239428_2_.isHandActive() && p_239428_2_.getActiveItemStack() == p_239428_0_ ? 1.0F : 0.0F);
     }
 }
