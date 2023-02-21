@@ -1,15 +1,18 @@
 package com.rena.dinosexpansion.common.entity.flying;
 
+import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.common.entity.ia.DinosaurFlyingMeleeAttackGoal;
 import com.rena.dinosexpansion.common.entity.ia.SleepRhythmGoal;
 import com.rena.dinosexpansion.core.init.EntityInit;
 import com.rena.dinosexpansion.core.init.ItemInit;
 import com.rena.dinosexpansion.core.init.SoundInit;
+import com.rena.dinosexpansion.core.tags.ModTags;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -19,6 +22,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.*;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import software.bernie.geckolib3.core.AnimationState;
@@ -44,7 +48,8 @@ public class Dimorphodon extends DinosaurFlying implements IAnimatable, IAnimati
     public int timeUntilNextEgg = this.rand.nextInt(6000) + 6000;
 
     public Dimorphodon(EntityType<Dimorphodon> type, World world) {
-        super(type, world, new DinosaurInfo("dimorphodon", 50, 20, 10, SleepRhythmGoal.SleepRhythm.DIURNAL), generateLevelWithinBounds(10, 50));
+        super(type, world, new DinosaurInfo("dimorphodon", 50, 50, 25, SleepRhythmGoal.SleepRhythm.DIURNAL), generateLevelWithinBounds(10, 50));
+        updateInfo();
     }
 
     public Dimorphodon(World world) {
@@ -69,8 +74,18 @@ public class Dimorphodon extends DinosaurFlying implements IAnimatable, IAnimati
         this.goalSelector.addGoal(3, new DinosaurWalkIdleGoal());
         this.goalSelector.addGoal(4, new FollowOwnerGoal(this, 1.0D, 10.0F, 2.0F, false));
         this.goalSelector.addGoal(5, new BreedGoal(this, 1.0D));
-        this.goalSelector.addGoal(6, new LookAtGoal(this, PlayerEntity.class, 6.0F));
-        this.goalSelector.addGoal(7, new LookRandomlyGoal(this));
+        this.goalSelector.addGoal(6, new LookAtGoal(this, PlayerEntity.class, 6.0F){
+            @Override
+            public boolean shouldExecute() {
+                return super.shouldExecute() && !Dimorphodon.this.isMovementDisabled();
+            }
+        });
+        this.goalSelector.addGoal(7, new LookRandomlyGoal(this){
+            @Override
+            public boolean shouldExecute() {
+                return super.shouldExecute() && !Dimorphodon.this.isMovementDisabled();
+            }
+        });
         this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
         this.targetSelector.addGoal(3, (new HurtByTargetGoal(this)).setCallsForHelp());
@@ -110,7 +125,7 @@ public class Dimorphodon extends DinosaurFlying implements IAnimatable, IAnimati
 
     @Override
     public List<Item> getFood() {
-        return null;
+        return ModTags.Items.DIMORPHODON_FOOD.getAllElements();
     }
 
     @Override
@@ -169,7 +184,7 @@ public class Dimorphodon extends DinosaurFlying implements IAnimatable, IAnimati
     @Override
     protected SoundEvent getAmbientSound() {
         int i = MathHelper.nextInt(rand, 0, 8);
-        if (i < SoundInit.DIMORPHODON_AMBIENT.size()) {
+        if (i < SoundInit.DIMORPHODON_AMBIENT.size() && !this.isMovementDisabled()) {
             playSound(SoundInit.DIMORPHODON_AMBIENT.get(i).get(), 1, 1.5F);
         }
         return null;
@@ -179,7 +194,7 @@ public class Dimorphodon extends DinosaurFlying implements IAnimatable, IAnimati
     @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         int i = MathHelper.nextInt(rand, 0, 5);
-        if (i < SoundInit.DIMORPHODON_HURT.size()) {
+        if (i < SoundInit.DIMORPHODON_HURT.size() && !this.isMovementDisabled()) {
             playSound(SoundInit.DIMORPHODON_HURT.get(i).get(), 1, 1.5F);
         }
         return null;
@@ -230,6 +245,19 @@ public class Dimorphodon extends DinosaurFlying implements IAnimatable, IAnimati
         }
     }
 
+    @Override
+    public ActionResultType applyPlayerInteraction(PlayerEntity player, Vector3d vec, Hand hand) {
+        this.getInfo().print();
+        DinosExpansion.LOGGER.debug("Narcotic: [" + getNarcoticValue() + "/" + getInfo().getMaxNarcotic() + "]");
+        DinosExpansion.LOGGER.debug("IsKnockout: " + this.isKnockout());
+        if (!world.isRemote() && hand == Hand.MAIN_HAND){
+            if (player.getHeldItem(hand).isEmpty() && isKnockedOutBy(player)){
+                openTamingGui(this, (ServerPlayerEntity) player);
+            }
+        }
+        return super.applyPlayerInteraction(player, vec, hand);
+    }
+
     private PlayState predicate(AnimationEvent<Dimorphodon> event) {
         if (this.isOnGround()) {
             if (horizontalMag(this.getMotion()) > 1.0E-6) {
@@ -237,13 +265,17 @@ public class Dimorphodon extends DinosaurFlying implements IAnimatable, IAnimati
             } else {
                 event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.dimorphodon.idle", ILoopType.EDefaultLoopTypes.LOOP));
             }
-        } else if (this.isFlying()) {
+        }
+        if (this.isFlying()) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.dimorphodon.fly", ILoopType.EDefaultLoopTypes.LOOP));
-        } else if (this.isSleeping()) {
+        }
+        if (this.isSleeping()) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.dimorphodon.sleep", ILoopType.EDefaultLoopTypes.LOOP));
-        } else if (this.isKnockout()) {
+        }
+        if (this.isKnockout()) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.dimorphodon.knockout", ILoopType.EDefaultLoopTypes.LOOP));
-        } else if (this.isQueuedToSit()) {
+        }
+        if (this.isQueuedToSit()) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.dimorphodon.sit", ILoopType.EDefaultLoopTypes.LOOP));
         }
         return PlayState.CONTINUE;

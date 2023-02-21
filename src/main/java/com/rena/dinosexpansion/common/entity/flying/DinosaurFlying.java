@@ -119,9 +119,9 @@ public abstract class DinosaurFlying extends Dinosaur implements IFlyingAnimal {
             if (isFlying()) {
                 timeFlying++;
                 this.setNoGravity(true);
-                /*if (this.isSitting() || this.isPassenger() || this.isInLove()) {
+                if (this.isQueuedToSit() || this.isPassenger() || this.isInLove()) {
                     this.setFlying(false);
-                }*/
+                }
             } else {
                 timeFlying = 0;
                 this.setNoGravity(false);
@@ -160,12 +160,12 @@ public abstract class DinosaurFlying extends Dinosaur implements IFlyingAnimal {
 
     @Override
     public void travel(Vector3d vec3d) {
-        /*if (this.isSitting()) {
+        if (this.isQueuedToSit()) {
             if (this.getNavigator().getPath() != null) {
                 this.getNavigator().clearPath();
             }
             vec3d = Vector3d.ZERO;
-        }*/
+        }
         super.travel(vec3d);
     }
 
@@ -273,7 +273,7 @@ public abstract class DinosaurFlying extends Dinosaur implements IFlyingAnimal {
         }
         @Override
         public boolean shouldExecute() {
-            if (this.dinosaurFlying.isBeingRidden() || (dinosaurFlying.getAttackTarget() != null && dinosaurFlying.getAttackTarget().isAlive()) || this.dinosaurFlying.isPassenger()) {
+            if (this.dinosaurFlying.isBeingRidden() || (dinosaurFlying.getAttackTarget() != null && dinosaurFlying.getAttackTarget().isAlive()) || this.dinosaurFlying.isPassenger() || dinosaurFlying.isMovementDisabled()) {
                 return false;
             } else {
                 if (this.dinosaurFlying.getRNG().nextInt(30) != 0 && !dinosaurFlying.isFlying()) {

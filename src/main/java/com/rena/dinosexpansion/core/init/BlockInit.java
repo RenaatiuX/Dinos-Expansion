@@ -5,7 +5,7 @@ import com.rena.dinosexpansion.common.block.BaseSaplingBlock;
 import com.rena.dinosexpansion.common.block.GeyserBlock;
 import com.rena.dinosexpansion.common.block.GlowStickBlock;
 import com.rena.dinosexpansion.common.block.QuicksandBlock;
-import com.rena.dinosexpansion.common.block.plant.GrowQuadruplePlantBlock;
+import com.rena.dinosexpansion.common.block.bush.BushBlockBase;
 import com.rena.dinosexpansion.common.block.plant.SinglePlantBlock;
 import com.rena.dinosexpansion.common.block.plant.TriplePlantBlock;
 import com.rena.dinosexpansion.common.world.gen.trees.ModTreeSpawners;
@@ -35,6 +35,10 @@ public class BlockInit {
     public static final RegistryObject<Block> MOSSY_FUTURISTIC_BLOCK2 = register("mossy_futuristic_block_2", () -> new Block(AbstractBlock.Properties.create(Material.ROCK).hardnessAndResistance(100f, 2400f).harvestTool(ToolType.PICKAXE).harvestLevel(3).setRequiresTool()), ModItemGroups.BLOCKS);
     public static final RegistryObject<Block> QUICKSAND = register("quicksand", () -> new QuicksandBlock(AbstractBlock.Properties.create(Material.SAND, MaterialColor.SAND).hardnessAndResistance(0.5F).sound(SoundType.SAND).doesNotBlockMovement().harvestTool(ToolType.SHOVEL)), ModItemGroups.BLOCKS);
     public static final RegistryObject<Block> GLOW_STICK = BLOCKS.register("glowstick", () -> (new GlowStickBlock(AbstractBlock.Properties.create(Material.CARPET).doesNotBlockMovement().setLightLevel((state) -> 12).zeroHardnessAndResistance())));
+
+    //Crop and Bush
+    public static final RegistryObject<Block> NARCOTIC_BERRY_BUSH = BLOCKS.register("narcotic_berry_bush",
+            () -> new BushBlockBase(AbstractBlock.Properties.create(Material.PLANTS).tickRandomly().doesNotBlockMovement().sound(SoundType.SWEET_BERRY_BUSH), ItemInit.NARCOTIC_BERRIES));
 
     //Plants
     public static final RegistryObject<Block> LAVENDER = register("lavender",
@@ -83,8 +87,8 @@ public class BlockInit {
             ()-> new TriplePlantBlock(AbstractBlock.Properties.create(Material.PLANTS).doesNotBlockMovement().zeroHardnessAndResistance().sound(SoundType.PLANT)), ModItemGroups.BLOCKS);
 
     //Quadruple Tall Flower
-    public static final RegistryObject<Block> PROTOTAXITES = register("prototaxites_1",
-            ()-> new GrowQuadruplePlantBlock(AbstractBlock.Properties.create(Material.TALL_PLANTS).doesNotBlockMovement().zeroHardnessAndResistance().sound(SoundType.PLANT)),  ModItemGroups.BLOCKS);
+    /*public static final RegistryObject<Block> PROTOTAXITES = register("prototaxites_1",
+            ()-> new GrowQuadruplePlantBlock(AbstractBlock.Properties.create(Material.TALL_PLANTS).doesNotBlockMovement().zeroHardnessAndResistance().sound(SoundType.PLANT)),  ModItemGroups.BLOCKS);*/
 
     //Tree
     public static final RegistryObject<Block> REDWOOD_LEAVES = register("redwood_leaves",

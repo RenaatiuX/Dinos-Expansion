@@ -1,6 +1,6 @@
 {
   "parent": "item/handheld",
   "textures": {
-    "layer0": "dinosexpansion:item/wooden_tomahawk"
+    "layer0": "dinosexpansion:item/emerald_tomahawk"
   }
 }

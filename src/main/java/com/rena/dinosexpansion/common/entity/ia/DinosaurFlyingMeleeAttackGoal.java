@@ -27,7 +27,7 @@ public class DinosaurFlyingMeleeAttackGoal extends Goal {
         if (this.dinosaurFlying.isChild()){
             return false;
         }
-        return dinosaurFlying.getAttackTarget() != null;
+        return dinosaurFlying.getAttackTarget() != null && !dinosaurFlying.isMovementDisabled();
     }
 
     @Override

@@ -29,6 +29,10 @@ public class FoodInit {
             .saturation(0.5F).meat().build();
     public static final Food SPECIAL_FRUIT = new Food.Builder().hunger(0)
             .saturation(0.0F).setAlwaysEdible().build();
+    public static final Food NARCOTIC_BERRIES = new Food.Builder().hunger(2)
+            .saturation(0.1F)
+            .effect(() -> new EffectInstance(Effects.HUNGER, 10*20, 2), 1)
+            .effect(() -> new EffectInstance(Effects.NAUSEA, 10*10, 2), 1).build();
 
     public static final Food KIBBLE_BASIC = kibbleEffects(new Food.Builder().hunger(10).saturation(0)).build();
     public static final Food KIBBLE_SIMPLE = kibbleEffects(new Food.Builder().hunger(15).saturation(0)).build();

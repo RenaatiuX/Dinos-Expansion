@@ -2,7 +2,7 @@ package com.rena.dinosexpansion.client.renderer.entity;
 
 import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.client.model.entity.HermitModel;
-import com.rena.dinosexpansion.common.entity.Hermit;
+import com.rena.dinosexpansion.common.entity.villagers.Hermit;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.CrossedArmsItemLayer;

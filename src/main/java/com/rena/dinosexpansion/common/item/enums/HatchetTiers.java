@@ -3,7 +3,13 @@ package com.rena.dinosexpansion.common.item.enums;
 import com.rena.dinosexpansion.common.item.TieredHatchet;
 
 public enum HatchetTiers implements TieredHatchet.HatchetTier {
-    WOODEN_HATCHET(0.4D, 0.1D, 25, 72),;
+    WOODEN_HATCHET(0.4D, 0.1D, 25, 72),
+    STONE_HATCHET(0.5D,0.2D, 18, 150),
+    IRON_HATCHET(0.6D,0.3D, 15, 273),
+    GOLD_HATCHET(0.4D, 0.1D, 32, 72),
+    DIAMOND_HATCHET(0.7D, 0.4D, 10, 643),
+    NETHERITE_HATCHET(0.8D, 0.5D, 10, 840),
+    EMERALD_HATCHET(0.9D, 0.6D, 20, 1253);
 
     private final double damageAddition, speedAddition;
     private final int enchantability, durability;

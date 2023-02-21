@@ -76,7 +76,7 @@ public class ModLanguageProvider extends LanguageProvider {
         add(ItemInit.COOKED_TRICERATOPS_MEAT.get(), "Cooked Triceratops Meat");
         add(ItemInit.RAW_TRICERATOPS_MEAT.get(), "Raw Triceratops Meat");
         add(ItemInit.RAW_DIMORPHODON_MEAT.get(), "Raw Dimorphodon Meat");
-        add(ItemInit.COOKED_DIMORPHODON_MEAT.get(), "Raw Dimorphodon Meat");
+        add(ItemInit.COOKED_DIMORPHODON_MEAT.get(), "Cooked Dimorphodon Meat");
         add(ItemInit.BLOWGUN.get(), "Blowgun");
         add(ItemInit.DART.get(), "Dart");
         add(ItemInit.DIAMOND_CHAKRAM.get(), "Diamond Chakram");

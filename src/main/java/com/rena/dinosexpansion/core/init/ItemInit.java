@@ -9,10 +9,12 @@ import com.rena.dinosexpansion.common.item.arrow.TinyRockItem;
 import com.rena.dinosexpansion.common.item.enums.*;
 import com.rena.dinosexpansion.common.item.util.BaseNarcoticItem;
 import net.minecraft.fluid.Fluids;
+import net.minecraft.item.BlockNamedItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.Rarity;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -39,8 +41,12 @@ public class ItemInit {
     public static final RegistryObject<Item> TINY_ROCK = ITEMS.register("tiny_rock",
             () -> new TinyRockItem(new Item.Properties().group(ModItemGroups.WEAPONS)));
 
-    public static final RegistryObject<TieredBoomerang> WOOD_BOOMERANG = ITEMS.register("wood_boomerang", () -> new TieredBoomerang(new Item.Properties().group(ModItemGroups.WEAPONS), BoomerangTiers.WOOD));
-
+    public static final RegistryObject<TieredBoomerang> WOOD_BOOMERANG = ITEMS.register("wood_boomerang",
+            () -> new TieredBoomerang(new Item.Properties().group(ModItemGroups.WEAPONS), BoomerangTiers.WOOD));
+    public static final RegistryObject<TieredBoomerang> IRON_BOOMERANG = ITEMS.register("iron_boomerang",
+            () -> new TieredBoomerang(new Item.Properties().group(ModItemGroups.WEAPONS), BoomerangTiers.IRON));
+    public static final RegistryObject<TieredBoomerang> DIAMOND_BOOMERANG = ITEMS.register("diamond_boomerang",
+            () -> new TieredBoomerang(new Item.Properties().group(ModItemGroups.WEAPONS), BoomerangTiers.DIAMOND));
 
     public static final RegistryObject<Item> WOODEN_CHAKRAM = ITEMS.register("wooden_chakram",
             () -> new TieredChakram(new Item.Properties().group(ModItemGroups.WEAPONS), ChakramTiers.WOODEN_CHAKRAM));
@@ -58,6 +64,18 @@ public class ItemInit {
             () -> new TieredChakram(new Item.Properties().group(ModItemGroups.WEAPONS), ChakramTiers.NETHERITE_CHAKRAM));
     public static final RegistryObject<Item> WOODEN_HATCHET = ITEMS.register("wooden_hatchet",
             () -> new TieredHatchet(new Item.Properties().group(ModItemGroups.WEAPONS), HatchetTiers.WOODEN_HATCHET));
+    public static final RegistryObject<Item> STONE_HATCHET = ITEMS.register("stone_hatchet",
+            () -> new TieredHatchet(new Item.Properties().group(ModItemGroups.WEAPONS), HatchetTiers.STONE_HATCHET));
+    public static final RegistryObject<Item> IRON_HATCHET = ITEMS.register("iron_hatchet",
+            () -> new TieredHatchet(new Item.Properties().group(ModItemGroups.WEAPONS), HatchetTiers.IRON_HATCHET));
+    public static final RegistryObject<Item> GOLD_HATCHET = ITEMS.register("golden_hatchet",
+            () -> new TieredHatchet(new Item.Properties().group(ModItemGroups.WEAPONS), HatchetTiers.GOLD_HATCHET));
+    public static final RegistryObject<Item> DIAMOND_HATCHET = ITEMS.register("diamond_hatchet",
+            () -> new TieredHatchet(new Item.Properties().group(ModItemGroups.WEAPONS), HatchetTiers.DIAMOND_HATCHET));
+    public static final RegistryObject<Item> NETHERITE_HATCHET = ITEMS.register("netherite_hatchet",
+            () -> new TieredHatchet(new Item.Properties().group(ModItemGroups.WEAPONS), HatchetTiers.NETHERITE_HATCHET));
+    public static final RegistryObject<Item> EMERALD_HATCHET = ITEMS.register("emerald_hatchet",
+            () -> new TieredHatchet(new Item.Properties().group(ModItemGroups.WEAPONS), HatchetTiers.EMERALD_HATCHET));
     public static final RegistryObject<Item> WOODEN_SPEAR = ITEMS.register("wooden_spear",
             () -> new TieredSpear(new Item.Properties().group(ModItemGroups.WEAPONS).setISTER(
                     () -> () -> ClientISTERProvider.bakeSpearISTER("wooden_spear")), SpearTiers.WOODEN_SPEAR));
@@ -105,7 +123,8 @@ public class ItemInit {
             () -> new ForgeSpawnEggItem(EntityInit.DIMORPHODON, 5592428, 10785674, new Item.Properties().group(ModItemGroups.SPAWN_EGGS)));
     public static final RegistryObject<Item> ASTORGOSUCHUS_SPAWN_EGG = ITEMS.register("astorgosuchus_spawn_egg",
             () -> new ForgeSpawnEggItem(EntityInit.ASTORGOSUCHUS, 8098406, 12561789, new Item.Properties().group(ModItemGroups.SPAWN_EGGS)));
-    public static final RegistryObject<ForgeSpawnEggItem> CAMPANILE_SPAEN_EGG = ITEMS.register("campanile_spawn_egg", () -> new ForgeSpawnEggItem(EntityInit.CAMPANILE, 5592428, 12561789, new Item.Properties().group(ModItemGroups.SPAWN_EGGS)));
+    public static final RegistryObject<ForgeSpawnEggItem> CAMPANILE_SPAEN_EGG = ITEMS.register("campanile_spawn_egg",
+            () -> new ForgeSpawnEggItem(EntityInit.CAMPANILE, 5592428, 12561789, new Item.Properties().group(ModItemGroups.SPAWN_EGGS)));
     //Food
     public static final RegistryObject<Item> RAW_CARNOTAURUS_MEAT = ITEMS.register("raw_carnotaurus_meat",
             () -> new Item(new Item.Properties().food(FoodInit.RAW_CARNOTAURUS_MEAT).group(ModItemGroups.ITEMS)));
@@ -127,6 +146,8 @@ public class ItemInit {
             () -> new Item(new Item.Properties().food(FoodInit.RAW_DIMORPHODON_MEAT).group(ModItemGroups.ITEMS)));
     public static final RegistryObject<Item> COOKED_DIMORPHODON_MEAT = ITEMS.register("cooked_dimorphodon_meat",
             () -> new Item(new Item.Properties().food(FoodInit.COOKED_DIMORPHODON_MEAT).group(ModItemGroups.ITEMS)));
+    public static final RegistryObject<Item> NARCOTIC_BERRIES = ITEMS.register("narcotic_berries",
+            () -> new BlockNamedItem(BlockInit.NARCOTIC_BERRY_BUSH.get(), new Item.Properties().food(FoodInit.NARCOTIC_BERRIES).group(ModItemGroups.ITEMS)));
 
     public static final RegistryObject<Item> NARCOTICS = ITEMS.register("narcotics",
             () -> new BaseNarcoticItem(new Item.Properties().group(ModItemGroups.ITEMS), 10));

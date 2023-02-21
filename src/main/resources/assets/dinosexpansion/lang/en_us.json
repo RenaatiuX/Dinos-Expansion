@@ -100,5 +100,8 @@
   "itemGroup.dinosexpansion.blocks": "Blocks",
   "itemGroup.dinosexpansion.items": "Items",
   "itemGroup.dinosexpansion.spawn_eggs": "Spawn Eggs",
-  "itemGroup.dinosexpansion.weapons": "Weapons"
+  "itemGroup.dinosexpansion.weapons": "Weapons",
+
+  "dinosexpansion.modifiers.hand": "When Throwing:",
+  "dinosexpansion.boomerang.damage": "%d Damage"
 }

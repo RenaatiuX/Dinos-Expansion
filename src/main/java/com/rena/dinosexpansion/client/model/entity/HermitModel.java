@@ -1,7 +1,7 @@
 package com.rena.dinosexpansion.client.model.entity;
 
 import com.google.common.collect.Lists;
-import com.rena.dinosexpansion.common.entity.Hermit;
+import com.rena.dinosexpansion.common.entity.villagers.Hermit;
 import net.minecraft.client.renderer.entity.model.SegmentedModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;

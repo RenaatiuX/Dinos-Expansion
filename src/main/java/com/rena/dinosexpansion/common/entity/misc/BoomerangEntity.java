@@ -62,7 +62,7 @@ public class BoomerangEntity extends Entity {
      *
      * @param worldIn
      * @param entity
-     * @param boomerang has to be from type {@link com.rena.dinosexpansion.common.item.BoomerangItem}
+     * @param boomerang has to be from type {@link com.rena.dinosexpansion.common.item.TieredBoomerang}
      * @param hand
      */
     public BoomerangEntity(World worldIn, PlayerEntity entity, ItemStack boomerang, Hand hand) {

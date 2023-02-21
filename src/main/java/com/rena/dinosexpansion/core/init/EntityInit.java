@@ -1,7 +1,7 @@
 package com.rena.dinosexpansion.core.init;
 
 import com.rena.dinosexpansion.DinosExpansion;
-import com.rena.dinosexpansion.common.entity.Hermit;
+import com.rena.dinosexpansion.common.entity.villagers.Hermit;
 import com.rena.dinosexpansion.common.entity.aquatic.Eosqualodon;
 import com.rena.dinosexpansion.common.entity.aquatic.MegaPiranha;
 import com.rena.dinosexpansion.common.entity.aquatic.Parapuzosia;

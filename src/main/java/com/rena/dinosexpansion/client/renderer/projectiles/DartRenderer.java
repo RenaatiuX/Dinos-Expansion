@@ -1,12 +1,13 @@
 package com.rena.dinosexpansion.client.renderer.projectiles;
 
 import com.rena.dinosexpansion.DinosExpansion;
+import com.rena.dinosexpansion.common.entity.projectile.DartEntity;
 import net.minecraft.client.renderer.entity.ArrowRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 
-public class DartRenderer extends ArrowRenderer {
+public class DartRenderer extends ArrowRenderer<DartEntity> {
 
     private static final ResourceLocation TEXTURE = DinosExpansion.modLoc("textures/entity/projectile/dart.png");
 
@@ -15,7 +16,7 @@ public class DartRenderer extends ArrowRenderer {
     }
 
     @Override
-    public ResourceLocation getEntityTexture(Entity entity) {
+    public ResourceLocation getEntityTexture(DartEntity entity) {
         return TEXTURE;
     }
 }

@@ -10,7 +10,7 @@ import com.rena.dinosexpansion.client.renderer.projectiles.CustomArrowRenderer;
 import com.rena.dinosexpansion.client.renderer.projectiles.DartRenderer;
 import com.rena.dinosexpansion.client.screens.OrderScreen;
 import com.rena.dinosexpansion.client.screens.TamingScreen;
-import com.rena.dinosexpansion.common.entity.Hermit;
+import com.rena.dinosexpansion.common.entity.villagers.Hermit;
 import com.rena.dinosexpansion.common.entity.aquatic.Eosqualodon;
 import com.rena.dinosexpansion.common.entity.aquatic.MegaPiranha;
 import com.rena.dinosexpansion.common.entity.aquatic.Parapuzosia;
@@ -93,13 +93,12 @@ public class ClientSetupEvents {
         RenderTypeLookup.setRenderLayer(BlockInit.FLORISSANTIA.get(), RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(BlockInit.AMORPHOPHALLUS.get(), RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(BlockInit.TEMPSKYA.get(), RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(BlockInit.PROTOTAXITES.get(), RenderType.getCutout());
-        //RenderTypeLookup.setRenderLayer(BlockInit.PROTOTAXITES_2.get(), RenderType.getCutout());
-        //RenderTypeLookup.setRenderLayer(BlockInit.PROTOTAXITES_3.get(), RenderType.getCutout());
-        //RenderTypeLookup.setRenderLayer(BlockInit.PROTOTAXITES_4.get(), RenderType.getCutout());
+        //RenderTypeLookup.setRenderLayer(BlockInit.PROTOTAXITES.get(), RenderType.getCutout());
 
         RenderTypeLookup.setRenderLayer(BlockInit.REDWOOD_SAPLING.get(), RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(BlockInit.REDWOOD_LEAVES.get(), RenderType.getCutout());
+
+        RenderTypeLookup.setRenderLayer(BlockInit.NARCOTIC_BERRY_BUSH.get(), RenderType.getCutout());
     }
 
     public static void registerModelProperties() {
