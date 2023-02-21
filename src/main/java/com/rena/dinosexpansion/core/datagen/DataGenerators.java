@@ -40,6 +40,7 @@ public class DataGenerators {
         gen.addProvider(new ModEntityTypeTagsProvider(gen, helper));
         gen.addProvider(new ModLootTableProvider(gen));
         gen.addProvider(new ModLanguageProvider(gen));
+        gen.addProvider(new ModSoundsProvider(gen, helper));
         ModBlockTagsProvider blockTags = new ModBlockTagsProvider(gen, helper);
         gen.addProvider(blockTags);
         gen.addProvider(new ModItemTagsProvider(gen, blockTags, helper));

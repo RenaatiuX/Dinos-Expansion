@@ -58,5 +58,23 @@
       "dinosexpansion:entity/dinosaur/dimorphodon/dimorphodon_dead2"
     ],
     "subtitle": "subtitles.dinosexpansion.dimorphodon_dead2"
+  },
+  "item.boomerang_throw": {
+    "subtitle": "sound.item.boomerang_throw",
+    "sounds": [
+      {
+        "name": "dinosexpansion:item/boomerang_loop",
+        "stream": true
+      }
+    ]
+  },
+  "item.boomerang_loop": {
+    "subtitle": "sound.item.boomerang_loop",
+    "sounds": [
+      {
+        "name": "dinosexpansion:item/boomerang_loop",
+        "stream": true
+      }
+    ]
   }
 }
