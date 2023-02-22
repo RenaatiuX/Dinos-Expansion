@@ -4,9 +4,10 @@ import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.common.entity.aquatic.Parapuzosia;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
+import software.bernie.geckolib3.model.AnimatedTickingGeoModel;
 import software.bernie.geckolib3.model.provider.GeoModelProvider;
 
-public class ParapuzosiaModel extends AnimatedGeoModel<Parapuzosia> {
+public class ParapuzosiaModel extends AnimatedTickingGeoModel<Parapuzosia> {
     @Override
     public ResourceLocation getModelLocation(Parapuzosia object) {
         return DinosExpansion.modLoc("geo/parapuzosia.geo.json");
