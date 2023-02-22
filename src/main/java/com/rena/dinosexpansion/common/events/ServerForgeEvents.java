@@ -5,7 +5,9 @@ import com.rena.dinosexpansion.core.init.DamageSourceInit;
 import com.rena.dinosexpansion.core.init.EffectInit;
 import com.rena.dinosexpansion.core.init.EnchantmentInit;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
@@ -90,16 +92,19 @@ public class ServerForgeEvents {
 
     @SubscribeEvent
     public static void onTick(TickEvent.PlayerTickEvent event) {
-        LivingEntity entity = event.player;
-        if (entity.world.getGameTime() % 200L == 0L && entity.world.isDaytime() && !entity.world.isRemote) {
+        PlayerEntity entity = event.player;
+        Enchantment blessing = EnchantmentInit.BLESSING_UNKNOWN.get();
+        if (!entity.world.isRemote && entity.world.isDaytime() && entity.world.canSeeSky(entity.getPosition())) {
             // Repara armaduras y herramientas en el inventario
             PlayerEntity player = event.player;
             for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
                 ItemStack itemStack = player.inventory.getStackInSlot(i);
-                if (!itemStack.isEmpty() && (itemStack.getItem() instanceof TieredItem || itemStack.getItem() instanceof ArmorItem)) {
+                if (!itemStack.isEmpty() && itemStack.isDamageable()) {
                     int level = EnchantmentHelper.getEnchantmentLevel(EnchantmentInit.BLESSING_UNKNOWN.get(), itemStack);
-                    if (level > 0) {
-                        itemStack.setDamage(itemStack.getDamage() - 1);
+                    if (entity.world.getGameTime() % (100L * (blessing.getMaxLevel() + 1 - level)) == 0L) {
+                        if (level > 0) {
+                            itemStack.setDamage(itemStack.getDamage() - 1);
+                        }
                     }
                 }
             }
@@ -110,19 +115,25 @@ public class ServerForgeEvents {
 
     /**
      * If the condition is met, the arrow is not consumed when fired
+     *
      * @param event
      */
     @SubscribeEvent
     public static void onArrowShot(ArrowLooseEvent event) {
         PlayerEntity player = event.getPlayer();
         ItemStack bow = event.getBow();
-        Item arrow = bow.getItem();
+        boolean flag = player.abilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, bow) > 0;
+        if (flag)
+            return;
+        ItemStack ammo = event.getPlayer().findAmmo(bow);
+        if (ammo.isEmpty())
+            return;
         int level = EnchantmentHelper.getEnchantmentLevel(EnchantmentInit.AMMO_RESERVATION.get(), bow);
         if (level > 0) {
-            if (arrow instanceof ArrowItem) {
-                float chance = (1.0F - 0.1F * level);
-                if (player.getRNG().nextFloat() > chance) {
-                    event.setCanceled(true);
+            float chance = (1.0F - 0.1F * level);
+            if (player.getRNG().nextFloat() > chance) {
+                if (event.hasAmmo()) {
+                    ammo.grow(1);
                 }
             }
         }

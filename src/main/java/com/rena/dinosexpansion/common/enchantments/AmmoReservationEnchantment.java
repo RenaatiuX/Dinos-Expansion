@@ -2,13 +2,14 @@ package com.rena.dinosexpansion.common.enchantments;
 
 import com.rena.dinosexpansion.common.enchantments.util.ModEnchantmentType;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentType;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.BowItem;
 import net.minecraft.item.ItemStack;
 public class AmmoReservationEnchantment extends Enchantment {
 
     public AmmoReservationEnchantment() {
-        super(Rarity.UNCOMMON, ModEnchantmentType.TYPE_THROWING_ITEM, new EquipmentSlotType[]{EquipmentSlotType.MAINHAND});
+        super(Rarity.UNCOMMON, EnchantmentType.BOW, new EquipmentSlotType[]{EquipmentSlotType.MAINHAND});
     }
 
     @Override
