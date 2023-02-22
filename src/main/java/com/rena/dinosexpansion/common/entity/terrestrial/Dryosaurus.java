@@ -1,8 +1,10 @@
 package com.rena.dinosexpansion.common.entity.terrestrial;
 
+import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.common.entity.Dinosaur;
 import com.rena.dinosexpansion.common.entity.ia.SleepRhythmGoal;
 import com.rena.dinosexpansion.common.entity.semiaquatic.Astorgosuchus;
+import com.rena.dinosexpansion.core.init.EntityInit;
 import com.rena.dinosexpansion.core.init.SoundInit;
 import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.EntityType;
@@ -11,10 +13,15 @@ import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.EatGrassGoal;
 import net.minecraft.entity.passive.TameableEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import software.bernie.geckolib3.GeckoLib;
@@ -41,6 +48,7 @@ public class Dryosaurus extends Dinosaur implements IAnimatable, IAnimationTicka
 
     public Dryosaurus(EntityType<Dryosaurus> type, World world) {
         super(type, world, new DinosaurInfo("dryosaurus", 70, 35, 10, SleepRhythmGoal.SleepRhythm.DIURNAL), generateLevelWithinBounds(10, 50));
+        updateInfo();
     }
 
     @Override
@@ -93,12 +101,12 @@ public class Dryosaurus extends Dinosaur implements IAnimatable, IAnimationTicka
         double rand = this.getRNG().nextDouble();
         if (rand <= 0.05)
             return Rarity.LEGENDARY;
-        if (rand <= 0.1)
+        /*if (rand <= 0.1)
             return Rarity.EPIC;
         if (rand < 0.2)
             return Rarity.RARE;
         if (rand <= 0.5)
-            return Rarity.UNCOMMON;
+            return Rarity.UNCOMMON;*/
         return Rarity.COMMON;
     }
 
@@ -117,7 +125,7 @@ public class Dryosaurus extends Dinosaur implements IAnimatable, IAnimationTicka
     @Nullable
     @Override
     public AgeableEntity createChild(ServerWorld world, AgeableEntity mate) {
-        return null;
+        return EntityInit.DRYOSAURUS.get().create(world);
     }
 
     @Override
@@ -158,6 +166,19 @@ public class Dryosaurus extends Dinosaur implements IAnimatable, IAnimationTicka
         }
     }
 
+    @Override
+    public ActionResultType applyPlayerInteraction(PlayerEntity player, Vector3d vec, Hand hand) {
+        this.getInfo().print();
+        DinosExpansion.LOGGER.debug("Narcotic: [" + getNarcoticValue() + "/" + getInfo().getMaxNarcotic() + "]");
+        DinosExpansion.LOGGER.debug("IsKnockout: " + this.isKnockout());
+        if (!world.isRemote() && hand == Hand.MAIN_HAND) {
+            if (player.getHeldItem(hand).isEmpty() && isKnockedOutBy(player)) {
+                openTamingGui(this, (ServerPlayerEntity) player);
+            }
+        }
+        return super.applyPlayerInteraction(player, vec, hand);
+    }
+
     @Nullable
     @Override
     protected SoundEvent getAmbientSound() {
@@ -186,32 +207,30 @@ public class Dryosaurus extends Dinosaur implements IAnimatable, IAnimationTicka
 
     private PlayState predicate(AnimationEvent<Dryosaurus> event) {
         if (this.isKnockout()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("dryosaurus_knockout", ILoopType.EDefaultLoopTypes.LOOP));
-        } else if (this.isOnGround()) {
-            if (event.isMoving()) {
-                if (this.isSprinting()) {
-                    event.getController().setAnimation(new AnimationBuilder().addAnimation("dryosaurus_run", ILoopType.EDefaultLoopTypes.LOOP));
-                    event.getController().setAnimationSpeed(1.5D);
-                } else {
-                    event.getController().setAnimation(new AnimationBuilder().addAnimation("dryosaurus_walk", ILoopType.EDefaultLoopTypes.LOOP));
-                }
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("dryosaurus.knockout", ILoopType.EDefaultLoopTypes.LOOP));
+        }
+        if (event.isMoving()) {
+            if (this.isSprinting()) {
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("dryosaurus.run", ILoopType.EDefaultLoopTypes.LOOP));
+                event.getController().setAnimationSpeed(1.5D);
             } else {
-                event.getController().setAnimation(new AnimationBuilder().addAnimation("dryosaurus_idle", ILoopType.EDefaultLoopTypes.LOOP));
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("dryosaurus.walk", ILoopType.EDefaultLoopTypes.LOOP));
             }
         } else if (this.isEating()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("dryosaurus_eat", ILoopType.EDefaultLoopTypes.LOOP));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("dryosaurus.eat", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
         } else if (this.isSleeping()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("dryosaurus_sleep", ILoopType.EDefaultLoopTypes.LOOP));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("dryosaurus.sleep", ILoopType.EDefaultLoopTypes.LOOP));
         } else if (this.isQueuedToSit()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("dryosaurus_sit", ILoopType.EDefaultLoopTypes.LOOP));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("dryosaurus.sit", ILoopType.EDefaultLoopTypes.LOOP));
         }
+        event.getController().setAnimation(new AnimationBuilder().addAnimation("dryosaurus.idle", ILoopType.EDefaultLoopTypes.LOOP));
         return PlayState.CONTINUE;
     }
 
     private PlayState attackPredicate(AnimationEvent<Dryosaurus> event) {
         if (!isKnockout() && this.isSwingInProgress && event.getController().getAnimationState().equals(AnimationState.Stopped)) {
             event.getController().markNeedsReload();
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("dryosaurus_attack"));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("dryosaurus.attack"));
             this.isSwingInProgress = false;
         }
         return PlayState.CONTINUE;
@@ -219,7 +238,7 @@ public class Dryosaurus extends Dinosaur implements IAnimatable, IAnimationTicka
 
     @Override
     public void registerControllers(AnimationData data) {
-        data.addAnimationController(new AnimationController<>(this, "controller", 30, this::predicate));
+        data.addAnimationController(new AnimationController<>(this, "controller", 10, this::predicate));
     }
 
     @Override
