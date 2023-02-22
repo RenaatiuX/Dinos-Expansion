@@ -1,8 +1,8 @@
 package com.rena.dinosexpansion.common.entity.projectile;
 
 import com.rena.dinosexpansion.core.init.EnchantmentInit;
-import com.rena.dinosexpansion.core.init.EntityInit;
 import com.rena.dinosexpansion.core.init.ItemInit;
+import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -14,8 +14,7 @@ import net.minecraft.network.IPacket;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
@@ -35,30 +34,32 @@ public class TinyRockEntity extends AbstractArrowEntity{
         setDamage(1.5D);
     }
 
-    public TinyRockEntity(EntityType<TinyRockEntity> type, World world, LivingEntity shooter, ItemStack dart) {
+    public TinyRockEntity(EntityType<TinyRockEntity> type, World world, LivingEntity shooter, ItemStack rock) {
         this(type, world, shooter.getPosX(),shooter.getPosY() + (double)shooter.getEyeHeight() - (double)0.1F, shooter.getPosZ());
         this.setShooter(shooter);
+        ItemStack countRock = rock.copy();
+        countRock.setCount(1);
         if (shooter instanceof PlayerEntity) {
             this.pickupStatus = AbstractArrowEntity.PickupStatus.ALLOWED;
         }
-        this.dataManager.set(ROCK_STACK, dart.copy());
+        this.dataManager.set(ROCK_STACK, rock);
     }
 
     @Override
     protected ItemStack getArrowStack() {
-        return getDart().isEmpty() ? new ItemStack(ItemInit.DART.get()) : getDart();
+        return getRock().isEmpty() ? new ItemStack(ItemInit.TINY_ROCK.get()) : getRock();
     }
 
     @Override
     protected float getSpeedFactor() {
-        if (EnchantmentHelper.getEnchantmentLevel(EnchantmentInit.AQUATIC_ENCHANT.get(), getDart()) <= 0)
+        if (EnchantmentHelper.getEnchantmentLevel(EnchantmentInit.AQUATIC_ENCHANT.get(), getRock()) <= 0)
             return super.getSpeedFactor();
         return 1.0f;
     }
 
     @Override
     protected float getWaterDrag() {
-        return EnchantmentHelper.getEnchantmentLevel(EnchantmentInit.AQUATIC_ENCHANT.get(), getDart()) <= 0 ? super.getWaterDrag() : 1.0f;
+        return EnchantmentHelper.getEnchantmentLevel(EnchantmentInit.AQUATIC_ENCHANT.get(), getRock()) <= 0 ? super.getWaterDrag() : 1.0f;
     }
 
     @Override
@@ -85,7 +86,14 @@ public class TinyRockEntity extends AbstractArrowEntity{
         super.onEntityHit(raytraceResultIn);
     }
 
-    public ItemStack getDart(){
+    @Override
+    public void onImpact(RayTraceResult result) {
+        if (result.getType() == RayTraceResult.Type.BLOCK && world.getBlockState(((BlockRayTraceResult) result).getPos()).getBlock() == Blocks.GLASS) {
+            world.destroyBlock(((BlockRayTraceResult) result).getPos(), false);
+        }
+    }
+
+    public ItemStack getRock(){
         return this.dataManager.get(ROCK_STACK);
     }
 }

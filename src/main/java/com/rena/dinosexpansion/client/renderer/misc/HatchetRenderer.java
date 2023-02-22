@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
@@ -39,6 +40,6 @@ public class HatchetRenderer extends EntityRenderer<HatchetEntity> {
 
     @Override
     public ResourceLocation getEntityTexture(HatchetEntity entity) {
-        return AtlasTexture.LOCATION_BLOCKS_TEXTURE;
+        return PlayerContainer.LOCATION_BLOCKS_TEXTURE;
     }
 }

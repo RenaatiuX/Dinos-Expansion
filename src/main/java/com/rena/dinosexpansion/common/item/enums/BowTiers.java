@@ -12,7 +12,7 @@ import java.util.function.Supplier;
 
 public enum BowTiers implements TieredBow.BowTier {
     VANILLA(0, 0, 1, 384),
-    COMPOUND_BOW(4, 0.3f, 1, 1200, stack -> ModTags.Items.COMPOUND_ARROWS.contains(stack.getItem()), () -> ItemInit.COMPOUND_ARROW.get());
+    COMPOUND_BOW(4, 0.3f, 1, 1200, stack -> ModTags.Items.COMPOUND_ARROWS.contains(stack.getItem()), ItemInit.COMPOUND_ARROW);
 
     private final double damageAddition, speedAddition;
     private final int enchantability, durability;

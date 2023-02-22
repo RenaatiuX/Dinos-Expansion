@@ -53,6 +53,7 @@ public class ClientSetupEvents {
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.CHAKRAM.get(), ChakramRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.HATCHET.get(), HatchetRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.SPEAR.get(), SpearRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityInit.TINY_ROCK.get(), TinyRockRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.PARAPUZOSIA.get(), ParapuzosiaRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.EOSQUALODON.get(), EosqualodonRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.MEGA_PIRANHA.get(), MegaPiranhaRenderer::new);

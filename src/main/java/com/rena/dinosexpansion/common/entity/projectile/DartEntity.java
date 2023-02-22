@@ -35,10 +35,12 @@ public class DartEntity extends AbstractArrowEntity {
     public DartEntity(EntityType<DartEntity> type, World world, LivingEntity shooter, ItemStack dart) {
         this(type, world, shooter.getPosX(),shooter.getPosY() + (double)shooter.getEyeHeight() - (double)0.1F, shooter.getPosZ());
         this.setShooter(shooter);
+        ItemStack countDart = dart.copy();
+        countDart.setCount(1);
         if (shooter instanceof PlayerEntity) {
             this.pickupStatus = AbstractArrowEntity.PickupStatus.ALLOWED;
         }
-        this.dataManager.set(DART_STACK, dart.copy());
+        this.dataManager.set(DART_STACK, dart);
     }
 
     @Override

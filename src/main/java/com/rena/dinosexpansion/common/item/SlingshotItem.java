@@ -47,7 +47,7 @@ public class SlingshotItem extends BowItem {
                 if (!((double)f < 0.1D)) {
                     boolean flag1 = playerentity.abilities.isCreativeMode || (itemstack.getItem() instanceof TinyRockItem && ((TinyRockItem)itemstack.getItem()).isInfinite(itemstack, stack, playerentity));
                     if (!worldIn.isRemote) {
-                        ArrowItem arrowitem = (ArrowItem)(itemstack.getItem() instanceof TinyRockItem ? itemstack.getItem() : ItemInit.DART.get());
+                        ArrowItem arrowitem = (ArrowItem)(itemstack.getItem() instanceof TinyRockItem ? itemstack.getItem() : ItemInit.TINY_ROCK.get());
                         AbstractArrowEntity abstractarrowentity = arrowitem.createArrow(worldIn, itemstack, playerentity);
                         abstractarrowentity = customArrow(abstractarrowentity);
                         abstractarrowentity.setDirectionAndMovement(playerentity, playerentity.rotationPitch, playerentity.rotationYaw, 0.0F, f * 1.1F /*ALTERED FROM PARENT*/, 1.0F);

@@ -41,7 +41,7 @@ public class ItemInit {
     public static final RegistryObject<Item> TINY_ROCK = ITEMS.register("tiny_rock",
             () -> new TinyRockItem(new Item.Properties().group(ModItemGroups.WEAPONS)));
     public static final RegistryObject<Item> SLINGSHOT = ITEMS.register("slingshot",
-            () -> new SlingshotItem(new Item.Properties().group(ModItemGroups.WEAPONS)));
+            () -> new SlingshotItem(new Item.Properties().group(ModItemGroups.WEAPONS).maxStackSize(1).maxDamage(200)));
 
     public static final RegistryObject<TieredBoomerang> WOOD_BOOMERANG = ITEMS.register("wood_boomerang",
             () -> new TieredBoomerang(new Item.Properties().group(ModItemGroups.WEAPONS), BoomerangTiers.WOOD));
