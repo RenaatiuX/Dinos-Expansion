@@ -146,8 +146,8 @@ public class Dryosaurus extends Dinosaur implements IAnimatable, IAnimationTicka
             int ticks = 100 + this.rand.nextInt(100);
             this.panicTicks = ticks;
             List<? extends Dryosaurus> dryosauruses = this.world.getEntitiesWithinAABB(Dryosaurus.class, this.getBoundingBox().grow(8.0D, 4.0D, 8.0D));
-            for (Dryosaurus deer : dryosauruses) {
-                deer.panicTicks = ticks;
+            for (Dryosaurus dryosaurus : dryosauruses) {
+                dryosaurus.panicTicks = ticks;
             }
         }
         return lastHurt;
