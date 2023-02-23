@@ -51,6 +51,10 @@ public class Dryosaurus extends Dinosaur implements IAnimatable, IAnimationTicka
         updateInfo();
     }
 
+    public Dryosaurus(World world){
+        this(EntityInit.DRYOSAURUS.get(), world);
+    }
+
     @Override
     protected void registerGoals() {
         this.eatGrassGoal = new EatGrassGoal(this);
@@ -216,12 +220,16 @@ public class Dryosaurus extends Dinosaur implements IAnimatable, IAnimationTicka
             } else {
                 event.getController().setAnimation(new AnimationBuilder().addAnimation("dryosaurus.walk", ILoopType.EDefaultLoopTypes.LOOP));
             }
+            return PlayState.CONTINUE;
         } else if (this.isEating()) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("dryosaurus.eat", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
+            return PlayState.CONTINUE;
         } else if (this.isSleeping()) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("dryosaurus.sleep", ILoopType.EDefaultLoopTypes.LOOP));
+            return PlayState.CONTINUE;
         } else if (this.isQueuedToSit()) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("dryosaurus.sit", ILoopType.EDefaultLoopTypes.LOOP));
+            return PlayState.CONTINUE;
         }
         event.getController().setAnimation(new AnimationBuilder().addAnimation("dryosaurus.idle", ILoopType.EDefaultLoopTypes.LOOP));
         return PlayState.CONTINUE;

@@ -11,11 +11,12 @@ import com.rena.dinosexpansion.client.renderer.projectiles.DartRenderer;
 import com.rena.dinosexpansion.client.renderer.projectiles.TinyRockRenderer;
 import com.rena.dinosexpansion.client.screens.OrderScreen;
 import com.rena.dinosexpansion.client.screens.TamingScreen;
-import com.rena.dinosexpansion.common.entity.aquatic.Wetherellus;
+import com.rena.dinosexpansion.common.entity.aquatic.Aegirocassis;
+import com.rena.dinosexpansion.common.entity.aquatic.fish.Wetherellus;
 import com.rena.dinosexpansion.common.entity.terrestrial.Dryosaurus;
 import com.rena.dinosexpansion.common.entity.villagers.Hermit;
 import com.rena.dinosexpansion.common.entity.aquatic.Eosqualodon;
-import com.rena.dinosexpansion.common.entity.aquatic.MegaPiranha;
+import com.rena.dinosexpansion.common.entity.aquatic.fish.MegaPiranha;
 import com.rena.dinosexpansion.common.entity.aquatic.Parapuzosia;
 import com.rena.dinosexpansion.common.entity.flying.Dimorphodon;
 import com.rena.dinosexpansion.common.entity.semiaquatic.Astorgosuchus;
@@ -64,6 +65,7 @@ public class ClientSetupEvents {
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.ASTORGOSUCHUS.get(), AstorgosuchusRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.CAMPANILE.get(), CampanileRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.DRYOSAURUS.get(), DryosaurusRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityInit.AEGIROCASSIS.get(), AegirocassisRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.HERMIT.get(), HermitRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.BOOMERANG.get(), BoomerangRenderer::new);
     }
@@ -79,6 +81,7 @@ public class ClientSetupEvents {
         event.put(EntityInit.HERMIT.get(), Hermit.createAttributes());
         event.put(EntityInit.DRYOSAURUS.get(), Dryosaurus.createAttributes().create());
         event.put(EntityInit.WETHERELLUS.get(), Wetherellus.createAttributes().create());
+        event.put(EntityInit.AEGIROCASSIS.get(), Aegirocassis.createAttributes().create());
     }
 
     public static void registerPlantsRenderer() {

@@ -1,6 +1,6 @@
 package com.rena.dinosexpansion.common.item;
 
-import com.rena.dinosexpansion.common.entity.aquatic.PrehistoricFish;
+import com.rena.dinosexpansion.common.entity.aquatic.fish.PrehistoricFish;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;

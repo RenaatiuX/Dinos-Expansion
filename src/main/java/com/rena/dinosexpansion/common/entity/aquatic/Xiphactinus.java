@@ -19,30 +19,12 @@ import java.util.List;
 public class Xiphactinus extends DinosaurAquatic implements IAnimatable, IAnimationTickable {
     public Xiphactinus(EntityType<? extends Dinosaur> type, World world) {
         super(type, world, new DinosaurInfo("xiphactinus", 150, 120, 60, SleepRhythmGoal.SleepRhythm.NONE), generateLevelWithinBounds(10, 100));
+        updateInfo();
     }
 
     @Override
     public List<Item> getFood() {
         return ModTags.Items.XIPHACTINUS_FOOD.getAllElements();
-    }
-
-    @Override
-    protected Rarity getinitialRarity() {
-        double rand = this.getRNG().nextDouble();
-        if (rand <= 0.05)
-            return Rarity.LEGENDARY;
-        if (rand <= 0.1)
-            return Rarity.EPIC;
-        if (rand < 0.2)
-            return Rarity.RARE;
-        if (rand <= 0.5)
-            return Rarity.UNCOMMON;
-        return Rarity.COMMON;
-    }
-
-    @Override
-    protected Gender getInitialGender() {
-        return getRNG().nextDouble() <= 0.51 ? Gender.MALE : Gender.FEMALE;
     }
 
     @Override

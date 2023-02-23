@@ -1,12 +1,13 @@
 package com.rena.dinosexpansion.core.init;
 
 import com.rena.dinosexpansion.DinosExpansion;
-import com.rena.dinosexpansion.common.entity.aquatic.Wetherellus;
+import com.rena.dinosexpansion.common.entity.aquatic.Aegirocassis;
+import com.rena.dinosexpansion.common.entity.aquatic.fish.Wetherellus;
 import com.rena.dinosexpansion.common.entity.projectile.TinyRockEntity;
 import com.rena.dinosexpansion.common.entity.terrestrial.Dryosaurus;
 import com.rena.dinosexpansion.common.entity.villagers.Hermit;
 import com.rena.dinosexpansion.common.entity.aquatic.Eosqualodon;
-import com.rena.dinosexpansion.common.entity.aquatic.MegaPiranha;
+import com.rena.dinosexpansion.common.entity.aquatic.fish.MegaPiranha;
 import com.rena.dinosexpansion.common.entity.aquatic.Parapuzosia;
 import com.rena.dinosexpansion.common.entity.flying.Dimorphodon;
 import com.rena.dinosexpansion.common.entity.misc.*;
@@ -59,6 +60,8 @@ public class EntityInit {
             () -> EntityType.Builder.<Campanile>create(Campanile::new, EntityClassification.AMBIENT).size(0.5F, 1.0F));
     public static final RegistryObject<EntityType<Dryosaurus>> DRYOSAURUS = register("dryosaurus",
             () -> EntityType.Builder.<Dryosaurus>create(Dryosaurus::new, EntityClassification.CREATURE).size(0.7F, 1.7F));
+    public static final RegistryObject<EntityType<Aegirocassis>> AEGIROCASSIS = register("aegirocassis",
+            () -> EntityType.Builder.<Aegirocassis>create(Aegirocassis::new, EntityClassification.WATER_CREATURE).size(0.5F, 0.5F));
     public static final RegistryObject<EntityType<Hermit>> HERMIT = register("hermit", () -> EntityType.Builder.create(Hermit::new, EntityClassification.CREATURE));
 
     public static final <T extends Entity> RegistryObject<EntityType<T>> register(String name, Supplier<EntityType.Builder<T>> builder){

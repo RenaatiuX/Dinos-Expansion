@@ -1,4 +1,4 @@
-package com.rena.dinosexpansion.common.entity.aquatic;
+package com.rena.dinosexpansion.common.entity.aquatic.fish;
 
 import com.rena.dinosexpansion.common.entity.ia.DinosaurSwimBottomGoal;
 import com.rena.dinosexpansion.common.entity.ia.SleepRhythmGoal;
@@ -66,14 +66,14 @@ public class Wetherellus extends PrehistoricFish implements IAnimatable, IAnimat
 
     @Override
     public void registerControllers(AnimationData data) {
-        data.addAnimationController(new AnimationController<>(this, "controller", 0, this::predicate));
+        data.addAnimationController(new AnimationController<>(this, "controller", 10, this::predicate));
     }
 
     private PlayState predicate(AnimationEvent<Wetherellus> event) {
         if (this.isOnGround()) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("wetherellus.outofwater", ILoopType.EDefaultLoopTypes.LOOP));
         }
-        if(isInWater()) {
+        else if(this.isInWater()) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("wetherellus.swim", ILoopType.EDefaultLoopTypes.LOOP));
         }
         return PlayState.CONTINUE;

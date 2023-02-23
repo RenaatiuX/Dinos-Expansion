@@ -1,0 +1,146 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "aegirocassis.idle": {
+      "loop": true,
+      "animation_length": 2.08,
+      "bones": {
+        "Body": {
+          "rotation": {
+            "0.0": {
+              "vector": [0, 0, 0]
+            },
+            "1.04": {
+              "vector": [2.5, 0, 0]
+            },
+            "2.08": {
+              "vector": [0, 0, 0]
+            }
+          }
+        },
+        "BeardL": {
+          "rotation": {
+            "0.0": {
+              "vector": [0, 0, 0]
+            },
+            "0.52": {
+              "vector": [-12.5, 0, 0]
+            },
+            "1.04": {
+              "vector": [5, 0, 0]
+            },
+            "1.56": {
+              "vector": [-17.5, 0, 0]
+            },
+            "2.08": {
+              "vector": [0, 0, 0]
+            }
+          }
+        },
+        "BeardL2": {
+          "rotation": {
+            "0.0": {
+              "vector": [0, 0, 0]
+            },
+            "0.52": {
+              "vector": [5, 0, 0]
+            },
+            "1.04": {
+              "vector": [-12.5, 0, 0]
+            },
+            "1.56": {
+              "vector": [7.5, 0, 0]
+            },
+            "2.08": {
+              "vector": [0, 0, 0]
+            }
+          }
+        },
+        "Tail": {
+          "rotation": {
+            "0.0": {
+              "vector": [0, 0, 0]
+            },
+            "1.04": {
+              "vector": [-5, 0, 0]
+            },
+            "2.08": {
+              "vector": [0, 0, 0]
+            }
+          }
+        }
+      }
+    },
+    "aegirocassis.swim": {
+      "loop": true,
+      "animation_length": 2.08,
+      "bones": {
+        "Body": {
+          "rotation": {
+            "0.0": {
+              "vector": [5, 0, 0]
+            },
+            "1.04": {
+              "vector": [2.5, 0, 0]
+            },
+            "2.08": {
+              "vector": [5, 0, 0]
+            }
+          }
+        },
+        "BeardL": {
+          "rotation": {
+            "0.0": {
+              "vector": [0, 0, 0]
+            },
+            "0.52": {
+              "vector": [-12.5, 0, 0]
+            },
+            "1.04": {
+              "vector": [5, 0, 0]
+            },
+            "1.56": {
+              "vector": [-17.5, 0, 0]
+            },
+            "2.08": {
+              "vector": [0, 0, 0]
+            }
+          }
+        },
+        "BeardL2": {
+          "rotation": {
+            "0.0": {
+              "vector": [0, 0, 0]
+            },
+            "0.52": {
+              "vector": [5, 0, 0]
+            },
+            "1.04": {
+              "vector": [-12.5, 0, 0]
+            },
+            "1.56": {
+              "vector": [7.5, 0, 0]
+            },
+            "2.08": {
+              "vector": [0, 0, 0]
+            }
+          }
+        },
+        "Tail": {
+          "rotation": {
+            "0.0": {
+              "vector": [0, 0, 0]
+            },
+            "1.04": {
+              "vector": [-5, 0, 0]
+            },
+            "2.08": {
+              "vector": [0, 0, 0]
+            }
+          }
+        }
+      }
+    }
+  },
+  "geckolib_format_version": 2
+}

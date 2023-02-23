@@ -131,6 +131,8 @@ public class ItemInit {
             () -> new ForgeSpawnEggItem(EntityInit.DRYOSAURUS, 9012770, 5987102, new Item.Properties().group(ModItemGroups.SPAWN_EGGS)));
     public static final RegistryObject<Item> WETHERELLUS_SPAWN_EGG = ITEMS.register("wetherellus_spawn_egg",
             () -> new ForgeSpawnEggItem(EntityInit.WETHERELLUS, 8161967, 7438131, new Item.Properties().group(ModItemGroups.SPAWN_EGGS)));
+    public static final RegistryObject<Item> AEGIROCASSIS_SPAWN_EGG = ITEMS.register("aegirocassis_spawn_egg",
+            () -> new ForgeSpawnEggItem(EntityInit.AEGIROCASSIS, 3034935, 1214097, new Item.Properties().group(ModItemGroups.SPAWN_EGGS)));
 
     //Food
     public static final RegistryObject<Item> RAW_CARNOTAURUS_MEAT = ITEMS.register("raw_carnotaurus_meat",
@@ -195,6 +197,6 @@ public class ItemInit {
             () -> new CustomBlockBucket(new Item.Properties().group(ModItemGroups.ITEMS).maxStackSize(1), BlockInit.QUICKSAND));
     public static final RegistryObject<Item> GLOW_STICK = ITEMS.register("glowstick",
             () -> new GlowStickItem(new Item.Properties().group(ModItemGroups.ITEMS)));
-    public static final RegistryObject<ZoomItem> ZOOM = ITEMS.register("spyglass",
+    public static final RegistryObject<ZoomItem> SPYGLASS = ITEMS.register("spyglass",
             () -> new ZoomItem(new Item.Properties().group(ModItemGroups.ITEMS), 2, 10));
 }

@@ -1,4 +1,4 @@
-package com.rena.dinosexpansion.common.entity.aquatic;
+package com.rena.dinosexpansion.common.entity.aquatic.fish;
 
 import com.rena.dinosexpansion.common.entity.Dinosaur;
 import net.minecraft.advancements.CriteriaTriggers;
