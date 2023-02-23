@@ -7,7 +7,9 @@ import com.rena.dinosexpansion.common.container.TamingContainer;
 import com.rena.dinosexpansion.common.entity.Dinosaur;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
+import net.minecraft.client.gui.screen.inventory.InventoryScreen;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
@@ -17,6 +19,9 @@ import net.minecraftforge.fml.client.gui.GuiUtils;
 public class TamingScreen extends ContainerScreen<TamingContainer> {
 
     public static final ResourceLocation TEXTURE = DinosExpansion.modLoc("textures/gui/dinosaur_tamed_gui.png");
+
+    private float mousePosx;
+    private float mousePosY;
 
     public TamingScreen(TamingContainer screenContainer, PlayerInventory inv, ITextComponent titleIn) {
         super(screenContainer, inv, titleIn);
@@ -38,6 +43,8 @@ public class TamingScreen extends ContainerScreen<TamingContainer> {
     @Override
     public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrixStack);
+        this.mousePosx = (float)mouseX;
+        this.mousePosY = (float)mouseY;
         this.drawGuiContainerBackgroundLayer(matrixStack, partialTicks, mouseX, mouseY);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
         this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
@@ -70,25 +77,31 @@ public class TamingScreen extends ContainerScreen<TamingContainer> {
             int width = (int) ((float) dino.getTamingProgress() * 84f / 100f);
             this.blit(matrixStack, guiLeft + 7, guiTop + 99, 0, 218, width, 6);
         }
+        float round = (float)Math.round(dino.getTamingEfficiency() * 1000f) / 10f;
+        StringTextComponent comp = new StringTextComponent( round + "%");
+        int width = this.font.getStringPropertyWidth(comp);
+        this.font.drawText(matrixStack, comp, guiLeft + 7 + (84 - width) / 2, guiTop + 99, 4210752);
         Dinosaur.DinosaurInfo info = dino.getInfo();
         int left = guiLeft + this.titleX + 88;
-        this.font.drawText(matrixStack, new TranslationTextComponent(DinosExpansion.MOD_ID + ".gender").appendSibling(info.getGender().getDisplayName()), left, (float)  guiTop + this.titleY - 2, 4210752);
-        this.font.drawText(matrixStack, new TranslationTextComponent(DinosExpansion.MOD_ID + ".level").appendString("" + info.getLevel()), left, (float)  guiTop + this.titleY + 10, 4210752);
-        this.font.drawText(matrixStack, new TranslationTextComponent(DinosExpansion.MOD_ID + ".sleep_rhythm").appendSibling(info.getRhythm().getDisplayName()), left, (float)  guiTop + this.titleY + 22, 4210752);
+        this.font.drawText(matrixStack, new TranslationTextComponent(DinosExpansion.MOD_ID + ".gender", info.getGender().getDisplayName()), left, (float) guiTop + this.titleY - 2, 4210752);
+        this.font.drawText(matrixStack, new TranslationTextComponent(DinosExpansion.MOD_ID + ".level", info.getLevel()), left, (float) guiTop + this.titleY + 10, 4210752);
+        this.font.drawText(matrixStack, new TranslationTextComponent(DinosExpansion.MOD_ID + ".sleep_rhythm", info.getRhythm().getDisplayName()), left, (float) guiTop + this.titleY + 22, 4210752);
+        InventoryScreen.drawEntityOnScreen(guiLeft + 55, guiTop + 50, 20, (guiLeft + 55) -this.mousePosx, (guiTop+ 75 - 50) - this.mousePosY, dino);
     }
+
 
     @Override
     protected void renderHoveredTooltip(MatrixStack matrixStack, int x, int y) {
         super.renderHoveredTooltip(matrixStack, x, y);
         Dinosaur dino = this.container.getDinosaur();
         if (x >= guiLeft + 7 && x <= guiLeft + 7 + 84 && y >= guiTop + 73 && y <= guiTop + 73 + 6) {
-            this.renderTooltip(matrixStack, new TranslationTextComponent("taming_screen." + DinosExpansion.MOD_ID + ".narcotic").copyRaw().appendSibling(new StringTextComponent(dino.getNarcoticValue() + "/" + dino.getInfo().getMaxNarcotic())), x, y);
+            this.renderTooltip(matrixStack, new TranslationTextComponent("taming_screen." + DinosExpansion.MOD_ID + ".narcotic", dino.getNarcoticValue(), dino.getInfo().getMaxNarcotic()), x, y);
         }
         if (x >= guiLeft + 7 && x <= guiLeft + 7 + 84 && y >= guiTop + 86 && y <= guiTop + 86 + 6) {
-            this.renderTooltip(matrixStack, new StringTextComponent(dino.getHungerValue() + "/" + dino.getInfo().getMaxHunger()), x, y);
+            this.renderTooltip(matrixStack, new TranslationTextComponent("taming_screen." + DinosExpansion.MOD_ID + ".hunger", dino.getHungerValue(), dino.getInfo().getMaxHunger()), x, y);
         }
         if (x >= guiLeft + 7 && x <= guiLeft + 7 + 84 && y >= guiTop + 99 && y <= guiTop + 99 + 6) {
-            this.renderTooltip(matrixStack, new StringTextComponent(dino.getTamingProgress() + "/100"), x, y);
+            this.renderTooltip(matrixStack, new TranslationTextComponent("taming_screen." + DinosExpansion.MOD_ID + ".taming_progress", dino.getTamingProgress()), x, y);
         }
     }
 }

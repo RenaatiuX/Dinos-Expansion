@@ -1,6 +1,7 @@
 package com.rena.dinosexpansion.common.entity.ia;
 
 import com.rena.dinosexpansion.common.entity.Dinosaur;
+import com.rena.dinosexpansion.common.util.enums.AttackOrder;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -10,24 +11,27 @@ import java.util.function.Predicate;
 
 public class DinosaurNearestTargetGoal<T extends LivingEntity> extends NearestAttackableTargetGoal<T> {
     protected final Dinosaur dino;
+    protected boolean attackAsNonTamed;
     public DinosaurNearestTargetGoal(Dinosaur goalOwnerIn, Class<T> targetClassIn, boolean checkSight) {
-        super(goalOwnerIn, targetClassIn, checkSight);
-        this.dino = goalOwnerIn;
+        this(goalOwnerIn, targetClassIn, checkSight, false, true);
     }
 
-    public DinosaurNearestTargetGoal(Dinosaur goalOwnerIn, Class<T> targetClassIn, boolean checkSight, boolean nearbyOnlyIn) {
-        super(goalOwnerIn, targetClassIn, checkSight, nearbyOnlyIn);
-        this.dino = goalOwnerIn;
+    public DinosaurNearestTargetGoal(Dinosaur goalOwnerIn, Class<T> targetClassIn, boolean checkSight, boolean nearbyOnlyIn, boolean attackAsNonTamed) {
+        this(goalOwnerIn, targetClassIn,10, checkSight, nearbyOnlyIn, attackAsNonTamed, null);
     }
 
-    public DinosaurNearestTargetGoal(Dinosaur goalOwnerIn, Class<T> targetClassIn, int targetChanceIn, boolean checkSight, boolean nearbyOnlyIn, @Nullable Predicate<LivingEntity> targetPredicate) {
+    public DinosaurNearestTargetGoal(Dinosaur goalOwnerIn, Class<T> targetClassIn, int targetChanceIn, boolean checkSight, boolean nearbyOnlyIn,boolean attackAsNonTamed, @Nullable Predicate<LivingEntity> targetPredicate) {
         super(goalOwnerIn, targetClassIn, targetChanceIn, checkSight, nearbyOnlyIn, targetPredicate);
         this.dino = goalOwnerIn;
+        this.attackAsNonTamed = attackAsNonTamed;
     }
 
     @Override
     public boolean shouldExecute() {
-        return !this.dino.isSleeping() && !this.dino.isKnockout() && super.shouldExecute();
+        if (dino.isTamed()){
+            return !dino.isMovementDisabled() && this.dino.getAttackOrder() == AttackOrder.HOSTILE && super.shouldExecute();
+        }
+        return attackAsNonTamed && !this.dino.isSleeping() && !this.dino.isKnockout() && super.shouldExecute();
     }
 
     @Override

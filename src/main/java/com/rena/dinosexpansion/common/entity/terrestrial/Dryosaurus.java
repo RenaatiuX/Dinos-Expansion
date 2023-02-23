@@ -1,30 +1,37 @@
 package com.rena.dinosexpansion.common.entity.terrestrial;
 
+import com.google.common.collect.Lists;
 import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.common.entity.Dinosaur;
-import com.rena.dinosexpansion.common.entity.ia.SleepRhythmGoal;
-import com.rena.dinosexpansion.common.entity.semiaquatic.Astorgosuchus;
+import com.rena.dinosexpansion.common.entity.ia.*;
+import com.rena.dinosexpansion.common.util.enums.MoveOrder;
 import com.rena.dinosexpansion.core.init.EntityInit;
 import com.rena.dinosexpansion.core.init.SoundInit;
+import com.rena.dinosexpansion.core.tags.ModTags;
 import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.EatGrassGoal;
+import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.ai.goal.HurtByTargetGoal;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
+import net.minecraft.item.Items;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
-import software.bernie.geckolib3.GeckoLib;
 import software.bernie.geckolib3.core.AnimationState;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimationTickable;
@@ -44,6 +51,7 @@ public class Dryosaurus extends Dinosaur implements IAnimatable, IAnimationTicka
     private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
     private int panicTicks = 0;
     private int eatAnimationTick;
+    private BlockPos attacker;
     private EatGrassGoal eatGrassGoal;
 
     public Dryosaurus(EntityType<Dryosaurus> type, World world) {
@@ -51,14 +59,26 @@ public class Dryosaurus extends Dinosaur implements IAnimatable, IAnimationTicka
         updateInfo();
     }
 
-    public Dryosaurus(World world){
+    public Dryosaurus(World world) {
         this(EntityInit.DRYOSAURUS.get(), world);
     }
 
     @Override
     protected void registerGoals() {
-        this.eatGrassGoal = new EatGrassGoal(this);
+        this.goalSelector.addGoal(0, new FleeGoal(1.2, 10));
+        this.goalSelector.addGoal(0, new TamingProgressGoal(this, 5, (byte) 25, 0.01f));
+        this.goalSelector.addGoal(1, new DinosaurMeleeAttackGoal(this, 0.9D, false));
+        this.goalSelector.addGoal(1, new DinosaurFollowOwnerGoal(this, 1.0D, 3, 8, true));
+        this.goalSelector.addGoal(2, new DinosaurNearestTargetGoal<>(this, LivingEntity.class, 10, true, false, false, living -> !isOnSameTeam(living) && !(living instanceof Dryosaurus)));
+        this.goalSelector.addGoal(2, new DinosaurHurByTargetGoal(this, false));
+        this.eatGrassGoal = new EatGrassGoal(this) {
+            @Override
+            public boolean shouldExecute() {
+                return !isSleeping() && !isKnockout() && (getMoveOrder() == MoveOrder.WANDER || getMoveOrder() == MoveOrder.IDLE) && super.shouldExecute();
+            }
+        };
         this.goalSelector.addGoal(5, this.eatGrassGoal);
+        this.goalSelector.addGoal(6, new DinosaurWanderGoal(this, 1.0D));
     }
 
     public static AttributeModifierMap.MutableAttribute createAttributes() {
@@ -95,9 +115,15 @@ public class Dryosaurus extends Dinosaur implements IAnimatable, IAnimationTicka
         }
     }
 
+    public float getEatAnimationTick() {
+        return eatAnimationTick;
+    }
+
     @Override
     public List<Item> getFood() {
-        return null;
+        List<Item> food = Lists.newArrayList(Items.APPLE);
+        food.addAll(ModTags.Items.KIBBLE.getAllElements());
+        return food;
     }
 
     @Override
@@ -121,7 +147,7 @@ public class Dryosaurus extends Dinosaur implements IAnimatable, IAnimationTicka
 
     @Override
     protected int reduceNarcotic(int narcoticValue) {
-        if (getRNG().nextDouble() <= 0.05)
+        if (getRNG().nextDouble() <= 0.001)
             return narcoticValue - 1;
         return narcoticValue;
     }
@@ -149,9 +175,16 @@ public class Dryosaurus extends Dinosaur implements IAnimatable, IAnimationTicka
         if (lastHurt) {
             int ticks = 100 + this.rand.nextInt(100);
             this.panicTicks = ticks;
+            if (source.getTrueSource() != null)
+                this.attacker = source.getTrueSource().getPosition();
             List<? extends Dryosaurus> dryosauruses = this.world.getEntitiesWithinAABB(Dryosaurus.class, this.getBoundingBox().grow(8.0D, 4.0D, 8.0D));
             for (Dryosaurus dryosaurus : dryosauruses) {
-                dryosaurus.panicTicks = ticks;
+                if (source.getTrueSource() != null && source.getTrueSource() instanceof LivingEntity) {
+                    if (!dryosaurus.isOwner((LivingEntity) source.getTrueSource()) && !dryosaurus.isKnockedOutBy((LivingEntity) source.getTrueSource())) {
+                        dryosaurus.panicTicks = ticks;
+                        dryosaurus.attacker = this.attacker;
+                    }
+                }
             }
         }
         return lastHurt;
@@ -161,8 +194,10 @@ public class Dryosaurus extends Dinosaur implements IAnimatable, IAnimationTicka
     public void tick() {
         super.tick();
         if (!this.world.isRemote) {
-            if (panicTicks >= 0) {
+            if (panicTicks > 0) {
                 panicTicks--;
+                if (panicTicks == 0)
+                    this.attacker = null;
             }
             if (panicTicks == 0 && this.getRevengeTarget() != null) {
                 this.setRevengeTarget(null);
@@ -212,13 +247,14 @@ public class Dryosaurus extends Dinosaur implements IAnimatable, IAnimationTicka
     private PlayState predicate(AnimationEvent<Dryosaurus> event) {
         if (this.isKnockout()) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("dryosaurus.knockout", ILoopType.EDefaultLoopTypes.LOOP));
+            return PlayState.CONTINUE;
         }
         if (event.isMoving()) {
             if (this.isSprinting()) {
-                event.getController().setAnimation(new AnimationBuilder().addAnimation("dryosaurus.run", ILoopType.EDefaultLoopTypes.LOOP));
-                event.getController().setAnimationSpeed(1.5D);
+                //event.getController().setAnimation(new AnimationBuilder().addAnimation("dryosaurus.run", ILoopType.EDefaultLoopTypes.LOOP));
+                //event.getController().setAnimationSpeed(1.5D);
             } else {
-                event.getController().setAnimation(new AnimationBuilder().addAnimation("dryosaurus.walk", ILoopType.EDefaultLoopTypes.LOOP));
+                //event.getController().setAnimation(new AnimationBuilder().addAnimation("dryosaurus.walk", ILoopType.EDefaultLoopTypes.LOOP));
             }
             return PlayState.CONTINUE;
         } else if (this.isEating()) {
@@ -227,7 +263,7 @@ public class Dryosaurus extends Dinosaur implements IAnimatable, IAnimationTicka
         } else if (this.isSleeping()) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("dryosaurus.sleep", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
-        } else if (this.isQueuedToSit()) {
+        } else if (this.getMoveOrder() == MoveOrder.SIT) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("dryosaurus.sit", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }
@@ -247,6 +283,7 @@ public class Dryosaurus extends Dinosaur implements IAnimatable, IAnimationTicka
     @Override
     public void registerControllers(AnimationData data) {
         data.addAnimationController(new AnimationController<>(this, "controller", 10, this::predicate));
+        data.addAnimationController(new AnimationController<>(this, "attack_controller", 0, this::attackPredicate));
     }
 
     @Override
@@ -257,5 +294,46 @@ public class Dryosaurus extends Dinosaur implements IAnimatable, IAnimationTicka
     @Override
     public int tickTimer() {
         return this.ticksExisted;
+    }
+
+
+    public class FleeGoal extends Goal {
+
+        protected double posX, posY, posZ;
+        private final double speed, distance;
+
+        public FleeGoal(double speed, double distance) {
+            this.speed = speed;
+            this.distance = distance;
+        }
+
+        @Override
+        public boolean shouldExecute() {
+            if (!isKnockout() && !isSleeping() && !isTamed() && panicTicks > 0 && attacker != null) {
+                BlockPos thisPos = Dryosaurus.this.getPosition();
+
+                Vector3d direction = new Vector3d(attacker.getX() - thisPos.getX(), 0, attacker.getZ() - thisPos.getZ()).normalize();
+                Vector3d randomPos = RandomPositionGenerator.findRandomTargetTowardsScaled(Dryosaurus.this, 10, 4, direction, distance);
+                if (randomPos != null) {
+                    DinosExpansion.LOGGER.debug("" + randomPos.toString());
+                    this.posX = randomPos.x;
+                    this.posY = randomPos.y;
+                    this.posZ = randomPos.z;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        @Override
+        public void startExecuting() {
+            Dryosaurus.this.getNavigator().tryMoveToXYZ(this.posX, this.posY, this.posY, this.speed);
+        }
+
+        public boolean shouldContinueExecuting() {
+            return !isKnockout() && !isSleeping() && (!Dryosaurus.this.getNavigator().noPath() || panicTicks <= 0);
+        }
+
+
     }
 }

@@ -6,6 +6,7 @@ import com.rena.dinosexpansion.common.entity.Dinosaur;
 import com.rena.dinosexpansion.common.entity.terrestrial.Dryosaurus;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Util;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
@@ -57,9 +58,11 @@ public class DryosaurusModel extends AnimatedTickingGeoModel<Dryosaurus> {
             neck.setScaleZ(1.45F);
         }
 
+
         if (entity.isEating()) {
             neck.setRotationX(extraDataOfType.get(0).headPitch * 0.017453292F);
             neck.setRotationY(extraDataOfType.get(0).netHeadYaw * 0.017453292F);
+            neck.setPositionZ(neck.getPositionZ() - 4);
         }
     }
 }

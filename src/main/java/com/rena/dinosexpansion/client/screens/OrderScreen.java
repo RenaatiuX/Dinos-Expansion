@@ -24,6 +24,7 @@ import java.awt.*;
 
 public class OrderScreen extends ContainerScreen<DinosaurContainer<Dinosaur>> {
 
+    protected WidgetLabel attackOrderLabel, moveOrderLabel;
 
     public OrderScreen(DinosaurContainer<Dinosaur> screenContainer, PlayerInventory inv, ITextComponent titleIn) {
         super(screenContainer, inv, titleIn);
@@ -53,7 +54,7 @@ public class OrderScreen extends ContainerScreen<DinosaurContainer<Dinosaur>> {
         int currentX = boundingBox.x + paddingX;
         int width = boundingBox.width - 2 * paddingX;
         //we draw the current order
-        this.addButton(new WidgetLabel(currentX, currentY, width, 10, this.container.getDinosaur().getAttackOrder().getDisplayName()));
+        this.attackOrderLabel = this.addButton(new WidgetLabel(currentX, currentY, width, 10, this.container.getDinosaur().getAttackOrder().getDisplayName()));
         //this just goes down the y coordinate in order to draw the next Widget
         currentY += 10 + marginY;
         for (AttackOrder order : orders){
@@ -71,7 +72,7 @@ public class OrderScreen extends ContainerScreen<DinosaurContainer<Dinosaur>> {
         int currentY = boundingBox.y + paddingY;
         int currentX = boundingBox.x + paddingX;
         int width = boundingBox.width - 2 * paddingX;
-        this.addButton(new WidgetLabel(currentX, currentY, width, 10, this.container.getDinosaur().getMoveOrder().getDisplayName()));
+        this.moveOrderLabel = this.addButton(new WidgetLabel(currentX, currentY, width, 10, this.container.getDinosaur().getMoveOrder().getDisplayName()));
         currentY += 10 + marginY;
         for (MoveOrder order : orders){
             this.addButton(new MoveOrderButton(currentX, currentY, width, individualHeight, order, this::handleMoveOrder));
@@ -100,5 +101,7 @@ public class OrderScreen extends ContainerScreen<DinosaurContainer<Dinosaur>> {
     protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int x, int y) {
         Minecraft.getInstance().getTextureManager().bindTexture(DinosExpansion.modLoc("textures/gui/blank_screen.png"));
         this.blit(matrixStack, guiLeft, guiTop, 0,0,176, 166);
+        this.moveOrderLabel.setMessage(this.container.getDinosaur().getMoveOrder().getDisplayName());
+        this.attackOrderLabel.setMessage(this.container.getDinosaur().getAttackOrder().getDisplayName());
     }
 }

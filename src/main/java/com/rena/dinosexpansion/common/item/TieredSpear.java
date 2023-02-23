@@ -28,10 +28,17 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
 
 import javax.annotation.Nullable;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 public class TieredSpear extends Item implements IVanishable {
+
+    public static final Set<Enchantment> ALLOWED_ENCHANMENTS = Util.make(new HashSet<>(), set-> {
+        set.add(Enchantments.LOYALTY);
+        set.add(Enchantments.SHARPNESS);
+    });
+
 
     private final SpearTier spearTier;
     private final Multimap<Attribute, AttributeModifier> spearAttributes;
@@ -149,7 +156,7 @@ public class TieredSpear extends Item implements IVanishable {
 
     @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
-        return super.canApplyAtEnchantingTable(stack, enchantment) || enchantment == Enchantments.LOYALTY || enchantment == Enchantments.SHARPNESS;
+        return super.canApplyAtEnchantingTable(stack, enchantment) || ALLOWED_ENCHANMENTS.contains(enchantment);
     }
 
     @Override

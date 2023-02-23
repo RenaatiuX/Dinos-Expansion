@@ -46,7 +46,8 @@ public class Eosqualodon extends DinosaurAquatic implements IAnimatable, IAnimat
         return MobEntity.func_233666_p_()
                 .createMutableAttribute(Attributes.MAX_HEALTH, 30F)
                 .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.3F)
-                .createMutableAttribute(Attributes.ATTACK_DAMAGE, 5.0F);}
+                .createMutableAttribute(Attributes.ATTACK_DAMAGE, 5.0F);
+    }
 
     private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
@@ -70,8 +71,8 @@ public class Eosqualodon extends DinosaurAquatic implements IAnimatable, IAnimat
         this.goalSelector.addGoal(5, new DinosaurLookRandomGoal(this));
         this.goalSelector.addGoal(6, new FollowBoatGoal(this));
         this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)));
-        this.targetSelector.addGoal(2, new DinosaurNearestTargetGoal<>(this, SquidEntity.class, 40, false, true, null));
-        this.targetSelector.addGoal(3, new DinosaurNearestTargetGoal<>(this, AbstractGroupFishEntity.class, 100, false, true, null));
+        this.targetSelector.addGoal(2, new DinosaurNearestTargetGoal<>(this, SquidEntity.class, 40, false, true, true, null));
+        this.targetSelector.addGoal(3, new DinosaurNearestTargetGoal<>(this, AbstractGroupFishEntity.class, 100, false, true, true, null));
     }
 
     @Override
@@ -84,8 +85,8 @@ public class Eosqualodon extends DinosaurAquatic implements IAnimatable, IAnimat
         this.getInfo().print();
         DinosExpansion.LOGGER.debug("Narcotic: [" + getNarcoticValue() + "/" + getInfo().getMaxNarcotic() + "]");
         DinosExpansion.LOGGER.debug("IsKnockout: " + this.isKnockout());
-        if (!world.isRemote() && hand == Hand.MAIN_HAND){
-            if (player.getHeldItem(hand).isEmpty() && isKnockedOutBy(player)){
+        if (!world.isRemote() && hand == Hand.MAIN_HAND) {
+            if (player.getHeldItem(hand).isEmpty() && isKnockedOutBy(player)) {
                 openTamingGui(this, (ServerPlayerEntity) player);
             }
         }
@@ -111,10 +112,10 @@ public class Eosqualodon extends DinosaurAquatic implements IAnimatable, IAnimat
     }
 
     private PlayState predicate(AnimationEvent<Eosqualodon> event) {
-        if (event.getController().getCurrentAnimation() != null){
+        if (event.getController().getCurrentAnimation() != null) {
             //DinosExpansion.LOGGER.debug(event.getController().getCurrentAnimation().animationName);
         }
-        if (isKnockout()){
+        if (isKnockout()) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("eosqualodon_knockout", ILoopType.EDefaultLoopTypes.LOOP));
         }
         if (this.isInWater()) {

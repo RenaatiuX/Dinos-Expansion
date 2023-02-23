@@ -11,7 +11,6 @@ import com.rena.dinosexpansion.common.item.util.INarcotic;
 import com.rena.dinosexpansion.common.util.enums.AttackOrder;
 import com.rena.dinosexpansion.common.util.enums.MoveOrder;
 import com.rena.dinosexpansion.core.init.CriteriaTriggerInit;
-import com.rena.dinosexpansion.core.network.Network;
 import com.rena.dinosexpansion.core.tags.ModTags;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -37,7 +36,6 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -80,6 +78,7 @@ public abstract class Dinosaur extends TameableEntity {
     public static final DataParameter<Integer> NARCOTIC_VALUE = EntityDataManager.createKey(Dinosaur.class, DataSerializers.VARINT);
     public static final DataParameter<Byte> TAMING_PROGRESS = EntityDataManager.createKey(Dinosaur.class, DataSerializers.BYTE);
     public static final DataParameter<Float> HUNGER_VALUE = EntityDataManager.createKey(Dinosaur.class, DataSerializers.FLOAT);
+    public static final DataParameter<Float> TAMING_EFFICIENCY = EntityDataManager.createKey(Dinosaur.class, DataSerializers.FLOAT);
     public static final DataParameter<Optional<UUID>> KNOCKED_OUT = EntityDataManager.createKey(Dinosaur.class, DataSerializers.OPTIONAL_UNIQUE_ID);
     public static final DataParameter<Byte> MOVE_ORDER = EntityDataManager.createKey(Dinosaur.class, DataSerializers.BYTE);
     public static final DataParameter<Byte> ATTACK_ORDER = EntityDataManager.createKey(Dinosaur.class, DataSerializers.BYTE);
@@ -134,13 +133,15 @@ public abstract class Dinosaur extends TameableEntity {
         this.dataManager.register(NARCOTIC_VALUE, 0);
         this.dataManager.register(HUNGER_VALUE, 0f);
         this.dataManager.register(TAMING_PROGRESS, (byte) 0);
-        this.dataManager.register(MOVE_ORDER, (byte) MoveOrder.FOLLOW.ordinal());
+        this.dataManager.register(MOVE_ORDER, (byte) MoveOrder.IDLE.ordinal());
         this.dataManager.register(ATTACK_ORDER, (byte) AttackOrder.NEUTRAL.ordinal());
+        this.dataManager.register(TAMING_EFFICIENCY, 1f);
     }
 
     @Override
     public void readAdditional(CompoundNBT nbt) {
         super.readAdditional(nbt);
+        this.dataManager.set(TAMING_EFFICIENCY, nbt.getFloat("tamingEfficiency"));
         this.dataManager.set(LEVEL, nbt.getInt("level"));
         this.dataManager.set(XP, nbt.getInt("xp"));
         this.dataManager.set(BOOLS, nbt.getInt("bools"));
@@ -161,6 +162,7 @@ public abstract class Dinosaur extends TameableEntity {
     @Override
     public void writeAdditional(CompoundNBT nbt) {
         super.writeAdditional(nbt);
+        nbt.putFloat("tamingEfficiency", getTamingEfficiency());
         nbt.putInt("level", this.dataManager.get(LEVEL));
         nbt.putInt("xp", this.dataManager.get(XP));
         nbt.putInt("bools", this.dataManager.get(BOOLS));
@@ -290,6 +292,7 @@ public abstract class Dinosaur extends TameableEntity {
             if (getTamingProgress() >= 100) {
                 if (this.dataManager.get(KNOCKED_OUT).isPresent()) {
                     setTamedBy(this.world.getPlayerByUuid(this.dataManager.get(KNOCKED_OUT).get()));
+                    setKnockout(false);
                     setTamingProgress((byte) 0);
                 }else
                     throw new IllegalStateException("dinosaur got knocked out by no Player, what went wrong here?");
@@ -319,13 +322,6 @@ public abstract class Dinosaur extends TameableEntity {
      */
     public boolean isKnockout() {
         return BitUtils.getBit(1, this.dataManager.get(BOOLS)) > 0;
-    }
-
-    /**
-     * client synced
-     */
-    public boolean isTamed() {
-        return BitUtils.getBit(2, this.dataManager.get(BOOLS)) > 0;
     }
 
     /**
@@ -434,7 +430,7 @@ public abstract class Dinosaur extends TameableEntity {
     /**
      * client synced
      */
-    protected void addHungerValue(int add) {
+    public void addHungerValue(float add) {
         this.dataManager.set(HUNGER_VALUE, Math.max(0, Math.min(getHungerValue() + add, maxHunger)));
     }
 
@@ -479,6 +475,9 @@ public abstract class Dinosaur extends TameableEntity {
                 this.getCombatTracker().trackDamage(source, f1, f2);
                 this.setHealth(f1 - f2); // Forge: moved to fix MC-121048
                 this.setAbsorptionAmount(this.getAbsorptionAmount() - f2);
+                if (isKnockout()){
+                    this.dataManager.set(TAMING_EFFICIENCY, getTamingEfficiency() * .8f);
+                }
                 if (source.getImmediateSource() instanceof INarcoticProjectile && source.getTrueSource() instanceof LivingEntity)
                     this.addNarcoticValue(((INarcoticProjectile) source.getImmediateSource()).getNarcoticValue(), (LivingEntity) source.getTrueSource());
             }
@@ -491,6 +490,14 @@ public abstract class Dinosaur extends TameableEntity {
     public DinosaurInfo getInfo() {
         this.updateInfo();
         return info;
+    }
+
+    /**
+     * client synced
+     * @return the taming efficiancy between 0.0 and 1.0
+     */
+    public float getTamingEfficiency(){
+        return this.dataManager.get(TAMING_EFFICIENCY);
     }
 
     public ItemStackHandler getInventory() {
@@ -514,6 +521,10 @@ public abstract class Dinosaur extends TameableEntity {
         }
     }
 
+    /**
+     *
+     * @return whether the dino is knocked out or sleeps
+     */
     public boolean isMovementDisabled() {
         return isSleeping() || isKnockout();
     }
@@ -605,6 +616,7 @@ public abstract class Dinosaur extends TameableEntity {
     public void setAttackOrder(AttackOrder order) {
         if (Arrays.stream(allowedAttackOrders()).anyMatch(o -> o == order))
             this.dataManager.set(ATTACK_ORDER, (byte) order.ordinal());
+        DinosExpansion.LOGGER.debug("" + getAttackOrder().name());
     }
 
     /**

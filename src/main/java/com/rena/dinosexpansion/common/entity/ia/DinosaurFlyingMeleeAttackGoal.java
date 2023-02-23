@@ -6,6 +6,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
@@ -63,6 +64,7 @@ public class DinosaurFlyingMeleeAttackGoal extends Goal {
                 }else{
                     target.attackEntityFrom(DamageSource.GENERIC, 1);
                 }
+                this.dinosaurFlying.swingArm(Hand.MAIN_HAND);
 
                 resetTask();
             }

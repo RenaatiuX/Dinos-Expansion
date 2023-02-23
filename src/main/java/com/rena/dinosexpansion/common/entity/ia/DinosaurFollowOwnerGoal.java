@@ -48,7 +48,7 @@ public class DinosaurFollowOwnerGoal extends Goal {
             return false;
         } else if (this.dino.isQueuedToSit()) {
             return false;
-        }else if (dino.getMoveOrder() != MoveOrder.FOLLOW){
+        }else if (dino.getMoveOrder() != MoveOrder.FOLLOW || dino.isSleeping()){
             return false;
         } else if (this.dino.getDistanceSq(livingentity) < (double)(this.minDist * this.minDist)) {
             return false;

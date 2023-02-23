@@ -103,5 +103,38 @@
   "itemGroup.dinosexpansion.weapons": "Weapons",
 
   "dinosexpansion.modifiers.hand": "When Throwing:",
-  "dinosexpansion.boomerang.damage": "%d Damage"
+  "dinosexpansion.boomerang.damage": "%d Damage",
+
+
+  "_comment": "screens",
+
+  "dinosexpansion.taming_gui.dryosaurus": "Dryosaurus",
+  "dinosexpansion.order_screen.dryosaurus": "Dryosaurus",
+
+  "taming_screen.dinosexpansion.narcotic": "Narcotic: %s / %d",
+  "taming_screen.dinosexpansion.hunger": "Hunger: %s / %d",
+  "taming_screen.dinosexpansion.taming_progress": "Taming Progress: %s / 100",
+
+  "dinosexpansion.gender": "Gender: %s",
+  "dinosexpansion.level": "Level: %s",
+  "dinosexpansion.sleep_rhythm": "Sleep Rhythm: %s",
+
+  "_comment": "enums",
+
+  "gender.dinosexpansion.male": "Male",
+  "gender.dinosexpansion.female": "Female",
+
+  "sleep_rhythm.dinosexpansion.diurnal": "Diurnal",
+  "sleep_rhythm.dinosexpansion.nocturnal": "Nocturnal",
+  "sleep_rhythm.dinosexpansion.none": "None",
+
+  "order_type.dinosexpansion.neutral": "Neutral",
+  "order_type.dinosexpansion.protecting": "Protecting",
+  "order_type.dinosexpansion.hostile": "Hostile",
+  "order_type.dinosexpansion.passive": "Passive",
+
+  "order_type.dinosexpansion.wander": "Wander",
+  "order_type.dinosexpansion.sit": "Sit",
+  "order_type.dinosexpansion.follow": "Follow",
+  "order_type.dinosexpansion.idle": "Idle"
 }

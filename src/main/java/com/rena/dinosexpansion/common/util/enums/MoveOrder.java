@@ -7,7 +7,8 @@ import net.minecraft.util.text.TranslationTextComponent;
 public enum MoveOrder {
     WANDER(translatable("wander")),
     SIT(translatable("sit")),
-    FOLLOW(translatable("follow"));
+    FOLLOW(translatable("follow")),
+    IDLE(translatable("idle"));
 
     private final ITextComponent displayName;
 

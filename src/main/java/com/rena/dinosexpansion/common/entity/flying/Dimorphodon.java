@@ -2,6 +2,7 @@ package com.rena.dinosexpansion.common.entity.flying;
 
 import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.common.entity.ia.DinosaurFlyingMeleeAttackGoal;
+import com.rena.dinosexpansion.common.entity.ia.DinosaurFollowOwnerGoal;
 import com.rena.dinosexpansion.common.entity.ia.SleepRhythmGoal;
 import com.rena.dinosexpansion.core.init.EntityInit;
 import com.rena.dinosexpansion.core.init.ItemInit;
@@ -72,7 +73,7 @@ public class Dimorphodon extends DinosaurFlying implements IAnimatable, IAnimati
         this.goalSelector.addGoal(1, new SitGoal(this));
         this.goalSelector.addGoal(2, new DinosaurFlyingMeleeAttackGoal(this));
         this.goalSelector.addGoal(3, new DinosaurWalkIdleGoal());
-        this.goalSelector.addGoal(4, new FollowOwnerGoal(this, 1.0D, 10.0F, 2.0F, false));
+        this.goalSelector.addGoal(4, new DinosaurFollowOwnerGoal(this, 1.0D, 10.0F, 2.0F, false));
         this.goalSelector.addGoal(5, new BreedGoal(this, 1.0D));
         this.goalSelector.addGoal(6, new LookAtGoal(this, PlayerEntity.class, 6.0F){
             @Override
@@ -282,7 +283,7 @@ public class Dimorphodon extends DinosaurFlying implements IAnimatable, IAnimati
     }
 
     private PlayState attackPredicate(AnimationEvent<Dimorphodon> event) {
-        if (this.isSwingInProgress && event.getController().getAnimationState().equals(AnimationState.Stopped)) {
+        if (!isKnockout() && this.isSwingInProgress && event.getController().getAnimationState().equals(AnimationState.Stopped)) {
             event.getController().markNeedsReload();
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.dimorphodon.attack"));
             this.isSwingInProgress = false;
