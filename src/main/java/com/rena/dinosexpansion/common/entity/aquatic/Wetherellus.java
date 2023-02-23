@@ -1,7 +1,10 @@
 package com.rena.dinosexpansion.common.entity.aquatic;
 
 import com.rena.dinosexpansion.common.entity.ia.DinosaurSwimBottomGoal;
+import com.rena.dinosexpansion.common.entity.ia.SleepRhythmGoal;
 import com.rena.dinosexpansion.common.entity.ia.movecontroller.AquaticMoveController;
+import com.rena.dinosexpansion.core.init.EntityInit;
+import com.rena.dinosexpansion.core.init.ItemInit;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
@@ -9,7 +12,6 @@ import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.FindWaterGoal;
 import net.minecraft.entity.ai.goal.PanicGoal;
 import net.minecraft.entity.ai.goal.RandomSwimmingGoal;
-import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
@@ -25,11 +27,15 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
-public class Wheterellus extends PrehistoricFish implements IAnimatable, IAnimationTickable {
+public class Wetherellus extends PrehistoricFish implements IAnimatable, IAnimationTickable {
     private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
-    public Wheterellus(EntityType<? extends TameableEntity> type, World world, DinosaurInfo info, int level) {
-        super(type, world, info, level);
+    public Wetherellus(EntityType<Wetherellus> type, World world) {
+        super(type, world, new DinosaurInfo("wetherellus", 30, 10, 5, SleepRhythmGoal.SleepRhythm.NONE), generateLevelWithinBounds(10, 50));
         this.moveController = new AquaticMoveController(this, 1.0F);
+    }
+
+    public Wetherellus(World world) {
+        this(EntityInit.WETHERELLUS.get(), world);
     }
 
     @Override
@@ -37,19 +43,20 @@ public class Wheterellus extends PrehistoricFish implements IAnimatable, IAnimat
         super.registerGoals();
         this.goalSelector.addGoal(1, new FindWaterGoal(this));
         this.goalSelector.addGoal(2, new PanicGoal(this, 1D));
-        this.goalSelector.addGoal(3, new DinosaurSwimBottomGoal(this, 1F, 3));
-        this.goalSelector.addGoal(4, new RandomSwimmingGoal(this, 1.0D, 7));
+        this.goalSelector.addGoal(3, new DinosaurSwimBottomGoal(this, 0.8F, 3));
+        this.goalSelector.addGoal(4, new RandomSwimmingGoal(this, 0.8D, 7));
     }
 
     public static AttributeModifierMap.MutableAttribute createAttributes() {
         return MobEntity.func_233666_p_()
                 .createMutableAttribute(Attributes.MAX_HEALTH, 3)
-                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.25D);
+                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.25D)
+                .createMutableAttribute(Attributes.ATTACK_DAMAGE, 0.0F);
     }
 
     @Override
     protected ItemStack getFishBucket() {
-        return null;
+        return new ItemStack(ItemInit.WHETERELLUS_BUCKET.get());
     }
 
     @Override
@@ -62,23 +69,23 @@ public class Wheterellus extends PrehistoricFish implements IAnimatable, IAnimat
         data.addAnimationController(new AnimationController<>(this, "controller", 0, this::predicate));
     }
 
-    private PlayState predicate(AnimationEvent<Wheterellus> event) {
+    private PlayState predicate(AnimationEvent<Wetherellus> event) {
         if (this.isOnGround()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.wetherellus.outofwater", ILoopType.EDefaultLoopTypes.LOOP));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("wetherellus.outofwater", ILoopType.EDefaultLoopTypes.LOOP));
         }
         if(isInWater()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.wetherellus.swim", ILoopType.EDefaultLoopTypes.LOOP));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("wetherellus.swim", ILoopType.EDefaultLoopTypes.LOOP));
         }
         return PlayState.CONTINUE;
     }
 
     @Override
     public AnimationFactory getFactory() {
-        return null;
+        return this.factory;
     }
 
     @Override
     public int tickTimer() {
-        return 0;
+        return this.ticksExisted;
     }
 }

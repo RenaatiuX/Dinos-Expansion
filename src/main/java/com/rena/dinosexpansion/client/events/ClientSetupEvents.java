@@ -11,6 +11,7 @@ import com.rena.dinosexpansion.client.renderer.projectiles.DartRenderer;
 import com.rena.dinosexpansion.client.renderer.projectiles.TinyRockRenderer;
 import com.rena.dinosexpansion.client.screens.OrderScreen;
 import com.rena.dinosexpansion.client.screens.TamingScreen;
+import com.rena.dinosexpansion.common.entity.aquatic.Wetherellus;
 import com.rena.dinosexpansion.common.entity.terrestrial.Dryosaurus;
 import com.rena.dinosexpansion.common.entity.villagers.Hermit;
 import com.rena.dinosexpansion.common.entity.aquatic.Eosqualodon;
@@ -58,6 +59,7 @@ public class ClientSetupEvents {
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.PARAPUZOSIA.get(), ParapuzosiaRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.EOSQUALODON.get(), EosqualodonRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.MEGA_PIRANHA.get(), MegaPiranhaRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityInit.WETHERELLUS.get(), WetherellusRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.DIMORPHODON.get(), DimorphodonRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.ASTORGOSUCHUS.get(), AstorgosuchusRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.CAMPANILE.get(), CampanileRenderer::new);
@@ -76,6 +78,7 @@ public class ClientSetupEvents {
         event.put(EntityInit.CAMPANILE.get(), Campanile.createAttributes().create());
         event.put(EntityInit.HERMIT.get(), Hermit.createAttributes());
         event.put(EntityInit.DRYOSAURUS.get(), Dryosaurus.createAttributes().create());
+        event.put(EntityInit.WETHERELLUS.get(), Wetherellus.createAttributes().create());
     }
 
     public static void registerPlantsRenderer() {

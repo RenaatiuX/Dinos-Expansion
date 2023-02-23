@@ -1,0 +1,56 @@
+{
+  "format_version": "1.12.0",
+  "minecraft:geometry": [
+    {
+      "description": {
+        "identifier": "geometry.unknown",
+        "texture_width": 32,
+        "texture_height": 32,
+        "visible_bounds_width": 3,
+        "visible_bounds_height": 1.5,
+        "visible_bounds_offset": [0, 0.25, 0]
+      },
+      "bones": [
+        {
+          "name": "Wetherellus",
+          "pivot": [0, 4, 4]
+        },
+        {
+          "name": "Torso",
+          "parent": "Wetherellus",
+          "pivot": [0, 4, 4],
+          "cubes": [
+            {"origin": [-1.5, 0, -6], "size": [3, 4, 10], "uv": [0, 0]},
+            {"origin": [0, -2, -4], "size": [0, 9, 9], "uv": [0, 5]}
+          ]
+        },
+        {
+          "name": "Tail",
+          "parent": "Torso",
+          "pivot": [0, 4, 4],
+          "cubes": [
+            {"origin": [0, 0, 4], "size": [0, 6, 7], "uv": [0, 16]}
+          ]
+        },
+        {
+          "name": "RightFin",
+          "parent": "Torso",
+          "pivot": [-1.5, 3, -3],
+          "rotation": [0, -45, 0],
+          "cubes": [
+            {"origin": [-1.5, 1, -3], "size": [0, 2, 2], "uv": [0, 2]}
+          ]
+        },
+        {
+          "name": "LeftFin",
+          "parent": "Torso",
+          "pivot": [1.5, 3, -3],
+          "rotation": [0, 45, 0],
+          "cubes": [
+            {"origin": [1.5, 1, -3], "size": [0, 2, 2], "uv": [0, 0]}
+          ]
+        }
+      ]
+    }
+  ]
+}

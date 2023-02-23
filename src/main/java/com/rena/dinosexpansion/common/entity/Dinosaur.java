@@ -109,7 +109,7 @@ public abstract class Dinosaur extends TameableEntity {
         setHungerValue(maxHunger);
         Rarity rarity = getRarity();
         this.info = info;
-        //dont do that at home kids
+        //don't do that at home kids
         //normally goals should only be added in the registerGoals method
         if (this.info.rhythm != SleepRhythmGoal.SleepRhythm.NONE)
             this.goalSelector.addGoal(3, new SleepRhythmGoal(this, info.rhythm));
@@ -624,7 +624,7 @@ public abstract class Dinosaur extends TameableEntity {
     /**
      * this determines which orders are allowed on this dinosaur
      *
-     * @return a array of all allowed orders
+     * @return an array of all allowed orders
      */
     public AttackOrder[] allowedAttackOrders() {
         return AttackOrder.values();
@@ -633,14 +633,14 @@ public abstract class Dinosaur extends TameableEntity {
     /**
      * this determines which orders are allowed on this dinosaur
      *
-     * @return a array of all allowed orders
+     * @return an array of all allowed orders
      */
     public MoveOrder[] allowedMoveOrders() {
         return MoveOrder.values();
     }
 
     /**
-     * this item is the item the player has to right click on the dino in order to change orders
+     * this item is the item the player has to right-click on the dino in order to change orders
      * make sure it isn´t food that the dino can potentially eat
      */
     public Item getOrderItem(){

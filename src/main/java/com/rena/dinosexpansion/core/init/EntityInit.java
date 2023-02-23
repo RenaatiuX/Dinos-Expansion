@@ -1,6 +1,7 @@
 package com.rena.dinosexpansion.core.init;
 
 import com.rena.dinosexpansion.DinosExpansion;
+import com.rena.dinosexpansion.common.entity.aquatic.Wetherellus;
 import com.rena.dinosexpansion.common.entity.projectile.TinyRockEntity;
 import com.rena.dinosexpansion.common.entity.terrestrial.Dryosaurus;
 import com.rena.dinosexpansion.common.entity.villagers.Hermit;
@@ -13,7 +14,6 @@ import com.rena.dinosexpansion.common.entity.projectile.CustomArrow;
 import com.rena.dinosexpansion.common.entity.projectile.DartEntity;
 import com.rena.dinosexpansion.common.entity.semiaquatic.Astorgosuchus;
 import com.rena.dinosexpansion.common.entity.terrestrial.ambient.Campanile;
-import com.rena.dinosexpansion.common.item.arrow.TinyRockItem;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
@@ -49,6 +49,8 @@ public class EntityInit {
             () -> EntityType.Builder.<Eosqualodon>create(Eosqualodon::new, EntityClassification.WATER_CREATURE).size(1.5F, 1.0F));
     public static final RegistryObject<EntityType<MegaPiranha>> MEGA_PIRANHA = register("megapiranha",
             () -> EntityType.Builder.<MegaPiranha>create(MegaPiranha::new, EntityClassification.WATER_CREATURE).size(0.5F, 0.75F));
+    public static final RegistryObject<EntityType<Wetherellus>> WETHERELLUS = register("wetherellus",
+            () -> EntityType.Builder.<Wetherellus>create(Wetherellus::new, EntityClassification.WATER_AMBIENT).size(0.5F, 0.5F));
     public static final RegistryObject<EntityType<Dimorphodon>> DIMORPHODON = register("dimorphodon",
             () -> EntityType.Builder.<Dimorphodon>create(Dimorphodon::new, EntityClassification.WATER_CREATURE).size(0.5F, 0.7F));
     public static final RegistryObject<EntityType<Astorgosuchus>> ASTORGOSUCHUS = register("astorgosuchus",

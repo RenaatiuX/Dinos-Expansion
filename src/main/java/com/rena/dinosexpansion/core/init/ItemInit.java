@@ -129,6 +129,9 @@ public class ItemInit {
             () -> new ForgeSpawnEggItem(EntityInit.CAMPANILE, 5592428, 12561789, new Item.Properties().group(ModItemGroups.SPAWN_EGGS)));
     public static final RegistryObject<Item> DRYOSAURUS_SPAWN_EGG = ITEMS.register("dryosaurus_spawn_egg",
             () -> new ForgeSpawnEggItem(EntityInit.DRYOSAURUS, 9012770, 5987102, new Item.Properties().group(ModItemGroups.SPAWN_EGGS)));
+    public static final RegistryObject<Item> WETHERELLUS_SPAWN_EGG = ITEMS.register("wetherellus_spawn_egg",
+            () -> new ForgeSpawnEggItem(EntityInit.WETHERELLUS, 8161967, 7438131, new Item.Properties().group(ModItemGroups.SPAWN_EGGS)));
+
     //Food
     public static final RegistryObject<Item> RAW_CARNOTAURUS_MEAT = ITEMS.register("raw_carnotaurus_meat",
             () -> new Item(new Item.Properties().food(FoodInit.RAW_CARNOTAURUS_MEAT).group(ModItemGroups.ITEMS)));
@@ -176,6 +179,8 @@ public class ItemInit {
             () -> new Item(new Item.Properties().group(ModItemGroups.ITEMS).rarity(Rarity.RARE)));
     public static final RegistryObject<Item> MEGA_PIRANHA_BUCKET = ITEMS.register("mega_piranha_bucket",
             () -> new CustomFishBucket(EntityInit.MEGA_PIRANHA::get, () -> Fluids.WATER, new Item.Properties().group(ModItemGroups.ITEMS)));
+    public static final RegistryObject<Item> WHETERELLUS_BUCKET = ITEMS.register("wetherellus_bucket",
+            () -> new CustomFishBucket(EntityInit.WETHERELLUS::get, () -> Fluids.WATER, new Item.Properties().group(ModItemGroups.ITEMS)));
     public static final RegistryObject<Item> ELECTRONICS_PARTS = ITEMS.register("electronics_parts",
             () -> new Item(new Item.Properties().group(ModItemGroups.ITEMS)));
     public static final RegistryObject<Item> OIL = ITEMS.register("oil",
@@ -190,5 +195,6 @@ public class ItemInit {
             () -> new CustomBlockBucket(new Item.Properties().group(ModItemGroups.ITEMS).maxStackSize(1), BlockInit.QUICKSAND));
     public static final RegistryObject<Item> GLOW_STICK = ITEMS.register("glowstick",
             () -> new GlowStickItem(new Item.Properties().group(ModItemGroups.ITEMS)));
-    public static final RegistryObject<ZoomItem> ZOOM = ITEMS.register("zooooooooom", () -> new ZoomItem(new Item.Properties().group(ModItemGroups.ITEMS), 2, 10));
+    public static final RegistryObject<ZoomItem> ZOOM = ITEMS.register("spyglass",
+            () -> new ZoomItem(new Item.Properties().group(ModItemGroups.ITEMS), 2, 10));
 }
