@@ -190,4 +190,5 @@ public class ItemInit {
             () -> new CustomBlockBucket(new Item.Properties().group(ModItemGroups.ITEMS).maxStackSize(1), BlockInit.QUICKSAND));
     public static final RegistryObject<Item> GLOW_STICK = ITEMS.register("glowstick",
             () -> new GlowStickItem(new Item.Properties().group(ModItemGroups.ITEMS)));
+    public static final RegistryObject<ZoomItem> ZOOM = ITEMS.register("zooooooooom", () -> new ZoomItem(new Item.Properties().group(ModItemGroups.ITEMS), 2, 10));
 }
