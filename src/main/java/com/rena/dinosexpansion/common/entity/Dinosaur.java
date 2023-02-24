@@ -85,6 +85,7 @@ public abstract class Dinosaur extends TameableEntity {
 
 
     protected int maxNarcotic, maxHunger;
+    protected float feedHungerTaming;
     protected DinosaurInfo info;
     protected ItemStackHandler inventory = new ItemStackHandler(2) {
         @Override
@@ -153,6 +154,7 @@ public abstract class Dinosaur extends TameableEntity {
         this.dataManager.set(ATTACK_ORDER, nbt.getByte("attack_order"));
         this.maxNarcotic = nbt.getInt("maxNarcotic");
         this.maxHunger = nbt.getInt("maxHunger");
+        this.feedHungerTaming = nbt.getFloat("feedHungerTaming");
         this.inventory.deserializeNBT(nbt.getCompound("inventory"));
         if (nbt.contains("knocked_out_player"))
             this.dataManager.set(KNOCKED_OUT, Optional.of(nbt.getUniqueId("knocked_out_player")));
@@ -176,6 +178,7 @@ public abstract class Dinosaur extends TameableEntity {
         nbt.putInt("maxNarcotic", this.maxNarcotic);
         nbt.putInt("maxHunger", this.maxHunger);
         nbt.put("inventory", this.inventory.serializeNBT());
+        nbt.putFloat("feedHungerTaming", this.feedHungerTaming);
         this.dataManager.get(KNOCKED_OUT).ifPresent(uuid -> nbt.putUniqueId("knocked_out_player", uuid));
     }
 
@@ -294,6 +297,7 @@ public abstract class Dinosaur extends TameableEntity {
                     setTamedBy(this.world.getPlayerByUuid(this.dataManager.get(KNOCKED_OUT).get()));
                     setKnockout(false);
                     setTamingProgress((byte) 0);
+                    this.feedHungerTaming = 0;
                 }else
                     throw new IllegalStateException("dinosaur got knocked out by no Player, what went wrong here?");
             }
@@ -422,8 +426,11 @@ public abstract class Dinosaur extends TameableEntity {
             CriteriaTriggerInit.FEED_DINOSAUR.trigger((ServerPlayerEntity) feeder, food, this);
         float saturation = food.getItem().getFood().getHealing();
         setHungerValue(getHungerValue() + saturation);
-        int progress = (int) (saturation * 100f / (float) this.info.getMaxHunger());
-        addTamingProgress((byte) MathHelper.clamp(progress, 0, 100));
+        if (isKnockout()) {
+            this.feedHungerTaming += saturation;
+            int progress = (int) (saturation * 100f / (float) this.info.getMaxHunger());
+            addTamingProgress((byte) MathHelper.clamp(progress, 0, 100));
+        }
     }
 
     /**
@@ -518,6 +525,25 @@ public abstract class Dinosaur extends TameableEntity {
             if (hasArmor() == armor)
                 setArmor(armor);
         }
+    }
+
+    /**
+     * only use when knocked out and should be tamed
+     * be careful this isnt checked os when u try to reduce it below 0 it will just clamp at 0
+     * its also clamped to maxHunger in caes u want to add Hunger threw this method
+     * @param reduce the amount u want it to reduce
+     */
+    public void reduceTamingFeed(float reduce){
+        this.feedHungerTaming = MathHelper.clamp(this.feedHungerTaming - reduce, 0, this.maxHunger);
+    }
+
+    /**
+     *
+     * @param reduce the amount u want to reduce the hunger during taming
+     * @return if u can reduce that amount of tamingFeed from the hunger
+     */
+    public boolean canReduceTamingFeed(float reduce){
+        return reduce <= feedHungerTaming;
     }
 
     /**

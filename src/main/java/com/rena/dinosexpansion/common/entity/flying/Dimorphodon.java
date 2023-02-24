@@ -264,13 +264,14 @@ public class Dimorphodon extends DinosaurFlying implements IAnimatable, IAnimati
             return PlayState.CONTINUE;
         }
         if (this.isOnGround()) {
-            if (event.isMoving()) {
+            if (this.isSleeping()) {
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.dimorphodon.sleep", ILoopType.EDefaultLoopTypes.LOOP));
+                return PlayState.CONTINUE;
+            }
+            if (prevPosX != getPosX() || prevPosY != getPosY() || prevPosZ != getPosZ()) {
                 event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.dimorphodon.walk", ILoopType.EDefaultLoopTypes.LOOP));
             } else {
-                if (this.isSleeping()) {
-                    event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.dimorphodon.sleep", ILoopType.EDefaultLoopTypes.LOOP));
-                } else
-                    event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.dimorphodon.idle", ILoopType.EDefaultLoopTypes.LOOP));
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.dimorphodon.idle", ILoopType.EDefaultLoopTypes.LOOP));
             }
             return PlayState.CONTINUE;
         }

@@ -13,7 +13,7 @@ public class TamingProgressGoal extends Goal {
     /**
      *
      * @param dino the dino this should work on
-     * @param eat the hunger that the dino has to have and will be eaten
+     * @param eat the hunger that the dino has to have been fed from the player and will be eaten
      * @param percentTamingProgressAdd the percentage that will be added to the taming progress goes from 0.0 to 100
      * @param chance the chance that the dino will eat and progress taming
      */
@@ -26,12 +26,13 @@ public class TamingProgressGoal extends Goal {
 
     @Override
     public boolean shouldExecute() {
-        return dino.isKnockout() && dino.getHungerValue() > this.eat && dino.getTamingProgress() < 100 && dino.getRNG().nextFloat() < chance;
+        return dino.isKnockout() && dino.getHungerValue() > this.eat && dino.canReduceTamingFeed(this.eat) && dino.getTamingProgress() < 100 && dino.getRNG().nextFloat() < chance;
     }
 
     @Override
     public void startExecuting() {
         dino.addHungerValue(eat * -1f);
+        dino.reduceTamingFeed(eat);
         dino.addTamingProgress((byte) percentTamingProgressAdd);
     }
 }
