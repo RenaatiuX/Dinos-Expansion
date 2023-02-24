@@ -12,7 +12,7 @@ import java.util.UUID;
 
 public class SpecialFruitItem extends Item {
     private static final double MAX_HEALTH = 40;
-    private static final double HEALTH_BOOST = 0.5D;
+    private static final double HEALTH_BOOST = 1D;
 
     public SpecialFruitItem(Properties properties) {
         super(properties);
@@ -26,7 +26,7 @@ public class SpecialFruitItem extends Item {
             double maxHealth = player.getAttribute(Attributes.MAX_HEALTH).getValue();
             if (maxHealth + HEALTH_BOOST <= MAX_HEALTH) {
                 player.getAttribute(Attributes.MAX_HEALTH).setBaseValue(maxHealth + HEALTH_BOOST);
-                player.setHealth(player.getMaxHealth());
+                player.setHealth((float) (player.getHealth() + HEALTH_BOOST));
             }
         }
         return super.onItemUseFinish(stack, worldIn, entityLiving);
