@@ -133,8 +133,8 @@ public class Dimorphodon extends DinosaurFlying implements IAnimatable, IAnimati
     @Override
     public void livingTick() {
         super.livingTick();
-        if(isSleeping()){
-            if (this.isOnGround() && isFlying()){
+        if (isSleeping()) {
+            if (this.isOnGround() && isFlying()) {
                 this.setFlying(false);
             }
         }
@@ -250,8 +250,8 @@ public class Dimorphodon extends DinosaurFlying implements IAnimatable, IAnimati
         this.getInfo().print();
         DinosExpansion.LOGGER.debug("Narcotic: [" + getNarcoticValue() + "/" + getInfo().getMaxNarcotic() + "]");
         DinosExpansion.LOGGER.debug("IsKnockout: " + this.isKnockout());
-        if (!world.isRemote() && hand == Hand.MAIN_HAND){
-            if (player.getHeldItem(hand).isEmpty() && isKnockedOutBy(player)){
+        if (!world.isRemote() && hand == Hand.MAIN_HAND) {
+            if (player.getHeldItem(hand).isEmpty() && isKnockedOutBy(player)) {
                 openTamingGui(this, (ServerPlayerEntity) player);
             }
         }
@@ -259,24 +259,23 @@ public class Dimorphodon extends DinosaurFlying implements IAnimatable, IAnimati
     }
 
     private PlayState predicate(AnimationEvent<Dimorphodon> event) {
+        if (this.isKnockout()) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.dimorphodon.knockout", ILoopType.EDefaultLoopTypes.LOOP));
+            return PlayState.CONTINUE;
+        }
         if (this.isOnGround()) {
             if (event.isMoving()) {
                 event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.dimorphodon.walk", ILoopType.EDefaultLoopTypes.LOOP));
             } else {
-                event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.dimorphodon.idle", ILoopType.EDefaultLoopTypes.LOOP));
+                if (this.isSleeping()) {
+                    event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.dimorphodon.sleep", ILoopType.EDefaultLoopTypes.LOOP));
+                } else
+                    event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.dimorphodon.idle", ILoopType.EDefaultLoopTypes.LOOP));
             }
             return PlayState.CONTINUE;
         }
         if (this.isFlying()) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.dimorphodon.fly", ILoopType.EDefaultLoopTypes.LOOP));
-            return PlayState.CONTINUE;
-        }
-        if (this.isSleeping()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.dimorphodon.sleep", ILoopType.EDefaultLoopTypes.LOOP));
-            return PlayState.CONTINUE;
-        }
-        if (this.isKnockout()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.dimorphodon.knockout", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }
         if (this.getMoveOrder() == MoveOrder.SIT) {

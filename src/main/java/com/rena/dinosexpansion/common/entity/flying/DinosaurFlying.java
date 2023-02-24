@@ -111,6 +111,10 @@ public abstract class DinosaurFlying extends Dinosaur implements IFlyingAnimal {
             flyProgress--;
         }
         if (!world.isRemote) {
+            if(isFlying() && isSleeping() && isOnGround()){
+                setFlying(false);
+                setNoGravity(false);
+            }
             if (isFlying() && this.isLandNavigator) {
                 switchNavigator(false);
             }
