@@ -111,8 +111,6 @@ public class ServerForgeEvents {
         }
     }
 
-    //TODO need review
-
     /**
      * If the condition is met, the arrow is not consumed when fired
      *

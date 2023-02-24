@@ -77,23 +77,10 @@ public class Dimorphodon extends DinosaurFlying implements IAnimatable, IAnimati
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(0, new SwimGoal(this));
-        this.goalSelector.addGoal(1, new SitGoal(this));
         this.goalSelector.addGoal(2, new DinosaurFlyingMeleeAttackGoal(this));
         this.goalSelector.addGoal(3, new DinosaurWalkIdleGoal());
         this.goalSelector.addGoal(4, new DinosaurFollowOwnerGoal(this, 1.0D, 10.0F, 2.0F, false));
         this.goalSelector.addGoal(5, new BreedGoal(this, 1.0D));
-        this.goalSelector.addGoal(6, new LookAtGoal(this, PlayerEntity.class, 6.0F){
-            @Override
-            public boolean shouldExecute() {
-                return super.shouldExecute() && !Dimorphodon.this.isMovementDisabled();
-            }
-        });
-        this.goalSelector.addGoal(7, new LookRandomlyGoal(this){
-            @Override
-            public boolean shouldExecute() {
-                return super.shouldExecute() && !Dimorphodon.this.isMovementDisabled();
-            }
-        });
         this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
         this.targetSelector.addGoal(3, (new HurtByTargetGoal(this)).setCallsForHelp());
@@ -272,12 +259,13 @@ public class Dimorphodon extends DinosaurFlying implements IAnimatable, IAnimati
     }
 
     private PlayState predicate(AnimationEvent<Dimorphodon> event) {
-        if (this.isOnGround() && event.isMoving()) {
-            if (horizontalMag(this.getMotion()) > 1.0E-6) {
+        if (this.isOnGround()) {
+            if (event.isMoving()) {
                 event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.dimorphodon.walk", ILoopType.EDefaultLoopTypes.LOOP));
             } else {
                 event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.dimorphodon.idle", ILoopType.EDefaultLoopTypes.LOOP));
             }
+            return PlayState.CONTINUE;
         }
         if (this.isFlying()) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.dimorphodon.fly", ILoopType.EDefaultLoopTypes.LOOP));
