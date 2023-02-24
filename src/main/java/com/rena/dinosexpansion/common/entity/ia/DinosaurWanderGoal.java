@@ -29,7 +29,6 @@ public class DinosaurWanderGoal extends RandomWalkingGoal {
     @Override
     public boolean shouldExecute() {
         if (dino.isTamed()){
-            DinosExpansion.LOGGER.debug("" + dino.getMoveOrder().name());
             return !dino.isMovementDisabled() && dino.getMoveOrder() == MoveOrder.WANDER && super.shouldExecute();
         }
         return !dino.isMovementDisabled() && super.shouldExecute();

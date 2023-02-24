@@ -16,7 +16,7 @@ public class DinosaurMeleeAttackGoal extends MeleeAttackGoal {
     @Override
     public boolean shouldExecute() {
         if (dino.isTamed()){
-            return !dino.isMovementDisabled() && dino.getMoveOrder() == MoveOrder.WANDER && (dino.getAttackOrder() != AttackOrder.PASSIVE) && super.shouldExecute();
+            return !dino.isMovementDisabled() && dino.getMoveOrder() == MoveOrder.WANDER && dino.getAttackOrder() != AttackOrder.PASSIVE && super.shouldExecute();
         }
         return !dino.isMovementDisabled() && super.shouldExecute();
     }

@@ -21,6 +21,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.pathfinding.PathNodeType;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -258,6 +259,43 @@ public abstract class DinosaurFlying extends Dinosaur implements IFlyingAnimal {
             position = position.down();
         }
         return !world.getFluidState(position).isEmpty();
+    }
+
+    @Override
+    protected void setKnockout(boolean knockout) {
+        super.setKnockout(knockout);
+       this.setNoGravity(!knockout);
+    }
+
+    @Override
+    public void setSleeping(boolean sleeping) {
+        super.setSleeping(sleeping);
+        if (sleeping && isFlying()){
+            BlockPos leave = detectTreesInArea(this.world, this.getPosition(), 50);
+            if (leave != null){
+                this.navigator.tryMoveToXYZ(leave.getX(), leave.getY(), leave.getZ(), 1.1D);
+            }
+            Vector3d randomPos = null;
+            while (randomPos == null){
+                randomPos = getBlockGrounding(getPositionVec());
+            }
+            this.navigator.tryMoveToXYZ(randomPos.x, randomPos.y, randomPos.z, 1.1D);
+        }
+    }
+
+    public static BlockPos detectTreesInArea(World world, BlockPos center, int radius) {
+        for (int x = center.getX() - radius; x <= center.getX() + radius; x++) {
+            for (int y = center.getY() - radius; y <= center.getY() + radius; y++) {
+                for (int z = center.getZ() - radius; z <= center.getZ() + radius; z++) {
+                    BlockPos pos = new BlockPos(x, y, z);
+                    BlockState block = world.getBlockState(pos);
+                    if (block.isIn(BlockTags.LEAVES) && world.isAirBlock(pos.up())) {
+                        return pos;
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     public class DinosaurWalkIdleGoal extends Goal{

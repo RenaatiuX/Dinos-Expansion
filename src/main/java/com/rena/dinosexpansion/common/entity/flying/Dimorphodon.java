@@ -1,13 +1,17 @@
 package com.rena.dinosexpansion.common.entity.flying;
 
 import com.rena.dinosexpansion.DinosExpansion;
+import com.rena.dinosexpansion.common.entity.Dinosaur;
 import com.rena.dinosexpansion.common.entity.ia.DinosaurFlyingMeleeAttackGoal;
 import com.rena.dinosexpansion.common.entity.ia.DinosaurFollowOwnerGoal;
 import com.rena.dinosexpansion.common.entity.ia.SleepRhythmGoal;
+import com.rena.dinosexpansion.common.util.enums.MoveOrder;
 import com.rena.dinosexpansion.core.init.EntityInit;
 import com.rena.dinosexpansion.core.init.ItemInit;
 import com.rena.dinosexpansion.core.init.SoundInit;
 import com.rena.dinosexpansion.core.tags.ModTags;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -21,11 +25,14 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.*;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.common.Tags;
 import software.bernie.geckolib3.core.AnimationState;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimationTickable;
@@ -139,6 +146,11 @@ public class Dimorphodon extends DinosaurFlying implements IAnimatable, IAnimati
     @Override
     public void livingTick() {
         super.livingTick();
+        if(isSleeping()){
+            if (this.isOnGround() && isFlying()){
+                this.setFlying(false);
+            }
+        }
         if (!this.world.isRemote && this.isAlive() && !this.isChild() && --this.timeUntilNextEgg <= 0 && this.getRarity() != Rarity.LEGENDARY) {
             this.playSound(SoundEvents.ENTITY_CHICKEN_EGG, 1.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
             //this.entityDropItem(Items.EGG);
@@ -260,7 +272,7 @@ public class Dimorphodon extends DinosaurFlying implements IAnimatable, IAnimati
     }
 
     private PlayState predicate(AnimationEvent<Dimorphodon> event) {
-        if (this.isOnGround()) {
+        if (this.isOnGround() && event.isMoving()) {
             if (horizontalMag(this.getMotion()) > 1.0E-6) {
                 event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.dimorphodon.walk", ILoopType.EDefaultLoopTypes.LOOP));
             } else {
@@ -269,15 +281,19 @@ public class Dimorphodon extends DinosaurFlying implements IAnimatable, IAnimati
         }
         if (this.isFlying()) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.dimorphodon.fly", ILoopType.EDefaultLoopTypes.LOOP));
+            return PlayState.CONTINUE;
         }
         if (this.isSleeping()) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.dimorphodon.sleep", ILoopType.EDefaultLoopTypes.LOOP));
+            return PlayState.CONTINUE;
         }
         if (this.isKnockout()) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.dimorphodon.knockout", ILoopType.EDefaultLoopTypes.LOOP));
+            return PlayState.CONTINUE;
         }
-        if (this.isQueuedToSit()) {
+        if (this.getMoveOrder() == MoveOrder.SIT) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.dimorphodon.sit", ILoopType.EDefaultLoopTypes.LOOP));
+            return PlayState.CONTINUE;
         }
         return PlayState.CONTINUE;
     }

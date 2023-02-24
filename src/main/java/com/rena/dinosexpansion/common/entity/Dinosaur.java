@@ -311,7 +311,6 @@ public abstract class Dinosaur extends TameableEntity {
         int bools = this.dataManager.get(BOOLS);
         this.dataManager.set(BOOLS, BitUtils.setBit(1, bools, knockout));
         if (knockout) {
-            DinosExpansion.LOGGER.debug("getExecuted");
             this.navigator.clearPath();
             setAttackTarget(null);
         }
@@ -616,7 +615,6 @@ public abstract class Dinosaur extends TameableEntity {
     public void setAttackOrder(AttackOrder order) {
         if (Arrays.stream(allowedAttackOrders()).anyMatch(o -> o == order))
             this.dataManager.set(ATTACK_ORDER, (byte) order.ordinal());
-        DinosExpansion.LOGGER.debug("" + getAttackOrder().name());
     }
 
     /**

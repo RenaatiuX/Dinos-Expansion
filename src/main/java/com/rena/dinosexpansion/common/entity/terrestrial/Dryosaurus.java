@@ -315,7 +315,6 @@ public class Dryosaurus extends Dinosaur implements IAnimatable, IAnimationTicka
                 Vector3d direction = new Vector3d(attacker.getX() - thisPos.getX(), 0, attacker.getZ() - thisPos.getZ()).normalize();
                 Vector3d randomPos = RandomPositionGenerator.findRandomTargetTowardsScaled(Dryosaurus.this, 10, 4, direction, distance);
                 if (randomPos != null) {
-                    DinosExpansion.LOGGER.debug("" + randomPos.toString());
                     this.posX = randomPos.x;
                     this.posY = randomPos.y;
                     this.posZ = randomPos.z;

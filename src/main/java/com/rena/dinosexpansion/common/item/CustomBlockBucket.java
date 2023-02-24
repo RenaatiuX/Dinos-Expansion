@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUseContext;
 import net.minecraft.item.Items;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
@@ -23,14 +24,13 @@ public class CustomBlockBucket extends Item {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
-        BlockPos pos = playerIn.getPosition().offset(playerIn.getHorizontalFacing());
-        if (worldIn.isAirBlock(pos)) {
-            worldIn.setBlockState(pos, blockSupplier.get().getDefaultState());
-            playerIn.setHeldItem(handIn, new ItemStack(Items.BUCKET));
-            return new ActionResult<>(ActionResultType.SUCCESS, playerIn.getHeldItem(handIn));
-        } else {
-            return new ActionResult<>(ActionResultType.FAIL, playerIn.getHeldItem(handIn));
+    public ActionResultType onItemUse(ItemUseContext context) {
+        BlockPos pos = context.getPos();
+        if (context.getWorld().isAirBlock(pos.up())){
+            context.getWorld().setBlockState(pos.up(), blockSupplier.get().getDefaultState());
+            context.getPlayer().setHeldItem(context.getHand(), new ItemStack(Items.BUCKET));
+            return ActionResultType.SUCCESS;
         }
+        return super.onItemUse(context);
     }
 }
