@@ -1,14 +1,15 @@
 package com.rena.dinosexpansion.common.entity.ia;
 
+import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.common.entity.Dinosaur;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.math.MathHelper;
 
 public class TamingProgressGoal extends Goal {
 
-    private final Dinosaur dino;
-    private final float eat, chance;
-    private final int percentTamingProgressAdd;
+    protected final Dinosaur dino;
+    protected final float eat, chance;
+    protected final int percentTamingProgressAdd;
 
     /**
      *
@@ -19,20 +20,24 @@ public class TamingProgressGoal extends Goal {
      */
     public TamingProgressGoal(Dinosaur dino, float eat, byte percentTamingProgressAdd, float chance) {
         this.dino = dino;
-        this.eat = MathHelper.clamp(eat, 0, dino.getMaxHunger());
+        this.eat = eat;
         this.percentTamingProgressAdd = MathHelper.clamp(percentTamingProgressAdd, 0, 100);
         this.chance = MathHelper.clamp(chance, 0.0f, 1.0f);
     }
 
     @Override
     public boolean shouldExecute() {
-        return dino.isKnockout() && dino.getHungerValue() > this.eat && dino.canReduceTamingFeed(this.eat) && dino.getTamingProgress() < 100 && dino.getRNG().nextFloat() < chance;
+        return dino.isKnockout() && dino.getHungerValue() > getEat() && dino.canReduceTamingFeed(getEat()) && dino.getTamingProgress() < 100 && dino.getRNG().nextFloat() < chance;
+    }
+
+    protected float getEat(){
+        return MathHelper.clamp(this.eat, 0, dino.getMaxHunger());
     }
 
     @Override
     public void startExecuting() {
-        dino.addHungerValue(eat * -1f);
-        dino.reduceTamingFeed(eat);
+        dino.addHungerValue(getEat() * -1f);
+        dino.reduceTamingFeed(getEat());
         dino.addTamingProgress((byte) percentTamingProgressAdd);
     }
 }

@@ -12,8 +12,10 @@ import com.rena.dinosexpansion.common.util.enums.AttackOrder;
 import com.rena.dinosexpansion.common.util.enums.MoveOrder;
 import com.rena.dinosexpansion.core.init.CriteriaTriggerInit;
 import com.rena.dinosexpansion.core.tags.ModTags;
+import net.minecraft.entity.EntitySize;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.Pose;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -36,6 +38,7 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -85,7 +88,7 @@ public abstract class Dinosaur extends TameableEntity {
 
 
     protected int maxNarcotic, maxHunger;
-    protected float feedHungerTaming;
+    protected float feedHungerTaming = 0.0f;
     protected DinosaurInfo info;
     protected ItemStackHandler inventory = new ItemStackHandler(2) {
         @Override
@@ -276,6 +279,7 @@ public abstract class Dinosaur extends TameableEntity {
             this.navigator.clearPath();
         }
         this.dataManager.set(BOOLS, BitUtils.setBit(0, this.dataManager.get(BOOLS), sleeping));
+        recalculateSize();
     }
 
     public boolean isSleeping() {
@@ -318,6 +322,7 @@ public abstract class Dinosaur extends TameableEntity {
             this.navigator.clearPath();
             setAttackTarget(null);
         }
+        recalculateSize();
     }
 
     /**
@@ -406,7 +411,7 @@ public abstract class Dinosaur extends TameableEntity {
      * client synced
      */
     protected void setHungerValue(float value) {
-        this.dataManager.set(HUNGER_VALUE, Math.min(value, maxHunger));
+        this.dataManager.set(HUNGER_VALUE, MathHelper.clamp(value,0, maxHunger));
     }
 
     /**
@@ -425,9 +430,10 @@ public abstract class Dinosaur extends TameableEntity {
         if (feeder instanceof ServerPlayerEntity)
             CriteriaTriggerInit.FEED_DINOSAUR.trigger((ServerPlayerEntity) feeder, food, this);
         float saturation = food.getItem().getFood().getHealing();
-        setHungerValue(getHungerValue() + saturation);
+        float maxSaturation = MathHelper.clamp(saturation, 0, maxHunger - getHungerValue());
+        setHungerValue(getHungerValue() + maxSaturation);
         if (isKnockout()) {
-            this.feedHungerTaming += saturation;
+            this.feedHungerTaming += maxSaturation;
             int progress = (int) (saturation * 100f / (float) this.info.getMaxHunger());
             addTamingProgress((byte) MathHelper.clamp(progress, 0, 100));
         }
@@ -633,6 +639,14 @@ public abstract class Dinosaur extends TameableEntity {
     public void setMoveOrder(MoveOrder order) {
         if (Arrays.stream(allowedMoveOrders()).anyMatch(o -> o == order))
             this.dataManager.set(MOVE_ORDER, (byte) order.ordinal());
+        recalculateSize();
+    }
+
+    @Override
+    public void notifyDataManagerChange(DataParameter<?> key) {
+        if (BOOLS.equals(key) || MOVE_ORDER.equals(key) || ATTACK_ORDER.equals(key))
+            recalculateSize();
+        super.notifyDataManagerChange(key);
     }
 
     /**
@@ -641,6 +655,31 @@ public abstract class Dinosaur extends TameableEntity {
     public void setAttackOrder(AttackOrder order) {
         if (Arrays.stream(allowedAttackOrders()).anyMatch(o -> o == order))
             this.dataManager.set(ATTACK_ORDER, (byte) order.ordinal());
+        recalculateSize();
+    }
+
+    @Override
+    public EntitySize getSize(Pose poseIn) {
+        if (getMoveOrder() == MoveOrder.SIT)
+            return getSitSize(poseIn);
+        if (this.isSleeping()){
+            return getSleepSize(poseIn);
+        }
+        if (this.isKnockout())
+            return getKnockoutSize(poseIn);
+        return super.getSize(poseIn);
+    }
+
+    protected EntitySize getSitSize(Pose pose){
+        return super.getSize(pose);
+    }
+
+    protected EntitySize getSleepSize(Pose pose){
+        return super.getSize(pose);
+    }
+
+    protected EntitySize getKnockoutSize(Pose pose){
+        return super.getSize(pose);
     }
 
     /**

@@ -8,10 +8,7 @@ import com.rena.dinosexpansion.common.util.enums.MoveOrder;
 import com.rena.dinosexpansion.core.init.EntityInit;
 import com.rena.dinosexpansion.core.init.SoundInit;
 import com.rena.dinosexpansion.core.tags.ModTags;
-import net.minecraft.entity.AgeableEntity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -66,7 +63,7 @@ public class Dryosaurus extends Dinosaur implements IAnimatable, IAnimationTicka
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FleeGoal(1.2, 10));
-        this.goalSelector.addGoal(0, new TamingProgressGoal(this, 5, (byte) 25, 0.01f));
+        this.goalSelector.addGoal(0, new TamingProgressGoal(this, 5f, (byte) 25, 0.01f));
         this.goalSelector.addGoal(1, new DinosaurMeleeAttackGoal(this, 0.9D, false));
         this.goalSelector.addGoal(1, new DinosaurFollowOwnerGoal(this, 1.0D, 3, 8, true));
         this.goalSelector.addGoal(2, new DinosaurNearestTargetGoal<>(this, LivingEntity.class, 10, true, false, false, living -> !isOnSameTeam(living) && !(living instanceof Dryosaurus)));
@@ -113,6 +110,7 @@ public class Dryosaurus extends Dinosaur implements IAnimatable, IAnimationTicka
         if (this.isChild()) {
             this.addGrowth(60);
         }
+        this.addHungerValue(10);
     }
 
     public float getEatAnimationTick() {
@@ -138,6 +136,21 @@ public class Dryosaurus extends Dinosaur implements IAnimatable, IAnimationTicka
         if (rand <= 0.5)
             return Rarity.UNCOMMON;*/
         return Rarity.COMMON;
+    }
+
+    @Override
+    protected EntitySize getSitSize(Pose pose) {
+        return EntitySize.flexible(1.5f, 1.0f);
+    }
+
+    @Override
+    protected EntitySize getSleepSize(Pose pose) {
+        return EntitySize.flexible(1.3f, 0.9f);
+    }
+
+    @Override
+    protected EntitySize getKnockoutSize(Pose pose) {
+        return EntitySize.flexible(1.3f, 0.9f);
     }
 
     @Override

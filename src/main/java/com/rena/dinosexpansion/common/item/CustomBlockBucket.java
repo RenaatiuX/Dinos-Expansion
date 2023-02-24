@@ -28,7 +28,8 @@ public class CustomBlockBucket extends Item {
         BlockPos pos = context.getPos();
         if (context.getWorld().isAirBlock(pos.up())){
             context.getWorld().setBlockState(pos.up(), blockSupplier.get().getDefaultState());
-            context.getPlayer().setHeldItem(context.getHand(), new ItemStack(Items.BUCKET));
+            if (!context.getPlayer().abilities.isCreativeMode)
+                context.getPlayer().setHeldItem(context.getHand(), new ItemStack(Items.BUCKET));
             return ActionResultType.SUCCESS;
         }
         return super.onItemUse(context);

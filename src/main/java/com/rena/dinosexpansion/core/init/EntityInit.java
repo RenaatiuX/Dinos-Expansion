@@ -59,7 +59,7 @@ public class EntityInit {
     public static final RegistryObject<EntityType<Campanile>> CAMPANILE = register("campanile",
             () -> EntityType.Builder.<Campanile>create(Campanile::new, EntityClassification.AMBIENT).size(0.5F, 1.0F));
     public static final RegistryObject<EntityType<Dryosaurus>> DRYOSAURUS = register("dryosaurus",
-            () -> EntityType.Builder.<Dryosaurus>create(Dryosaurus::new, EntityClassification.CREATURE).size(0.7F, 1.7F));
+            () -> EntityType.Builder.<Dryosaurus>create(Dryosaurus::new, EntityClassification.CREATURE).size(1.5F, 1.5F));
     public static final RegistryObject<EntityType<Aegirocassis>> AEGIROCASSIS = register("aegirocassis",
             () -> EntityType.Builder.<Aegirocassis>create(Aegirocassis::new, EntityClassification.WATER_CREATURE).size(0.5F, 0.5F));
     public static final RegistryObject<EntityType<Hermit>> HERMIT = register("hermit", () -> EntityType.Builder.create(Hermit::new, EntityClassification.CREATURE));

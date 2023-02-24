@@ -277,7 +277,7 @@ public abstract class DinosaurFlying extends Dinosaur implements IFlyingAnimal {
         if (sleeping && isFlying()){
             BlockPos leave = detectTreesInArea(this.world, this.getPosition(), 50);
             if (leave != null){
-                this.navigator.tryMoveToXYZ(leave.getX(), leave.getY(), leave.getZ(), 1.1D);
+                this.getMoveHelper().setMoveTo(leave.getX(), leave.getY(), leave.getZ(), 1.1D);
             }
             Vector3d randomPos = null;
             while (randomPos == null){
@@ -374,7 +374,7 @@ public abstract class DinosaurFlying extends Dinosaur implements IFlyingAnimal {
             if (flightTarget) {
                 return dinosaurFlying.isFlying() && dinosaurFlying.getDistanceSq(x, y, z) > 2F;
             } else {
-                return (!this.dinosaurFlying.getNavigator().noPath()) && !this.dinosaurFlying.isBeingRidden();
+                return !this.dinosaurFlying.getNavigator().noPath() && !this.dinosaurFlying.isBeingRidden() && !dinosaurFlying.isMovementDisabled();
             }
         }
         @Override
