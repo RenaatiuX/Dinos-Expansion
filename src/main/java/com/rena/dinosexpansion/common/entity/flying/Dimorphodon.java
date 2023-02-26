@@ -77,12 +77,9 @@ public class Dimorphodon extends DinosaurFlying implements IAnimatable, IAnimati
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(0, new SwimGoal(this));
-        this.goalSelector.addGoal(0, new ChangeFlyingGoal(this, 0.001d,0.0009d));
+        this.goalSelector.addGoal(0, new ChangeFlyingGoal(this, 0.01d,0.009d));
         this.goalSelector.addGoal(0, new LandWhenOrderedGoal(this, 1.0, true));
         this.goalSelector.addGoal(2, new DinosaurFlyingMeleeAttackGoal(this));
-        this.goalSelector.addGoal(2, new DinosaurRandomFlyingGoal(this, 0.08d, 1.1d));
-        this.goalSelector.addGoal(2, new FlyingRandomWalkingGoal(this, 0.6d));
-        //this.goalSelector.addGoal(3, new DinosaurWalkIdleGoal());
         this.goalSelector.addGoal(4, new DinosaurFollowOwnerGoal(this, 1.0D, 10.0F, 2.0F, false));
         this.goalSelector.addGoal(5, new BreedGoal(this, 1.0D));
         this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
@@ -90,6 +87,8 @@ public class Dimorphodon extends DinosaurFlying implements IAnimatable, IAnimati
         this.targetSelector.addGoal(3, (new HurtByTargetGoal(this)).setCallsForHelp());
         this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, 10, true, false, this::func_233680_b_));
         this.targetSelector.addGoal(5, new ResetAngerGoal<>(this, true));
+        this.goalSelector.addGoal(9, new FlyingRandomWalkingGoal(this, 0.6d));
+        this.goalSelector.addGoal(9, new DinosaurRandomFlyingGoal(this, 0.08d, 1.1d));
     }
 
     @Override

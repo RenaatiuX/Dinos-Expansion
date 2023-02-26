@@ -46,9 +46,6 @@ public class DinosaurFlyingMeleeAttackGoal extends Goal {
         circlingTime = 0;
         maxCircleTime = 20 + dinosaurFlying.getRNG().nextInt(100);
         circleDistance = 8F + dinosaurFlying.getRNG().nextFloat() * 3F;
-        if(dinosaurFlying.isOnGround()){
-            //dinosaurFlying.setFlying(false);
-        }
     }
     @Override
     public void tick() {
@@ -73,7 +70,9 @@ public class DinosaurFlyingMeleeAttackGoal extends Goal {
             if (circlePos == null) {
                 circlePos = target.getPositionVec();
             }
-            //dinosaurFlying.setFlying(true);
+            if (!this.dinosaurFlying.isFlying()){
+                this.dinosaurFlying.startFlying();
+            }
             dinosaurFlying.getMoveHelper().setMoveTo(circlePos.getX(), circlePos.getY() + target.getEyeHeight() + 0.2F, circlePos.getZ(), 1F);
 
         }

@@ -31,6 +31,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.*;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
+import org.lwjgl.system.CallbackI;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
@@ -292,6 +293,18 @@ public abstract class DinosaurFlying extends Dinosaur implements IFlyingAnimal {
         return dinoPos;
     }
 
+    public static BlockPos getGroundPos(BlockPos pos, World world) {
+        BlockPos copy = new BlockPos(pos);
+        if (world.isAirBlock(copy.up())) {
+            for (; copy.getY() > 0 && world.isAirBlock(copy); copy = copy.down()) ;
+            return copy;
+        } else if (world.isAirBlock(copy.down())) {
+            for (; copy.getY() > 0 && world.isAirBlock(copy); copy = copy.up()) ;
+            return copy;
+        }
+        return copy.down();
+    }
+
     /**
      * this makes the dino land when it should land
      * it also makes dinos preferably land in high trees
@@ -312,15 +325,19 @@ public abstract class DinosaurFlying extends Dinosaur implements IFlyingAnimal {
 
         @Override
         public boolean shouldExecute() {
-            findPosition();
-            return dino.shouldLand && target != null;
+            if (!this.dino.shouldLand) {
+                return false;
+            }
+            BlockPos tmp = findPosition();
+            if (tmp == null)
+                return false;
+            this.target = tmp;
+            return true;
         }
 
         @Override
-        public void tick() {
-            if (!this.dino.getNavigator().tryMoveToXYZ(this.target.getX(), this.target.getY(), this.target.getZ(), this.speed)) {
-                findPosition();
-            }
+        public void startExecuting() {
+            this.dino.getNavigator().tryMoveToXYZ(this.target.getX(), this.target.getY(), this.target.getZ(), this.speed);
         }
 
         @Override
@@ -329,21 +346,26 @@ public abstract class DinosaurFlying extends Dinosaur implements IFlyingAnimal {
             this.dino.getNavigator().clearPath();
         }
 
-        protected void findPosition() {
+        @Override
+        public boolean shouldContinueExecuting() {
+            return !this.dino.getNavigator().noPath() && !this.dino.isMovementDisabled() && !this.dino.isBeingRidden();
+        }
+
+        protected BlockPos findPosition() {
+            /*
             if (preferTrees) {
                 Vector3d treePos = getTreePos();
                 if (treePos != null)
-                    this.target = new BlockPos(getTreePos());
+                   return new BlockPos(treePos);
             }
-            if (this.target == null) {
-                Vector3d randPos = RandomPositionGenerator.findRandomTarget(this.dino, 10, 7);
-                if (randPos != null) {
-                    BlockPos pos = new BlockPos(randPos);
-                    if (!dino.world.isAirBlock(pos) && dino.world.isAirBlock(pos.up())) {
-                        this.target = pos;
-                    }
-                }
+
+             */
+            BlockPos ground = getGroundDinosaur(dino);
+            BlockPos radialPos = new BlockPos(dino.getPosX() + dino.getRNG().nextInt(10) - 5, ground.getY(), dino.getPosZ() + dino.getRNG().nextInt(10) - 5);
+            if (radialPos != null) {
+                return radialPos;
             }
+            return null;
         }
 
         @Nullable
@@ -352,7 +374,7 @@ public abstract class DinosaurFlying extends Dinosaur implements IFlyingAnimal {
             BlockPos.Mutable blockpos$mutableblockpos = new BlockPos.Mutable();
             BlockPos.Mutable blockpos$mutableblockpos1 = new BlockPos.Mutable();
 
-            for (BlockPos blockpos1 : BlockPos.getAllInBoxMutable(MathHelper.floor(this.dino.getPosX() - 3.0D), MathHelper.floor(this.dino.getPosY() - 6), MathHelper.floor(this.dino.getPosZ() - 3.0D), MathHelper.floor(this.dino.getPosX() + 3.0D), MathHelper.floor(this.dino.getPosY() - 6), MathHelper.floor(this.dino.getPosZ() + 3.0D))) {
+            for (BlockPos blockpos1 : BlockPos.getAllInBoxMutable(MathHelper.floor(this.dino.getPosX() - 3.0D), MathHelper.floor(this.dino.getPosY() + 6), MathHelper.floor(this.dino.getPosZ() - 3.0D), MathHelper.floor(this.dino.getPosX() + 3.0D), MathHelper.floor(this.dino.getPosY() - 6), MathHelper.floor(this.dino.getPosZ() + 3.0D))) {
                 if (!blockpos.equals(blockpos1)) {
                     BlockState blockstate = this.dino.world.getBlockState(blockpos$mutableblockpos1.setAndMove(blockpos1, Direction.DOWN));
                     boolean flag = blockstate.getBlock() instanceof LeavesBlock || blockstate.isIn(BlockTags.LOGS);
@@ -414,7 +436,6 @@ public abstract class DinosaurFlying extends Dinosaur implements IFlyingAnimal {
 
         @Override
         public void startExecuting() {
-            DinosExpansion.LOGGER.debug("changed to: " + !dino.isFlying());
             if (dino.isFlying())
                 dino.shouldLand();
             else
@@ -439,21 +460,35 @@ public abstract class DinosaurFlying extends Dinosaur implements IFlyingAnimal {
         public boolean shouldExecute() {
             if (this.dino.getRNG().nextDouble() >= chance)
                 return false;
-            target = getBlockInView(this.dino);
-            return !dino.isMovementDisabled() && target != null && !this.dino.isBeingRidden() && (dino.isFlying() || dino.startFlying) &&  !dino.shouldLand;
+            BlockPos tmp = getBlockInView(this.dino);
+            if (tmp == null)
+                return false;
+            this.target = tmp;
+            return !dino.isMovementDisabled() && target != null && !this.dino.isBeingRidden() && (dino.isFlying() || dino.startFlying) && !dino.shouldLand;
         }
 
         @Override
         public void startExecuting() {
-           this.dino.getNavigator().tryMoveToXYZ(target.getX(), target.getY(), target.getZ(), this.speed);
+            DinosExpansion.LOGGER.debug("moves to: " + target.toString());
+            this.dino.getNavigator().tryMoveToXYZ(target.getX(), target.getY(), target.getZ(), this.speed);
+        }
+
+        @Override
+        public void resetTask() {
+            this.dino.getNavigator().clearPath();
+        }
+
+        @Override
+        public boolean shouldContinueExecuting() {
+            return !dino.getNavigator().noPath() && !dino.isMovementDisabled() && !dino.isBeingRidden();
         }
 
         public static BlockPos getBlockInView(DinosaurFlying dinosaur) {
-            BlockPos radialPos = new BlockPos(dinosaur.getPosX() + dinosaur.getRNG().nextInt(20) + 1, 0, dinosaur.getPosZ() + dinosaur.getRNG().nextInt(20) + 1);
+            BlockPos radialPos = new BlockPos(dinosaur.getPosX() + dinosaur.getRNG().nextInt(40) - 20, 0, dinosaur.getPosZ() + dinosaur.getRNG().nextInt(40) - 20);
             BlockPos ground = getGroundDinosaur(dinosaur);
             int distFromGround = (int) dinosaur.getPosY() - ground.getY();
-            BlockPos newPos = radialPos.up(distFromGround > dinosaur.getMaxFlyingHeight() ? (int) Math.min(dinosaur.getMaxFlyingHeight(), dinosaur.getPosY() + dinosaur.getRNG().nextInt(4) - 2) : (int) dinosaur.getPosY() + dinosaur.getRNG().nextInt(4) + 1);
-            if (!dinosaur.world.isAirBlock(newPos) && dinosaur.getDistanceSq(Vector3d.copyCentered(newPos)) > 6) {
+            BlockPos newPos = radialPos.up(distFromGround > dinosaur.getMaxFlyingHeight() ? (int) Math.min(dinosaur.getMaxFlyingHeight(), dinosaur.getPosY() + dinosaur.getRNG().nextInt(4) - 2) : (int) dinosaur.getPosY() + dinosaur.getRNG().nextInt(10) + 1);
+            if (dinosaur.world.isAirBlock(newPos) && dinosaur.getDistanceSq(Vector3d.copyCentered(newPos)) > 6) {
                 return newPos;
             }
             return null;
@@ -461,10 +496,10 @@ public abstract class DinosaurFlying extends Dinosaur implements IFlyingAnimal {
 
         public static boolean isTargetBlocked(Entity entity, Vector3d target) {
             if (target != null) {
+                AxisAlignedBB entityBox = entity.getBoundingBox().offset(-entity.getPosX(), -entity.getPosY(), -entity.getPosZ()); // Exclude the entity's bounding box from the RayTrace
                 RayTraceResult rayTrace = entity.world.rayTraceBlocks(new RayTraceContext(entity.getPositionVec(), target, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, entity));
                 if (rayTrace != null && rayTrace.getType() != RayTraceResult.Type.MISS) {
-                    BlockPos pos = new BlockPos(rayTrace.getHitVec());
-                    return entity.world.isAirBlock(pos);
+                    return entity.world.isAirBlock(new BlockPos(target));
                 }
             }
             return false;
