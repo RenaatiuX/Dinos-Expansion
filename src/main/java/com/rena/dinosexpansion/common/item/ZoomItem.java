@@ -113,13 +113,12 @@ public class ZoomItem extends Item {
 
        @SubscribeEvent
        public static void renderOverlay(RenderGameOverlayEvent.Post event){
-           if (event.getType() == RenderGameOverlayEvent.ElementType.POTION_ICONS) {
+           if (event.getType() == RenderGameOverlayEvent.ElementType.HOTBAR) {
                if (Minecraft.getInstance() != null && Minecraft.getInstance().player != null){
                    if (Minecraft.getInstance().player.getPersistentData().contains(DinosExpansion.MOD_ID + "zooming") && Minecraft.getInstance().player.getPersistentData().getBoolean(DinosExpansion.MOD_ID + "zooming")){
                        MainWindow res = event.getWindow();
                        Minecraft.getInstance().textureManager.bindTexture(ZOOM_OVERLAY);
                        AbstractGui.blit(event.getMatrixStack(), 0, 0, 0, 0, res.getScaledWidth(), res.getScaledHeight(), res.getScaledWidth(), res.getScaledHeight());
-
                    }
                }
            }

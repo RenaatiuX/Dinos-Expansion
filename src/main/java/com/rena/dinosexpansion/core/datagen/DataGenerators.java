@@ -44,5 +44,6 @@ public class DataGenerators {
         ModBlockTagsProvider blockTags = new ModBlockTagsProvider(gen, helper);
         gen.addProvider(blockTags);
         gen.addProvider(new ModItemTagsProvider(gen, blockTags, helper));
+        gen.addProvider(new ModFluidTagsProvider(gen, helper));
     }
 }

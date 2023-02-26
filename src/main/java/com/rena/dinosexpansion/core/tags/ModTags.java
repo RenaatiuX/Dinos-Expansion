@@ -2,8 +2,10 @@ package com.rena.dinosexpansion.core.tags;
 
 import com.rena.dinosexpansion.DinosExpansion;
 import net.minecraft.entity.EntityType;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
 import net.minecraft.tags.EntityTypeTags;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.ITag;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.ResourceLocation;
@@ -36,6 +38,16 @@ public class ModTags {
             return EntityTypeTags.getTagById(new ResourceLocation(DinosExpansion.MOD_ID, name).toString());
         }
 
+    }
+
+
+    public static class Fluids{
+
+        public static final ITag.INamedTag<Fluid> CANNOT_FLY_FROM = createModTag("cannot_fly_from");
+
+        public static ITag.INamedTag<Fluid> createModTag(String name){
+            return FluidTags.makeWrapperTag(new ResourceLocation(DinosExpansion.MOD_ID, name).toString());
+        }
     }
 
 }

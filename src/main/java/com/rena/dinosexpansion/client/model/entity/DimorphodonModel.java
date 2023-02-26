@@ -12,6 +12,10 @@ import java.util.Map;
 
 public class DimorphodonModel extends AnimatedTickingGeoModel<Dimorphodon> {
 
+    public DimorphodonModel() {
+        super();
+    }
+
     private static final Map<Dinosaur.Rarity, ResourceLocation> RARITY = Util.make(Maps.newEnumMap(Dinosaur.Rarity.class),
             (rarity) -> {
                         rarity.put(Dinosaur.Rarity.COMMON, DinosExpansion.modLoc("textures/entity/dimorphodon/dimorphodon_common.png"));
