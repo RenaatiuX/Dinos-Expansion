@@ -115,6 +115,8 @@ public class ModLanguageProvider extends LanguageProvider {
         add(EntityInit.DIMORPHODON.get(), "Dimorphodon");
         add(EntityInit.ASTORGOSUCHUS.get(), "Astorgosuchus");
         add(EntityInit.CAMPANILE.get(), "Campanile");
+        add(EntityInit.DRYOSAURUS.get(), "Dryosaurus");
+        add(EntityInit.AEGIROCASSIS.get(), "Aegirocassis");
         add(EntityInit.HERMIT.get(), "Hermit");
     }
 
