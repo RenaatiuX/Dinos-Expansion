@@ -6,6 +6,7 @@ import com.rena.dinosexpansion.common.block.GeyserBlock;
 import com.rena.dinosexpansion.common.block.GlowStickBlock;
 import com.rena.dinosexpansion.common.block.QuicksandBlock;
 import com.rena.dinosexpansion.common.block.bush.BushBlockBase;
+import com.rena.dinosexpansion.common.block.crops.DoubleCropBaseBlock;
 import com.rena.dinosexpansion.common.block.plant.SinglePlantBlock;
 import com.rena.dinosexpansion.common.block.plant.TriplePlantBlock;
 import com.rena.dinosexpansion.common.world.gen.trees.ModTreeSpawners;
@@ -99,9 +100,13 @@ public class BlockInit {
     public static final RegistryObject<Block> REDWOOD_SAPLING = register("redwood_sapling",
             ()-> new BaseSaplingBlock(ModTreeSpawners.REDWOOD, AbstractBlock.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().zeroHardnessAndResistance().sound(SoundType.PLANT)), ModItemGroups.BLOCKS);
 
+    //Crops
+    public static final RegistryObject<Block> EGGPLANT_CROP = BLOCKS.register("eggplant_crop",
+            ()-> new DoubleCropBaseBlock(AbstractBlock.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().hardnessAndResistance(0).sound(SoundType.CROP), ItemInit.EGGPLANT_SEED));
     //Blocks
     public static final RegistryObject<Block> GEYSER = register("geyser",
             ()-> new GeyserBlock(AbstractBlock.Properties.create(Material.ROCK).zeroHardnessAndResistance().sound(SoundType.GROUND).tickRandomly().notSolid()), ModItemGroups.BLOCKS);
+
     public static <T extends Block> RegistryObject<T> register(String name, Supplier<T> blockSupplier, ItemGroup tab){
         return register(name, blockSupplier, () -> new Item.Properties().group(tab));
     }

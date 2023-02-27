@@ -63,7 +63,7 @@ public class Campanile extends AmbientDinosaur implements IAnimatable, IAnimatio
                 return !Campanile.this.isInShell() && super.shouldExecute();
             }
         });
-        this.goalSelector.addGoal(5, new WaterAvoidingRandomWalkingGoal(this, 0.5D) {
+        this.goalSelector.addGoal(5, new WaterAvoidingRandomWalkingGoal(this, 0.6D) {
             @Override
             public boolean shouldExecute() {
                 return !Campanile.this.isInShell() && super.shouldExecute();

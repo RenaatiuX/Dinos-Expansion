@@ -28,67 +28,37 @@ import static com.rena.dinosexpansion.client.events.ClientForgeEvents.rand;
 
 public class DoubleCropBaseBlock extends CropBaseBlock {
 
-    public static final BooleanProperty UPPER = BooleanProperty.create("upper");
-    private static final VoxelShape[] SHAPE_BY_AGE = new VoxelShape[] {
-            Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 16.0D),
-            Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D),
-            Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D),
-            Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D),
-            Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D),
-            Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D),
-            Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D),
-            Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D)
-    };
+    public static final EnumProperty<DoubleBlockHalf> HALF = BlockStateProperties.DOUBLE_BLOCK_HALF;
+
     public DoubleCropBaseBlock(Properties builder, Supplier<Item> seedItemSupplier) {
         super(builder, seedItemSupplier);
-        setDefaultState(stateContainer.getBaseState().with(getAgeProperty(), 0).with(UPPER, false));
+        setDefaultState(stateContainer.getBaseState().with(getAgeProperty(), 0).with(HALF, DoubleBlockHalf.LOWER));
     }
 
-    public BooleanProperty getUpperProperty() {
-        return UPPER;
-    }
-
-    public int getGrowUpperAge() {
-        return 4;
-    }
-
-    @Override
-    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-        return SHAPE_BY_AGE[state.get(this.getAgeProperty())];
-    }
-
-    @Override
-    public BlockState withAge(int age) {
-        return super.withAge(age);
+    public DoubleBlockHalf getHalf(BlockState state) {
+        return state.get(HALF);
     }
 
     @Override
     public void randomTick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random) {
         if (!worldIn.isAreaLoaded(pos, 1))
             return;
-
         if (worldIn.getLightSubtracted(pos, 0) >= 9) {
             int age = getAge(state);
             if (age < getMaxAge()) {
                 float f = getGrowthChance(this, worldIn, pos);
                 if (ForgeHooks.onCropsGrowPre(worldIn, pos, state, random.nextInt((int) (25.0F / f) + 1) == 0)) {
-                    if (age == getMaxAge() - 1) {
+                    if (age == getMaxAge() - 3) {
                         if (worldIn.getBlockState(pos.up()) == Blocks.AIR.getDefaultState() && worldIn.getBlockState(pos.down()).getBlock() instanceof FarmlandBlock) {
-                            worldIn.setBlockState(pos.up(), this.withAge(age + 1).with(this.getUpperProperty(), state.get(this.getUpperProperty())), Constants.BlockFlags.BLOCK_UPDATE);
+                            worldIn.setBlockState(pos.up(), this.withAge(getMaxAge()).with(HALF, DoubleBlockHalf.UPPER), Constants.BlockFlags.BLOCK_UPDATE);
+                            worldIn.setBlockState(pos, this.withAge(getMaxAge()).with(HALF, DoubleBlockHalf.LOWER), Constants.BlockFlags.BLOCK_UPDATE);
                             ForgeHooks.onCropsGrowPost(worldIn, pos, state);
                         }
                     }
-                }
-
-            if(state.get(this.getUpperProperty()))
-                    return;
-                if (age >= this.getGrowUpperAge()) {
-                    if (ForgeHooks.onCropsGrowPre(worldIn, pos, state, rand.nextInt((int)(25.0F / f) + 1) == 0)) {
-                        if (this.getDefaultState().isValidPosition(worldIn, pos.up()) && worldIn.isAirBlock(pos.up())) {
-                            worldIn.setBlockState(pos.up(), this.getDefaultState().with(this.getUpperProperty(), true));
-                            ForgeHooks.onCropsGrowPost(worldIn, pos, state);
-                        }
+                    else {
+                        worldIn.setBlockState(pos, this.withAge(age + 1), Constants.BlockFlags.BLOCK_UPDATE);
                     }
+                    ForgeHooks.onCropsGrowPost(worldIn, pos, state);
                 }
             }
         }
@@ -96,18 +66,19 @@ public class DoubleCropBaseBlock extends CropBaseBlock {
 
     @Override
     public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos) {
-        BlockPos downPos = pos.down();
-        if(worldIn.getBlockState(downPos).matchesBlock(this))
-            return  !worldIn.getBlockState(downPos).get(this.getUpperProperty())
-                    && (worldIn.getLightSubtracted(pos, 0) >= 8 || worldIn.canSeeSky(pos))
-                    && this.getAge(worldIn.getBlockState(downPos))>= this.getGrowUpperAge();
-        return super.isValidPosition(state, worldIn, pos);
+        return (worldIn.getLightSubtracted(pos, 0) >= 8 || worldIn.canSeeSky(pos)) && placementChecker(state, worldIn, pos);
     }
 
+    private boolean placementChecker(BlockState state, IWorldReader worldIn, BlockPos pos) {
+        BlockState testState = worldIn.getBlockState(pos.down());
+        if (testState.getBlock() instanceof FarmlandBlock)
+            return true;
+        return testState == this.withAge(getMaxAge()).with(HALF, DoubleBlockHalf.LOWER) && worldIn.getBlockState(pos.down(2)).getBlock() instanceof FarmlandBlock;
+    }
 
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-        builder.add(AGE, UPPER);
+        builder.add(AGE, HALF);
     }
 
     @Override
@@ -119,14 +90,7 @@ public class DoubleCropBaseBlock extends CropBaseBlock {
 
     @Override
     public boolean canGrow(IBlockReader worldIn, BlockPos pos, BlockState state, boolean isClient) {
-        BlockState upperState = worldIn.getBlockState(pos.up());
-        if (upperState.matchesBlock(this)) {
-            return !(this.isMaxAge(upperState));
-        }
-        if (state.get(this.getUpperProperty())) {
-            return !(this.isMaxAge(state));
-        }
-        return true;
+        return !isMaxAge(state) && worldIn.getBlockState(pos.up()) == Blocks.AIR.getDefaultState() && worldIn.getBlockState(pos.down()).getBlock() instanceof FarmlandBlock;
     }
 
     @Override
@@ -136,28 +100,32 @@ public class DoubleCropBaseBlock extends CropBaseBlock {
 
     @Override
     public void grow(ServerWorld worldIn, Random rand, BlockPos pos, BlockState state) {
-        int ageGrowth = Math.min(this.getAge(state) + this.getBonemealAgeIncrease(worldIn), 15);
-        if (ageGrowth <= this.getMaxAge()) {
-            worldIn.setBlockState(pos, state.with(AGE, ageGrowth));
-        } else {
-            worldIn.setBlockState(pos, state.with(AGE, this.getMaxAge()));
-            if (state.get(this.getUpperProperty())) {
+        int maxAge = getMaxAge();
+        int newAge = Math.min(getAge(state) + getBonemealAgeIncrease(worldIn), maxAge);
+        if (newAge >= getMaxAge() - 3 && worldIn.getBlockState(pos.up()) == Blocks.AIR.getDefaultState() && worldIn.getBlockState(pos.down()).getBlock() instanceof FarmlandBlock) {
+            BlockState upperState = withAge(maxAge).with(DoubleCropBaseBlock.HALF, DoubleBlockHalf.UPPER);
+            if (worldIn.getBlockState(pos.up()) == Blocks.AIR.getDefaultState() && worldIn.getBlockState(pos.down()).getBlock() instanceof FarmlandBlock) {
+                worldIn.setBlockState(pos, withAge(maxAge), Constants.BlockFlags.BLOCK_UPDATE);
+                worldIn.setBlockState(pos.up(), upperState, Constants.BlockFlags.BLOCK_UPDATE);
                 return;
             }
-            BlockState top = worldIn.getBlockState(pos.up());
-            if (top.matchesBlock(this)) {
-                IGrowable growable = (IGrowable) worldIn.getBlockState(pos.up()).getBlock();
-                if (growable.canGrow(worldIn, pos.up(), top, false)) {
-                    growable.grow(worldIn, worldIn.rand, pos.up(), top);
-                }
-            } else {
-                int remainingGrowth = ageGrowth - this.getMaxAge() - 1;
-                if (this.getDefaultState().isValidPosition(worldIn, pos.up()) && worldIn.isAirBlock(pos.up())) {
-                    worldIn.setBlockState(pos.up(), this.getDefaultState()
-                            .with(this.getUpperProperty(), true)
-                            .with(this.getAgeProperty(), remainingGrowth), 3);
+        }
+
+        worldIn.setBlockState(pos, withAge(newAge), Constants.BlockFlags.BLOCK_UPDATE);
+    }
+
+    @Override
+    public void onBlockHarvested(World worldIn, BlockPos pos, BlockState state, PlayerEntity player) {
+        if (!worldIn.isRemote) {
+            Block below = worldIn.getBlockState(pos.down()).getBlock();
+            if (state.getBlock() == this && below == this) { //make sure the block below is also a double crop block
+                DoubleCropBaseBlock crop = (DoubleCropBaseBlock) worldIn.getBlockState(pos).getBlock();
+                if (crop.getAge(state) == getMaxAge() && crop.getHalf(state) == DoubleBlockHalf.UPPER) {
+                    worldIn.setBlockState(pos.down(), crop.getDefaultState(), Constants.BlockFlags.BLOCK_UPDATE);
                 }
             }
         }
+
+        super.onBlockHarvested(worldIn, pos, state, player);
     }
 }

@@ -111,6 +111,8 @@ public class ClientSetupEvents {
         RenderTypeLookup.setRenderLayer(BlockInit.REDWOOD_LEAVES.get(), RenderType.getCutout());
 
         RenderTypeLookup.setRenderLayer(BlockInit.NARCOTIC_BERRY_BUSH.get(), RenderType.getCutout());
+
+        RenderTypeLookup.setRenderLayer(BlockInit.EGGPLANT_CROP.get(), RenderType.getCutout());
     }
 
     public static void registerModelProperties() {

@@ -157,6 +157,10 @@ public class ItemInit {
             () -> new Item(new Item.Properties().food(FoodInit.COOKED_DIMORPHODON_MEAT).group(ModItemGroups.ITEMS)));
     public static final RegistryObject<Item> NARCOTIC_BERRIES = ITEMS.register("narcotic_berries",
             () -> new BlockNamedItem(BlockInit.NARCOTIC_BERRY_BUSH.get(), new Item.Properties().food(FoodInit.NARCOTIC_BERRIES).group(ModItemGroups.ITEMS)));
+    public static final RegistryObject<Item> EGGPLANT = ITEMS.register("eggplant",
+            ()-> new Item(new Item.Properties().food(FoodInit.EGGPLANT).group(ModItemGroups.ITEMS)));
+    public static final RegistryObject<Item> EGGPLANT_SEED = ITEMS.register("eggplant_seed",
+            ()-> new BlockNamedItem(BlockInit.EGGPLANT_CROP.get(), new Item.Properties().group(ModItemGroups.ITEMS)));
 
     public static final RegistryObject<Item> NARCOTICS = ITEMS.register("narcotics",
             () -> new BaseNarcoticItem(new Item.Properties().group(ModItemGroups.ITEMS), 10));
