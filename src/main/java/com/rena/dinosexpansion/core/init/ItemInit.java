@@ -14,7 +14,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.Rarity;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.fml.RegistryObject;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -126,7 +125,7 @@ public class ItemInit {
     public static final RegistryObject<Item> ASTORGOSUCHUS_SPAWN_EGG = ITEMS.register("astorgosuchus_spawn_egg",
             () -> new ForgeSpawnEggItem(EntityInit.ASTORGOSUCHUS, 8098406, 12561789, new Item.Properties().group(ModItemGroups.SPAWN_EGGS)));
     public static final RegistryObject<Item> CAMPANILE_SPAEN_EGG = ITEMS.register("campanile_spawn_egg",
-            () -> new ForgeSpawnEggItem(EntityInit.CAMPANILE, 5592428, 12561789, new Item.Properties().group(ModItemGroups.SPAWN_EGGS)));
+            () -> new ForgeSpawnEggItem(EntityInit.CAMPANILE, 8546118, 14404019, new Item.Properties().group(ModItemGroups.SPAWN_EGGS)));
     public static final RegistryObject<Item> DRYOSAURUS_SPAWN_EGG = ITEMS.register("dryosaurus_spawn_egg",
             () -> new ForgeSpawnEggItem(EntityInit.DRYOSAURUS, 9012770, 5987102, new Item.Properties().group(ModItemGroups.SPAWN_EGGS)));
     public static final RegistryObject<Item> WETHERELLUS_SPAWN_EGG = ITEMS.register("wetherellus_spawn_egg",
@@ -155,12 +154,39 @@ public class ItemInit {
             () -> new Item(new Item.Properties().food(FoodInit.RAW_DIMORPHODON_MEAT).group(ModItemGroups.ITEMS)));
     public static final RegistryObject<Item> COOKED_DIMORPHODON_MEAT = ITEMS.register("cooked_dimorphodon_meat",
             () -> new Item(new Item.Properties().food(FoodInit.COOKED_DIMORPHODON_MEAT).group(ModItemGroups.ITEMS)));
+    public static final RegistryObject<Item> RAW_ASTORGOSUCHUS_MEAT = ITEMS.register("raw_astorgosuchus_meat",
+            () -> new Item(new Item.Properties().food(FoodInit.RAW_ASTORGOSUCHUS_MEAT).group(ModItemGroups.ITEMS)));
+    public static final RegistryObject<Item> COOKED_ASTORGOSUCHUS_MEAT = ITEMS.register("cooked_astorgosuchus_meat",
+            () -> new Item(new Item.Properties().food(FoodInit.COOKED_ASTORGOSUCHUS_MEAT).group(ModItemGroups.ITEMS)));
+    public static final RegistryObject<Item> RAW_PARAPUZOSIA_TENTACLE = ITEMS.register("raw_parapuzosia_tentacle",
+            () -> new Item(new Item.Properties().food(FoodInit.RAW_PARAPUZOSIA_TENTACLE).group(ModItemGroups.ITEMS)));
+    public static final RegistryObject<Item> COOKED_PARAPUZOSIA_TENTACLE = ITEMS.register("cooked_parapuzosia_tentacle",
+            () -> new Item(new Item.Properties().food(FoodInit.COOKED_PARAPUZOSIA_TENTACLE).group(ModItemGroups.ITEMS)));
+    public static final RegistryObject<Item> RAW_DRYOSAURUS_MEAT = ITEMS.register("raw_dryosaurus_meat",
+            () -> new Item(new Item.Properties().food(FoodInit.RAW_DRYOSAURUS_MEAT).group(ModItemGroups.ITEMS)));
+    public static final RegistryObject<Item> COOKED_DRYOSAURUS_MEAT = ITEMS.register("cooked_dryosaurus_meat",
+            () -> new Item(new Item.Properties().food(FoodInit.COOKED_DRYOSAURUS_MEAT).group(ModItemGroups.ITEMS)));
     public static final RegistryObject<Item> NARCOTIC_BERRIES = ITEMS.register("narcotic_berries",
             () -> new BlockNamedItem(BlockInit.NARCOTIC_BERRY_BUSH.get(), new Item.Properties().food(FoodInit.NARCOTIC_BERRIES).group(ModItemGroups.ITEMS)));
     public static final RegistryObject<Item> EGGPLANT = ITEMS.register("eggplant",
             ()-> new Item(new Item.Properties().food(FoodInit.EGGPLANT).group(ModItemGroups.ITEMS)));
+    public static final RegistryObject<Item> CORN = ITEMS.register("corn",
+            ()-> new Item(new Item.Properties().food(FoodInit.CORN).group(ModItemGroups.ITEMS)));
+    public static final RegistryObject<Item> ONION = ITEMS.register("onion",
+            ()-> new Item(new Item.Properties().food(FoodInit.ONION).group(ModItemGroups.ITEMS)));
+    public static final RegistryObject<Item> SPINACH = ITEMS.register("spinach",
+            ()-> new Item(new Item.Properties().food(FoodInit.SPINACH).group(ModItemGroups.ITEMS)));
+    public static final RegistryObject<Item> TOMATO = ITEMS.register("tomato",
+            ()-> new Item(new Item.Properties().food(FoodInit.TOMATO).group(ModItemGroups.ITEMS)));
+    public static final RegistryObject<Item> CUCUMBER = ITEMS.register("cucumber",
+            ()-> new Item(new Item.Properties().food(FoodInit.CUCUMBER).group(ModItemGroups.ITEMS)));
+    public static final RegistryObject<Item> LETTUCE = ITEMS.register("lettuce",
+            ()-> new Item(new Item.Properties().food(FoodInit.LETTUCE).group(ModItemGroups.ITEMS)));
+
     public static final RegistryObject<Item> EGGPLANT_SEED = ITEMS.register("eggplant_seed",
             ()-> new BlockNamedItem(BlockInit.EGGPLANT_CROP.get(), new Item.Properties().group(ModItemGroups.ITEMS)));
+    public static final RegistryObject<Item> CORN_SEED = ITEMS.register("corn_seed",
+            ()-> new BlockNamedItem(BlockInit.CORN_CROP.get(), new Item.Properties().group(ModItemGroups.ITEMS)));
 
     public static final RegistryObject<Item> NARCOTICS = ITEMS.register("narcotics",
             () -> new BaseNarcoticItem(new Item.Properties().group(ModItemGroups.ITEMS), 10));
@@ -185,7 +211,7 @@ public class ItemInit {
             () -> new Item(new Item.Properties().group(ModItemGroups.ITEMS).rarity(Rarity.RARE)));
     public static final RegistryObject<Item> MEGA_PIRANHA_BUCKET = ITEMS.register("mega_piranha_bucket",
             () -> new CustomFishBucket(EntityInit.MEGA_PIRANHA::get, () -> Fluids.WATER, new Item.Properties().group(ModItemGroups.ITEMS)));
-    public static final RegistryObject<Item> WHETERELLUS_BUCKET = ITEMS.register("wetherellus_bucket",
+    public static final RegistryObject<Item> WETHERELLUS_BUCKET = ITEMS.register("wetherellus_bucket",
             () -> new CustomFishBucket(EntityInit.WETHERELLUS::get, () -> Fluids.WATER, new Item.Properties().group(ModItemGroups.ITEMS)));
     public static final RegistryObject<Item> ELECTRONICS_PARTS = ITEMS.register("electronics_parts",
             () -> new Item(new Item.Properties().group(ModItemGroups.ITEMS)));
@@ -203,4 +229,6 @@ public class ItemInit {
             () -> new GlowStickItem(new Item.Properties().group(ModItemGroups.ITEMS)));
     public static final RegistryObject<ZoomItem> SPYGLASS = ITEMS.register("spyglass",
             () -> new ZoomItem(new Item.Properties().group(ModItemGroups.ITEMS), 2, 10));
+    public static final RegistryObject<Item> TELEPORT_ITEM = ITEMS.register("teleport_machine",
+            () -> new TeleportedItem(new Item.Properties().group(ModItemGroups.ITEMS).rarity(Rarity.EPIC)));
 }

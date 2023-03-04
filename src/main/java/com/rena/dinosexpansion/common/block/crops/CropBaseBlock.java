@@ -7,8 +7,6 @@ import net.minecraft.util.IItemProvider;
 import java.util.function.Supplier;
 
 public class CropBaseBlock extends CropsBlock {
-
-
     private final Supplier<Item> seedItemSupplier;
 
     public CropBaseBlock(Properties builder, Supplier<Item> seedItemSupplier) {

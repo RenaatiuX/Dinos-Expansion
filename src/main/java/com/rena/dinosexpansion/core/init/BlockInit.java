@@ -103,6 +103,9 @@ public class BlockInit {
     //Crops
     public static final RegistryObject<Block> EGGPLANT_CROP = BLOCKS.register("eggplant_crop",
             ()-> new DoubleCropBaseBlock(AbstractBlock.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().hardnessAndResistance(0).sound(SoundType.CROP), ItemInit.EGGPLANT_SEED));
+    public static final RegistryObject<Block> CORN_CROP = BLOCKS.register("corn_crop",
+            ()-> new DoubleCropBaseBlock(AbstractBlock.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().hardnessAndResistance(0).sound(SoundType.CROP), ItemInit.CORN_SEED));
+
     //Blocks
     public static final RegistryObject<Block> GEYSER = register("geyser",
             ()-> new GeyserBlock(AbstractBlock.Properties.create(Material.ROCK).zeroHardnessAndResistance().sound(SoundType.GROUND).tickRandomly().notSolid()), ModItemGroups.BLOCKS);

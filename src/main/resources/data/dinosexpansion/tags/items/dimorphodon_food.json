@@ -1,8 +1,8 @@
 {
   "replace": false,
   "values": [
-    "minecraft:salmon",
     "minecraft:cod",
+    "minecraft:salmon",
     "minecraft:tropical_fish",
     "minecraft:pufferfish"
   ]

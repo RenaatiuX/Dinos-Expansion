@@ -56,7 +56,7 @@ public class Wetherellus extends PrehistoricFish implements IAnimatable, IAnimat
 
     @Override
     protected ItemStack getFishBucket() {
-        return new ItemStack(ItemInit.WHETERELLUS_BUCKET.get());
+        return new ItemStack(ItemInit.WETHERELLUS_BUCKET.get());
     }
 
     @Override
