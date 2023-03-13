@@ -42,7 +42,6 @@ public class TieredMultiTool extends ToolItem{
 
     public TieredMultiTool(float attackDamageIn, float attackSpeedIn, IItemTier tier, Properties builderIn) {
         super(attackDamageIn, attackSpeedIn, tier, EFFECTIVE_ON, builderIn.addToolType(ToolType.AXE, tier.getHarvestLevel()).addToolType(ToolType.PICKAXE, tier.getHarvestLevel()).addToolType(ToolType.SHOVEL, tier.getHarvestLevel()).maxStackSize(1));
-
         this.material = tier;
         this.attackSpeed = attackSpeedIn;
         this.attackDamage = attackDamageIn;
@@ -119,7 +118,7 @@ public class TieredMultiTool extends ToolItem{
         }
 
         if (blockstate.getBlock() instanceof CampfireBlock && blockstate.get(CampfireBlock.LIT)) {
-            world.playEvent((PlayerEntity)null, 1009, blockpos, 0);
+            world.playEvent(null, 1009, blockpos, 0);
             world.setBlockState(blockpos, blockstate.with(CampfireBlock.LIT, Boolean.FALSE), 11);
         }
 
