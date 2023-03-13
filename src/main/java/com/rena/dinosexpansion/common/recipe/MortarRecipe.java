@@ -118,9 +118,7 @@ public class MortarRecipe implements IRecipe<IInventory> {
             NonNullList<Ingredient> inputs = NonNullList.withSize(2, Ingredient.EMPTY);
             for (int i = 0; i < inputs.size(); i++) {
                 inputs.set(i, Ingredient.deserialize(ingredients.get(i)));
-                System.out.println(ingredients.get(i).isJsonObject());
                 if (ingredients.get(i).isJsonObject()) {
-                    System.out.println(Arrays.toString(ingredients.get(i).getAsJsonObject().entrySet().stream().map(Map.Entry::getKey).toArray()));
                     counts[i] = JSONUtils.getInt(ingredients.get(i).getAsJsonObject(), "count", 1);
 
                 }

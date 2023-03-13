@@ -67,7 +67,6 @@ public class MortarTileEntity extends ContainerTileEntity implements IAnimatable
                 if (recipe == null || !canProcess(recipe)){
                     counter = 0;
                 }else{
-                    System.out.println(Arrays.toString(recipe.getCounts()));
                     if (counter <= 0){
                         startProcessing(recipe);
                         counter++;
