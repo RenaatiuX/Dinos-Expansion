@@ -711,7 +711,7 @@ public abstract class Dinosaur extends TameableEntity {
      * @return an array of all allowed orders
      */
     public MoveOrder[] allowedMoveOrders() {
-        return MoveOrder.values();
+        return new MoveOrder[]{MoveOrder.WANDER, MoveOrder.SIT, MoveOrder.FOLLOW, MoveOrder.IDLE};
     }
 
     /**

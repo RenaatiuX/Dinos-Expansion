@@ -2,57 +2,61 @@ package com.rena.dinosexpansion.common.recipe;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.rena.dinosexpansion.common.recipe.util.IMortarRecipe;
+import com.google.gson.JsonParseException;
+import com.rena.dinosexpansion.common.tileentity.MortarTileEntity;
 import com.rena.dinosexpansion.core.init.RecipeInit;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.ShapedRecipe;
+import net.minecraft.item.crafting.*;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
-import javax.annotation.Nullable;
+import java.util.Arrays;
+import java.util.Map;
 
-public class MortarRecipe implements IMortarRecipe {
+public class MortarRecipe implements IRecipe<IInventory> {
+
+    public static final Serializer SERIALIZER = new Serializer();
+
     private final ItemStack output;
     private final ResourceLocation id;
     private final NonNullList<Ingredient> recipeItems;
     private final int workTime;
     private final float experience;
-    private final int count1;
-    private final int count2;
+    private final int[] counts;
 
-    public MortarRecipe(ItemStack output, ResourceLocation id, NonNullList<Ingredient> recipeItems, int count1, int count2, float experience, int workTime) {
+    public MortarRecipe(ItemStack output, ResourceLocation id, NonNullList<Ingredient> recipeItems, int[] counts, float experience, int workTime) {
         this.output = output;
         this.id = id;
         this.recipeItems = recipeItems;
-        this.count1 = count1;
-        this.count2 = count2;
+        this.counts = counts;
         this.workTime = workTime;
         this.experience = experience;
     }
 
     @Override
     public boolean matches(IInventory inv, World worldIn) {
-        if (this.recipeItems.get(0).test(inv.getStackInSlot(0))) {
-            return recipeItems.get(1).test(inv.getStackInSlot(1));
+        //also allow the user to make recipes with only one ingredient
+        if (this.counts.length == 1){
+            return compareStacks(0, inv.getStackInSlot(0)) || compareStacks(0, inv.getStackInSlot(1));
         }
+        if (compareStacks(0, inv.getStackInSlot(0))) {
+            return compareStacks(1, inv.getStackInSlot(1));
+        } else if (compareStacks(1, inv.getStackInSlot(0)))
+            return compareStacks(0, inv.getStackInSlot(1));
         return false;
     }
 
-    public boolean testInput1(ItemStack stack) {
-        return recipeItems.get(0).test(stack) && stack.getCount() >= count1;
+    public boolean compareStacks(int ingredientIndex, ItemStack compare) {
+        return this.recipeItems.get(ingredientIndex).test(compare) && this.counts[ingredientIndex] <= compare.getCount();
     }
 
-    public boolean testInput2(ItemStack stack) {
-        return recipeItems.get(1).test(stack) && stack.getCount() >= count2;
+    public int[] getCounts() {
+        return counts;
     }
 
     @Override
@@ -68,17 +72,14 @@ public class MortarRecipe implements IMortarRecipe {
         return workTime;
     }
 
-    public int getCount1() {
-        return count1;
-    }
-
-    public int getCount2() {
-        return count2;
-    }
-
     @Override
     public ItemStack getCraftingResult(IInventory inv) {
         return output.copy();
+    }
+
+    @Override
+    public boolean canFit(int width, int height) {
+        return false;
     }
 
     @Override
@@ -93,42 +94,55 @@ public class MortarRecipe implements IMortarRecipe {
 
     @Override
     public IRecipeSerializer<?> getSerializer() {
-        return null;
+        return SERIALIZER;
     }
 
-    public static class MortarRecipeTypes implements IRecipeType<MortarRecipe> {
-        @Override
-        public String toString() {
-            return MortarRecipe.ID.toString();
-        }
+    @Override
+    public IRecipeType<?> getType() {
+        return RecipeInit.MORTAR_RECIPE;
     }
 
-    /*public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<MortarRecipe> {
+    public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<MortarRecipe> {
 
         @Override
         public MortarRecipe read(ResourceLocation recipeId, JsonObject json) {
             ItemStack output = ShapedRecipe.deserializeItem(JSONUtils.getJsonObject(json, "result"));
             JsonArray ingredients = JSONUtils.getJsonArray(json, "ingredients");
+            if (ingredients.size() > 2) {
+                throw new JsonParseException("there cant be more then 2 ingredients in the mortar. Error found in recipe: " + recipeId.toString());
+            }
+            int[] counts = new int[ingredients.size()];
+            Arrays.fill(counts, 1);
             float experience = JSONUtils.getFloat(json, "experience", 0.0F);
             int workTime = JSONUtils.getInt(json, "workTime", 200);
             NonNullList<Ingredient> inputs = NonNullList.withSize(2, Ingredient.EMPTY);
             for (int i = 0; i < inputs.size(); i++) {
                 inputs.set(i, Ingredient.deserialize(ingredients.get(i)));
+                System.out.println(ingredients.get(i).isJsonObject());
+                if (ingredients.get(i).isJsonObject()) {
+                    System.out.println(Arrays.toString(ingredients.get(i).getAsJsonObject().entrySet().stream().map(Map.Entry::getKey).toArray()));
+                    counts[i] = JSONUtils.getInt(ingredients.get(i).getAsJsonObject(), "count", 1);
+
+                }
             }
 
-            return new MortarRecipe(output, recipeId, inputs, experience, workTime);
+            return new MortarRecipe(output, recipeId, inputs, counts, experience, workTime);
         }
 
-        @Nullable
         @Override
         public MortarRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
-            NonNullList<Ingredient> inputs = NonNullList.withSize(2, Ingredient.EMPTY);
+            int size = buffer.readInt();
+            NonNullList<Ingredient> inputs = NonNullList.withSize(size, Ingredient.EMPTY);
+            int[] counts = new int[size];
             inputs.replaceAll(ignored -> Ingredient.read(buffer));
+            for (int i = 0; i < size; i++) {
+                counts[i] = buffer.readInt();
+            }
             ItemStack output = buffer.readItemStack();
             float experience = buffer.readFloat();
             int workTime = buffer.readVarInt();
 
-            return new MortarRecipe(output, recipeId, inputs, experience, workTime);
+            return new MortarRecipe(output, recipeId, inputs, counts, experience, workTime);
         }
 
         @Override
@@ -137,9 +151,12 @@ public class MortarRecipe implements IMortarRecipe {
             for (Ingredient ing : recipe.getIngredients()) {
                 ing.write(buffer);
             }
+            for (int i : recipe.counts){
+                buffer.writeInt(i);
+            }
             buffer.writeItemStack(recipe.output);
             buffer.writeFloat(recipe.experience);
             buffer.writeVarInt(recipe.workTime);
         }
-    }*/
+    }
 }

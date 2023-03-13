@@ -1,6 +1,7 @@
 package com.rena.dinosexpansion.client.events;
 
 import com.rena.dinosexpansion.DinosExpansion;
+import com.rena.dinosexpansion.client.renderer.block.MortarRenderer;
 import com.rena.dinosexpansion.client.renderer.entity.*;
 import com.rena.dinosexpansion.client.renderer.misc.BoomerangRenderer;
 import com.rena.dinosexpansion.client.renderer.misc.ChakramRenderer;
@@ -9,8 +10,10 @@ import com.rena.dinosexpansion.client.renderer.misc.SpearRenderer;
 import com.rena.dinosexpansion.client.renderer.projectiles.CustomArrowRenderer;
 import com.rena.dinosexpansion.client.renderer.projectiles.DartRenderer;
 import com.rena.dinosexpansion.client.renderer.projectiles.TinyRockRenderer;
+import com.rena.dinosexpansion.client.screens.MortarScreen;
 import com.rena.dinosexpansion.client.screens.OrderScreen;
 import com.rena.dinosexpansion.client.screens.TamingScreen;
+import com.rena.dinosexpansion.common.container.MortarContainer;
 import com.rena.dinosexpansion.common.entity.aquatic.Aegirocassis;
 import com.rena.dinosexpansion.common.entity.aquatic.fish.Wetherellus;
 import com.rena.dinosexpansion.common.entity.terrestrial.Dryosaurus;
@@ -21,10 +24,7 @@ import com.rena.dinosexpansion.common.entity.aquatic.Parapuzosia;
 import com.rena.dinosexpansion.common.entity.flying.Dimorphodon;
 import com.rena.dinosexpansion.common.entity.semiaquatic.Astorgosuchus;
 import com.rena.dinosexpansion.common.entity.terrestrial.ambient.Campanile;
-import com.rena.dinosexpansion.core.init.BlockInit;
-import com.rena.dinosexpansion.core.init.ContainerInit;
-import com.rena.dinosexpansion.core.init.EntityInit;
-import com.rena.dinosexpansion.core.init.ItemInit;
+import com.rena.dinosexpansion.core.init.*;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
@@ -32,6 +32,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -49,6 +50,7 @@ public class ClientSetupEvents {
 
         ScreenManager.registerFactory(ContainerInit.TAMING_CONTAINER.get(), TamingScreen::new);
         ScreenManager.registerFactory(ContainerInit.ORDER_CONTAINER.get(), OrderScreen::new);
+        ScreenManager.registerFactory(ContainerInit.MORTAR_CONTAINER.get(), MortarScreen::new);
 
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.CUSTOM_ARROW.get(), CustomArrowRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.DART.get(), DartRenderer::new);
@@ -68,6 +70,8 @@ public class ClientSetupEvents {
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.AEGIROCASSIS.get(), AegirocassisRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.HERMIT.get(), HermitRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.BOOMERANG.get(), BoomerangRenderer::new);
+
+        ClientRegistry.bindTileEntityRenderer(BlockEntityInit.MORTAR.get(), MortarRenderer::new);
     }
 
     @SubscribeEvent

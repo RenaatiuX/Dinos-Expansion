@@ -5,6 +5,7 @@ import com.rena.dinosexpansion.core.init.*;
 import com.rena.dinosexpansion.core.network.Network;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -30,10 +31,13 @@ public class DinosExpansion
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, DinosExpansionConfig.BUILDER.build());
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
 
+        bus.addGenericListener(IRecipeSerializer.class, RecipeInit::registerRecipes);
+
         bus.addListener(this::setup);
         ItemInit.ITEMS.register(bus);
         BlockInit.BLOCKS.register(bus);
         EntityInit.ENTITY_TYPES.register(bus);
+        BlockEntityInit.TES.register(bus);
         BiomeInit.BIOMES.register(bus);
         EnchantmentInit.VANILLA.register(bus);
         EnchantmentInit.ENCHANTMENTS.register(bus);

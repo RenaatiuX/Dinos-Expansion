@@ -20,6 +20,15 @@ public class DimorphodonRenderer extends GeoEntityRenderer<Dimorphodon> {
     }
 
     @Override
+    public void render(Dimorphodon entity, float entityYaw, float partialTicks, MatrixStack stack, IRenderTypeBuffer bufferIn, int packedLightIn) {
+        stack.push();
+        float scale = entity.getShoulderScaling();
+        stack.scale(scale, scale, scale);
+        super.render(entity, entityYaw, partialTicks, stack, bufferIn, packedLightIn);
+        stack.pop();
+    }
+
+    @Override
     public ResourceLocation getEntityTexture(Dimorphodon entity) {
         return this.modelProvider.getTextureLocation(entity);
     }

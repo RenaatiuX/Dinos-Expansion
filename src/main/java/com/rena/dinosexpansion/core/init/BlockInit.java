@@ -1,10 +1,7 @@
 package com.rena.dinosexpansion.core.init;
 
 import com.rena.dinosexpansion.DinosExpansion;
-import com.rena.dinosexpansion.common.block.BaseSaplingBlock;
-import com.rena.dinosexpansion.common.block.GeyserBlock;
-import com.rena.dinosexpansion.common.block.GlowStickBlock;
-import com.rena.dinosexpansion.common.block.QuicksandBlock;
+import com.rena.dinosexpansion.common.block.*;
 import com.rena.dinosexpansion.common.block.bush.BushBlockBase;
 import com.rena.dinosexpansion.common.block.crops.DoubleCropBaseBlock;
 import com.rena.dinosexpansion.common.block.plant.SinglePlantBlock;
@@ -36,6 +33,7 @@ public class BlockInit {
     public static final RegistryObject<Block> MOSSY_FUTURISTIC_BLOCK2 = register("mossy_futuristic_block_2", () -> new Block(AbstractBlock.Properties.create(Material.ROCK).hardnessAndResistance(100f, 2400f).harvestTool(ToolType.PICKAXE).harvestLevel(3).setRequiresTool()), ModItemGroups.BLOCKS);
     public static final RegistryObject<Block> QUICKSAND = register("quicksand", () -> new QuicksandBlock(AbstractBlock.Properties.create(Material.SAND, MaterialColor.SAND).hardnessAndResistance(0.5F).sound(SoundType.SAND).doesNotBlockMovement().harvestTool(ToolType.SHOVEL)), ModItemGroups.BLOCKS);
     public static final RegistryObject<Block> GLOW_STICK = BLOCKS.register("glowstick", () -> (new GlowStickBlock(AbstractBlock.Properties.create(Material.CARPET).doesNotBlockMovement().setLightLevel((state) -> 12).zeroHardnessAndResistance())));
+    public static final RegistryObject<MortarBlock> MORTAR = register("mortar", MortarBlock::new, ModItemGroups.BLOCKS);
 
     //Crop and Bush
     public static final RegistryObject<Block> NARCOTIC_BERRY_BUSH = BLOCKS.register("narcotic_berry_bush",

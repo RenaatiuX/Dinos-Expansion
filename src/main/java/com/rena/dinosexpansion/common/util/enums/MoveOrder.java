@@ -8,7 +8,8 @@ public enum MoveOrder {
     WANDER(translatable("wander")),
     SIT(translatable("sit")),
     FOLLOW(translatable("follow")),
-    IDLE(translatable("idle"));
+    IDLE(translatable("idle")),
+    SIT_SHOULDER(translatable("sit_shoulder"));
 
     private final ITextComponent displayName;
 

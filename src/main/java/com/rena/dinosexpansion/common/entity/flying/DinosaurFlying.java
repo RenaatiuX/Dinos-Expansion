@@ -410,6 +410,8 @@ public abstract class DinosaurFlying extends Dinosaur implements IFlyingAnimal {
 
         @Override
         public boolean shouldExecute() {
+            if (dino.isTamed() && dino.getMoveOrder() != MoveOrder.WANDER)
+                return false;
             return !dino.isMovementDisabled() && !dino.isFlying() && super.shouldExecute();
         }
     }
@@ -431,6 +433,8 @@ public abstract class DinosaurFlying extends Dinosaur implements IFlyingAnimal {
 
         @Override
         public boolean shouldExecute() {
+            if (dino.isTamed() && dino.getMoveOrder() != MoveOrder.WANDER)
+                return false;
             return !dino.isMovementDisabled() && !this.dino.isBeingRidden() && dino.isFlying() ? dino.getRNG().nextDouble() < chanceGoOnGround : dino.getRNG().nextDouble() < chanceStartFlying;
         }
 
@@ -458,18 +462,19 @@ public abstract class DinosaurFlying extends Dinosaur implements IFlyingAnimal {
 
         @Override
         public boolean shouldExecute() {
+            if (!dino.isMovementDisabled() || target != null && !this.dino.isBeingRidden() || (dino.isTamed() && dino.getMoveOrder() != MoveOrder.WANDER))
+                return false;
             if (this.dino.getRNG().nextDouble() >= chance)
                 return false;
             BlockPos tmp = getBlockInView(this.dino);
             if (tmp == null)
                 return false;
             this.target = tmp;
-            return !dino.isMovementDisabled() && target != null && !this.dino.isBeingRidden() && (dino.isFlying() || dino.startFlying) && !dino.shouldLand;
+            return (dino.isFlying() || dino.startFlying) && !dino.shouldLand;
         }
 
         @Override
         public void startExecuting() {
-            DinosExpansion.LOGGER.debug("moves to: " + target.toString());
             this.dino.getNavigator().tryMoveToXYZ(target.getX(), target.getY(), target.getZ(), this.speed);
         }
 
@@ -496,7 +501,6 @@ public abstract class DinosaurFlying extends Dinosaur implements IFlyingAnimal {
 
         public static boolean isTargetBlocked(Entity entity, Vector3d target) {
             if (target != null) {
-                AxisAlignedBB entityBox = entity.getBoundingBox().offset(-entity.getPosX(), -entity.getPosY(), -entity.getPosZ()); // Exclude the entity's bounding box from the RayTrace
                 RayTraceResult rayTrace = entity.world.rayTraceBlocks(new RayTraceContext(entity.getPositionVec(), target, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, entity));
                 if (rayTrace != null && rayTrace.getType() != RayTraceResult.Type.MISS) {
                     return entity.world.isAirBlock(new BlockPos(target));
