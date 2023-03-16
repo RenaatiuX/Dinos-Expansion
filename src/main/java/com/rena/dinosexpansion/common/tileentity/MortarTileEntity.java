@@ -150,7 +150,7 @@ public class MortarTileEntity extends ContainerTileEntity implements IAnimatable
         for(Object2IntMap.Entry<ResourceLocation> entry : this.recipes.object2IntEntrySet()) {
             world.getRecipeManager().getRecipe(entry.getKey()).ifPresent((recipe) -> {
                 list.add(recipe);
-                splitAndSpawnExperience(world, pos, entry.getIntValue(), ((AbstractCookingRecipe)recipe).getExperience());
+                splitAndSpawnExperience(world, pos, entry.getIntValue(), ((MortarRecipe)recipe).getExperience());
             });
         }
 
