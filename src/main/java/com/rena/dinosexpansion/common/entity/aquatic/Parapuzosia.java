@@ -39,10 +39,8 @@ import java.util.List;
 public class Parapuzosia extends DinosaurAquatic implements IAnimatable, IAnimationTickable {
 
     public static final String CONTROLLER_NAME = "controller";
-    public static final String ATTACK_CONTROLLER_NAME = "attack_controller";
     private static final DataParameter<Boolean> GRABBING = EntityDataManager.createKey(Parapuzosia.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Integer> GRAB_ENTITY = EntityDataManager.createKey(Parapuzosia.class, DataSerializers.VARINT);
-
     public float grabProgress;
     public float prevGrabProgress;
     private int holdTime;
@@ -59,7 +57,7 @@ public class Parapuzosia extends DinosaurAquatic implements IAnimatable, IAnimat
 
     public Parapuzosia(EntityType<Parapuzosia> type, World world) {
         super(type, world, new DinosaurInfo("parapuzosia", 100, 100, 50, SleepRhythmGoal.SleepRhythm.NONE), generateLevelWithinBounds(20, 100));
-        this.moveController = new AquaticMoveController(this, 1.2F, 5);
+        this.moveController = new AquaticMoveController(this, 1.0F);
         updateInfo();
     }
 
@@ -71,7 +69,7 @@ public class Parapuzosia extends DinosaurAquatic implements IAnimatable, IAnimat
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(0, new FindWaterGoal(this));
-        this.goalSelector.addGoal(2, new ParapuzosiaAiGrab());
+        this.goalSelector.addGoal(2, new ParapuzosiaGrabGoal());
         this.goalSelector.addGoal(3, new DinosaurSwimBottomGoal(this, 0.8F, 7));
         this.goalSelector.addGoal(4, new RandomSwimmingGoal(this, 0.8F, 3));
         this.goalSelector.addGoal(5, new LookRandomlyGoal(this));
@@ -181,7 +179,6 @@ public class Parapuzosia extends DinosaurAquatic implements IAnimatable, IAnimat
     public void registerControllers(AnimationData data) {
         data.setResetSpeedInTicks(10);
         data.addAnimationController(new AnimationController<>(this, CONTROLLER_NAME, 0, this::predicate));
-        //data.addAnimationController(new AnimationController<>(this, ATTACK_CONTROLLER_NAME, 0, this::attackPredicate));
     }
 
     private PlayState predicate(AnimationEvent<Parapuzosia> event) {
@@ -189,14 +186,7 @@ public class Parapuzosia extends DinosaurAquatic implements IAnimatable, IAnimat
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Parapuzosia.Swim", ILoopType.EDefaultLoopTypes.LOOP));
         }
         if (isGrabbing()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Parapuzosia.Catch", ILoopType.EDefaultLoopTypes.HOLD_ON_LAST_FRAME));
-        }
-        return PlayState.CONTINUE;
-    }
-
-    private PlayState attackPredicate(AnimationEvent<Parapuzosia> event) {
-        if (isGrabbing()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Parapuzosia.Catch", ILoopType.EDefaultLoopTypes.HOLD_ON_LAST_FRAME));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Parapuzosia.Catch", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
         }
         return PlayState.CONTINUE;
     }
@@ -206,7 +196,7 @@ public class Parapuzosia extends DinosaurAquatic implements IAnimatable, IAnimat
         return this.factory;
     }
 
-    private class ParapuzosiaAiGrab extends Goal {
+    private class ParapuzosiaGrabGoal extends Goal {
 
         @Override
         public boolean shouldExecute() {

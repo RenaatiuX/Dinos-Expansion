@@ -43,7 +43,10 @@ public class BlockInit {
     //Crop and Bush
     public static final RegistryObject<Block> NARCOTIC_BERRY_BUSH = BLOCKS.register("narcotic_berry_bush",
             () -> new BushBlockBase(AbstractBlock.Properties.create(Material.PLANTS).tickRandomly().doesNotBlockMovement().sound(SoundType.SWEET_BERRY_BUSH), ItemInit.NARCOTIC_BERRIES));
-
+    public static final RegistryObject<Block> ORANGE_BERRY_BUSH = BLOCKS.register("orange_berry_bush",
+            () -> new BushBlockBase(AbstractBlock.Properties.create(Material.PLANTS).tickRandomly().doesNotBlockMovement().sound(SoundType.SWEET_BERRY_BUSH), ItemInit.ORANGE_BERRIES));
+    public static final RegistryObject<Block> YELLOW_BERRY_BUSH = BLOCKS.register("yellow_berry_bush",
+            () -> new BushBlockBase(AbstractBlock.Properties.create(Material.PLANTS).tickRandomly().doesNotBlockMovement().sound(SoundType.SWEET_BERRY_BUSH), ItemInit.YELLOW_BERRIES));
     //Plants
     public static final RegistryObject<Block> LAVENDER = register("lavender",
             ()-> new SinglePlantBlock(AbstractBlock.Properties.create(Material.PLANTS).doesNotBlockMovement().zeroHardnessAndResistance().sound(SoundType.PLANT)), ModItemGroups.BLOCKS);

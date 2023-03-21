@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "dinosexpansion:item/narcotic_berry"
+    "layer0": "dinosexpansion:item/cooked_dryosaurus_meat"
   }
 }

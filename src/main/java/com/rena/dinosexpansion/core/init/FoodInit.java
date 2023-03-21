@@ -46,6 +46,10 @@ public class FoodInit {
             .saturation(0.1F)
             .effect(() -> new EffectInstance(Effects.HUNGER, 10*20, 2), 1)
             .effect(() -> new EffectInstance(Effects.NAUSEA, 10*10, 2), 1).build();
+    public static final Food ORANGE_BERRIES = new Food.Builder().hunger(2)
+            .saturation(0.1F).build();
+    public static final Food YELLOW_BERRIES = new Food.Builder().hunger(2)
+            .saturation(0.1F).build();
     public static final Food EGGPLANT = new Food.Builder().hunger(3)
             .saturation(0.6F).build();
     public static final Food ONION = new Food.Builder().hunger(3)

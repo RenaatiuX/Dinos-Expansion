@@ -168,6 +168,10 @@ public class ItemInit {
             () -> new Item(new Item.Properties().food(FoodInit.COOKED_DRYOSAURUS_MEAT).group(ModItemGroups.ITEMS)));
     public static final RegistryObject<Item> NARCOTIC_BERRIES = ITEMS.register("narcotic_berries",
             () -> new BlockNamedItem(BlockInit.NARCOTIC_BERRY_BUSH.get(), new Item.Properties().food(FoodInit.NARCOTIC_BERRIES).group(ModItemGroups.ITEMS)));
+    public static final RegistryObject<Item> ORANGE_BERRIES = ITEMS.register("orange_berry",
+            () -> new BlockNamedItem(BlockInit.ORANGE_BERRY_BUSH.get(), new Item.Properties().food(FoodInit.ORANGE_BERRIES).group(ModItemGroups.ITEMS)));
+    public static final RegistryObject<Item> YELLOW_BERRIES = ITEMS.register("yellow_berry",
+            () -> new BlockNamedItem(BlockInit.YELLOW_BERRY_BUSH.get(), new Item.Properties().food(FoodInit.YELLOW_BERRIES).group(ModItemGroups.ITEMS)));
     public static final RegistryObject<Item> EGGPLANT = ITEMS.register("eggplant",
             ()-> new Item(new Item.Properties().food(FoodInit.EGGPLANT).group(ModItemGroups.ITEMS)));
     public static final RegistryObject<Item> CORN = ITEMS.register("corn",
