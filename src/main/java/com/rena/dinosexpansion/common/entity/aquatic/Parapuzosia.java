@@ -182,11 +182,12 @@ public class Parapuzosia extends DinosaurAquatic implements IAnimatable, IAnimat
     }
 
     private PlayState predicate(AnimationEvent<Parapuzosia> event) {
-        if (isInWater()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Parapuzosia.Swim", ILoopType.EDefaultLoopTypes.LOOP));
-        }
         if (isGrabbing()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Parapuzosia.Catch", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Parapuzosia.Catch", ILoopType.EDefaultLoopTypes.LOOP));
+            return PlayState.CONTINUE;
+        }if (isInWater()) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Parapuzosia.Swim", ILoopType.EDefaultLoopTypes.LOOP));
+            return PlayState.CONTINUE;
         }
         return PlayState.CONTINUE;
     }

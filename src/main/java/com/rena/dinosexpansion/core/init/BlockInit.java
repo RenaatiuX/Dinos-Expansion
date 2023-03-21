@@ -7,10 +7,12 @@ import com.rena.dinosexpansion.common.block.bush.BushBlockBase;
 import com.rena.dinosexpansion.common.block.crops.DoubleCropBaseBlock;
 import com.rena.dinosexpansion.common.block.plant.SinglePlantBlock;
 import com.rena.dinosexpansion.common.block.plant.TriplePlantBlock;
+import com.rena.dinosexpansion.common.item.util.AnimatedBlockItem;
 import com.rena.dinosexpansion.common.world.gen.trees.ModTreeSpawners;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
+import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -23,6 +25,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistry;
 
+import java.util.concurrent.Callable;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -38,7 +41,7 @@ public class BlockInit {
     public static final RegistryObject<Block> MOSSY_FUTURISTIC_BLOCK2 = register("mossy_futuristic_block_2", () -> new Block(AbstractBlock.Properties.create(Material.ROCK).hardnessAndResistance(100f, 2400f).harvestTool(ToolType.PICKAXE).harvestLevel(3).setRequiresTool()), ModItemGroups.BLOCKS);
     public static final RegistryObject<Block> QUICKSAND = register("quicksand", () -> new QuicksandBlock(AbstractBlock.Properties.create(Material.SAND, MaterialColor.SAND).hardnessAndResistance(0.5F).sound(SoundType.SAND).doesNotBlockMovement().harvestTool(ToolType.SHOVEL)), ModItemGroups.BLOCKS);
     public static final RegistryObject<Block> GLOW_STICK = BLOCKS.register("glowstick", () -> (new GlowStickBlock(AbstractBlock.Properties.create(Material.CARPET).doesNotBlockMovement().setLightLevel((state) -> 12).zeroHardnessAndResistance())));
-    public static final RegistryObject<MortarBlock> MORTAR = register("mortar", MortarBlock::new, ModItemGroups.BLOCKS);
+    public static final RegistryObject<MortarBlock> MORTAR = register("mortar", MortarBlock::new, ModItemGroups.BLOCKS, () -> MortarItemRenderer::new);
 
     //Crop and Bush
     public static final RegistryObject<Block> NARCOTIC_BERRY_BUSH = BLOCKS.register("narcotic_berry_bush",
@@ -128,5 +131,9 @@ public class BlockInit {
         RegistryObject<T> block = BLOCKS.register(name, blockSupplier);
         ItemInit.ITEMS.register(name, () -> blockItemFunction.apply(block.get()));
         return block;
+    }
+
+    public static <T extends Block> RegistryObject<T> register(String name, Supplier<T> blockSupplier, ItemGroup tab, Supplier<Callable<ItemStackTileEntityRenderer>> renderer){
+        return register(name, blockSupplier, b -> new AnimatedBlockItem(b, new Item.Properties().setISTER(renderer).group(tab)));
     }
 }

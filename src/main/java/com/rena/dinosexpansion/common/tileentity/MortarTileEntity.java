@@ -109,6 +109,7 @@ public class MortarTileEntity extends ContainerTileEntity implements IAnimatable
         }else {
             setInventorySlotContents(2, recipe.getRecipeOutput().copy());
         }
+        setRecipeUsed(recipe);
     }
 
     protected void shrinkCorrectOne(int inventoryIndex, MortarRecipe recipe){
@@ -142,6 +143,7 @@ public class MortarTileEntity extends ContainerTileEntity implements IAnimatable
         List<IRecipe<?>> list = this.grantStoredRecipeExperience(player.world, player.getPositionVec());
         player.unlockRecipes(list);
         this.recipes.clear();
+        System.out.println("granted experience");
     }
 
     public List<IRecipe<?>> grantStoredRecipeExperience(World world, Vector3d pos) {

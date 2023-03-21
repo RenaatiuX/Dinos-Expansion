@@ -56,6 +56,35 @@ public class MortarContainer extends BaseTileEntityContainer<MortarTileEntity> {
         return tileEntity.getWorld().getBlockState(tileEntity.getPos()).get(BlockStateProperties.POWERED);
     }
 
+    @Override
+    public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
+        ItemStack stack = ItemStack.EMPTY;
+        Slot slot = this.inventorySlots.get(index);
+        if (slot != null && slot.getHasStack()) {
+            ItemStack stack1 = slot.getStack();
+            stack = stack1.copy();
+            System.out.println(index);
+            if (index == 2) {
+                if (!this.mergeItemStack(stack1, 3, 39, true)) {
+                    return ItemStack.EMPTY;
+                }
+                slot.onSlotChange(stack1, stack);
+            }
+            if (index < tileEntity.getSizeInventory() && !this.mergeItemStack(stack1, tileEntity.getSizeInventory(), this.inventorySlots.size(), true))
+                return ItemStack.EMPTY;
+            if (!this.mergeItemStack(stack1, 0, tileEntity.getSizeInventory() - 1, false))
+                return ItemStack.EMPTY;
+            slot.onSlotChange(stack1, stack);
+            if (stack1.isEmpty()) {
+                slot.putStack(ItemStack.EMPTY);
+            } else {
+                slot.onSlotChanged();
+            }
+            slot.onTake(playerIn, stack1);
+        }
+        return stack;
+    }
+
     public static class MortarResultSlot extends Slot{
 
         protected final PlayerEntity player;

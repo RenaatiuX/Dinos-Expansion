@@ -3,8 +3,10 @@ package com.rena.dinosexpansion.client.events;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.rena.dinosexpansion.DinosExpansion;
+import com.rena.dinosexpansion.client.renderer.entity.ParapuzosiaRenderer;
 import com.rena.dinosexpansion.common.config.DinosExpansionConfig;
 import com.rena.dinosexpansion.common.entity.Dinosaur;
+import com.rena.dinosexpansion.common.entity.aquatic.Parapuzosia;
 import com.rena.dinosexpansion.common.item.BlowgunItem;
 import com.rena.dinosexpansion.core.init.EffectInit;
 import com.rena.dinosexpansion.core.init.EnchantmentInit;
@@ -33,6 +35,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.util.text.*;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.FOVUpdateEvent;
@@ -66,6 +69,9 @@ public class ClientForgeEvents {
         if (event.getEntity() instanceof Dinosaur && DinosExpansionConfig.SHOW_LEVEL_ABOVE_HEAD.get()) {
             event.setResult(Event.Result.DENY);
             Dinosaur dino = (Dinosaur) event.getEntity();
+            if (event.getEntityRenderer() instanceof ParapuzosiaRenderer){
+                event.getMatrixStack().rotate(Vector3f.YP.rotationDegrees(180));
+            }
             if (dino.hasCustomName()) {
                 IFormattableTextComponent name = dino.getDisplayName().deepCopy().appendString("\n").appendString("" + dino.getLevel());
                 if (Minecraft.getInstance().player != null && (dino.isKnockedOutBy(Minecraft.getInstance().player) || dino.isOwner(Minecraft.getInstance().player)))

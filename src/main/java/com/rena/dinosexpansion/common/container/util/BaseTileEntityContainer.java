@@ -70,16 +70,18 @@ public abstract class BaseTileEntityContainer<T extends TileEntity & IInventory>
 		if (slot != null && slot.getHasStack()) {
 			ItemStack stack1 = slot.getStack();
 			stack = stack1.copy();
-			if (index < tileEntity.getSizeInventory()
-					&& !this.mergeItemStack(stack1, tileEntity.getSizeInventory(), this.inventorySlots.size(), true))
+			System.out.println(index);
+			if (index < tileEntity.getSizeInventory() && !this.mergeItemStack(stack1, tileEntity.getSizeInventory(), this.inventorySlots.size(), true))
 				return ItemStack.EMPTY;
-			if (!this.mergeItemStack(stack1, 0, tileEntity.getSizeInventory(), false))
+			if (!this.mergeItemStack(stack1, 0, tileEntity.getSizeInventory() - 1, false))
 				return ItemStack.EMPTY;
+			slot.onSlotChange(stack1, stack);
 			if (stack1.isEmpty()) {
 				slot.putStack(ItemStack.EMPTY);
 			} else {
 				slot.onSlotChanged();
 			}
+			slot.onTake(playerIn, stack1);
 		}
 		return stack;
 	}

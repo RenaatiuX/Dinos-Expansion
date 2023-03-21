@@ -1,7 +1,7 @@
 package com.rena.dinosexpansion.client.model.item;
 
 import com.rena.dinosexpansion.DinosExpansion;
-import com.rena.dinosexpansion.common.block.AnimatedBlockItem;
+import com.rena.dinosexpansion.common.item.util.AnimatedBlockItem;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 
