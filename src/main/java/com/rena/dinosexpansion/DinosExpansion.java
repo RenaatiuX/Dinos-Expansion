@@ -62,7 +62,7 @@ public class DinosExpansion
             FeatureInit.registerConfiguredFeatures();
             StructureInit.setupStructures();
             DimensionInit.setupDimension();
-            ModVillagerTrades.addHermitTrades();
+            ModVillagerTrades.registerTrades();
         });
     }
 }

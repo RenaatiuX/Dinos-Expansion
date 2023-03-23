@@ -141,7 +141,7 @@ public class Dimorphodon extends DinosaurFlying implements IAnimatable, IAnimati
 
     @Override
     protected int reduceNarcotic(int narcoticValue) {
-        if (getRNG().nextDouble() <= 0.05)
+        if (getRNG().nextDouble() <= 0.005)
             return narcoticValue - 1;
         return narcoticValue;
     }
@@ -365,6 +365,39 @@ public class Dimorphodon extends DinosaurFlying implements IAnimatable, IAnimati
         return super.applyPlayerInteraction(player, vec, hand);
     }
 
+    @Override
+    public void updateRidden() {
+        Entity entity = this.getRidingEntity();
+        if (this.isPassenger() && !entity.isAlive()) {
+            this.stopRiding();
+        } else if (isTamed() && entity instanceof LivingEntity && isOwner((LivingEntity) entity)) {
+            this.setMotion(0, 0, 0);
+            this.tick();
+            if (this.isPassenger()) {
+                Entity mount = this.getRidingEntity();
+                if (mount instanceof PlayerEntity) {
+                    this.renderYawOffset = ((LivingEntity) mount).renderYawOffset;
+                    this.rotationYaw = mount.rotationYaw;
+                    this.rotationYawHead = ((LivingEntity) mount).rotationYawHead;
+                    this.prevRotationYaw = ((LivingEntity) mount).rotationYawHead;
+                    float radius = 0F;
+                    float angle = (0.01745329251F * (((LivingEntity) mount).renderYawOffset - 180F));
+                    double extraX = radius * MathHelper.sin((float) (Math.PI + angle));
+                    double extraZ = radius * MathHelper.cos(angle);
+                    System.out.println((mount.getPosX() + extraX) + "|" + (Math.max(mount.getPosY() + mount.getHeight() + 0.1, mount.getPosY())) + "|" + (mount.getPosZ() + extraZ));
+                    this.setPosition(mount.getPosX() + extraX, Math.max(mount.getPosY() + mount.getHeight() + 0.1, mount.getPosY()), mount.getPosZ() + extraZ);
+                    if (!mount.isAlive() || rideCooldown == 0 && mount.isSneaking()) {
+                        this.dismount();
+                    }
+                }
+
+            }
+        } else {
+            super.updateRidden();
+        }
+
+    }
+
     private PlayState predicate(AnimationEvent<Dimorphodon> event) {
         if (this.isKnockout()) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.dimorphodon.knockout", ILoopType.EDefaultLoopTypes.LOOP));
@@ -494,10 +527,8 @@ public class Dimorphodon extends DinosaurFlying implements IAnimatable, IAnimati
         public void tick() {
             if (getOwner().getDistanceSq(Dimorphodon.this) < 2f) {
                 if (isLeftShoulderFree(getOwner())) {
-                    setLeftShoulderOccupied(getOwner(), Dimorphodon.this);
                     setOnShoulder(true, getOwner());
                 } else if (isRightShoulderFree(getOwner())) {
-                    setRightShoulderOccupied(getOwner(), Dimorphodon.this);
                     setOnShoulder(true, getOwner());
                 }
             }
@@ -510,7 +541,7 @@ public class Dimorphodon extends DinosaurFlying implements IAnimatable, IAnimati
 
         @Override
         public boolean shouldContinueExecuting() {
-            return Dimorphodon.this.getOwner() != null && (isLeftShoulderFree(getOwner()) || isRightShoulderFree(getOwner())) && !isOnShoulder() && isTamed() && !isMovementDisabled() && getMoveOrder() == MoveOrder.SIT_SHOULDER;
+            return Dimorphodon.this.getOwner() != null && getOwner().getPassengers().size() <= 2 && !isOnShoulder() && isTamed() && !isMovementDisabled() && getMoveOrder() == MoveOrder.SIT_SHOULDER;
         }
     }
 }
