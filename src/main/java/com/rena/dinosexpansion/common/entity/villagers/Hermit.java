@@ -194,7 +194,6 @@ public class Hermit extends AbstractVillagerEntity implements IRangedAttackMob {
 
     @Override
     protected void populateTradeData() {
-        System.out.println(this.getLevel());
         VillagerTrades.ITrade[] trades = ModVillagerTrades.HERMIT_TRADES.get(this.getLevel());
         System.out.println(Arrays.toString(trades));
         if (trades != null) {

@@ -1,16 +1,20 @@
 package com.rena.dinosexpansion.common.entity.villagers.caveman;
 
 import com.rena.dinosexpansion.DinosExpansion;
+import com.rena.dinosexpansion.common.config.DinosExpansionConfig;
 import com.rena.dinosexpansion.core.init.ModVillagerTrades;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.entity.merchant.villager.VillagerTrades;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Util;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Tribe {
 
@@ -22,16 +26,123 @@ public class Tribe {
         return DinosExpansion.modLoc("textures/entity/caveman/" + textureName);
     }
 
+    public static int getIndex(TribeType type) {
+        for (int i = 0; i < TYPES.size(); i++) {
+            if (TYPES.get(i) == type)
+                return i;
+        }
+        return -1;
+    }
+
+    public static Tribe fromNbt(CompoundNBT nbt) {
+        String name = nbt.getString("name");
+        TribeType type = TYPES.get(nbt.getInt("type"));
+        Map<UUID, Integer> approvals = new HashMap<>();
+        CompoundNBT approvalsByPlayer = nbt.getCompound("approvalByPlayer");
+        for (int i = 0; approvalsByPlayer.contains("UUID" + i); i++) {
+            approvals.put(approvalsByPlayer.getUniqueId("UUID" + i), approvalsByPlayer.getInt("approval" + i));
+        }
+        return new Tribe(type, name, approvals);
+    }
+
 
     protected final TribeType type;
     protected final String name;
-    protected final List<Caveman> caveman = new ArrayList<>();
+    protected Map<UUID, Integer> approvals;
+    //stores their id
+    protected final List<Caveman> cavemen = new ArrayList<>();
+    protected Caveman boss;
 
     public Tribe(TribeType type, String name) {
-        this.type = type;
-        this.name = name;
+        this(type, name, new HashMap<>());
+
     }
 
+    protected Tribe(TribeType type, String name, Map<UUID, Integer> approvals) {
+        this.type = type;
+        this.name = name;
+        this.approvals = approvals;
+    }
+
+    protected int getInitialApproval() {
+        if (type.aggro == AggresionLevel.HOSTILE)
+            return 0;
+        return DinosExpansionConfig.MAX_TRIBE_APPROVAL.get();
+    }
+
+    public CompoundNBT write() {
+        return write(new CompoundNBT());
+    }
+
+    public CompoundNBT write(CompoundNBT nbt) {
+        nbt.putString("name", this.name);
+        int index = getIndex(this.type);
+        if (index < 0)
+            throw new IllegalStateException("the type provided in tribe: " + name + " isnt registered to its final field");
+        nbt.putInt("type", index);
+        CompoundNBT approvalsByPlayer = new CompoundNBT();
+        int i = 0;
+        for (Map.Entry<UUID, Integer> entry : approvals.entrySet()) {
+            approvalsByPlayer.putUniqueId("UUID" + i, entry.getKey());
+            approvalsByPlayer.putInt("approval" + i, entry.getValue());
+            i++;
+        }
+        nbt.put("approvalByPlayer", approvalsByPlayer);
+        return nbt;
+    }
+
+
+    public ITextComponent getDisplayName() {
+        return new TranslationTextComponent("tribe." + DinosExpansion.MOD_ID + "." + this.name);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public TribeType getType() {
+        return type;
+    }
+
+    public boolean canTrade(PlayerEntity player) {
+        return getApproval(player) >= DinosExpansionConfig.TRIBE_TRADING_THRESHOLD.get();
+    }
+
+    public boolean isHostile(PlayerEntity player) {
+        return getApproval(player) >= DinosExpansionConfig.TRIBE_HOSTILE_THRESHOLD.get();
+    }
+
+    public int getApproval(PlayerEntity player) {
+        if (!this.approvals.containsKey(player.getUniqueID())) {
+            this.approvals.put(player.getUniqueID(), getInitialApproval());
+        }
+        return this.approvals.get(player.getUniqueID());
+    }
+
+    public boolean containsCaveman(Caveman caveman) {
+        return cavemen.contains(caveman);
+    }
+
+    public void addCaveman(Caveman c) {
+        if (c.isBoss())
+            this.boss = c;
+        this.cavemen.add(c);
+    }
+
+    /**
+     * make sure to check if u may have removed the boss
+     */
+    public void removeCaveman(Caveman c) {
+        this.cavemen.remove(c);
+    }
+
+    public boolean hasBoss() {
+        for (Caveman c : this.cavemen) {
+            if (c.isBoss())
+                return true;
+        }
+        return false;
+    }
 
     public static class TribeType {
         protected final Int2ObjectMap<VillagerTrades.ITrade[]> normalTrades, bossTrades;
