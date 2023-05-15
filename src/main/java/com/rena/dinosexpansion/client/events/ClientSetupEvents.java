@@ -15,6 +15,7 @@ import com.rena.dinosexpansion.client.screens.OrderScreen;
 import com.rena.dinosexpansion.client.screens.TamingScreen;
 import com.rena.dinosexpansion.common.container.MortarContainer;
 import com.rena.dinosexpansion.common.entity.aquatic.Aegirocassis;
+import com.rena.dinosexpansion.common.entity.aquatic.Anomalocaris;
 import com.rena.dinosexpansion.common.entity.aquatic.fish.Wetherellus;
 import com.rena.dinosexpansion.common.entity.terrestrial.Dryosaurus;
 import com.rena.dinosexpansion.common.entity.villagers.Hermit;
@@ -68,6 +69,7 @@ public class ClientSetupEvents {
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.CAMPANILE.get(), CampanileRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.DRYOSAURUS.get(), DryosaurusRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.AEGIROCASSIS.get(), AegirocassisRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityInit.ANOMALOCARIS.get(), AnomalocarisRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.HERMIT.get(), HermitRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.BOOMERANG.get(), BoomerangRenderer::new);
 
@@ -86,6 +88,7 @@ public class ClientSetupEvents {
         event.put(EntityInit.DRYOSAURUS.get(), Dryosaurus.createAttributes().create());
         event.put(EntityInit.WETHERELLUS.get(), Wetherellus.createAttributes().create());
         event.put(EntityInit.AEGIROCASSIS.get(), Aegirocassis.createAttributes().create());
+        event.put(EntityInit.ANOMALOCARIS.get(), Anomalocaris.createAttributes().create());
     }
 
     public static void registerPlantsRenderer() {
@@ -118,6 +121,7 @@ public class ClientSetupEvents {
 
         RenderTypeLookup.setRenderLayer(BlockInit.EGGPLANT_CROP.get(), RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(BlockInit.CORN_CROP.get(), RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(BlockInit.SPINACH_CROP.get(), RenderType.getCutout());
     }
 
     public static void registerModelProperties() {

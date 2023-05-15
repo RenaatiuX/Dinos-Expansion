@@ -50,6 +50,12 @@ public class FoodInit {
             .saturation(0.1F).build();
     public static final Food YELLOW_BERRIES = new Food.Builder().hunger(2)
             .saturation(0.1F).build();
+    public static final Food BLUE_BERRY = new Food.Builder().hunger(2)
+            .saturation(0.1F).build();
+    public static final Food PURPLE_BERRY = new Food.Builder().hunger(2)
+            .saturation(0.1F).build();
+    public static final Food RED_BERRY = new Food.Builder().hunger(2)
+            .saturation(0.1F).build();
     public static final Food EGGPLANT = new Food.Builder().hunger(3)
             .saturation(0.6F).build();
     public static final Food ONION = new Food.Builder().hunger(3)

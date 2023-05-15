@@ -2,6 +2,7 @@ package com.rena.dinosexpansion.core.init;
 
 import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.common.entity.aquatic.Aegirocassis;
+import com.rena.dinosexpansion.common.entity.aquatic.Anomalocaris;
 import com.rena.dinosexpansion.common.entity.aquatic.fish.Wetherellus;
 import com.rena.dinosexpansion.common.entity.projectile.TinyRockEntity;
 import com.rena.dinosexpansion.common.entity.terrestrial.Dryosaurus;
@@ -22,6 +23,7 @@ import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import javax.swing.plaf.PanelUI;
 import java.util.function.Supplier;
 
 public class EntityInit {
@@ -62,6 +64,8 @@ public class EntityInit {
             () -> EntityType.Builder.<Dryosaurus>create(Dryosaurus::new, EntityClassification.CREATURE).size(1.5F, 1.5F));
     public static final RegistryObject<EntityType<Aegirocassis>> AEGIROCASSIS = register("aegirocassis",
             () -> EntityType.Builder.<Aegirocassis>create(Aegirocassis::new, EntityClassification.WATER_CREATURE).size(0.5F, 0.5F));
+    public static final RegistryObject<EntityType<Anomalocaris>> ANOMALOCARIS = register("anomalocaris",
+            () -> EntityType.Builder.<Anomalocaris>create(Anomalocaris::new, EntityClassification.WATER_CREATURE).size(0.5F, 0.5F));
     public static final RegistryObject<EntityType<Hermit>> HERMIT = register("hermit", () -> EntityType.Builder.create(Hermit::new, EntityClassification.CREATURE));
 
     public static final <T extends Entity> RegistryObject<EntityType<T>> register(String name, Supplier<EntityType.Builder<T>> builder){
