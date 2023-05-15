@@ -16,7 +16,7 @@ import javax.annotation.Nullable;
 public class DimorphodonRenderer extends GeoEntityRenderer<Dimorphodon> {
     public DimorphodonRenderer(EntityRendererManager renderManager) {
         super(renderManager, new DimorphodonModel());
-        //this.addLayer(new DimorphodonLayer(this));
+        this.addLayer(new DimorphodonLayer(this));
     }
 
     @Override

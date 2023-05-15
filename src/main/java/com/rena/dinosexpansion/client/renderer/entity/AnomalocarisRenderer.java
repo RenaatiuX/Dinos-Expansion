@@ -15,6 +15,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
+import software.bernie.geckolib3.renderers.geo.GeoLayerRenderer;
 
 import javax.annotation.Nullable;
 
@@ -27,10 +28,5 @@ public class AnomalocarisRenderer extends GeoEntityRenderer<Anomalocaris> {
     @Override
     public ResourceLocation getEntityTexture(Anomalocaris entity) {
         return this.modelProvider.getTextureLocation(entity);
-    }
-
-    @Override
-    public RenderType getRenderType(Anomalocaris animatable, float partialTicks, MatrixStack stack, @Nullable IRenderTypeBuffer renderTypeBuffer, @Nullable IVertexBuilder vertexBuilder, int packedLightIn, ResourceLocation textureLocation) {
-        return RenderType.getEntityCutout(textureLocation);
     }
 }

@@ -11,7 +11,6 @@ import software.bernie.geckolib3.model.AnimatedTickingGeoModel;
 import java.util.Map;
 
 public class AnomalocarisModel extends AnimatedTickingGeoModel<Anomalocaris> {
-
     public AnomalocarisModel() {
         super();
     }
@@ -21,7 +20,7 @@ public class AnomalocarisModel extends AnimatedTickingGeoModel<Anomalocaris> {
                 rarity.put(Dinosaur.Rarity.COMMON, DinosExpansion.modLoc("textures/entity/anomalocaris/anomalocaris_common.png"));
                 rarity.put(Dinosaur.Rarity.UNCOMMON, DinosExpansion.modLoc("textures/entity/anomalocaris/anomalocaris_uncommon.png"));
                 rarity.put(Dinosaur.Rarity.RARE, DinosExpansion.modLoc("textures/entity/anomalocaris/anomalocaris_rare.png"));
-                //rarity.put(Dinosaur.Rarity.EPIC, DinosExpansion.modLoc("textures/entity/anomalocaris/anomalocaris_epic.png"));
+                rarity.put(Dinosaur.Rarity.EPIC, DinosExpansion.modLoc("textures/entity/anomalocaris/anomalocaris_epic.png"));
                 rarity.put(Dinosaur.Rarity.LEGENDARY, DinosExpansion.modLoc("textures/entity/anomalocaris/anomalocaris_legendary.png"));
             });
 
@@ -39,4 +38,5 @@ public class AnomalocarisModel extends AnimatedTickingGeoModel<Anomalocaris> {
     public ResourceLocation getAnimationFileLocation(Anomalocaris animatable) {
         return DinosExpansion.modLoc("animations/anomalocaris.animation.json");
     }
+
 }

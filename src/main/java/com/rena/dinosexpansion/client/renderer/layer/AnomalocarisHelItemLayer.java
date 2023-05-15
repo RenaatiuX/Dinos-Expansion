@@ -17,7 +17,6 @@ import software.bernie.geckolib3.renderers.geo.GeoLayerRenderer;
 import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 
 public class AnomalocarisHelItemLayer extends GeoLayerRenderer<Anomalocaris> {
-    private static final ResourceLocation MODEL = new ResourceLocation(DinosExpansion.MOD_ID, "geo/anomalocaris.geo.json");
 
     public AnomalocarisHelItemLayer(IGeoRenderer<Anomalocaris> entityRendererIn) {
         super(entityRendererIn);
@@ -37,7 +36,6 @@ public class AnomalocarisHelItemLayer extends GeoLayerRenderer<Anomalocaris> {
             //the itemstack here is the item stack that u want to render it must be the same as where u got the baked model from otherwise i dont know what will happen
             //CameraTransform defines that the item looks like when u throw it to the ground, well u can also render it like it is in the inventory(thats not usefule here but maybe for u in the future)
             Minecraft.getInstance().getItemRenderer().renderItem(heldItem, ItemCameraTransforms.TransformType.GROUND, false, matrixStackIn, bufferIn, packedLightIn, OverlayTexture.NO_OVERLAY, ibakedmodel);
-            this.getRenderer().render(this.getEntityModel().getModel(MODEL), entityLivingBaseIn, partialTicks, renderType, matrixStackIn, bufferIn, bufferIn.getBuffer(renderType), packedLightIn, OverlayTexture.NO_OVERLAY, 1f, 1f, 1f, 1f);
             matrixStackIn.pop();
         }
     }
