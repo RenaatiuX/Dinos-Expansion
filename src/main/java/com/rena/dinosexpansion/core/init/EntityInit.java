@@ -65,7 +65,7 @@ public class EntityInit {
     public static final RegistryObject<EntityType<Aegirocassis>> AEGIROCASSIS = register("aegirocassis",
             () -> EntityType.Builder.<Aegirocassis>create(Aegirocassis::new, EntityClassification.WATER_CREATURE).size(0.5F, 0.5F));
     public static final RegistryObject<EntityType<Anomalocaris>> ANOMALOCARIS = register("anomalocaris",
-            () -> EntityType.Builder.<Anomalocaris>create(Anomalocaris::new, EntityClassification.WATER_CREATURE).size(0.5F, 0.5F));
+            () -> EntityType.Builder.<Anomalocaris>create(Anomalocaris::new, EntityClassification.WATER_CREATURE).size(0.7F, 0.3F));
     public static final RegistryObject<EntityType<Hermit>> HERMIT = register("hermit", () -> EntityType.Builder.create(Hermit::new, EntityClassification.CREATURE));
 
     public static final <T extends Entity> RegistryObject<EntityType<T>> register(String name, Supplier<EntityType.Builder<T>> builder){

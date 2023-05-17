@@ -18,6 +18,7 @@ import net.minecraft.entity.ai.goal.LookAtGoal;
 import net.minecraft.entity.ai.goal.RandomSwimmingGoal;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -25,6 +26,8 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.particles.ItemParticleData;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvents;
@@ -44,15 +47,19 @@ import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class Anomalocaris extends DinosaurAquatic implements IAnimatable, IAnimationTickable {
-    private static final DataParameter<Boolean> IS_GRABBING  = EntityDataManager.createKey(Anomalocaris.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> IS_GRABBING = EntityDataManager.createKey(Anomalocaris.class, DataSerializers.BOOLEAN);
     private static final DataParameter<ItemStack> HELD_ITEM = EntityDataManager.createKey(Anomalocaris.class, DataSerializers.ITEMSTACK);
     private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
+    public static final Predicate<ItemEntity> ITEMS = (obj) -> !obj.cannotPickup() && obj.isAlive();
+    private int eatTimer;
     public Anomalocaris(EntityType<Anomalocaris> type, World world) {
         super(type, world, new DinosaurInfo("anomalocaris", 100, 50, 40, SleepRhythmGoal.SleepRhythm.NONE), generateLevelWithinBounds(1, 100));
         this.moveController = new AquaticMoveController(this, 1F);
         this.updateInfo();
+        this.setCanPickUpLoot(true);
     }
 
     public Anomalocaris(World world) {
@@ -126,6 +133,39 @@ public class Anomalocaris extends DinosaurAquatic implements IAnimatable, IAnima
     private void dropHeldItem() {
         this.world.addEntity(new ItemEntity(this.world, this.getPosX(), this.getPosY(), this.getPosZ(), this.getHeldItem(Hand.MAIN_HAND)));
         this.setHeldItem(ItemStack.EMPTY);
+    }
+
+    @Override
+    public void livingTick() {
+        if (!this.world.isRemote && this.isAlive() && this.isServerWorld()) {
+            ++this.eatTimer;
+            ItemStack itemstack = this.getItemStackFromSlot(EquipmentSlotType.MAINHAND);
+            if (this.canEatItem(itemstack)) {
+                if (this.eatTimer > 600) {
+                    ItemStack itemstack1 = itemstack.onItemUseFinish(this.world, this);
+                    if (!itemstack1.isEmpty()) {
+                        this.setItemStackToSlot(EquipmentSlotType.MAINHAND, itemstack1);
+                    }
+
+                    this.eatTimer = 0;
+                } else if (this.eatTimer > 560 && this.rand.nextFloat() < 0.1F) {
+                    this.playSound(this.getEatSound(itemstack), 1.0F, 1.0F);
+                    this.world.setEntityState(this, (byte)45);
+                    double d = this.getPosX() + (this.getRNG().nextDouble() - 0.5D) * (double) this.getWidth();
+                    double e = this.getPosY() + this.getRNG().nextDouble() * (double) this.getHeight();
+                    double f = this.getPosZ() + (this.getRNG().nextDouble() - 0.5D) * (double) this.getWidth();
+                    double g = (this.getRNG().nextDouble() - 0.5D) * 2.0D;
+                    double h = -this.getRNG().nextDouble();
+                    double k = (this.getRNG().nextDouble() - 0.5D) * 2.0D;
+                    this.world.addParticle(new ItemParticleData(ParticleTypes.ITEM, itemstack), d, e, f, g, h, k);
+                }
+            }
+        }
+        super.livingTick();
+    }
+
+    private boolean canEatItem(ItemStack itemStackIn) {
+        return itemStackIn.getItem().isFood() && this.getAttackTarget() == null && this.onGround || this.isInWater();
     }
 
     @Override
