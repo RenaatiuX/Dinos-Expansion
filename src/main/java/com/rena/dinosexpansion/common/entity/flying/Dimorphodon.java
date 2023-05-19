@@ -33,6 +33,7 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.event.world.NoteBlockEvent;
 import software.bernie.geckolib3.core.AnimationState;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimationTickable;
@@ -134,8 +135,8 @@ public class Dimorphodon extends DinosaurFlying implements IAnimatable, IAnimati
     @Override
     public void setMoveOrder(MoveOrder order) {
         super.setMoveOrder(order);
-        if (order != MoveOrder.SIT_SHOULDER && isOnShoulder() && getOwner() != null) {
-            setOnShoulder(false, this.getOwner());
+        if (order != MoveOrder.SIT_SHOULDER && isOnShoulder() && getOwner() != null && getOwner() instanceof PlayerEntity) {
+            setOnShoulder(false, (PlayerEntity) this.getOwner());
         }
     }
 
@@ -158,6 +159,9 @@ public class Dimorphodon extends DinosaurFlying implements IAnimatable, IAnimati
             this.playSound(SoundEvents.ENTITY_CHICKEN_EGG, 1.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
             //this.entityDropItem(Items.EGG);
             this.timeUntilNextEgg = this.rand.nextInt(6000) + 6000;
+        }
+        if (getMoveOrder() == MoveOrder.IDLE && isOnShoulder() && getOwner() instanceof PlayerEntity){
+            setOnShoulder(false, (PlayerEntity) getOwner());
         }
         if (isOnShoulder() && getOwner() != null) {
             this.dataManager.set(SHOULDER_SCALING, 0.5f);
@@ -332,18 +336,16 @@ public class Dimorphodon extends DinosaurFlying implements IAnimatable, IAnimati
         return this.dataManager.get(IS_ON_SHOULDER);
     }
 
-    public void setOnShoulder(boolean setOnShoulder, LivingEntity mount) {
+    public void setOnShoulder(boolean setOnShoulder, PlayerEntity mount) {
         this.dataManager.set(IS_ON_SHOULDER, setOnShoulder);
-        if (!setOnShoulder) {
-            this.stopRiding();
-            if (!isLeftShoulderFree(mount) && getLeftShoulderEntity(mount).getEntityId() == this.getEntityId()) {
-                setLeftShoulderOccupied(mount, null);
+        if (setOnShoulder) {
+            CompoundNBT entity = new CompoundNBT();
+            entity.putString("id", this.getEntityString());
+            this.writeWithoutTypeId(entity);
+            if(mount.addShoulderEntity(entity)){
+                this.setMoveOrder(MoveOrder.IDLE);
+                this.remove();
             }
-            if (!isRightShoulderFree(mount) && getRightShoulderEntity(mount).getEntityId() == this.getEntityId()) {
-                setRightShoulderOccupied(mount, null);
-            }
-        }else {
-            this.startRiding(mount, true);
         }
     }
 
@@ -363,39 +365,6 @@ public class Dimorphodon extends DinosaurFlying implements IAnimatable, IAnimati
             }
         }
         return super.applyPlayerInteraction(player, vec, hand);
-    }
-
-    @Override
-    public void updateRidden() {
-        Entity entity = this.getRidingEntity();
-        if (this.isPassenger() && !entity.isAlive()) {
-            this.stopRiding();
-        } else if (isTamed() && entity instanceof LivingEntity && isOwner((LivingEntity) entity)) {
-            this.setMotion(0, 0, 0);
-            this.tick();
-            if (this.isPassenger()) {
-                Entity mount = this.getRidingEntity();
-                if (mount instanceof PlayerEntity) {
-                    this.renderYawOffset = ((LivingEntity) mount).renderYawOffset;
-                    this.rotationYaw = mount.rotationYaw;
-                    this.rotationYawHead = ((LivingEntity) mount).rotationYawHead;
-                    this.prevRotationYaw = ((LivingEntity) mount).rotationYawHead;
-                    float radius = 0F;
-                    float angle = (0.01745329251F * (((LivingEntity) mount).renderYawOffset - 180F));
-                    double extraX = radius * MathHelper.sin((float) (Math.PI + angle));
-                    double extraZ = radius * MathHelper.cos(angle);
-                    System.out.println((mount.getPosX() + extraX) + "|" + (Math.max(mount.getPosY() + mount.getHeight() + 0.1, mount.getPosY())) + "|" + (mount.getPosZ() + extraZ));
-                    this.setPosition(mount.getPosX() + extraX, Math.max(mount.getPosY() + mount.getHeight() + 0.1, mount.getPosY()), mount.getPosZ() + extraZ);
-                    if (!mount.isAlive() || rideCooldown == 0 && mount.isSneaking()) {
-                        this.dismount();
-                    }
-                }
-
-            }
-        } else {
-            super.updateRidden();
-        }
-
     }
 
     private PlayState predicate(AnimationEvent<Dimorphodon> event) {
@@ -456,64 +425,15 @@ public class Dimorphodon extends DinosaurFlying implements IAnimatable, IAnimati
         return this.ticksExisted;
     }
 
-
-    protected static boolean isLeftShoulderFree(LivingEntity living) {
-        return !living.getPersistentData().contains(DinosExpansion.MOD_ID + "leftShoulderSit");
-    }
-
-    protected static boolean isRightShoulderFree(LivingEntity living) {
-        return !living.getPersistentData().contains(DinosExpansion.MOD_ID + "rightShoulderSit");
-    }
-
-    /**
-     * @param living   the entity in which shoulder u wanna sit
-     * @param shoulder the entity that will go on the left shoulder make it null in order to remove an entity from the shoulder
-     */
-    protected static void setLeftShoulderOccupied(LivingEntity living, LivingEntity shoulder) {
-        if (shoulder == null) {
-            living.getPersistentData().remove(DinosExpansion.MOD_ID + "leftShoulderSit");
-        } else if (isLeftShoulderFree(living)) {
-            living.getPersistentData().putInt(DinosExpansion.MOD_ID + "leftShoulderSit", shoulder.getEntityId());
-        }
-    }
-
-    /**
-     * @param living   the entity in which shoulder u want to sit
-     * @param shoulder the entity that will go on the right shoulder make it null in order to remove an entity from the shoulder
-     */
-    protected static void setRightShoulderOccupied(LivingEntity living, LivingEntity shoulder) {
-        if (shoulder == null) {
-            living.getPersistentData().remove(DinosExpansion.MOD_ID + "rightShoulderSit");
-        } else if (isRightShoulderFree(living)) {
-            living.getPersistentData().putInt(DinosExpansion.MOD_ID + "rightShoulderSit", shoulder.getEntityId());
-        }
-    }
-
-    /**
-     * @return null if there isnt an entity otherwise the entity that is sitting on the left shoulder
-     */
-    protected static Entity getLeftShoulderEntity(LivingEntity living) {
-        if (!isLeftShoulderFree(living)) {
-            return living.world.getEntityByID(living.getPersistentData().getInt(DinosExpansion.MOD_ID + "leftShoulderSit"));
-        }
-        return null;
-    }
-
-    /**
-     * @return null if there isnt an entity otherwise the entity that is sitting on the right shoulder
-     */
-    protected static Entity getRightShoulderEntity(LivingEntity living) {
-        if (!isRightShoulderFree(living)) {
-            return living.world.getEntityByID(living.getPersistentData().getInt(DinosExpansion.MOD_ID + "rightShoulderSit"));
-        }
-        return null;
+    protected boolean hasFreeShoulder(PlayerEntity player){
+        return player.getLeftShoulderEntity().isEmpty() || player.getRightShoulderEntity().isEmpty();
     }
 
     public class SitOnShoulder extends Goal {
 
         @Override
         public boolean shouldExecute() {
-            return getMoveOrder() == MoveOrder.SIT_SHOULDER && isTamed() && getOwner() != null && !isMovementDisabled() && (isRightShoulderFree(getOwner()) || isLeftShoulderFree(getOwner()));
+            return getMoveOrder() == MoveOrder.SIT_SHOULDER && isTamed() && getOwner() != null && !isMovementDisabled() && getOwner() instanceof PlayerEntity && hasFreeShoulder((PlayerEntity)getOwner());
         }
 
         @Override
@@ -526,11 +446,7 @@ public class Dimorphodon extends DinosaurFlying implements IAnimatable, IAnimati
         @Override
         public void tick() {
             if (getOwner().getDistanceSq(Dimorphodon.this) < 2f) {
-                if (isLeftShoulderFree(getOwner())) {
-                    setOnShoulder(true, getOwner());
-                } else if (isRightShoulderFree(getOwner())) {
-                    setOnShoulder(true, getOwner());
-                }
+                setOnShoulder(true, (PlayerEntity) getOwner());
             }
         }
 
@@ -541,7 +457,7 @@ public class Dimorphodon extends DinosaurFlying implements IAnimatable, IAnimati
 
         @Override
         public boolean shouldContinueExecuting() {
-            return Dimorphodon.this.getOwner() != null && getOwner().getPassengers().size() <= 2 && !isOnShoulder() && isTamed() && !isMovementDisabled() && getMoveOrder() == MoveOrder.SIT_SHOULDER;
+            return Dimorphodon.this.getOwner() != null && !isOnShoulder() && isTamed() && !isMovementDisabled() && getMoveOrder() == MoveOrder.SIT_SHOULDER && hasFreeShoulder((PlayerEntity) getOwner());
         }
     }
 }

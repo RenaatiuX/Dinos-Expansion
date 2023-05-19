@@ -1,13 +1,14 @@
 package com.rena.dinosexpansion.client.model.entity;
 
 import com.google.common.collect.Lists;
-import com.rena.dinosexpansion.common.entity.villagers.Hermit;
+import com.rena.dinosexpansion.common.entity.villagers.caveman.Caveman;
+import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.client.renderer.entity.model.SegmentedModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
 import net.minecraft.util.math.MathHelper;
 
-public class HermitModel extends SegmentedModel<Hermit> {
+public class CavemanModel extends SegmentedModel<Caveman> {
 
     protected ModelRenderer villagerHead;
     protected ModelRenderer hat;
@@ -18,8 +19,8 @@ public class HermitModel extends SegmentedModel<Hermit> {
     protected final ModelRenderer rightVillagerLeg;
     protected final ModelRenderer leftVillagerLeg;
     protected final ModelRenderer villagerNose;
-    
-    public HermitModel(){
+
+    public CavemanModel(){
         float f = 0.5F;
         this.villagerHead = (new ModelRenderer(this)).setTextureSize(64, 64);
         this.villagerHead.setRotationPoint(0.0F, 0.0F, 0.0F);
@@ -63,11 +64,8 @@ public class HermitModel extends SegmentedModel<Hermit> {
     }
 
     @Override
-    public void setRotationAngles(Hermit entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-        boolean flag = false;
-        if (entityIn instanceof AbstractVillagerEntity) {
-            flag = entityIn.getShakeHeadTicks() > 0;
-        }
+    public void setRotationAngles(Caveman entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {;
+        boolean flag = entityIn.getShakeHeadTicks() > 0;
 
         this.villagerHead.rotateAngleY = netHeadYaw * ((float)Math.PI / 180F);
         this.villagerHead.rotateAngleX = headPitch * ((float)Math.PI / 180F);

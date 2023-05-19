@@ -4,15 +4,19 @@ import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.common.config.DinosExpansionConfig;
 import com.rena.dinosexpansion.core.init.ModVillagerTrades;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.merchant.villager.VillagerTrades;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Util;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.server.ServerWorld;
 
 import java.util.*;
 
@@ -20,6 +24,7 @@ public class Tribe {
 
     public static final List<TribeType> TYPES = Util.make(new ArrayList<>(), list -> {
         list.add(new TribeType(ModVillagerTrades.WHITE_NORMAL_TRADES, ModVillagerTrades.WHITE_BOSS_TRADES, new TextFormatting[]{TextFormatting.RED}, AggresionLevel.HOSTILE, getCaveman("caveman_boss_white.png"), getCaveman("caveman_normal_white.png")));
+        list.add(new TribeType(ModVillagerTrades.ORANGE_NORMAL_TRADES, ModVillagerTrades.ORANGE_BOSS_TRADES, new TextFormatting[]{TextFormatting.GOLD}, AggresionLevel.PASSIVE, getCaveman("caveman_boss_orange.png"), getCaveman("caveman_normal_orange.png")));
     });
 
     private static ResourceLocation getCaveman(String textureName) {
@@ -42,7 +47,17 @@ public class Tribe {
         for (int i = 0; approvalsByPlayer.contains("UUID" + i); i++) {
             approvals.put(approvalsByPlayer.getUniqueId("UUID" + i), approvalsByPlayer.getInt("approval" + i));
         }
-        return new Tribe(type, name, approvals);
+        Tribe t = new Tribe(type, name, approvals);
+        t.isBossFight = nbt.getBoolean("isBossfight");
+        if (nbt.contains("bossfightX")) {
+            double x = nbt.getDouble("bossfightX");
+            double y = nbt.getDouble("bossfightY");
+            double z = nbt.getDouble("bossfightZ");
+            t.bossFightCenter = new BlockPos(x, y, z);
+        }
+        t.bossfightCounterCircle = nbt.getInt("bossfightCircle");
+        t.startCounter = nbt.getInt("confirmBossfight");
+        return t;
     }
 
 
@@ -52,6 +67,10 @@ public class Tribe {
     //stores their id
     protected final List<Caveman> cavemen = new ArrayList<>();
     protected Caveman boss;
+    protected boolean isBossFight = false;
+    protected BlockPos bossFightCenter = null;
+    protected int bossfightCounterCircle = 0, startCounter = 1;
+
 
     public Tribe(TribeType type, String name) {
         this(type, name, new HashMap<>());
@@ -70,8 +89,16 @@ public class Tribe {
         return DinosExpansionConfig.MAX_TRIBE_APPROVAL.get();
     }
 
+    public List<Caveman> getCavemen() {
+        return cavemen;
+    }
+
     public CompoundNBT write() {
         return write(new CompoundNBT());
+    }
+
+    public Caveman getBoss() {
+        return boss;
     }
 
     public CompoundNBT write(CompoundNBT nbt) {
@@ -88,6 +115,14 @@ public class Tribe {
             i++;
         }
         nbt.put("approvalByPlayer", approvalsByPlayer);
+        nbt.putBoolean("isBossfight", this.isBossFight);
+        if (bossFightCenter != null) {
+            nbt.putDouble("bossfightX", bossFightCenter.getX());
+            nbt.putDouble("bossfightY", bossFightCenter.getY());
+            nbt.putDouble("bossfightZ", bossFightCenter.getZ());
+        }
+        nbt.putInt("bossfightCircle", this.bossfightCounterCircle);
+        nbt.putInt("confirmBossfight", this.startCounter);
         return nbt;
     }
 
@@ -102,6 +137,10 @@ public class Tribe {
 
     public TribeType getType() {
         return type;
+    }
+
+    public int getSize(){
+        return this.cavemen.size();
     }
 
     public boolean canTrade(PlayerEntity player) {
@@ -123,10 +162,50 @@ public class Tribe {
         return cavemen.contains(caveman);
     }
 
-    public void addCaveman(Caveman c) {
-        if (c.isBoss())
+    public boolean canStartBossfight(){
+        return this.startCounter == 0;
+    }
+
+    /**
+     * @param c the caveman we want to add
+     * @return whether the caveman could be added or not
+     */
+    public boolean addCaveman(Caveman c) {
+        if (c.isBoss() && boss == null) {
             this.boss = c;
-        this.cavemen.add(c);
+            this.cavemen.add(c);
+            return true;
+        } else if (c.isBoss() && !isBossFight) {
+            this.cavemen.add(c);
+            startBossfight(c, boss);
+            return true;
+        }else {
+            this.cavemen.add(c);
+        }
+        return false;
+    }
+
+    protected void startBossfight(Caveman boss1, Caveman boss2){
+        this.isBossFight = true;
+        boss1.setBoss(true);
+        boss2.setBoss(true);
+        boss1.startBossfight(boss2);
+        boss2.startBossfight(boss1);
+        Vector3d pos = null;
+        while (pos == null) {
+            pos = RandomPositionGenerator.findRandomTarget(boss1, 10, 7);
+            if (pos == null)
+                pos = RandomPositionGenerator.findRandomTarget(boss2, 10, 7);
+        }
+        this.bossFightCenter = new BlockPos(pos);
+    }
+
+    public BlockPos getBossFightCenter() {
+        return bossFightCenter;
+    }
+
+    public boolean isBossFight() {
+        return isBossFight;
     }
 
     /**
@@ -134,14 +213,70 @@ public class Tribe {
      */
     public void removeCaveman(Caveman c) {
         this.cavemen.remove(c);
+        if (!hasBoss() && this.cavemen.size() > 0) {
+            Random rand = new Random();
+            Caveman first = this.cavemen.get(rand.nextInt(this.cavemen.size()));
+            Caveman second = this.cavemen.get(rand.nextInt(this.cavemen.size()));
+            if (first == second)
+                first.setBoss(true);
+            else {
+               startBossfight(first, second);
+            }
+
+        } else if (countBosses() == 1 && isBossFight) {
+            endBossfight();
+        }
+        if (getSize() <= 0 && c.world instanceof ServerWorld){
+            TribeSaveData.removeTribe(this, (ServerWorld) c.world);
+        }
+    }
+
+    protected void endBossfight(){
+        this.isBossFight = false;
+        this.bossFightCenter = null;
+        this.bossfightCounterCircle = 0;
+        startCounter = 0;
+        System.out.println("ended");
+    }
+
+    /**
+     * this is to count the ticks until the bossfight starts
+     * this sets the initial startCounter * 2 as there will be two bosses batteling each other and each of them reduces the counter by himself
+     * @param startCounter
+     */
+    public void setStartCounter(int startCounter) {
+        //two as there are two bosses in a bossfight
+        this.startCounter = 2*startCounter;
+    }
+
+    public void reduceStartCounter(){
+        if (startCounter > 0)
+            startCounter--;
+    }
+
+    public int getStartCounter() {
+        return startCounter;
     }
 
     public boolean hasBoss() {
+        return countBosses() > 0;
+    }
+
+    public int countBosses() {
+        int count = 0;
         for (Caveman c : this.cavemen) {
             if (c.isBoss())
-                return true;
+                count++;
         }
-        return false;
+        return count;
+    }
+
+    public void setBossfightCounterCircle(int bossfightCounterCircle) {
+        this.bossfightCounterCircle = bossfightCounterCircle;
+    }
+
+    public int getBossfightCounterCircle() {
+        return bossfightCounterCircle;
     }
 
     public static class TribeType {

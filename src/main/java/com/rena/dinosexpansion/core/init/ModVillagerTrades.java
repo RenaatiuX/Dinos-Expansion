@@ -11,6 +11,7 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.merchant.villager.VillagerTrades;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.util.Util;
 import net.minecraftforge.common.BasicTrade;
 import org.lwjgl.system.CallbackI;
@@ -24,6 +25,8 @@ public class ModVillagerTrades {
     public static Int2ObjectMap<VillagerTrades.ITrade[]> HERMIT_TRADES = new Int2ObjectOpenHashMap<>();
     public static Int2ObjectMap<VillagerTrades.ITrade[]> WHITE_BOSS_TRADES = new Int2ObjectOpenHashMap<>();
     public static Int2ObjectMap<VillagerTrades.ITrade[]> WHITE_NORMAL_TRADES = new Int2ObjectOpenHashMap<>();
+    public static Int2ObjectMap<VillagerTrades.ITrade[]> ORANGE_BOSS_TRADES = new Int2ObjectOpenHashMap<>();
+    public static Int2ObjectMap<VillagerTrades.ITrade[]> ORANGE_NORMAL_TRADES = new Int2ObjectOpenHashMap<>();
 
     /**
      * if you want to add custom trades here, do it <b>before</b> the {@link net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent}
@@ -48,7 +51,13 @@ public class ModVillagerTrades {
         WHITE_NORMAL_TRADES.put(2, new VillagerTrades.ITrade[]{new VillagerTrades.EnchantedItemForEmeraldsTrade(ItemInit.WOODEN_CHAKRAM.get(), 5, 1, 6), new EmeraldsForItemsTrade(ItemInit.STONE_ARROW.get(), 4,5, 5, 3)});
         WHITE_NORMAL_TRADES.put(3, new VillagerTrades.ITrade[]{new VillagerTrades.EnchantedItemForEmeraldsTrade(ItemInit.WOOD_BOOMERANG.get(), 5, 1, 8), new EmeraldsForItemsTrade(ItemInit.IRON_ARROW.get(), 4,7, 5, 4)});
         WHITE_NORMAL_TRADES.put(4, new VillagerTrades.ITrade[]{new DefinedEnchantedBookTrade(new Enchantment[]{Enchantments.BANE_OF_ARTHROPODS, Enchantments.FIRE_PROTECTION, Enchantments.BLAST_PROTECTION, Enchantments.PROJECTILE_PROTECTION}, new int[]{4,1,1,1}, 10, 13), new EmeraldsForItemsTrade(ItemInit.DIAMOND_ARROW.get(), 4,10, 5, 5)});
-        WHITE_NORMAL_TRADES.put(4, new VillagerTrades.ITrade[]{new DefinedEnchantedBookTrade(new Enchantment[]{Enchantments.SMITE, Enchantments.SHARPNESS, Enchantments.PROTECTION, Enchantments.UNBREAKING, Enchantments.EFFICIENCY}, new int[]{4,1,1,1, 1}, 12, 20), new EmeraldsForItemsTrade(ItemInit.NETHERITE_ARROW.get(), 4,20, 4, 6), new EmeraldsForItemsTrade(ItemInit.EMERALD_ARROW.get(), 4,17, 4, 6)});
+        WHITE_NORMAL_TRADES.put(4, new VillagerTrades.ITrade[]{new DefinedEnchantedBookTrade(new Enchantment[]{Enchantments.SMITE, Enchantments.SHARPNESS, Enchantments.PROTECTION, Enchantments.UNBREAKING, Enchantments.EFFICIENCY}, new int[]{8,1,2,2, 2}, 12, 20), new EmeraldsForItemsTrade(ItemInit.NETHERITE_ARROW.get(), 4,20, 4, 6), new EmeraldsForItemsTrade(ItemInit.EMERALD_ARROW.get(), 4,17, 4, 6)});
+
+        ORANGE_BOSS_TRADES.put(1, new VillagerTrades.ITrade[]{new EmeraldsForItemsTrade(Items.POTATO, 1, 10, 4, 2), new EmeraldsForItemsTrade(Items.MELON_SEEDS, 1, 4, 2,2), new EmeraldsForItemsTrade(Items.PUMPKIN_SEEDS, 1, 4,2)});
+        ORANGE_BOSS_TRADES.put(2, new VillagerTrades.ITrade[]{new EmeraldsForItemsTrade(Items.CARROT, 1, 10, 4, 3), new EmeraldsForItemsTrade(ItemInit.ONION.get(), 2, 5, 4,3)});
+        ORANGE_BOSS_TRADES.put(3, new VillagerTrades.ITrade[]{new EmeraldsForItemsTrade(ItemInit.COOKED_ANKYLOSAURUS_MEAT.get(), 3, 10, 3, 4), new EmeraldsForItemsTrade(ItemInit.CORN_SEED.get(), 2, 5, 3,4)});
+        ORANGE_BOSS_TRADES.put(4, new VillagerTrades.ITrade[]{new EmeraldsForItemsTrade(ItemInit.EGGPLANT_SEED.get(), 1, 20, 2, 5), new EmeraldsForItemsTrade(Items.PHANTOM_MEMBRANE, 1, 13, 3,5)});
+        ORANGE_BOSS_TRADES.put(5, new VillagerTrades.ITrade[]{new EmeraldsForItemsTrade(Items.TOTEM_OF_UNDYING, 1, 40, 2, 6), new EmeraldsForItemsTrade(ItemInit.COMPOUND_ARROW.get(), 4, 13, 3,6), new EmeraldsForItemsTrade(ItemInit.COMPOUND_BOW.get(), 1, 63,1, 6)});
 
         addHermitTrades();
     }

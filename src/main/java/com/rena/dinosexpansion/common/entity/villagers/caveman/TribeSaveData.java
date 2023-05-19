@@ -13,7 +13,7 @@ import java.util.Map;
 
 public class TribeSaveData extends WorldSavedData {
 
-    public static final String NAME = DinosExpansion.MOD_ID + ".tribes";
+    public static final String NAME = DinosExpansion.MOD_ID + "tribes";
 
     private final Map<String, Tribe> tribes = new HashMap<>();
 
@@ -57,6 +57,7 @@ public class TribeSaveData extends WorldSavedData {
         for (int i = 0; nbt.contains("tribe" + i); i++) {
             Tribe t = Tribe.fromNbt(nbt.getCompound("tribe" + i));
             tribes.put(t.getName(), t);
+            System.out.println("this reads the tribes");
         }
     }
 
@@ -64,8 +65,10 @@ public class TribeSaveData extends WorldSavedData {
     public CompoundNBT write(CompoundNBT compound) {
         int i = 0;
         for (Tribe t : tribes.values()) {
-            compound.put("tribe" + i, t.write());
-            i++;
+            if (t.getSize() > 0) {
+                compound.put("tribe" + i, t.write());
+                i++;
+            }
         }
         return compound;
     }
@@ -73,6 +76,13 @@ public class TribeSaveData extends WorldSavedData {
     public static void addTribe(Tribe toAdd, ServerWorld world){
         TribeSaveData data = getData(world);
         data.tribes.put(toAdd.getName(), toAdd);
+        data.markDirty();
+    }
+
+
+    public static void removeTribe(Tribe t, ServerWorld world){
+        TribeSaveData data = getData(world);
+        data.tribes.remove(t.getName());
         data.markDirty();
     }
     public static TribeSaveData getData(ServerWorld world){
