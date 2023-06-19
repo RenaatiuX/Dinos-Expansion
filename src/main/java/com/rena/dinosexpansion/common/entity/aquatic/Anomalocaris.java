@@ -1,15 +1,14 @@
 package com.rena.dinosexpansion.common.entity.aquatic;
 
+import com.rena.dinosexpansion.common.config.DinosExpansionConfig;
 import com.rena.dinosexpansion.common.entity.ia.AnomalocarisGrabItemGoal;
 import com.rena.dinosexpansion.common.entity.ia.DinosaurLookRandomGoal;
 import com.rena.dinosexpansion.common.entity.ia.DinosaurSwimBottomGoal;
 import com.rena.dinosexpansion.common.entity.ia.SleepRhythmGoal;
 import com.rena.dinosexpansion.common.entity.ia.movecontroller.AquaticMoveController;
 import com.rena.dinosexpansion.core.init.EntityInit;
-import net.minecraft.entity.AgeableEntity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
+import net.minecraft.block.Blocks;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.FindWaterGoal;
@@ -28,10 +27,14 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ItemParticleData;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -47,6 +50,7 @@ import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Random;
 import java.util.function.Predicate;
 
 public class Anomalocaris extends DinosaurAquatic implements IAnimatable, IAnimationTickable {
@@ -72,9 +76,9 @@ public class Anomalocaris extends DinosaurAquatic implements IAnimatable, IAnima
         this.goalSelector.addGoal(1, new FindWaterGoal(this));
         this.goalSelector.addGoal(2, new RandomSwimmingGoal(this, 0.8F, 1));
         this.goalSelector.addGoal(3, new DinosaurSwimBottomGoal(this, 0.8F, 9));
-        this.goalSelector.addGoal(3, new DinosaurLookRandomGoal(this));
         this.goalSelector.addGoal(4, new AnomalocarisGrabItemGoal(this));
-        this.goalSelector.addGoal(4, new LookAtGoal(this, PlayerEntity.class, 6.0F));
+        this.goalSelector.addGoal(5, new DinosaurLookRandomGoal(this));
+        this.goalSelector.addGoal(6, new LookAtGoal(this, PlayerEntity.class, 6.0F));
     }
 
     public static AttributeModifierMap.MutableAttribute createAttributes() {
@@ -82,6 +86,11 @@ public class Anomalocaris extends DinosaurAquatic implements IAnimatable, IAnima
                 .createMutableAttribute(Attributes.MAX_HEALTH, 10)
                 .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.2D)
                 .createMutableAttribute(Attributes.ATTACK_DAMAGE, 0.1D);
+    }
+
+    @Override
+    public SoundEvent getEatSound(ItemStack itemStackIn) {
+        return SoundEvents.ENTITY_GENERIC_EAT;
     }
 
     @Override
@@ -122,20 +131,6 @@ public class Anomalocaris extends DinosaurAquatic implements IAnimatable, IAnima
     }
 
     @Override
-    public boolean attackEntityFrom(DamageSource source, float amount) {
-        if (this.isGrabbing()) {
-            this.dropHeldItem();
-            this.setGrabbing(false);
-        }
-        return super.attackEntityFrom(source, amount);
-    }
-
-    private void dropHeldItem() {
-        this.world.addEntity(new ItemEntity(this.world, this.getPosX(), this.getPosY(), this.getPosZ(), this.getHeldItem(Hand.MAIN_HAND)));
-        this.setHeldItem(ItemStack.EMPTY);
-    }
-
-    @Override
     public void livingTick() {
         if (!this.world.isRemote && this.isAlive() && this.isServerWorld()) {
             ++this.eatTimer;
@@ -151,13 +146,6 @@ public class Anomalocaris extends DinosaurAquatic implements IAnimatable, IAnima
                 } else if (this.eatTimer > 560 && this.rand.nextFloat() < 0.1F) {
                     this.playSound(this.getEatSound(itemstack), 1.0F, 1.0F);
                     this.world.setEntityState(this, (byte)45);
-                    double d = this.getPosX() + (this.getRNG().nextDouble() - 0.5D) * (double) this.getWidth();
-                    double e = this.getPosY() + this.getRNG().nextDouble() * (double) this.getHeight();
-                    double f = this.getPosZ() + (this.getRNG().nextDouble() - 0.5D) * (double) this.getWidth();
-                    double g = (this.getRNG().nextDouble() - 0.5D) * 2.0D;
-                    double h = -this.getRNG().nextDouble();
-                    double k = (this.getRNG().nextDouble() - 0.5D) * 2.0D;
-                    this.world.addParticle(new ItemParticleData(ParticleTypes.ITEM, itemstack), d, e, f, g, h, k);
                 }
             }
         }
@@ -165,7 +153,35 @@ public class Anomalocaris extends DinosaurAquatic implements IAnimatable, IAnima
     }
 
     private boolean canEatItem(ItemStack itemStackIn) {
-        return itemStackIn.getItem().isFood() && this.getAttackTarget() == null && this.onGround || this.isInWater();
+        return itemStackIn.getItem().isFood() && this.getAttackTarget() == null && this.isInWater();
+    }
+
+    @Override
+    public boolean canPickUpItem(ItemStack itemstackIn) {
+        EquipmentSlotType equipmentslottype = MobEntity.getSlotForItemStack(itemstackIn);
+        if (!this.getItemStackFromSlot(equipmentslottype).isEmpty()) {
+            return false;
+        } else {
+            return equipmentslottype == EquipmentSlotType.MAINHAND && super.canPickUpItem(itemstackIn);
+        }
+    }
+
+    @Override
+    public boolean canEquipItem(ItemStack stack) {
+        Item item = stack.getItem();
+        ItemStack itemstack = this.getItemStackFromSlot(EquipmentSlotType.MAINHAND);
+        return itemstack.isEmpty() || this.eatTimer > 0 && item.isFood() && !itemstack.getItem().isFood();
+    }
+
+    @Override
+    protected void spawnDrops(DamageSource damageSourceIn) {
+        ItemStack itemstack = this.getItemStackFromSlot(EquipmentSlotType.MAINHAND);
+        if (!itemstack.isEmpty()) {
+            this.entityDropItem(itemstack);
+            this.setItemStackToSlot(EquipmentSlotType.MAINHAND, ItemStack.EMPTY);
+        }
+
+        super.spawnDrops(damageSourceIn);
     }
 
     @Override
@@ -182,6 +198,11 @@ public class Anomalocaris extends DinosaurAquatic implements IAnimatable, IAnima
     @Override
     public AgeableEntity createChild(ServerWorld world, AgeableEntity mate) {
         return null;
+    }
+
+    @Override
+    public boolean isInvulnerableTo(DamageSource source) {
+        return source == DamageSource.DROWN || source == DamageSource.IN_WALL || source == DamageSource.FALLING_BLOCK || super.isInvulnerableTo(source);
     }
 
     private PlayState predicate(AnimationEvent<Anomalocaris> event) {
@@ -216,4 +237,11 @@ public class Anomalocaris extends DinosaurAquatic implements IAnimatable, IAnima
     public int tickTimer() {
         return this.ticksExisted;
     }
+
+    public static boolean anomalocarisSpawn(EntityType<? extends DinosaurAquatic> type, IWorld worldIn, SpawnReason reason, BlockPos p_223363_3_, Random randomIn) {
+        int level = worldIn.getSeaLevel();
+        int pos = level - 13;
+        return p_223363_3_.getY() >= pos && p_223363_3_.getY() <= level && worldIn.getFluidState(p_223363_3_.down()).isTagged(FluidTags.WATER) && worldIn.getBlockState(p_223363_3_.down()).matchesBlock(Blocks.WATER);
+    }
+
 }

@@ -10,24 +10,22 @@ import java.util.EnumSet;
 import java.util.List;
 
 public class AnomalocarisGrabItemGoal extends Goal {
-    private final Anomalocaris dinosaur;
-    private int eatTimer;
-
-    public AnomalocarisGrabItemGoal(Anomalocaris dinosaur) {
-        this.dinosaur = dinosaur;
-        this.setMutexFlags(EnumSet.of(Flag.MOVE));
+    private final Anomalocaris anomalocaris;
+    public AnomalocarisGrabItemGoal(Anomalocaris anomalocaris) {
+        this.anomalocaris = anomalocaris;
+        this.setMutexFlags(EnumSet.of(Goal.Flag.MOVE));
     }
 
     @Override
     public boolean shouldExecute() {
-        if (!dinosaur.getItemStackFromSlot(EquipmentSlotType.MAINHAND).isEmpty()) {
+        if (!anomalocaris.getItemStackFromSlot(EquipmentSlotType.MAINHAND).isEmpty()) {
             return false;
-        } else if (dinosaur.getAttackTarget() == null && dinosaur.getRevengeTarget() == null) {
-            if (dinosaur.getRNG().nextInt(10) != 0) {
+        } else if (anomalocaris.getAttackTarget() == null && anomalocaris.getRevengeTarget() == null) {
+            if (anomalocaris.getRNG().nextInt(10) != 0) {
                 return false;
             } else {
-                List<ItemEntity> items = this.dinosaur.world.getEntitiesWithinAABB(ItemEntity.class, this.dinosaur.getBoundingBox().grow(8.0, 4.0, 8.0), Anomalocaris.ITEMS);
-                return !items.isEmpty() && dinosaur.getItemStackFromSlot(EquipmentSlotType.MAINHAND).isEmpty();
+                List<ItemEntity> list = anomalocaris.world.getEntitiesWithinAABB(ItemEntity.class, anomalocaris.getBoundingBox().grow(8.0D, 8.0D, 8.0D), Anomalocaris.ITEMS);
+                return !list.isEmpty() && anomalocaris.getItemStackFromSlot(EquipmentSlotType.MAINHAND).isEmpty();
             }
         } else {
             return false;
@@ -35,25 +33,25 @@ public class AnomalocarisGrabItemGoal extends Goal {
     }
 
     @Override
-    public void startExecuting() {
-        List<ItemEntity> items = dinosaur.world.getEntitiesWithinAABB(ItemEntity.class, dinosaur.getBoundingBox().grow(8.0D, 4.0D, 8.0D), Anomalocaris.ITEMS);
-        if (!items.isEmpty()) {
-            dinosaur.getNavigator().tryMoveToEntityLiving(items.get(0), (double) 1.2F);
-            dinosaur.setGrabbing(true);
-            dinosaur.setHeldItem(items.get(0).getItem());
+    public void tick() {
+        List<ItemEntity> list = anomalocaris.world.getEntitiesWithinAABB(ItemEntity.class, anomalocaris.getBoundingBox().grow(8.0D, 8.0D, 8.0D), Anomalocaris.ITEMS);
+        ItemStack itemstack = anomalocaris.getItemStackFromSlot(EquipmentSlotType.MAINHAND);
+        if (itemstack.isEmpty() && !list.isEmpty()) {
+            anomalocaris.getNavigator().tryMoveToEntityLiving(list.get(0), (double)1.2F);
+            anomalocaris.setGrabbing(true);
+            anomalocaris.setHeldItem(list.get(0).getItem());
+        } else {
+            anomalocaris.setHeldItem(ItemStack.EMPTY);
         }
     }
 
     @Override
-    public void tick() {
-        List<ItemEntity> items = dinosaur.world.getEntitiesWithinAABB(ItemEntity.class, dinosaur.getBoundingBox().grow(8.0D, 4.0D, 8.0D), Anomalocaris.ITEMS);
-        ItemStack itemstack = dinosaur.getItemStackFromSlot(EquipmentSlotType.MAINHAND);
-        if (itemstack.isEmpty() && !items.isEmpty()) {
-            dinosaur.getNavigator().tryMoveToEntityLiving(items.get(0), (double) 1.2F);
-            dinosaur.setGrabbing(true);
-            dinosaur.setHeldItem(items.get(0).getItem());
-        } else {
-            dinosaur.setHeldItem(ItemStack.EMPTY);
+    public void startExecuting() {
+        List<ItemEntity> list = anomalocaris.world.getEntitiesWithinAABB(ItemEntity.class, anomalocaris.getBoundingBox().grow(8.0D, 8.0D, 8.0D), Anomalocaris.ITEMS);
+        if (!list.isEmpty()) {
+            anomalocaris.getNavigator().tryMoveToEntityLiving(list.get(0), (double)1.2F);
+            anomalocaris.setGrabbing(true);
+            anomalocaris.setHeldItem(list.get(0).getItem());
         }
     }
 }
