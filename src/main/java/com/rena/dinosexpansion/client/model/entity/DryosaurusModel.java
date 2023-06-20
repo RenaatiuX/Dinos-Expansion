@@ -23,9 +23,9 @@ public class DryosaurusModel extends AnimatedTickingGeoModel<Dryosaurus> {
     private static final Map<Dinosaur.Rarity, ResourceLocation> RARITY = Util.make(Maps.newEnumMap(Dinosaur.Rarity.class),
             (rarity) -> {
                 rarity.put(Dinosaur.Rarity.COMMON, DinosExpansion.modLoc("textures/entity/dryosaurus/dryosaurus_common.png"));
-                //rarity.put(Dinosaur.Rarity.UNCOMMON, DinosExpansion.modLoc("textures/entity/dimorphodon/dimorphodon_uncommon.png"));
-                //rarity.put(Dinosaur.Rarity.RARE, DinosExpansion.modLoc("textures/entity/dimorphodon/dimorphodon_rare.png"));
-                //rarity.put(Dinosaur.Rarity.EPIC, DinosExpansion.modLoc("textures/entity/dimorphodon/dimorphodon_epic.png"));
+                rarity.put(Dinosaur.Rarity.UNCOMMON, DinosExpansion.modLoc("textures/entity/dryosaurus/dryosaurus_uncommon.png"));
+                rarity.put(Dinosaur.Rarity.RARE, DinosExpansion.modLoc("textures/entity/dryosaurus/dryosaurus_rare.png"));
+                rarity.put(Dinosaur.Rarity.EPIC, DinosExpansion.modLoc("textures/entity/dryosaurus/dryosaurus_epic.png"));
                 rarity.put(Dinosaur.Rarity.LEGENDARY, DinosExpansion.modLoc("textures/entity/dryosaurus/dryosaurus_legendary.png"));
             });
     @Override

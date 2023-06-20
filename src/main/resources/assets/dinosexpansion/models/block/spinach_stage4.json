@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/crop",
+  "textures": {
+    "crop": "dinosexpansion:block/spinach_stage4"
+  }
+}

@@ -51,7 +51,6 @@ public class MegaPiranha extends PrehistoricFish implements IAnimatable, IAnimat
 
     @Override
     protected void registerGoals() {
-        super.registerGoals();
         this.goalSelector.addGoal(1, new FindWaterGoal(this));
         this.goalSelector.addGoal(2, new DinosaurMeleeAttackGoal(this, 1.2D, false));
         this.goalSelector.addGoal(4, new RandomSwimmingGoal(this, 1.0F, 10));

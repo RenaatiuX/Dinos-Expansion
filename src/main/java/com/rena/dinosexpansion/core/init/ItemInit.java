@@ -14,6 +14,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.Rarity;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -132,7 +133,14 @@ public class ItemInit {
             () -> new ForgeSpawnEggItem(EntityInit.WETHERELLUS, 8161967, 7438131, new Item.Properties().group(ModItemGroups.SPAWN_EGGS)));
     public static final RegistryObject<Item> AEGIROCASSIS_SPAWN_EGG = ITEMS.register("aegirocassis_spawn_egg",
             () -> new ForgeSpawnEggItem(EntityInit.AEGIROCASSIS, 3034935, 1214097, new Item.Properties().group(ModItemGroups.SPAWN_EGGS)));
-
+    public static final RegistryObject<Item> ANOMALOCARIS_SPAWN_EGG = ITEMS.register("anomalocaris_spawn_egg",
+            () -> new ForgeSpawnEggItem(EntityInit.ANOMALOCARIS, 14578253, 14986835, new Item.Properties().group(ModItemGroups.SPAWN_EGGS)));
+    public static final RegistryObject<Item> BELANTSEA_SPAWN_EGG = ITEMS.register("belantsea_spawn_egg",
+            () -> new ForgeSpawnEggItem(EntityInit.BELANTSEA, 12690565, 10637126, new Item.Properties().group(ModItemGroups.SPAWN_EGGS)));
+    public static final RegistryObject<Item> ACANTHODES_SPAWN_EGG = ITEMS.register("acanthodes_spawn_egg",
+            () -> new ForgeSpawnEggItem(EntityInit.ACANTHODES, 10212586, 5737117, new Item.Properties().group(ModItemGroups.SPAWN_EGGS)));
+    public static final RegistryObject<Item> MEGANEURA_SPAWN_EGG = ITEMS.register("meganeura_spawn_egg",
+            () -> new ForgeSpawnEggItem(EntityInit.MEGANEURA, 5257261, 9465189, new Item.Properties().group(ModItemGroups.SPAWN_EGGS)));
     //Food
     public static final RegistryObject<Item> RAW_CARNOTAURUS_MEAT = ITEMS.register("raw_carnotaurus_meat",
             () -> new Item(new Item.Properties().food(FoodInit.RAW_CARNOTAURUS_MEAT).group(ModItemGroups.ITEMS)));
@@ -191,6 +199,12 @@ public class ItemInit {
             ()-> new BlockNamedItem(BlockInit.EGGPLANT_CROP.get(), new Item.Properties().group(ModItemGroups.ITEMS)));
     public static final RegistryObject<Item> CORN_SEED = ITEMS.register("corn_seed",
             ()-> new BlockNamedItem(BlockInit.CORN_CROP.get(), new Item.Properties().group(ModItemGroups.ITEMS)));
+    public static final RegistryObject<Item> CUCUMBER_SEED = ITEMS.register("cucumber_seed",
+            ()-> new BlockNamedItem(BlockInit.CUCUMBER_CROP.get(), new Item.Properties().group(ModItemGroups.ITEMS)));
+    public static final RegistryObject<Item> LETTUCE_SEED = ITEMS.register("lettuce_seed",
+            ()-> new BlockNamedItem(BlockInit.LETTUCE_CROP.get(), new Item.Properties().group(ModItemGroups.ITEMS)));
+    public static final RegistryObject<Item> SPINACH_SEED = ITEMS.register("spinach_seed",
+            ()-> new BlockNamedItem(BlockInit.SPINACH_CROP.get(), new Item.Properties().group(ModItemGroups.ITEMS)));
 
     public static final RegistryObject<Item> NARCOTICS = ITEMS.register("narcotics",
             () -> new BaseNarcoticItem(new Item.Properties().group(ModItemGroups.ITEMS), 10));
@@ -217,6 +231,10 @@ public class ItemInit {
             () -> new CustomFishBucket(EntityInit.MEGA_PIRANHA::get, () -> Fluids.WATER, new Item.Properties().group(ModItemGroups.ITEMS)));
     public static final RegistryObject<Item> WETHERELLUS_BUCKET = ITEMS.register("wetherellus_bucket",
             () -> new CustomFishBucket(EntityInit.WETHERELLUS::get, () -> Fluids.WATER, new Item.Properties().group(ModItemGroups.ITEMS)));
+    public static final RegistryObject<Item> BELANTSEA_BUCKET = ITEMS.register("belantsea_bucket",
+            () -> new CustomFishBucket(EntityInit.BELANTSEA::get, () -> Fluids.WATER, new Item.Properties().group(ModItemGroups.ITEMS)));
+    public static final RegistryObject<Item> ACANTHODES_BUCKET = ITEMS.register("acanthodes_bucket",
+            () -> new CustomFishBucket(EntityInit.ACANTHODES::get, () -> Fluids.WATER, new Item.Properties().group(ModItemGroups.ITEMS)));
     public static final RegistryObject<Item> ELECTRONICS_PARTS = ITEMS.register("electronics_parts",
             () -> new Item(new Item.Properties().group(ModItemGroups.ITEMS)));
     public static final RegistryObject<Item> OIL = ITEMS.register("oil",

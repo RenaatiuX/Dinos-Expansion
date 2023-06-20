@@ -12,9 +12,7 @@ import net.minecraft.entity.*;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.EatGrassGoal;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.goal.HurtByTargetGoal;
+import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -68,6 +66,10 @@ public class Dryosaurus extends Dinosaur implements IAnimatable, IAnimationTicka
         this.goalSelector.addGoal(1, new DinosaurFollowOwnerGoal(this, 1.0D, 3, 8, true));
         this.goalSelector.addGoal(2, new DinosaurNearestTargetGoal<>(this, LivingEntity.class, 10, true, false, false, living -> !isOnSameTeam(living) && !(living instanceof Dryosaurus)));
         this.goalSelector.addGoal(2, new DinosaurHurByTargetGoal(this, false));
+        this.goalSelector.addGoal(3, new FollowParentGoal(this, 1.25D));
+        this.goalSelector.addGoal(4, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
+        this.goalSelector.addGoal(5, new LookAtGoal(this, PlayerEntity.class, 6.0F));
+        this.goalSelector.addGoal(6, new LookRandomlyGoal(this));
         this.eatGrassGoal = new EatGrassGoal(this) {
             @Override
             public boolean shouldExecute() {
@@ -129,12 +131,12 @@ public class Dryosaurus extends Dinosaur implements IAnimatable, IAnimationTicka
         double rand = this.getRNG().nextDouble();
         if (rand <= 0.05)
             return Rarity.LEGENDARY;
-        /*if (rand <= 0.1)
+        if (rand <= 0.1)
             return Rarity.EPIC;
         if (rand < 0.2)
             return Rarity.RARE;
         if (rand <= 0.5)
-            return Rarity.UNCOMMON;*/
+            return Rarity.UNCOMMON;
         return Rarity.COMMON;
     }
 
@@ -264,10 +266,11 @@ public class Dryosaurus extends Dinosaur implements IAnimatable, IAnimationTicka
         }
         if (event.isMoving()) {
             if (this.isSprinting()) {
-                //event.getController().setAnimation(new AnimationBuilder().addAnimation("dryosaurus.run", ILoopType.EDefaultLoopTypes.LOOP));
-                //event.getController().setAnimationSpeed(1.5D);
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("dryosaurus.run", ILoopType.EDefaultLoopTypes.LOOP));
+                event.getController().setAnimationSpeed(1.5D);
             } else {
-                //event.getController().setAnimation(new AnimationBuilder().addAnimation("dryosaurus.walk", ILoopType.EDefaultLoopTypes.LOOP));
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("dryosaurus.walk", ILoopType.EDefaultLoopTypes.LOOP));
+                event.getController().setAnimationSpeed(1.2D);
             }
             return PlayState.CONTINUE;
         } else if (this.isEating()) {
