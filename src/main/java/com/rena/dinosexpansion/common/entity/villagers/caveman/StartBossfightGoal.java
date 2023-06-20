@@ -46,7 +46,6 @@ public class StartBossfightGoal extends Goal {
             while (!caveman.world.getBlockState(viewerPos).isSolid() && caveman.getWorld().getBlockState(viewerPos).allowsMovement(caveman.world, viewerPos, PathType.LAND)){
                 viewerPos = viewerPos.down();
             }
-            viewerPos = viewerPos.up();
             caveman.getNavigator().tryMoveToXYZ(viewerPos.getX(), viewerPos.getY(), viewerPos.getZ(), .7d);
             caveman.getTribe().setBossfightCounterCircle((int) (getCavemanPosition + 1d));
         }
