@@ -25,7 +25,7 @@ public class MeganeuraModel extends AnimatedTickingGeoModel<Meganeura> {
 
     @Override
     public ResourceLocation getTextureLocation(Meganeura object) {
-        return DinosExpansion.modLoc("textures/entity/meganeura/meganeura_common.png");
+        return RARITY.get(object.getRarity());
     }
 
     @Override
