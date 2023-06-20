@@ -1,112 +1,69 @@
 package com.rena.dinosexpansion.core.init;
 
 import com.google.common.collect.ImmutableMap;
-import com.mojang.datafixers.types.Func;
+import com.rena.dinosexpansion.common.trades.DefinedEnchantedBookTradSerializer;
+import com.rena.dinosexpansion.common.trades.DefinedEnchantedBookTrade;
+import com.rena.dinosexpansion.common.trades.EmeraldsForItemsTrade;
+import com.rena.dinosexpansion.common.trades.TradeSerializer;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentData;
 import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.merchant.villager.VillagerTrades;
-import net.minecraft.item.EnchantedBookItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.item.MerchantOffer;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.Util;
 import net.minecraftforge.common.BasicTrade;
-import net.minecraftforge.registries.ForgeRegistries;
+import org.lwjgl.system.CallbackI;
 
-import javax.annotation.Nullable;
-import java.util.Arrays;
-import java.util.Random;
-import java.util.function.Function;
-import java.util.function.Predicate;
+import java.util.*;
 
 public class ModVillagerTrades {
     /**
      * if you want to add custom trades here, do it in the {@link net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent}
      */
     public static Int2ObjectMap<VillagerTrades.ITrade[]> HERMIT_TRADES = new Int2ObjectOpenHashMap<>();
+    public static Int2ObjectMap<VillagerTrades.ITrade[]> WHITE_BOSS_TRADES = new Int2ObjectOpenHashMap<>();
+    public static Int2ObjectMap<VillagerTrades.ITrade[]> WHITE_NORMAL_TRADES = new Int2ObjectOpenHashMap<>();
+    public static Int2ObjectMap<VillagerTrades.ITrade[]> ORANGE_BOSS_TRADES = new Int2ObjectOpenHashMap<>();
+    public static Int2ObjectMap<VillagerTrades.ITrade[]> ORANGE_NORMAL_TRADES = new Int2ObjectOpenHashMap<>();
+
+    /**
+     * if you want to add custom trades here, do it <b>before</b> the {@link net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent}
+     */
+    public static final Set<TradeSerializer<?>> SERIALIZER = Util.make(new HashSet<>(), set -> {
+        set.add(new DefinedEnchantedBookTradSerializer());
+    });
 
 
     public static Int2ObjectMap<VillagerTrades.ITrade[]> gatAsIntMap(ImmutableMap<Integer, VillagerTrades.ITrade[]> p_221238_0_) {
         return new Int2ObjectOpenHashMap<>(p_221238_0_);
     }
 
-    public static void addHermitTrades() {
-        HERMIT_TRADES.put(1, new VillagerTrades.ITrade[]{new BasicTrade(10, new ItemStack(ItemInit.DINOPEDIA.get()), 1, 5)});
-        HERMIT_TRADES.put(2, new VillagerTrades.ITrade[]{new DefinedEnchantedBookTrade(new Enchantment[]{EnchantmentInit.ICE_ENCHANTMENT.get(), Enchantments.LOOTING, Enchantments.MENDING, Enchantments.UNBREAKING},new int[]{10, 10, 5, 75} , 5, 30)});
+    public static void registerTrades() {
+        WHITE_BOSS_TRADES.put(1, new VillagerTrades.ITrade[]{new VillagerTrades.EnchantedItemForEmeraldsTrade(ItemInit.STONE_SPEAR.get(), 10, 2, 2), new VillagerTrades.EnchantedItemForEmeraldsTrade(ItemInit.STONE_CHAKRAM.get(), 10, 2, 2)});
+        WHITE_BOSS_TRADES.put(2, new VillagerTrades.ITrade[]{new VillagerTrades.EnchantedItemForEmeraldsTrade(ItemInit.IRON_SPEAR.get(), 15, 2, 5), new VillagerTrades.EnchantedItemForEmeraldsTrade(ItemInit.IRON_CHAKRAM.get(), 15, 2, 5)});
+        WHITE_BOSS_TRADES.put(3, new VillagerTrades.ITrade[]{new VillagerTrades.EnchantedItemForEmeraldsTrade(ItemInit.DIAMOND_CHAKRAM.get(), 30, 1, 20), new VillagerTrades.EnchantedItemForEmeraldsTrade(ItemInit.DIAMOND_CHAKRAM.get(), 30, 1, 20), new VillagerTrades.EnchantedItemForEmeraldsTrade(ItemInit.GOLD_SPEAR.get(), 20, 1, 17), new VillagerTrades.EnchantedItemForEmeraldsTrade(ItemInit.GOLD_CHAKRAM.get(), 20, 1, 17)});
+        WHITE_BOSS_TRADES.put(4, new VillagerTrades.ITrade[]{new VillagerTrades.EnchantedItemForEmeraldsTrade(ItemInit.EMERALD_SPEAR.get(), 45, 1, 25), new VillagerTrades.EnchantedItemForEmeraldsTrade(ItemInit.EMERALD_CHAKRAM.get(), 45, 1, 25)});
+        WHITE_BOSS_TRADES.put(5, new VillagerTrades.ITrade[]{new VillagerTrades.EnchantedItemForEmeraldsTrade(ItemInit.NETHERITE_SPEAR.get(), 55, 2, 30), new VillagerTrades.EnchantedItemForEmeraldsTrade(ItemInit.NETHERITE_CHAKRAM.get(), 55, 1, 30), new DefinedEnchantedBookTrade(new Enchantment[]{Enchantments.SHARPNESS, EnchantmentInit.AQUATIC_ENCHANT.get(), Enchantments.LOOTING, Enchantments.FIRE_ASPECT}, new int[]{3, 1, 1, 1}, 10, 35)});
+
+        WHITE_NORMAL_TRADES.put(1, new VillagerTrades.ITrade[]{new VillagerTrades.EnchantedItemForEmeraldsTrade(ItemInit.WOODEN_SPEAR.get(), 5, 1, 4), new EmeraldsForItemsTrade(ItemInit.WOODEN_ARROW.get(),4, 3, 5, 2)});
+        WHITE_NORMAL_TRADES.put(2, new VillagerTrades.ITrade[]{new VillagerTrades.EnchantedItemForEmeraldsTrade(ItemInit.WOODEN_CHAKRAM.get(), 5, 1, 6), new EmeraldsForItemsTrade(ItemInit.STONE_ARROW.get(), 4,5, 5, 3)});
+        WHITE_NORMAL_TRADES.put(3, new VillagerTrades.ITrade[]{new VillagerTrades.EnchantedItemForEmeraldsTrade(ItemInit.WOOD_BOOMERANG.get(), 5, 1, 8), new EmeraldsForItemsTrade(ItemInit.IRON_ARROW.get(), 4,7, 5, 4)});
+        WHITE_NORMAL_TRADES.put(4, new VillagerTrades.ITrade[]{new DefinedEnchantedBookTrade(new Enchantment[]{Enchantments.BANE_OF_ARTHROPODS, Enchantments.FIRE_PROTECTION, Enchantments.BLAST_PROTECTION, Enchantments.PROJECTILE_PROTECTION}, new int[]{4,1,1,1}, 10, 13), new EmeraldsForItemsTrade(ItemInit.DIAMOND_ARROW.get(), 4,10, 5, 5)});
+        WHITE_NORMAL_TRADES.put(4, new VillagerTrades.ITrade[]{new DefinedEnchantedBookTrade(new Enchantment[]{Enchantments.SMITE, Enchantments.SHARPNESS, Enchantments.PROTECTION, Enchantments.UNBREAKING, Enchantments.EFFICIENCY}, new int[]{8,1,2,2, 2}, 12, 20), new EmeraldsForItemsTrade(ItemInit.NETHERITE_ARROW.get(), 4,20, 4, 6), new EmeraldsForItemsTrade(ItemInit.EMERALD_ARROW.get(), 4,17, 4, 6)});
+
+        ORANGE_BOSS_TRADES.put(1, new VillagerTrades.ITrade[]{new EmeraldsForItemsTrade(Items.POTATO, 1, 10, 4, 2), new EmeraldsForItemsTrade(Items.MELON_SEEDS, 1, 4, 2,2), new EmeraldsForItemsTrade(Items.PUMPKIN_SEEDS, 1, 4,2)});
+        ORANGE_BOSS_TRADES.put(2, new VillagerTrades.ITrade[]{new EmeraldsForItemsTrade(Items.CARROT, 1, 10, 4, 3), new EmeraldsForItemsTrade(ItemInit.ONION.get(), 2, 5, 4,3)});
+        ORANGE_BOSS_TRADES.put(3, new VillagerTrades.ITrade[]{new EmeraldsForItemsTrade(ItemInit.COOKED_ANKYLOSAURUS_MEAT.get(), 3, 10, 3, 4), new EmeraldsForItemsTrade(ItemInit.CORN_SEED.get(), 2, 5, 3,4)});
+        ORANGE_BOSS_TRADES.put(4, new VillagerTrades.ITrade[]{new EmeraldsForItemsTrade(ItemInit.EGGPLANT_SEED.get(), 1, 20, 2, 5), new EmeraldsForItemsTrade(Items.PHANTOM_MEMBRANE, 1, 13, 3,5)});
+        ORANGE_BOSS_TRADES.put(5, new VillagerTrades.ITrade[]{new EmeraldsForItemsTrade(Items.TOTEM_OF_UNDYING, 1, 40, 2, 6), new EmeraldsForItemsTrade(ItemInit.COMPOUND_ARROW.get(), 4, 13, 3,6), new EmeraldsForItemsTrade(ItemInit.COMPOUND_BOW.get(), 1, 63,1, 6)});
+
+        addHermitTrades();
     }
 
-    public static class DefinedEnchantedBookTrade implements VillagerTrades.ITrade {
-
-        private final Enchantment[] allowedEnchantments;
-        private final int[] weights;
-        private final int xpValue, baseCost;
-
-        /**
-         *
-         * @param allowedEnchants a predicated that chooses from every enchantment the matching ones
-         * @param weights the weights for each enchantment stored in  a function
-         * @param xpValue the xpValue the player gains upon trading
-         * @param baseCost the cost an enchanted book would have if it has a probability of 50%
-         */
-        public DefinedEnchantedBookTrade(Predicate<Enchantment> allowedEnchants, Function<Enchantment, Integer> weights, int xpValue, int baseCost) {
-            this(calcAllowedEnchants(allowedEnchants), weights, xpValue, baseCost);
-        }
-
-        public DefinedEnchantedBookTrade(Enchantment[] allowedEnchantments, Function<Enchantment, Integer> weights, int xpValue, int baseCost) {
-            this(allowedEnchantments, calcWeights(allowedEnchantments, weights), xpValue, baseCost);
-        }
-
-        public DefinedEnchantedBookTrade(Enchantment[] allowedEnchantments, int[] weights, int xpValue, int baseCost) {
-            if (allowedEnchantments.length != weights.length) {
-                throw new IllegalArgumentException("there has to be exactly as much weights as enchantments");
-            }
-            this.allowedEnchantments = allowedEnchantments;
-            this.weights = weights;
-            this.xpValue = xpValue;
-            this.baseCost = baseCost;
-        }
-
-        @Nullable
-        @Override
-        public MerchantOffer getOffer(Entity trader, Random rand) {
-
-            int enchId = getWeightedRandom(this.allowedEnchantments, this.weights, rand);
-            Enchantment enchantment = allowedEnchantments[enchId];
-            int level = MathHelper.nextInt(rand, enchantment.getMinLevel(), enchantment.getMaxLevel());
-            ItemStack book = EnchantedBookItem.getEnchantedItemStack(new EnchantmentData(enchantment, level));
-            double sum = Arrays.stream(weights).sum();
-            double percent = Math.floor(((double) weights[enchId]) * 200d / sum);
-            int cost = (int) (((double)baseCost) * (percent - 50) + (double)rand.nextInt(5 + level * 10));
-            cost = Math.min(64, cost);
-
-            return new MerchantOffer(new ItemStack(Items.EMERALD, cost), new ItemStack(Items.BOOK), book, 2, this.xpValue, 0.2F);
-        }
-
-        private static int getWeightedRandom(Enchantment[] enchantments, int[] weights, Random rand) {
-            int randWeight = rand.nextInt(Arrays.stream(weights).sum());
-            for (int i = 0; i < enchantments.length; i++) {
-                randWeight -= weights[i];
-                if (randWeight < 0) {
-                    return i;
-                }
-            }
-            return 0;
-        }
-
-        private static Enchantment[] calcAllowedEnchants(Predicate<Enchantment> allowedEnchants) {
-            return (Enchantment[]) ForgeRegistries.ENCHANTMENTS.getValues().stream().filter(allowedEnchants).toArray();
-        }
-
-        private static int[] calcWeights(Enchantment[] allowedEnchants, Function<Enchantment, Integer> weightsFunc) {
-            int[] weights = new int[allowedEnchants.length];
-            for (int i = 0; i < allowedEnchants.length; i++) {
-                weights[i] = weightsFunc.apply(allowedEnchants[i]);
-            }
-            return weights;
-        }
+    public static void addHermitTrades() {
+        HERMIT_TRADES.put(1, new VillagerTrades.ITrade[]{new BasicTrade(10, new ItemStack(ItemInit.DINOPEDIA.get()), 1, 5)});
+        HERMIT_TRADES.put(2, new VillagerTrades.ITrade[]{new DefinedEnchantedBookTrade(new Enchantment[]{EnchantmentInit.ICE_ENCHANTMENT.get(), Enchantments.LOOTING, Enchantments.MENDING, Enchantments.UNBREAKING}, new int[]{10, 10, 5, 75}, 5, 30)});
     }
 }

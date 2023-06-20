@@ -58,7 +58,6 @@ public abstract class Dinosaur extends TameableEntity {
         int max = Math.min(maxLevel + DinosExpansionConfig.LEVEL_OFFSET.get(), DinosExpansionConfig.MAX_LEVEL.get() + DinosExpansionConfig.LEVEL_OFFSET.get());
         int min = Math.max(minLevel + DinosExpansionConfig.LEVEL_OFFSET.get(), 0);
         int levl = MathHelper.nextInt(new Random(), min, max);
-        DinosExpansion.LOGGER.debug("level: " + levl);
         return levl;
     }
 

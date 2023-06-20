@@ -349,6 +349,8 @@ public class DinoBiomeProvider extends BiomeProvider {
                                 .getOrDefault(DinoBiomeProvider.FROZEN_OCEAN));
     }
 
+
+
     public static boolean isBeach(int id){
         return id == getId(BEACH) || id == getId(SNOW_BEACH);
     }

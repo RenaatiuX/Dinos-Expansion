@@ -28,6 +28,7 @@ import com.rena.dinosexpansion.common.entity.aquatic.Parapuzosia;
 import com.rena.dinosexpansion.common.entity.flying.Dimorphodon;
 import com.rena.dinosexpansion.common.entity.semiaquatic.Astorgosuchus;
 import com.rena.dinosexpansion.common.entity.terrestrial.ambient.Campanile;
+import com.rena.dinosexpansion.common.entity.villagers.caveman.Caveman;
 import com.rena.dinosexpansion.core.init.*;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.RenderType;
@@ -78,6 +79,7 @@ public class ClientSetupEvents {
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.MEGANEURA.get(), MeganeuraRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.HERMIT.get(), HermitRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.BOOMERANG.get(), BoomerangRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityInit.CAVEMAN.get(), CavemanRenderer::new);
 
         ClientRegistry.bindTileEntityRenderer(BlockEntityInit.MORTAR.get(), MortarRenderer::new);
     }
@@ -94,6 +96,7 @@ public class ClientSetupEvents {
         event.put(EntityInit.DRYOSAURUS.get(), Dryosaurus.createAttributes().create());
         event.put(EntityInit.WETHERELLUS.get(), Wetherellus.createAttributes().create());
         event.put(EntityInit.AEGIROCASSIS.get(), Aegirocassis.createAttributes().create());
+        event.put(EntityInit.CAVEMAN.get(), Caveman.createAttributes());
         event.put(EntityInit.ANOMALOCARIS.get(), Anomalocaris.createAttributes().create());
         event.put(EntityInit.ACANTHODES.get(), Acanthodes.createAttributes().create());
         event.put(EntityInit.BELANTSEA.get(), Belantsea.createAttributes().create());

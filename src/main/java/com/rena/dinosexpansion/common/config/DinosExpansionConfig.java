@@ -7,7 +7,7 @@ public class DinosExpansionConfig {
     public static final ForgeConfigSpec.Builder BUILDER;
     public static final ForgeConfigSpec.IntValue MAX_LEVEL, MAX_XP, XP_INCREASE, NARCOTIC_NEEDED_PERCENT,
             WOOD_BOOMERANG_RANGE, WOOD_BOOMERANG_DAMAGE, IRON_BOOMERANG_RANGE, IRON_BOOMERANG_DAMAGE,
-            DIAMOND_BOOMERANG_RANGE, DIAMOND_BOOMERANG_DAMAGE, LEVEL_OFFSET;
+            DIAMOND_BOOMERANG_RANGE, DIAMOND_BOOMERANG_DAMAGE, LEVEL_OFFSET, MAX_TRIBE_APPROVAL, TRIBE_HOSTILE_THRESHOLD, TRIBE_TRADING_THRESHOLD;
     public static final ForgeConfigSpec.DoubleValue ATTACK_DAMAGE_PER_LEVEL, HEALTH_PER_LEVEL, ARMOR_PER_LEVEL;
     public static final ForgeConfigSpec.BooleanValue TURN_AROUND_ITEM, TURN_AROUND_MOB, TURN_AROUND_BUTTON,
             BREAKS_TORCHES, BREAKS_FLOWERS, BREAKS_GRASS, BREAKS_TALLGRASS,
@@ -59,6 +59,15 @@ public class DinosExpansionConfig {
         ACTIVATES_PRESSURES_PLATES = builder.comment("Can boomerang activate regular and lightweight pressure plates.").define("activatesPressurePlates", true);
         ACTIVATES_TRIP_WIRE = builder.comment("Can boomerang activate/trigger tripwire(s).").define("activatesTripWire", true);
         builder.pop();
+
+
+        builder.push("Tribes");
+        builder.comment("this defines the biggest value of approval of a tribe u can get");
+        MAX_TRIBE_APPROVAL = builder.defineInRange("max_tribe_approval", 200, 10, Integer.MAX_VALUE);
+        builder.comment("this defines how much approval you need so the tribe will no longer attack you", "this can be a maximum of max_tribe_approval, any value above will be clamped");
+        TRIBE_HOSTILE_THRESHOLD = builder.defineInRange("hostile_threshold", 120, 1, Integer.MAX_VALUE);
+        builder.comment("this defines how much approval u will need so the tribe will trade with you", "this will be clamped to max_tribe_approval");
+        TRIBE_TRADING_THRESHOLD = builder.defineInRange("trading_threshold", 180, 1, Integer.MAX_VALUE);
 
         BUILDER =  builder;
     }

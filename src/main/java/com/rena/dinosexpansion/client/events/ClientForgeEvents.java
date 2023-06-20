@@ -4,6 +4,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.client.renderer.entity.ParapuzosiaRenderer;
+import com.rena.dinosexpansion.client.renderer.layer.DinosaurShoulderRidingLayer;
 import com.rena.dinosexpansion.common.config.DinosExpansionConfig;
 import com.rena.dinosexpansion.common.entity.Dinosaur;
 import com.rena.dinosexpansion.common.entity.aquatic.Parapuzosia;
@@ -17,6 +18,7 @@ import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.client.settings.PointOfView;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -38,10 +40,7 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.util.text.*;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.FOVUpdateEvent;
-import net.minecraftforge.client.event.InputEvent;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.client.event.RenderNameplateEvent;
+import net.minecraftforge.client.event.*;
 import net.minecraftforge.client.gui.ForgeIngameGui;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.Event;
@@ -61,6 +60,7 @@ public class ClientForgeEvents {
     public static final ResourceLocation FREEZE_OVERLAY = DinosExpansion.modLoc("textures/overlay/ice_overlay.png");
     public static final ResourceLocation FROZEN_HEARTS = DinosExpansion.modLoc("textures/overlay/frozen_heart.png");
     public static final Random rand = new Random();
+    protected static boolean hasAddedLayer = false;
     private static boolean hasReleasedJumpKey;
     private static int jumpCount = 0;
 
@@ -122,6 +122,14 @@ public class ClientForgeEvents {
                 event.setCanceled(true);
             }
         }
+    }
+
+    @SubscribeEvent
+    public static void addCustomLayer(RenderPlayerEvent.Pre event){
+       if (!hasAddedLayer) {
+           event.getRenderer().addLayer(new DinosaurShoulderRidingLayer<>(event.getRenderer()));
+           hasAddedLayer = true;
+       }
     }
 
     @SubscribeEvent
