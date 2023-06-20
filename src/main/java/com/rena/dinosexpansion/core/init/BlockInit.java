@@ -4,6 +4,7 @@ import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.client.renderer.item.MortarItemRenderer;
 import com.rena.dinosexpansion.common.block.*;
 import com.rena.dinosexpansion.common.block.bush.BushBlockBase;
+import com.rena.dinosexpansion.common.block.crops.CropBaseBlock;
 import com.rena.dinosexpansion.common.block.crops.DoubleCropBaseBlock;
 import com.rena.dinosexpansion.common.block.plant.SinglePlantBlock;
 import com.rena.dinosexpansion.common.block.plant.TriplePlantBlock;
@@ -43,13 +44,14 @@ public class BlockInit {
     public static final RegistryObject<Block> GLOW_STICK = BLOCKS.register("glowstick", () -> (new GlowStickBlock(AbstractBlock.Properties.create(Material.CARPET).doesNotBlockMovement().setLightLevel((state) -> 12).zeroHardnessAndResistance())));
     public static final RegistryObject<MortarBlock> MORTAR = register("mortar", MortarBlock::new, ModItemGroups.BLOCKS, () -> MortarItemRenderer::new);
 
-    //Crop and Bush
+    //Bush
     public static final RegistryObject<Block> NARCOTIC_BERRY_BUSH = BLOCKS.register("narcotic_berry_bush",
             () -> new BushBlockBase(AbstractBlock.Properties.create(Material.PLANTS).tickRandomly().doesNotBlockMovement().sound(SoundType.SWEET_BERRY_BUSH), ItemInit.NARCOTIC_BERRIES));
     public static final RegistryObject<Block> ORANGE_BERRY_BUSH = BLOCKS.register("orange_berry_bush",
             () -> new BushBlockBase(AbstractBlock.Properties.create(Material.PLANTS).tickRandomly().doesNotBlockMovement().sound(SoundType.SWEET_BERRY_BUSH), ItemInit.ORANGE_BERRIES));
     public static final RegistryObject<Block> YELLOW_BERRY_BUSH = BLOCKS.register("yellow_berry_bush",
             () -> new BushBlockBase(AbstractBlock.Properties.create(Material.PLANTS).tickRandomly().doesNotBlockMovement().sound(SoundType.SWEET_BERRY_BUSH), ItemInit.YELLOW_BERRIES));
+
     //Plants
     public static final RegistryObject<Block> LAVENDER = register("lavender",
             ()-> new SinglePlantBlock(AbstractBlock.Properties.create(Material.PLANTS).doesNotBlockMovement().zeroHardnessAndResistance().sound(SoundType.PLANT)), ModItemGroups.BLOCKS);
@@ -114,6 +116,12 @@ public class BlockInit {
             ()-> new DoubleCropBaseBlock(AbstractBlock.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().hardnessAndResistance(0).sound(SoundType.CROP), ItemInit.EGGPLANT_SEED));
     public static final RegistryObject<Block> CORN_CROP = BLOCKS.register("corn_crop",
             ()-> new DoubleCropBaseBlock(AbstractBlock.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().hardnessAndResistance(0).sound(SoundType.CROP), ItemInit.CORN_SEED));
+    public static final RegistryObject<Block> CUCUMBER_CROP = BLOCKS.register("cucumber_crop",
+            ()-> new CropBaseBlock(AbstractBlock.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().hardnessAndResistance(0).sound(SoundType.CROP), ItemInit.CUCUMBER_SEED));
+    public static final RegistryObject<Block> LETTUCE_CROP = BLOCKS.register("lettuce_crop",
+            ()-> new CropBaseBlock(AbstractBlock.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().hardnessAndResistance(0).sound(SoundType.CROP),ItemInit.LETTUCE_SEED));
+    public static final RegistryObject<Block> SPINACH_CROP = BLOCKS.register("spinach_crop",
+            ()-> new CropBaseBlock(AbstractBlock.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().hardnessAndResistance(0).sound(SoundType.CROP), ItemInit.SPINACH_SEED));
 
     //Blocks
     public static final RegistryObject<Block> GEYSER = register("geyser",

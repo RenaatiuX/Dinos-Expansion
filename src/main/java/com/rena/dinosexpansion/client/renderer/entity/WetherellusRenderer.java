@@ -19,7 +19,7 @@ public class WetherellusRenderer extends GeoEntityRenderer<Wetherellus> {
 
     @Override
     public RenderType getRenderType(Wetherellus animatable, float partialTicks, MatrixStack stack, @Nullable IRenderTypeBuffer renderTypeBuffer, @Nullable IVertexBuilder vertexBuilder, int packedLightIn, ResourceLocation textureLocation) {
-        return RenderType.getEntityCutoutNoCull(textureLocation);
+        return RenderType.getEntityCutout(getTextureLocation(animatable));
     }
 
     @Override
