@@ -20,8 +20,10 @@ public class BossWanderToOtherTribe extends Goal {
     public boolean shouldExecute() {
         if (!caveman.world.isRemote() && caveman.isBoss() && caveman.tribe != null && caveman.tribe.getSize() == 1 && !caveman.tribe.isBossFight()) {
             for (Tribe t : TribeSaveData.getData((ServerWorld) caveman.world).getTribes())
-                if (t != caveman.tribe && t.getType() == caveman.tribe.getType() && t.getSize() > 1)
+                if (t != caveman.tribe && t.getType() == caveman.tribe.getType() && t.getSize() > 1) {
                     caveman.wanderTribe = t;
+                    return caveman.wanderTribe != null;
+                }
             return caveman.wanderTribe != null;
         }
         return false;
@@ -31,11 +33,17 @@ public class BossWanderToOtherTribe extends Goal {
     public void tick() {
         if (caveman.wanderTribe.boss != null)
             caveman.getNavigator().tryMoveToEntityLiving(caveman.wanderTribe.boss, speed);
-        if (!caveman.wanderTribe.isBossFight() && caveman.wanderTribe.getCavemen().stream().filter(c -> c.getDistance(caveman) <= 1d).count() > 0){
+        if (!caveman.wanderTribe.isBossFight() && caveman.wanderTribe.getCavemen().stream().filter(c -> c.getDistance(caveman) <= 25d).count() > 0) {
             caveman.tribe.removeCaveman(caveman);
             caveman.tribe = caveman.wanderTribe;
             caveman.tribe.addCaveman(caveman);
+            caveman.wanderTribe = null;
         }
+    }
+
+    @Override
+    public boolean shouldContinueExecuting() {
+        return caveman.isBoss() && caveman.wanderTribe != null && caveman.wanderTribe.getSize() > 1 && !caveman.tribe.isBossFight() && caveman.tribe.getSize() == 1;
     }
 
     @Override

@@ -163,7 +163,7 @@ public class Caveman extends AbstractVillagerEntity {
         this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.0f, true));
         this.goalSelector.addGoal(2, new StartBossfightGoal(this, RADIUS_BOSSFIGHT));
         this.goalSelector.addGoal(2, new FightBossfightGoal(this));
-        //this.goalSelector.addGoal(3, new BossWanderToOtherTribe(this, .7d));
+        this.goalSelector.addGoal(3, new BossWanderToOtherTribe(this, .7d));
         this.goalSelector.addGoal(3, new NearestAttackableTargetGoal(this, PlayerEntity.class, 5, true, false, e -> e instanceof PlayerEntity && tribe.isHostile((PlayerEntity) e)){
             @Override
             public boolean shouldExecute() {

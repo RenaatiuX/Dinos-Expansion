@@ -1,5 +1,6 @@
 package com.rena.dinosexpansion.common.entity.villagers.caveman;
 
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.pathfinding.PathType;
 import net.minecraft.util.math.BlockPos;
@@ -10,6 +11,7 @@ public class StartBossfightGoal extends Goal {
 
     protected final Caveman caveman;
     protected final double radius;
+    protected int pathfindCooldown = 0;
     protected BlockPos viewerPos = null;
 
     public StartBossfightGoal(Caveman caveman, double radius) {
@@ -25,6 +27,7 @@ public class StartBossfightGoal extends Goal {
 
     @Override
     public void startExecuting() {
+        pathfindCooldown = 0;
         BlockPos center = caveman.getTribe().getBossFightCenter();
         if (caveman.isFighterBossFight()) {
             if (!caveman.getRivalBoss().takingPlaceInBossfight) {
@@ -32,7 +35,7 @@ public class StartBossfightGoal extends Goal {
             } else {
                 this.viewerPos = new BlockPos(center.getX() - radius + 2d, 250, center.getZ());
             }
-            while (!caveman.world.getBlockState(viewerPos).isSolid() && caveman.getWorld().getBlockState(viewerPos).allowsMovement(caveman.world, viewerPos, PathType.LAND)){
+            while (caveman.world.isAirBlock(viewerPos)){
                 viewerPos = viewerPos.down();
             }
             viewerPos = viewerPos.up();
@@ -42,10 +45,11 @@ public class StartBossfightGoal extends Goal {
             double getCavemanPosition = caveman.getTribe().getBossfightCounterCircle();
             double x = center.getX() + Math.cos(around * getCavemanPosition) * radius;
             double z = center.getZ() + Math.sin(around * getCavemanPosition) * radius;
-            this.viewerPos = new BlockPos(x, 250, z);
-            while (!caveman.world.getBlockState(viewerPos).isSolid() && caveman.getWorld().getBlockState(viewerPos).allowsMovement(caveman.world, viewerPos, PathType.LAND)){
+            this.viewerPos = new BlockPos(x, caveman.getPosY() + 3, z);
+            while (caveman.world.isAirBlock(viewerPos)){
                 viewerPos = viewerPos.down();
             }
+            viewerPos = viewerPos.up();
             caveman.getNavigator().tryMoveToXYZ(viewerPos.getX(), viewerPos.getY(), viewerPos.getZ(), .7d);
             caveman.getTribe().setBossfightCounterCircle((int) (getCavemanPosition + 1d));
         }
@@ -58,18 +62,19 @@ public class StartBossfightGoal extends Goal {
         if (!caveman.world.isRemote()) {
             if (!caveman.isFighterBossFight()) {
                 caveman.getLookController().setLookPosition(caveman.tribe.getBossFightCenter().getX(), caveman.getPosYEye(), caveman.tribe.getBossFightCenter().getZ());
-                caveman.getNavigator().tryMoveToXYZ(viewerPos.getX(), viewerPos.getY(), viewerPos.getZ(), .7d);
+                if (!caveman.getNavigator().tryMoveToXYZ(viewerPos.getX(), viewerPos.getY(), viewerPos.getZ(), .7d))
+                    pathfindCooldown++;
             } else {
                 caveman.getLookController().setLookPosition(caveman.rivalBoss.getPosX(), caveman.getPosYEye(), caveman.rivalBoss.getPosZ());
-                caveman.getNavigator().tryMoveToXYZ(viewerPos.getX(), viewerPos.getY(), viewerPos.getZ(), .6d);
+                if (!caveman.getNavigator().tryMoveToXYZ(viewerPos.getX(), viewerPos.getY(), viewerPos.getZ(), .6d))
+                    pathfindCooldown++;
             }
         }
     }
 
     @Override
     public boolean shouldContinueExecuting() {
-        System.out.println(caveman.getPositionVec().squareDistanceTo(Vector3d.copy(viewerPos)));
-        if (caveman.getNavigator().getPath() == null || caveman.getPositionVec().squareDistanceTo(Vector3d.copy(viewerPos)) < 1d) {
+        if (pathfindCooldown >= 100 || caveman.getPositionVec().squareDistanceTo(Vector3d.copy(viewerPos)) <= 1.5d) {
             caveman.takingPlaceInBossfight = false;
             caveman.tookPlaceInBossfight = true;
             return false;
@@ -80,5 +85,6 @@ public class StartBossfightGoal extends Goal {
     @Override
     public void resetTask() {
         this.caveman.getNavigator().clearPath();
+        pathfindCooldown = 0;
     }
 }
