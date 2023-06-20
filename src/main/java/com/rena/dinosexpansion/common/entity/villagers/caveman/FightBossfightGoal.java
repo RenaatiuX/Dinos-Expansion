@@ -11,9 +11,7 @@ public class FightBossfightGoal extends Goal {
 
     @Override
     public boolean shouldExecute() {
-        if (false) {
-            System.out.println(caveman.tribe.getCavemen().stream().filter(c -> c.tookPlaceInBossfight).count() + "|" + caveman.tribe.getSize());
-        }
+        //System.out.println(caveman.tribe.getCavemen().stream().filter(c -> c.tookPlaceInBossfight).count() + "|" + caveman.tribe.getSize());
         return caveman.tookPlaceInBossfight && caveman.tribe != null && caveman.tribe.getCavemen().stream().filter(c -> c.tookPlaceInBossfight).count() == caveman.tribe.getSize();
     }
 
@@ -44,5 +42,7 @@ public class FightBossfightGoal extends Goal {
     @Override
     public void resetTask() {
         caveman.tookPlaceInBossfight = false;
+        if (caveman.isBoss())
+            caveman.heal(caveman.getMaxHealth());
     }
 }
