@@ -11,12 +11,12 @@ public class CrocodileMeleeGoal extends DinosaurMeleeAttackGoal {
 
     @Override
     public boolean shouldExecute() {
-        return super.shouldExecute() && dino.getPassengers().isEmpty();
+        return dino.getPassengers().isEmpty() && super.shouldExecute();
     }
 
     @Override
     public boolean shouldContinueExecuting() {
-        return super.shouldContinueExecuting() && dino.getPassengers().isEmpty();
+        return dino.getPassengers().isEmpty() && super.shouldContinueExecuting();
     }
 
     @Override

@@ -1,6 +1,8 @@
 package com.rena.dinosexpansion.common.entity.flying;
 
 import com.rena.dinosexpansion.common.entity.Dinosaur;
+import com.rena.dinosexpansion.common.entity.ia.BatMeleeAttackGoal;
+import com.rena.dinosexpansion.common.entity.ia.BatRandomFly;
 import com.rena.dinosexpansion.common.entity.ia.SleepRhythmGoal;
 import com.rena.dinosexpansion.common.entity.terrestrial.ambient.AmbientDinosaur;
 import com.rena.dinosexpansion.core.init.EntityInit;
@@ -12,11 +14,17 @@ import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.controller.FlyingMovementController;
 import net.minecraft.entity.ai.controller.MovementController;
 import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.ai.goal.HurtByTargetGoal;
 import net.minecraft.entity.passive.IFlyingAnimal;
 import net.minecraft.item.Item;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.FlyingPathNavigator;
 import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.pathfinding.PathNodeType;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.util.math.*;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.IWorldReader;
@@ -37,9 +45,14 @@ import java.util.EnumSet;
 import java.util.List;
 
 public class Meganeura extends AmbientDinosaur implements IAnimatable, IAnimationTickable, IFlyingAnimal {
+
+
+    public static final DataParameter<Boolean> HANGING = EntityDataManager.createKey(Meganeura.class, DataSerializers.BOOLEAN);
+
+
     private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
     @Nullable
-    private BlockPos targetPosition;
+    private BlockPos targetPosition, treePos;
     private int hoverTicks;
 
     public Meganeura(EntityType<? extends Dinosaur> type, World world) {
@@ -61,7 +74,37 @@ public class Meganeura extends AmbientDinosaur implements IAnimatable, IAnimatio
     public static AttributeModifierMap.MutableAttribute createAttributes() {
         return MobEntity.func_233666_p_().createMutableAttribute(Attributes.MAX_HEALTH, 8F)
                 .createMutableAttribute(Attributes.FLYING_SPEED, 0.1F)
-                .createMutableAttribute(Attributes.ATTACK_DAMAGE, 0.0F);
+                .createMutableAttribute(Attributes.ATTACK_DAMAGE, 0.1F);
+    }
+
+    @Override
+    protected void registerGoals() {
+        super.registerGoals();
+
+        this.goalSelector.addGoal(1, new BatMeleeAttackGoal(this, 0.6D));
+        this.goalSelector.addGoal(3, new HurtByTargetGoal(this).setCallsForHelp(Meganeura.class));
+
+        this.goalSelector.addGoal(10, new BatRandomFly<>(this, a -> !a.isHanging() && a.getHoverTicks() <= 0));
+    }
+
+    @Override
+    protected void registerData() {
+        super.registerData();
+        this.dataManager.register(HANGING, false);
+    }
+
+
+    @Override
+    public boolean attackEntityAsMob(Entity entityIn) {
+        if (super.attackEntityAsMob(entityIn)){
+            if (entityIn instanceof LivingEntity) {
+                LivingEntity livingEntity = (LivingEntity) entityIn;
+                livingEntity.addPotionEffect(new EffectInstance(Effects.WEAKNESS, 100, 2));
+            }
+            return true;
+
+        }
+        return super.attackEntityAsMob(entityIn);
     }
 
     public int getHoverTicks() {
@@ -82,42 +125,15 @@ public class Meganeura extends AmbientDinosaur implements IAnimatable, IAnimatio
     }
 
     @Override
-    protected void collideWithNearbyEntities() {
-    }
+    protected void collideWithNearbyEntities() {}
 
     @Override
     public void tick() {
         super.tick();
         this.setMotion(this.getMotion().mul(1.0D, 0.6D, 1.0D));
-    }
-
-    @Override
-    protected void updateAITasks() {
-        super.updateAITasks();
-        if (!(this.targetPosition == null || this.world.isAirBlock(this.targetPosition) && this.targetPosition.getY() > 1)) {
-            this.targetPosition = null;
-        }
-        if (this.getHoverTicks() > 0)  {
-            this.setHoverTicks(Math.max(0, this.getHoverTicks() - 1));
-        } else if (this.targetPosition == null || this.targetPosition.withinDistance(this.getPositionVec(), 2.0)) {
-            this.targetPosition = new BlockPos(this.getPosX() + (double)this.rand.nextInt(7) - (double)this.rand.nextInt(7), this.getPosY() + (double)this.rand.nextInt(6) - 2.0D, this.getPosZ() + (double)this.rand.nextInt(7) - (double)this.rand.nextInt(7));
-        }
-
-        if (this.targetPosition != null && this.getHoverTicks() <= 0) {
-            double d0 = this.targetPosition.getX() + 0.5D - this.getPosX();
-            double d1 = this.targetPosition.getY() + 0.1D - this.getPosY();
-            double d2 = this.targetPosition.getZ() + 0.5D - this.getPosZ();
-
-            double speed = this.getAttributeValue(Attributes.FLYING_SPEED);
-
-            Vector3d vector3d = this.getMotion();
-            Vector3d signumVector3d = vector3d.add((Math.signum(d0) * 0.5D - vector3d.x) * speed, (Math.signum(d1) * (double) 0.7F - vector3d.y) * speed, (Math.signum(d2) * 0.5D - vector3d.z) * speed);
-            this.setMotion(signumVector3d);
-
-            this.moveForward = 5.0F;
-            float angle = (float) (MathHelper.atan2(signumVector3d.z, signumVector3d.x) * (double) (180F / (float) Math.PI)) - 90.0F;
-            float wrappedAngle = MathHelper.wrapDegrees(angle - this.rotationYaw);
-            this.rotationYaw += wrappedAngle;
+        if (!world.isRemote){
+            if (this.getHoverTicks() > 0)
+                this.setHoverTicks(this.getHoverTicks() - 1);
         }
     }
 
@@ -172,6 +188,21 @@ public class Meganeura extends AmbientDinosaur implements IAnimatable, IAnimatio
     @Override
     public int tickTimer() {
         return this.ticksExisted;
+    }
+
+    /**
+     * client synced
+     * this will make the entity try to find a tree and hangs on it
+     */
+    protected void setHanging(boolean hanging){
+        this.dataManager.set(HANGING, hanging);
+    }
+
+    /**
+     * client synced
+     */
+    public boolean isHanging(){
+        return this.dataManager.get(HANGING);
     }
 
     //TODO do this for all other entities
