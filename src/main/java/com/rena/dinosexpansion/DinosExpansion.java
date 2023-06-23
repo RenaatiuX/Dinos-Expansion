@@ -63,7 +63,8 @@ public class DinosExpansion
         event.enqueueWork(() ->  {
             CriteriaTriggerInit.REGISTRY.forEach(CriteriaTriggers::register);
             Network.register();
-            FeatureInit.registerConfiguredFeatures();
+            //FeatureInit.registerConfiguredFeatures();
+            DimensionInit.registerDimension();
             StructureInit.setupStructures();
             ModVillagerTrades.registerTrades();
             TribeTypeSerializer.serializeTribeTypes();

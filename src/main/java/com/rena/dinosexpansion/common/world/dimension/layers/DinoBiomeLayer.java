@@ -10,12 +10,13 @@ public class DinoBiomeLayer implements IAreaTransformer0 {
     private static final int RARE_BIOME_CHANCE = 16;
 
     protected int[] commonBiomes = new int[] {
+            DinoLayerUtil.getBiomeId(BiomeInit.DESERT.getKey())
     };
     protected int[] uncommonBiomes = new int[] {
-
+        DinoLayerUtil.getBiomeId(BiomeInit.RIVER.getKey())
     };
     protected int[] rareBiomes = new int[] {
-            DinoLayerUtil.getBiomeId(BiomeInit.DESERT.getKey()),
+            DinoLayerUtil.getBiomeId(BiomeInit.DESERT.getKey())
     };
 
     @Override
