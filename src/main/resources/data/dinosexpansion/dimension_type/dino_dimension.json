@@ -6,7 +6,7 @@
   "ambient_light": 0.0,
   "bed_works": true,
   "respawn_anchor_works": false,
-  "has_raids": true,
+  "has_raids": false,
   "ultrawarm": false,
   "natural": true,
   "coordinate_scale": 1.0,

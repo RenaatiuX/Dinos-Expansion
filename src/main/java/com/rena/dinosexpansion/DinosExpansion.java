@@ -20,6 +20,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import software.bernie.geckolib3.GeckoLib;
 
+import java.util.Comparator;
+
 @Mod(DinosExpansion.MOD_ID)
 public class DinosExpansion
 {
@@ -63,7 +65,6 @@ public class DinosExpansion
             Network.register();
             FeatureInit.registerConfiguredFeatures();
             StructureInit.setupStructures();
-            DimensionInit.setupDimension();
             ModVillagerTrades.registerTrades();
             TribeTypeSerializer.serializeTribeTypes();
         });

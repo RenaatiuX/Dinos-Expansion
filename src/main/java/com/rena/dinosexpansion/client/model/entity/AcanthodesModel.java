@@ -28,7 +28,7 @@ public class AcanthodesModel extends AnimatedTickingGeoModel<Acanthodes> {
 
     @Override
     public ResourceLocation getTextureLocation(Acanthodes object) {
-        return DinosExpansion.modLoc("textures/entity/acanthodes/acanthodes_common.png");
+        return RARITY.get(object.getRarity());
     }
 
     @Override
