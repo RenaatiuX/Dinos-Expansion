@@ -22,12 +22,15 @@ public class DinoBiomeLayer implements IC0Transformer {
 
     @Override
     public int apply(INoiseRandom context, int value) {
-        if (context.random(RARE_BIOME_CHANCE) == 0) {
-            return rareBiomes[context.random(rareBiomes.length)];
-        } else if (context.random(UNCOMMON_BIOME_CHANCE) == 0) {
-            return uncommonBiomes[context.random(uncommonBiomes.length)];
-        } else {
-            return commonBiomes[context.random(commonBiomes.length)];
+        if (value == 1) {
+            if (context.random(RARE_BIOME_CHANCE) == 0) {
+                return rareBiomes[context.random(rareBiomes.length)];
+            } else if (context.random(UNCOMMON_BIOME_CHANCE) == 0) {
+                return uncommonBiomes[context.random(uncommonBiomes.length)];
+            } else {
+                return commonBiomes[context.random(commonBiomes.length)];
+            }
         }
+        return value;
     }
 }
