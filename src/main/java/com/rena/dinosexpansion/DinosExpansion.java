@@ -61,6 +61,8 @@ public class DinosExpansion
 
     private void setup(final FMLCommonSetupEvent event) {
         event.enqueueWork(() ->  {
+            BiomeInit.addBiomeEntries();
+            BiomeInit.fillBiomeDictionary();
             CriteriaTriggerInit.REGISTRY.forEach(CriteriaTriggers::register);
             Network.register();
             //FeatureInit.registerConfiguredFeatures();

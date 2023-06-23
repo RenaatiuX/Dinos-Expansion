@@ -1,8 +1,8 @@
 package com.rena.dinosexpansion.common.world.dimension;
 
-import com.rena.dinosexpansion.common.world.dimension.layers.DinoBiomeLayer;
-import com.rena.dinosexpansion.common.world.dimension.layers.DinoRiverLayer;
-import com.rena.dinosexpansion.common.world.dimension.layers.DinoRiverMixLayer;
+import com.rena.dinosexpansion.common.biome.BiomeBase;
+import com.rena.dinosexpansion.common.world.dimension.layers.*;
+import com.rena.dinosexpansion.core.init.BiomeInit;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.biome.Biome;
@@ -27,23 +27,36 @@ public class DinoLayerUtil {
         return biomeRegistry.getId(biome);
     }
 
+    public static int getBiomeId(BiomeBase define) {
+        return getBiomeId(define.getKey());
+    }
+
+    public static int getBiomeId(Biome b) {
+        return biomeRegistry.getId(b);
+    }
+
+    public static Biome getBiome(int id) {
+        return biomeRegistry.getByValue(id);
+    }
+
     public static <T extends IArea, C extends IExtendedNoiseRandom<T>> IAreaFactory<T> makeLayers(LongFunction<C> contextFactory, Registry<Biome> registry) {
         biomeRegistry = registry;
 
-        IAreaFactory<T> biomes = new DinoBiomeLayer().apply(contextFactory.apply(1L));
+        IAreaFactory<T> biomes = OceanLandLayer.INSTANCE.apply(contextFactory.apply(0L));
 
+        biomes = new DinoBiomeLayer().apply(contextFactory.apply(1L), biomes);
+
+        biomes = ZoomLayer.FUZZY.apply(contextFactory.apply(999L), biomes);
         biomes = ZoomLayer.NORMAL.apply(contextFactory.apply(1000), biomes);
         biomes = ZoomLayer.NORMAL.apply(contextFactory.apply(1001), biomes);
-        biomes = ZoomLayer.NORMAL.apply(contextFactory.apply(1002), biomes);
-        biomes = ZoomLayer.NORMAL.apply(contextFactory.apply(1003), biomes);
-        biomes = ZoomLayer.NORMAL.apply(contextFactory.apply(1004), biomes);
-        biomes = ZoomLayer.NORMAL.apply(contextFactory.apply(1005), biomes);
+        biomes = DinoSubbiomeLayer.INSTANCE.apply(contextFactory.apply(1006L), biomes);
 
-        biomes = LayerUtil.repeat(1000L, ZoomLayer.NORMAL, biomes, 1, contextFactory);
+        biomes = LayerUtil.repeat(1000L, ZoomLayer.NORMAL, biomes, 6, contextFactory);
 
         IAreaFactory<T> riverLayer = DinoRiverLayer.INSTANCE.apply(contextFactory.apply(1L), biomes);
         riverLayer = SmoothLayer.INSTANCE.apply(contextFactory.apply(7000L), riverLayer);
         biomes = DinoRiverMixLayer.INSTANCE.apply(contextFactory.apply(100L), biomes, riverLayer);
+
 
         return biomes;
     }
