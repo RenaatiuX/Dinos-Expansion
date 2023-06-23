@@ -17,7 +17,8 @@ public class DinoBiomeLayer implements IC0Transformer {
             DinoLayerUtil.getBiomeId(BiomeInit.DESERT.getKey())
     };
     protected int[] rareBiomes = new int[]{
-            DinoLayerUtil.getBiomeId(BiomeInit.RED_DESERT.getKey())
+            DinoLayerUtil.getBiomeId(BiomeInit.RED_DESERT.getKey()),
+            DinoLayerUtil.getBiomeId(BiomeInit.ALPS.getKey())
     };
 
     @Override
