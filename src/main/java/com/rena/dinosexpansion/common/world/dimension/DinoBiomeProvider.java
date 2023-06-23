@@ -29,7 +29,8 @@ public class DinoBiomeProvider extends BiomeProvider {
     private final Registry<Biome> registry;
     private final Layer genBiomes;
     private static final List<RegistryKey<Biome>> POSSIBLE_BIOMES = ImmutableList.of(
-            BiomeInit.DESERT.getKey()
+            BiomeInit.DESERT.getKey(), BiomeInit.RIVER.getKey(), BiomeInit.RED_DESERT.getKey(),
+            BiomeInit.DESERT_HILLS.getKey()
     );
 
     public DinoBiomeProvider(long seed, Registry<Biome> registry) {
