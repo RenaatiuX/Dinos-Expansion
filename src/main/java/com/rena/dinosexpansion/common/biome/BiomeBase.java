@@ -22,8 +22,8 @@ public class BiomeBase {
     public static final int BASE_WATER_COLOUR = 4159204;
     public static final int BASE_WATER_FOG_COLOUR = 329011;
 
-    public static final int OCEAN_WATER_COLOUR = 4159204;
-    public static final int OCEAN_WATER_FOG_COLOUR = 4159204;
+    public static final int FROZE_OCEAN_WATER_COLOUR = 3750089;
+    public static final int FROZE_OCEAN_WATER_FOG_COLOUR = 329011;
 
     public static final int LUKE_WARM_OCEAN_WATER_COLOUR = 4566514;
     public static final int LUKE_WARM_OCEAN_WATER_FOG_COLOUR = 267827;

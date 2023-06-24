@@ -6,7 +6,8 @@ import com.rena.dinosexpansion.common.biome.biomes.artic.Alps;
 import com.rena.dinosexpansion.common.biome.biomes.desert.Desert;
 import com.rena.dinosexpansion.common.biome.biomes.desert.RedDesert;
 import com.rena.dinosexpansion.common.biome.biomes.desert.subbiomes.DesertHills;
-import com.rena.dinosexpansion.common.biome.biomes.ocean.DinoLukeWarmOceanBiome;
+import com.rena.dinosexpansion.common.biome.biomes.ocean.*;
+import com.rena.dinosexpansion.common.biome.biomes.ocean.subbiome.*;
 import com.rena.dinosexpansion.common.biome.biomes.river.River;
 import com.rena.dinosexpansion.common.biome.util.BiomeData;
 import net.minecraft.util.RegistryKey;
@@ -20,6 +21,7 @@ import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import javax.swing.plaf.PanelUI;
 import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -34,18 +36,34 @@ public class BiomeInit {
     public static final BiomeBase DESERT_HILLS = new DesertHills();
     public static final BiomeBase RIVER = new River();
     public static final BiomeBase RED_DESERT = new RedDesert();
-    public static final BiomeBase LUKEWARM_OCEAN = new DinoLukeWarmOceanBiome(false);
-    public static final BiomeBase LUKEWARM_DEEP_OCEAN = new DinoLukeWarmOceanBiome(false);
     public static final BiomeBase ALPS = new Alps();
-
+    public static final BiomeBase OCEAN = new Ocean();
+    public static final BiomeBase DEEP_OCEAN = new DeepOcean();
+    public static final BiomeBase COLD_OCEAN = new ColdOcean();
+    public static final BiomeBase DEEP_COLD_OCEAN = new DeepColdOcean();
+    public static final BiomeBase LUKEWARM_OCEAN = new LukewarmOcean();
+    public static final BiomeBase LUKEWARM_DEEP_OCEAN = new DeepLukewarmOcean();
+    public static final BiomeBase WARM_OCEAN = new WarmOcean();
+    public static final BiomeBase DEEP_WARM_OCEAN = new DeepWarmOcean();
+    public static final BiomeBase FROZEN_OCEAN = new FrozenOcean();
+    public static final BiomeBase DEEP_FROZEN_OCEAN = new DeepFrozenOcean();
 
     public static final RegistryObject<Biome> DESERT_BIOME = register("desert", DESERT::getBiome, 1);
     public static final RegistryObject<Biome> DESERT_HILLS_BIOME = register("desert_hills", DESERT_HILLS::getBiome, 2);
     public static final RegistryObject<Biome> RIVER_BIOME = register("river", RIVER::getBiome, 3);
     public static final RegistryObject<Biome> RED_DESERT_BIOME = register("red_desert", RED_DESERT::getBiome, 4);
-    public static final RegistryObject<Biome> LUKEWARM_OCEAN_BIOME = register("lukewarm_ocean", LUKEWARM_OCEAN::getBiome, 4);
-    public static final RegistryObject<Biome> LUKEWARM_DEEP_BIOME = register("deep_lukewarm_ocean", LUKEWARM_DEEP_OCEAN::getBiome, 4);
     public static final RegistryObject<Biome> ALPS_BIOME = register("alps", ALPS::getBiome, 5);
+    public static final RegistryObject<Biome> OCEAN_BIOME = register("ocean", OCEAN::getBiome, 6);
+    public static final RegistryObject<Biome> DEEP_OCEAN_BIOME = register("deep_ocean", DEEP_OCEAN::getBiome, 7);
+    public static final RegistryObject<Biome> COLD_OCEAN_BIOME = register("cold_ocean", COLD_OCEAN::getBiome, 8);
+    public static final RegistryObject<Biome> DEEP_COLD_OCEAN_BIOME = register("deep_cold_ocean", DEEP_COLD_OCEAN::getBiome, 9);
+    public static final RegistryObject<Biome> LUKEWARM_OCEAN_BIOME = register("lukewarm_ocean", LUKEWARM_OCEAN::getBiome, 10);
+    public static final RegistryObject<Biome> DEEP_LUKEWARM_BIOME = register("deep_lukewarm_ocean", LUKEWARM_DEEP_OCEAN::getBiome, 11);
+    public static final RegistryObject<Biome> WARM_OCEAN_BIOME = register("warm_ocean", WARM_OCEAN::getBiome, 12);
+    public static final RegistryObject<Biome> DEEP_WARM_OCEAN_BIOME = register("deep_warm_ocean", DEEP_WARM_OCEAN::getBiome, 13);
+    public static final RegistryObject<Biome> FROZEN_OCEAN_BIOME = register("frozen_ocean", FROZEN_OCEAN::getBiome, 14);
+    public static final RegistryObject<Biome> DEEP_FROZEN_OCEAN_BIOME = register("deep_frozen_ocean", DEEP_FROZEN_OCEAN::getBiome, 15);
+
 
     public static RegistryObject<Biome> register(String name, Supplier<? extends Biome> biomeSupplier, int numericalID) {
         ResourceLocation id = new ResourceLocation(DinosExpansion.MOD_ID, name);
