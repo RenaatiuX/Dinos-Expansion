@@ -29,16 +29,6 @@ public class Alps extends BiomeBase {
     }
 
     @Override
-    public Biome getRiver() {
-        return this.getBiome();
-    }
-
-    @Override
-    public WeightedList<Biome> getHills() {
-        return super.getHills();
-    }
-
-    @Override
     public int getWeight() {
         return 6;
     }
@@ -48,14 +38,8 @@ public class Alps extends BiomeBase {
         return new BiomeDictionary.Type[] {BiomeDictionary.Type.MOUNTAIN, BiomeDictionary.Type.COLD, BiomeDictionary.Type.SNOWY};
     }
 
-    @Nullable
     @Override
-    public Biome getEdge() {
-        return super.getEdge();
-    }
-
-    @Override
-    public BiomeManager.BiomeType getBiomeType() {
-        return BiomeManager.BiomeType.COOL;
+    public BiomeType[] getBiomeType() {
+        return new BiomeType[]{BiomeType.ICY};
     }
 }

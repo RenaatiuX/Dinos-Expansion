@@ -23,18 +23,13 @@ public class River extends BiomeBase {
     }
 
     @Override
-    public Biome getRiver() {
-        return this.getBiome();
+    public boolean isRiver() {
+        return true;
     }
 
     @Override
     public BiomeDictionary.Type[] getBiomeDictionary() {
         return new BiomeDictionary.Type[]{BiomeDictionary.Type.RIVER};
-    }
-
-    @Override
-    public BiomeManager.BiomeType getBiomeType() {
-        return BiomeManager.BiomeType.COOL;
     }
 
     @Override

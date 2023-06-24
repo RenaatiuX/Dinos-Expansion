@@ -10,4 +10,9 @@ public class FrozenRiver extends BiomeBase {
     public FrozenRiver(Biome.Climate climate, Biome.Category category, float depth, float scale, BiomeAmbience effects, BiomeGenerationSettings biomeGenerationSettings, MobSpawnInfo mobSpawnInfo) {
         super(climate, category, depth, scale, effects, biomeGenerationSettings, mobSpawnInfo);
     }
+
+    @Override
+    public boolean isRiver() {
+        return true;
+    }
 }

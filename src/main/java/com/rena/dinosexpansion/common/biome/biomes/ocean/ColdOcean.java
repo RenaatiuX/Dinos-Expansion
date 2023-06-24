@@ -32,8 +32,13 @@ public class ColdOcean extends BiomeBase {
     }
 
     @Override
-    public net.minecraftforge.common.BiomeManager.BiomeType getBiomeType() {
-        return BiomeManager.BiomeType.COOL;
+    public BiomeType[] getBiomeType() {
+        return new BiomeType[]{BiomeType.COOL};
+    }
+
+    @Override
+    public boolean isShallowOcean() {
+        return true;
     }
 
     static {

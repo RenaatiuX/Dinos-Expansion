@@ -14,10 +14,6 @@ import static com.rena.dinosexpansion.common.world.dimension.DinoLayerUtil.*;
 public enum DinoRiverLayer implements ICastleTransformer {
     INSTANCE;
 
-    DinoRiverLayer() {
-
-    }
-
     @Override
     public int apply(INoiseRandom context, int north, int west, int south, int east, int center) {
         if (shouldRiver(center, west, south, east, north)) {

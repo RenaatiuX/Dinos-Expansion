@@ -20,7 +20,7 @@ public enum DeepOceanLayer implements IAreaTransformer1, IDimOffset0Transformer 
         int currentCenter = area.getValue(x, z);
         for (int dx = x - 5; dx <= x + 5; dx++) {
             for (int dz = z - 5; dz <= z + 5; dz++) {
-                if (!DinoLayerUtil.isShallowDinoOcean(area.getValue(x + dx, z + dz)) && !DinoLayerUtil.isVanillaShallowOcean(area.getValue(x + dx, z + dz)))
+                if (!DinoLayerUtil.isShallowDinoOcean(area.getValue(x + dx, z + dz)))
                     return currentCenter;
             }
         }
@@ -28,6 +28,12 @@ public enum DeepOceanLayer implements IAreaTransformer1, IDimOffset0Transformer 
         //make the deep variants
         if (currentCenter == DinoLayerUtil.getBiomeId(BiomeInit.LUKEWARM_OCEAN))
             return DinoLayerUtil.getBiomeId(BiomeInit.LUKEWARM_DEEP_OCEAN);
-        return DinoLayerUtil.getBiomeId(Biomes.DEEP_OCEAN);
+        if (currentCenter == DinoLayerUtil.getBiomeId(BiomeInit.COLD_OCEAN))
+            return DinoLayerUtil.getBiomeId(BiomeInit.DEEP_COLD_OCEAN);
+        if (currentCenter == DinoLayerUtil.getBiomeId(BiomeInit.WARM_OCEAN))
+            return DinoLayerUtil.getBiomeId(BiomeInit.DEEP_WARM_OCEAN);
+        if (currentCenter == DinoLayerUtil.getBiomeId(BiomeInit.FROZEN_OCEAN))
+            return DinoLayerUtil.getBiomeId(BiomeInit.DEEP_FROZEN_OCEAN);
+        return DinoLayerUtil.getBiomeId(BiomeInit.DEEP_OCEAN);
     }
 }

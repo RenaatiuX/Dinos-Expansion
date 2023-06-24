@@ -30,7 +30,7 @@ public class Arctic extends BiomeBase {
     }
 
     @Override
-    public net.minecraftforge.common.BiomeManager.BiomeType getBiomeType() {
-        return BiomeManager.BiomeType.COOL;
+    public BiomeType[] getBiomeType() {
+        return new BiomeType[]{BiomeType.ICY};
     }
 }

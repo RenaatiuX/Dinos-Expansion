@@ -32,8 +32,13 @@ public class Ocean extends BiomeBase {
     }
 
     @Override
-    public BiomeManager.BiomeType getBiomeType() {
-        return BiomeManager.BiomeType.COOL;
+    public BiomeType[] getBiomeType() {
+        return new BiomeType[]{BiomeType.NORMAL};
+    }
+
+    @Override
+    public boolean isShallowOcean() {
+        return true;
     }
 
     static {

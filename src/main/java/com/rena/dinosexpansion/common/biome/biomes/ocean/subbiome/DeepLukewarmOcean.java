@@ -6,6 +6,7 @@ import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.feature.Features;
 import net.minecraft.world.gen.surfacebuilders.ConfiguredSurfaceBuilders;
 import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.common.BiomeManager;
 
 public class DeepLukewarmOcean extends BiomeBase {
 
@@ -28,6 +29,16 @@ public class DeepLukewarmOcean extends BiomeBase {
     @Override
     public BiomeDictionary.Type[] getBiomeDictionary() {
         return new BiomeDictionary.Type[]{BiomeDictionary.Type.OCEAN};
+    }
+
+    @Override
+    public BiomeType[] getBiomeType() {
+        return new BiomeType[]{BiomeType.LUKEWARM};
+    }
+
+    @Override
+    public boolean isDeepOcean() {
+        return true;
     }
 
     static {

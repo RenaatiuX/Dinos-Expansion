@@ -32,8 +32,13 @@ public class FrozenOcean extends BiomeBase {
     }
 
     @Override
-    public net.minecraftforge.common.BiomeManager.BiomeType getBiomeType() {
-        return BiomeManager.BiomeType.COOL;
+    public BiomeType[] getBiomeType() {
+        return new BiomeType[]{BiomeType.ICY};
+    }
+
+    @Override
+    public boolean isShallowOcean() {
+        return true;
     }
 
     static {

@@ -32,8 +32,13 @@ public class DeepWarmOcean extends BiomeBase {
     }
 
     @Override
-    public net.minecraftforge.common.BiomeManager.BiomeType getBiomeType() {
-        return BiomeManager.BiomeType.COOL;
+    public BiomeType[] getBiomeType() {
+        return new BiomeType[]{BiomeType.WARM};
+    }
+
+    @Override
+    public boolean isDeepOcean() {
+        return true;
     }
 
     static {

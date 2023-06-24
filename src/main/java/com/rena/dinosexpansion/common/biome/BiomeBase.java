@@ -2,6 +2,7 @@ package com.rena.dinosexpansion.common.biome;
 
 import com.mojang.datafixers.util.Pair;
 import com.rena.dinosexpansion.common.biome.util.BiomeData;
+import com.rena.dinosexpansion.core.init.BiomeInit;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.WeightedList;
@@ -40,7 +41,7 @@ public class BiomeBase {
     public static final Map<ResourceLocation, ResourceLocation> BIOME_TO_BEACH_LIST = new HashMap<>();
     public static final Map<ResourceLocation, ResourceLocation> BIOME_TO_EDGE_LIST = new HashMap<>();
     public static final Map<ResourceLocation, ResourceLocation> BIOME_TO_RIVER_LIST = new HashMap<>();
-    public static final List<BiomeBase> BIOMES = new ArrayList<>();
+    public static final List<BiomeBase> BIOMES = new ArrayList<>(), RIVERS = new ArrayList<>(), SHALLOW_OCEANS = new ArrayList<>(), DEEP_OCEANS = new ArrayList<>();
     public static List<BiomeData> biomeData = new ArrayList<>();
 
     private final Biome biome;
@@ -50,25 +51,35 @@ public class BiomeBase {
 
     public BiomeBase(Biome.Climate climate, Biome.Category category, float depth, float scale, BiomeAmbience effects, BiomeGenerationSettings biomeGenerationSettings, MobSpawnInfo mobSpawnInfo) {
         biome = new Biome(climate, category, depth, scale, effects, biomeGenerationSettings, mobSpawnInfo);
-        BIOMES.add(this);
+        addBiome(this);
     }
 
     public BiomeBase(Biome.Builder builder) {
         this.biome = builder.build();
-        BIOMES.add(this);
+        addBiome(this);
     }
 
     public BiomeBase(Biome biome) {
         this.biome = biome;
-        BIOMES.add(this);
+        addBiome(this);
+    }
+
+    private void addBiome(BiomeBase base){
+        if (base.isRiver())
+            RIVERS.add(base);
+        else if (base.isShallowOcean())
+            SHALLOW_OCEANS.add(base);
+        else if (base.isDeepOcean())
+            DEEP_OCEANS.add(base);
+        else
+            BIOMES.add(base);
     }
 
     /**
-     *
-     * @param subBiome the sub biome that then should spawn inside that biome
+     * @param subBiome    the sub biome that then should spawn inside that biome
      * @param probability the probability thats int range from [0, probability) = 0
      */
-    public void addSubBiome(Supplier<RegistryKey<Biome>> subBiome, int probability){
+    public void addSubBiome(Supplier<RegistryKey<Biome>> subBiome, int probability) {
         this.subBiomes.add(Pair.of(subBiome, probability));
     }
 
@@ -83,34 +94,24 @@ public class BiomeBase {
     }
 
 
-    public Biome getRiver() {
-        return WorldGenRegistries.BIOME.getOrThrow(Biomes.RIVER);
+    public RegistryKey<Biome> getRiver() {
+        return BiomeInit.RIVER.getKey();
     }
 
     public WeightedList<Biome> getHills() {
         return new WeightedList<>();
     }
 
-    @Nullable
-    public Biome getEdge() {
-        return null;
-    }
-
-    @Nullable
-    public Biome getBeach() {
-        return WorldGenRegistries.BIOME.getOrThrow(Biomes.BEACH);
-    }
-
     public BiomeDictionary.Type[] getBiomeDictionary() {
-        return new BiomeDictionary.Type[] {BiomeDictionary.Type.OVERWORLD};
+        return new BiomeDictionary.Type[]{BiomeDictionary.Type.OVERWORLD};
     }
 
     public List<Pair<Supplier<RegistryKey<Biome>>, Integer>> getSubBiomes() {
         return subBiomes;
     }
 
-    public BiomeManager.BiomeType getBiomeType() {
-        return BiomeManager.BiomeType.WARM;
+    public BiomeType[] getBiomeType() {
+        return new BiomeType[]{BiomeType.NORMAL};
     }
 
     public int getWeight() {
@@ -119,6 +120,42 @@ public class BiomeBase {
 
     public RegistryKey<Biome> getKey() {
         return RegistryKey.getOrCreateKey(Registry.BIOME_KEY, Objects.requireNonNull(ForgeRegistries.BIOMES.getKey(this.biome)));
+    }
+
+    public boolean isRiver(){
+        return false;
+    }
+
+    public boolean isShallowOcean(){
+        return false;
+    }
+
+    public boolean isDeepOcean(){
+        return false;
+    }
+
+    public boolean isOcean(){
+        return isShallowOcean() || isDeepOcean();
+    }
+
+
+    public enum BiomeType {
+        ICY(1),
+        COOL(3),
+        NORMAL(5),
+        LUKEWARM(3),
+        WARM(2),
+        HOT(1);
+
+        private final int weight;
+
+        BiomeType(int weight) {
+            this.weight = weight;
+        }
+
+        public int getWeight() {
+            return weight;
+        }
     }
 
 

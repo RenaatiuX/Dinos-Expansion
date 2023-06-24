@@ -31,6 +31,16 @@ public class LukewarmOcean extends BiomeBase {
         return new BiomeDictionary.Type[]{BiomeDictionary.Type.OCEAN};
     }
 
+    @Override
+    public BiomeType[] getBiomeType() {
+        return new BiomeType[]{BiomeType.LUKEWARM};
+    }
+
+    @Override
+    public boolean isShallowOcean() {
+        return true;
+    }
+
     static {
 
         GENERATION_SETTINGS.withFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Features.SEAGRASS_WARM);

@@ -32,10 +32,14 @@ public class DeepOcean extends BiomeBase {
     }
 
     @Override
-    public BiomeManager.BiomeType getBiomeType() {
-        return BiomeManager.BiomeType.COOL;
+    public BiomeType[] getBiomeType() {
+        return new BiomeType[]{BiomeType.NORMAL};
     }
 
+    @Override
+    public boolean isDeepOcean() {
+        return true;
+    }
     static {
 
         GENERATION_SETTINGS.withFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Features.SEAGRASS_DEEP);

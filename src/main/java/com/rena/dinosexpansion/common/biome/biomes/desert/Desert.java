@@ -40,8 +40,8 @@ public class Desert extends BiomeBase {
     }
 
     @Override
-    public BiomeManager.BiomeType getBiomeType() {
-        return BiomeManager.BiomeType.DESERT;
+    public BiomeType[] getBiomeType() {
+        return new BiomeType[]{BiomeType.HOT};
     }
 
     @Override

@@ -32,8 +32,8 @@ public class RedDesert extends BiomeBase {
     }
 
     @Override
-    public net.minecraftforge.common.BiomeManager.BiomeType getBiomeType() {
-        return BiomeManager.BiomeType.DESERT;
+    public BiomeType[] getBiomeType() {
+        return new BiomeType[]{BiomeType.HOT};
     }
 
     @Override

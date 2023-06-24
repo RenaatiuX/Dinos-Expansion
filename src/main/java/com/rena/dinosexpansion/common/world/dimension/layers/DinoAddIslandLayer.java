@@ -10,13 +10,9 @@ public enum DinoAddIslandLayer implements ICastleTransformer {
 
     @Override
     public int apply(INoiseRandom context, int north, int west, int south, int east, int center) {
-        if (isSshallowOcean(north) && isSshallowOcean(west) && isSshallowOcean(south) && isSshallowOcean(east) && isSshallowOcean(center) && context.random(10) == 0){
+        if (north == 0 && west == 0 && south == 0 && east == 0 && center == 0 && context.random(20) == 0){
             return 1;
         }
-        return 0;
-    }
-
-    private boolean isSshallowOcean(int id){
-        return isShallowDinoOcean(id) || isVanillaOcean(id);
+        return center;
     }
 }

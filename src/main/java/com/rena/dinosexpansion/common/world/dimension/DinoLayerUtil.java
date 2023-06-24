@@ -8,6 +8,7 @@ import net.minecraft.util.RegistryKey;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.IExtendedNoiseRandom;
+import net.minecraft.world.gen.INoiseRandom;
 import net.minecraft.world.gen.LazyAreaLayerContext;
 import net.minecraft.world.gen.area.IArea;
 import net.minecraft.world.gen.area.IAreaFactory;
@@ -24,14 +25,6 @@ import java.util.function.LongFunction;
 public class DinoLayerUtil {
 
     private static Registry<Biome> biomeRegistry;
-
-    public static final RegistryKey<Biome>[] SHALLOW_OCEANS = new RegistryKey[]{
-            BiomeInit.LUKEWARM_OCEAN.getKey()
-    };
-
-    public static final RegistryKey<Biome>[] DEEP_OCEANS = new RegistryKey[]{
-            BiomeInit.LUKEWARM_DEEP_OCEAN.getKey()
-    };
 
     public static int getBiomeId(RegistryKey<Biome> define) {
         Biome biome = biomeRegistry.getValueForKey(define);
@@ -53,60 +46,57 @@ public class DinoLayerUtil {
     public static <T extends IArea, C extends IExtendedNoiseRandom<T>> IAreaFactory<T> makeLayers(LongFunction<C> contextFactory, Registry<Biome> registry) {
         biomeRegistry = registry;
 
-        IAreaFactory<T> biomes = OceanLandLayer.INSTANCE.apply(contextFactory.apply(0L));
+        IAreaFactory<T> oceanLand = OceanLandLayer.INSTANCE.apply(contextFactory.apply(0L));
 
-        biomes = ZoomLayer.FUZZY.apply(contextFactory.apply(999L), biomes);
+        IAreaFactory<T> tempreature = TemperatureLayer.INSTANCE.apply(contextFactory.apply(2L));
+        tempreature = LayerUtil.repeat(160000L, ZoomLayer.NORMAL, tempreature, 6, contextFactory);
+        tempreature = LayerUtil.repeat(170000L, SmoothLayer.INSTANCE, tempreature, 4, contextFactory);
 
-        biomes = DinoAddIslandLayer.INSTANCE.apply(contextFactory.apply(998L), biomes);
 
-        biomes = LayerUtil.repeat(10000L, ZoomLayer.NORMAL, biomes, 1, contextFactory);
+        oceanLand = ZoomLayer.FUZZY.apply(contextFactory.apply(999L), oceanLand);
 
-        biomes = LayerUtil.repeat(1500L, DinoAddIslandLayer.INSTANCE, biomes, 4, contextFactory);
+        oceanLand = DinoAddIslandLayer.INSTANCE.apply(contextFactory.apply(998L), oceanLand);
 
-        biomes = LayerUtil.repeat(11000L, ZoomLayer.NORMAL, biomes, 1, contextFactory);
+        oceanLand = LayerUtil.repeat(10000L, ZoomLayer.NORMAL, oceanLand, 1, contextFactory);
 
-        IAreaFactory<T> oceans = DinoOceanLayer.INSTANCE.apply(contextFactory.apply(5L));
+        oceanLand = LayerUtil.repeat(1500L, DinoAddIslandLayer.INSTANCE, oceanLand, 4, contextFactory);
+
+        oceanLand = LayerUtil.repeat(11000L, ZoomLayer.NORMAL, oceanLand, 5, contextFactory);
+
+        IAreaFactory<T> oceans = DinoOceanLayer.INSTANCE.apply(contextFactory.apply(5L), tempreature);
         oceans = LayerUtil.repeat(150000L, ZoomLayer.NORMAL, oceans, 4, contextFactory);
-        oceans = LayerUtil.repeat(160000L, SmoothLayer.INSTANCE, oceans, 1, contextFactory);
+        oceanLand = DinoMixOceansLayer.INSTANCE.apply(contextFactory.apply(99L), oceans, oceanLand);
 
 
-        biomes = new DinoBiomeLayer().apply(contextFactory.apply(1L), biomes);
+        IAreaFactory<T> biomes = new DinoBiomeLayer().apply(contextFactory.apply(1L), tempreature);
 
         biomes = ZoomLayer.NORMAL.apply(contextFactory.apply(1000), biomes);
         biomes = ZoomLayer.NORMAL.apply(contextFactory.apply(1001), biomes);
         biomes = DinoSubbiomeLayer.INSTANCE.apply(contextFactory.apply(1006L), biomes);
 
-        biomes = LayerUtil.repeat(1000L, ZoomLayer.NORMAL, biomes, 6, contextFactory);
+        biomes = LayerUtil.repeat(2000L, ZoomLayer.NORMAL, biomes, 6, contextFactory);
 
-        IAreaFactory<T> riverLayer = DinoRiverLayer.INSTANCE.apply(contextFactory.apply(1L), biomes);
+        oceanLand = DinoMixLand.INSTANCE.apply(contextFactory.apply(76L), oceanLand, biomes);
+
+        IAreaFactory<T> riverLayer = DinoRiverLayer.INSTANCE.apply(contextFactory.apply(1L), oceanLand);
         riverLayer = SmoothLayer.INSTANCE.apply(contextFactory.apply(7000L), riverLayer);
-        biomes = DinoRiverMixLayer.INSTANCE.apply(contextFactory.apply(100L), biomes, riverLayer);
-
-        biomes = DinoMixOceansLayer.INSTANCE.apply(contextFactory.apply(99L), oceans, biomes);
-        biomes = DeepOceanLayer.INSTANCE.apply(contextFactory.apply(98L), biomes);
+        oceanLand = DinoRiverMixLayer.INSTANCE.apply(contextFactory.apply(100L), oceanLand, riverLayer);
+        oceanLand = DeepOceanLayer.INSTANCE.apply(contextFactory.apply(98L), oceanLand);
 
 
-        return biomes;
+        return oceanLand;
     }
 
     public static boolean isShallowDinoOcean(int id) {
-        return Arrays.stream(SHALLOW_OCEANS).map(k -> getBiomeId(k)).filter(i -> i == id).count() > 0;
+        return BiomeBase.SHALLOW_OCEANS.stream().map(k -> getBiomeId(k)).filter(i -> i == id).count() > 0;
     }
 
     public static boolean isDeepOcean(int id) {
-        return Arrays.stream(DEEP_OCEANS).map(k -> getBiomeId(k)).filter(i -> i == id).count() > 0;
+        return BiomeBase.DEEP_OCEANS.stream().map(k -> getBiomeId(k)).filter(i -> i == id).count() > 0;
     }
 
     public static boolean isOcean(int id) {
         return isDeepOcean(id) || isShallowDinoOcean(id);
-    }
-
-    public static boolean isVanillaOcean(int biomeIn) {
-        return biomeIn == 44 || biomeIn == 45 || biomeIn == 0 || biomeIn == 46 || biomeIn == 10 || biomeIn == 47 || biomeIn == 48 || biomeIn == 24 || biomeIn == 49 || biomeIn == 50;
-    }
-
-    public static boolean isVanillaShallowOcean(int biomeIn) {
-        return biomeIn == 44 || biomeIn == 45 || biomeIn == 0 || biomeIn == 46 || biomeIn == 10;
     }
 
     public static boolean areSubbiomes(int id1, int id2) {
@@ -119,6 +109,26 @@ public class DinoLayerUtil {
                     return true;
             }
 
+        }
+        return false;
+    }
+
+    public static BiomeBase weightedRandom(INoiseRandom random, BiomeBase[] biomes) {
+        int totalWeight = Arrays.stream(biomes).mapToInt(BiomeBase::getWeight).sum();
+        for (BiomeBase base : biomes) {
+            if (random.random(totalWeight) <= base.getWeight())
+                return base;
+            else
+                totalWeight -= base.getWeight();
+        }
+        throw new IllegalStateException("something went horribly wrong in the weighted random");
+    }
+
+    public static <T> boolean contains(T[] arr, T element) {
+        for (T item : arr) {
+            if (item.equals(element)) {
+                return true;
+            }
         }
         return false;
     }
