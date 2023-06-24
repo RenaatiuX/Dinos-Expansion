@@ -725,9 +725,9 @@ public abstract class Dinosaur extends TameableEntity {
     public enum Rarity {
         COMMON(new TranslationTextComponent("rarity." + DinosExpansion.MOD_ID + ".common"), 0, 0, 0, 0),
         UNCOMMON(new TranslationTextComponent("rarity." + DinosExpansion.MOD_ID + ".uncommon"), 4f, 1f, 0, 2),
-        RARE(new TranslationTextComponent("rarity." + DinosExpansion.MOD_ID + ".rare"), 8, 2, .3f, 4),
-        EPIC(new TranslationTextComponent("rarity." + DinosExpansion.MOD_ID + ".epic"), 16, 4, .3f, 8),
-        LEGENDARY(new TranslationTextComponent("rarity." + DinosExpansion.MOD_ID + ".legendary"), 32, 16, .5f, 16);
+        RARE(new TranslationTextComponent("rarity." + DinosExpansion.MOD_ID + ".rare"), 8, 2, 0, 4),
+        EPIC(new TranslationTextComponent("rarity." + DinosExpansion.MOD_ID + ".epic"), 16, 4, 0, 8),
+        LEGENDARY(new TranslationTextComponent("rarity." + DinosExpansion.MOD_ID + ".legendary"), 32, 16, 0, 16);
 
         private final float healthBonus, attackDamageBonus, speedBonus, armorBonus;
         private final ITextComponent name;
