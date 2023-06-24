@@ -23,9 +23,6 @@ import java.util.function.Predicate;
 
 public class GroupFishSwimming extends Goal {
     protected final PrehistoricFish creature;
-    protected double x;
-    protected double y;
-    protected double z;
     protected final double speed;
     protected double[] weights = new double[]{1, 1, 1, 1, 1, 1};
     protected boolean mustUpdate;
@@ -216,14 +213,7 @@ public class GroupFishSwimming extends Goal {
      * Returns whether an in-progress EntityAIBase should continue executing
      */
     public boolean shouldContinueExecuting() {
-        return !this.creature.getNavigator().noPath() && !this.creature.isBeingRidden() && !this.creature.isMovementDisabled();
-    }
-
-    /**
-     * Execute a one shot task or start executing a continuous task
-     */
-    public void startExecuting() {
-        this.creature.getNavigator().tryMoveToXYZ(this.x, this.y, this.z, this.speed);
+        return !this.creature.isBeingRidden() && !this.creature.isMovementDisabled();
     }
 
     /**
