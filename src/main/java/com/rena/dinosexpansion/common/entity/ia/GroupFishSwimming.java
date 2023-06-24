@@ -1,24 +1,14 @@
 package com.rena.dinosexpansion.common.entity.ia;
 
-import com.rena.dinosexpansion.common.entity.Dinosaur;
 import com.rena.dinosexpansion.common.entity.aquatic.fish.PrehistoricFish;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.pathfinding.PathType;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 
-import javax.annotation.Nullable;
 import java.util.EnumSet;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Predicate;
 
 public class GroupFishSwimming extends Goal {
