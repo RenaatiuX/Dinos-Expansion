@@ -9,6 +9,8 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.INoiseRandom;
 import net.minecraft.world.gen.layer.traits.ICastleTransformer;
 
+import static com.rena.dinosexpansion.common.world.dimension.DinoLayerUtil.*;
+
 public enum DinoRiverLayer implements ICastleTransformer {
     INSTANCE;
 
@@ -26,6 +28,8 @@ public enum DinoRiverLayer implements ICastleTransformer {
     }
 
     boolean shouldRiver(int mid, int left, int down, int right, int up) {
+        if (isOcean(left) || isOcean(down) || isOcean(right) || isOcean(up))
+            return false;
         return shouldRiver(mid, left) || shouldRiver(mid, right) || shouldRiver(mid, down) || shouldRiver(mid, up);
     }
 
@@ -33,17 +37,5 @@ public enum DinoRiverLayer implements ICastleTransformer {
         return id1 != id2 && !areSubbiomes(id1, id2);
     }
 
-    boolean areSubbiomes(int id1, int id2) {
-        for (BiomeBase base : BiomeBase.BIOMES) {
-            if (id1 == DinoLayerUtil.getBiomeId(base)) {
-                if (base.getSubBiomes().stream().map(Pair::getFirst).filter(b -> DinoLayerUtil.getBiomeId(b.get()) == id2).count() > 0)
-                    return true;
-            } else if (id2 == DinoLayerUtil.getBiomeId(base)) {
-                if (base.getSubBiomes().stream().map(Pair::getFirst).filter(b -> DinoLayerUtil.getBiomeId(b.get()) == id1).count() > 0)
-                    return true;
-            }
 
-        }
-        return false;
-    }
 }
