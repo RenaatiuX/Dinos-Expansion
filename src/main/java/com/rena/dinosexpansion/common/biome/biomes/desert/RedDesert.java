@@ -1,6 +1,7 @@
 package com.rena.dinosexpansion.common.biome.biomes.desert;
 
 import com.rena.dinosexpansion.common.biome.BiomeBase;
+import com.rena.dinosexpansion.common.world.gen.surfacebuilder.DinoSurfaceBuilders;
 import net.minecraft.world.biome.*;
 import net.minecraft.world.gen.surfacebuilders.ConfiguredSurfaceBuilders;
 import net.minecraftforge.common.BiomeDictionary;
@@ -17,7 +18,7 @@ public class RedDesert extends BiomeBase {
 
     private static final Biome.Climate WEATHER = new Biome.Climate(PRECIPITATION, TEMPERATURE, Biome.TemperatureModifier.NONE, DOWNFALL);
     private static final MobSpawnInfo.Builder SPAWN_SETTINGS = new MobSpawnInfo.Builder().isValidSpawnBiomeForPlayer();
-    private static final BiomeGenerationSettings.Builder GENERATION_SETTINGS = (new BiomeGenerationSettings.Builder()).withSurfaceBuilder(ConfiguredSurfaceBuilders.BADLANDS);
+    private static final BiomeGenerationSettings.Builder GENERATION_SETTINGS = (new BiomeGenerationSettings.Builder()).withSurfaceBuilder(DinoSurfaceBuilders.RED_SAND);
 
     public RedDesert() {
         super(WEATHER, CATEGORY, DEPTH, SCALE, (new BiomeAmbience.Builder()).setWaterColor(BiomeBase.BASE_WATER_COLOUR)
