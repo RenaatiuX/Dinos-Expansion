@@ -90,10 +90,10 @@ public class MegaPiranha extends PrehistoricFish implements IAnimatable, IAnimat
 
     private PlayState predicate(AnimationEvent<MegaPiranha> event) {
         if (this.isInWater()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("de.megapiranha.swim", ILoopType.EDefaultLoopTypes.LOOP));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("swim", ILoopType.EDefaultLoopTypes.LOOP));
         } else {
             if (this.isOnGround()) {
-                event.getController().setAnimation(new AnimationBuilder().addAnimation("de.megapiranha.outofwater", ILoopType.EDefaultLoopTypes.LOOP));
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("outofwater", ILoopType.EDefaultLoopTypes.LOOP));
             }
         }
         return PlayState.CONTINUE;
@@ -102,7 +102,7 @@ public class MegaPiranha extends PrehistoricFish implements IAnimatable, IAnimat
     private PlayState attackPredicate(AnimationEvent<MegaPiranha> event) {
         if (!isKnockout() && this.isSwingInProgress && event.getController().getAnimationState().equals(AnimationState.Stopped)) {
             event.getController().markNeedsReload();
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("de.megapiranha.bite"));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("attack"));
             this.isSwingInProgress = false;
         }
         return PlayState.CONTINUE;
