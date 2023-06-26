@@ -16,6 +16,6 @@ public class SurfaceBuilderInit {
 
 
     public static final RegistryObject<SurfaceBuilder<SurfaceBuilderConfig>> MARSHLAND = SURFACE_BUILDERS
-            .register("marshland", () ->MARSHLAND_SB);
+            .register("marshland", () -> MARSHLAND_SB);
 
 }
