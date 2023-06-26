@@ -29,4 +29,9 @@ public class Oasis extends BiomeBase {
     public BiomeDictionary.Type[] getBiomeDictionary() {
         return new BiomeDictionary.Type[] {BiomeDictionary.Type.HOT, BiomeDictionary.Type.SPARSE, BiomeDictionary.Type.DRY};
     }
+
+    @Override
+    public boolean isSubbiome() {
+        return true;
+    }
 }

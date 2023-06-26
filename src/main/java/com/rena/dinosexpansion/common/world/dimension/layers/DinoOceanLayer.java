@@ -3,6 +3,7 @@ package com.rena.dinosexpansion.common.world.dimension.layers;
 import com.rena.dinosexpansion.common.biome.BiomeBase;
 import com.rena.dinosexpansion.common.world.dimension.DinoLayerUtil;
 import com.rena.dinosexpansion.core.init.BiomeInit;
+import net.minecraft.world.biome.Biomes;
 import net.minecraft.world.gen.IExtendedNoiseRandom;
 import net.minecraft.world.gen.INoiseRandom;
 import net.minecraft.world.gen.ImprovedNoiseGenerator;
@@ -27,7 +28,7 @@ public enum DinoOceanLayer implements IAreaTransformer1, IDimOffset0Transformer 
             if (result.length > 0)
                 return DinoLayerUtil.getBiomeId(DinoLayerUtil.weightedRandom(context, result));
             else
-                return  DinoLayerUtil.getBiomeId(BiomeInit.OCEAN);
+                return  DinoLayerUtil.getBiomeId(Biomes.BAMBOO_JUNGLE);
         }
         return -1;
     }

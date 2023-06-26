@@ -46,42 +46,40 @@ public class DinoLayerUtil {
     public static <T extends IArea, C extends IExtendedNoiseRandom<T>> IAreaFactory<T> makeLayers(LongFunction<C> contextFactory, Registry<Biome> registry) {
         biomeRegistry = registry;
 
-        IAreaFactory<T> oceanLand = OceanLandLayer.INSTANCE.apply(contextFactory.apply(0L));
 
+        //defining the temperature distribution
         IAreaFactory<T> tempreature = TemperatureLayer.INSTANCE.apply(contextFactory.apply(2L));
-        tempreature = LayerUtil.repeat(160000L, ZoomLayer.NORMAL, tempreature, 6, contextFactory);
-        tempreature = LayerUtil.repeat(170000L, SmoothLayer.INSTANCE, tempreature, 4, contextFactory);
+        tempreature = LayerUtil.repeat(160000L, ZoomLayer.NORMAL, tempreature, 4, contextFactory);
+        //tempreature = LayerUtil.repeat(170000L, SmoothLayer.INSTANCE, tempreature, 4, contextFactory);
 
 
+        //defining ocean and land
+        IAreaFactory<T> oceanLand = OceanLandLayer.INSTANCE.apply(contextFactory.apply(0L));
         oceanLand = ZoomLayer.FUZZY.apply(contextFactory.apply(999L), oceanLand);
-
         oceanLand = DinoAddIslandLayer.INSTANCE.apply(contextFactory.apply(998L), oceanLand);
+        oceanLand = LayerUtil.repeat(10000L, ZoomLayer.NORMAL, oceanLand, 2, contextFactory);
+        oceanLand = LayerUtil.repeat(1500L, DinoAddIslandLayer.INSTANCE, oceanLand, 2, contextFactory);
+        oceanLand = LayerUtil.repeat(11000L, ZoomLayer.NORMAL, oceanLand, 4, contextFactory);
 
-        oceanLand = LayerUtil.repeat(10000L, ZoomLayer.NORMAL, oceanLand, 1, contextFactory);
-
-        oceanLand = LayerUtil.repeat(1500L, DinoAddIslandLayer.INSTANCE, oceanLand, 4, contextFactory);
-
-        oceanLand = LayerUtil.repeat(11000L, ZoomLayer.NORMAL, oceanLand, 5, contextFactory);
-
+        //making the oceans
         IAreaFactory<T> oceans = DinoOceanLayer.INSTANCE.apply(contextFactory.apply(5L), tempreature);
         oceans = LayerUtil.repeat(150000L, ZoomLayer.NORMAL, oceans, 4, contextFactory);
         oceanLand = DinoMixOceansLayer.INSTANCE.apply(contextFactory.apply(99L), oceans, oceanLand);
 
 
+        //making the biomes
         IAreaFactory<T> biomes = new DinoBiomeLayer().apply(contextFactory.apply(1L), tempreature);
-
         biomes = ZoomLayer.NORMAL.apply(contextFactory.apply(1000), biomes);
         biomes = ZoomLayer.NORMAL.apply(contextFactory.apply(1001), biomes);
         biomes = DinoSubbiomeLayer.INSTANCE.apply(contextFactory.apply(1006L), biomes);
-
-        biomes = LayerUtil.repeat(2000L, ZoomLayer.NORMAL, biomes, 6, contextFactory);
+        biomes = LayerUtil.repeat(2000L, ZoomLayer.NORMAL, biomes, 2, contextFactory);
 
         oceanLand = DinoMixLand.INSTANCE.apply(contextFactory.apply(76L), oceanLand, biomes);
 
         IAreaFactory<T> riverLayer = DinoRiverLayer.INSTANCE.apply(contextFactory.apply(1L), oceanLand);
         riverLayer = SmoothLayer.INSTANCE.apply(contextFactory.apply(7000L), riverLayer);
         oceanLand = DinoRiverMixLayer.INSTANCE.apply(contextFactory.apply(100L), oceanLand, riverLayer);
-        oceanLand = DeepOceanLayer.INSTANCE.apply(contextFactory.apply(98L), oceanLand);
+        //oceanLand = DeepOceanLayer.INSTANCE.apply(contextFactory.apply(98L), oceanLand);
 
 
         return oceanLand;
@@ -114,12 +112,14 @@ public class DinoLayerUtil {
     }
 
     public static BiomeBase weightedRandom(INoiseRandom random, BiomeBase[] biomes) {
+        if (biomes.length == 1)
+            return biomes[0];
         int totalWeight = Arrays.stream(biomes).mapToInt(BiomeBase::getWeight).sum();
+        int randomWeight = random.random(totalWeight);
         for (BiomeBase base : biomes) {
-            if (random.random(totalWeight) <= base.getWeight())
-                return base;
-            else
-                totalWeight -= base.getWeight();
+            randomWeight -= base.getWeight();
+           if (randomWeight < 0)
+               return base;
         }
         throw new IllegalStateException("something went horribly wrong in the weighted random");
     }
