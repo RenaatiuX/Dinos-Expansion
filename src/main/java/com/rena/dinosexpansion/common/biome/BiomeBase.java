@@ -71,7 +71,7 @@ public class BiomeBase {
             SHALLOW_OCEANS.add(base);
         else if (base.isDeepOcean())
             DEEP_OCEANS.add(base);
-        else
+        else if (!base.isSubbiome())
             BIOMES.add(base);
     }
 
@@ -91,6 +91,10 @@ public class BiomeBase {
         float colour = temperature / 3.0F;
         colour = MathHelper.clamp(colour, -1.0F, 1.0F);
         return MathHelper.hsvToRGB(0.62222224F - colour * 0.05F, 0.5F + colour * 0.1F, 1.0F);
+    }
+
+    public boolean isSubbiome(){
+        return false;
     }
 
 
