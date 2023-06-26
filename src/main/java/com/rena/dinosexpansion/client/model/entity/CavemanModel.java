@@ -65,7 +65,6 @@ public class CavemanModel extends SegmentedModel<Caveman> {
 
     @Override
     public void setRotationAngles(Caveman entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {;
-        boolean flag = entityIn.getShakeHeadTicks() > 0;
 
         /*
         if (entityIn.getHeldItem(Hand.MAIN_HAND).isEmpty() && entityIn.getHeldItem(Hand.OFF_HAND).isEmpty()) {
@@ -81,7 +80,7 @@ public class CavemanModel extends SegmentedModel<Caveman> {
         this.head.rotateAngleY = netHeadYaw * ((float)Math.PI / 180F);
         this.head.rotateAngleX = headPitch * ((float)Math.PI / 180F);
         //head shaking
-        if (flag) {
+        if (entityIn.getShakeHeadTicks() > 0) {
             this.head.rotateAngleZ = 0.3F * MathHelper.sin(0.45F * ageInTicks);
             this.head.rotateAngleX = 0.4F;
         } else {
