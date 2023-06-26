@@ -2,86 +2,95 @@ package com.rena.dinosexpansion.client.model.entity;
 
 import com.google.common.collect.Lists;
 import com.rena.dinosexpansion.common.entity.villagers.caveman.Caveman;
-import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.client.renderer.entity.model.SegmentedModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.MathHelper;
 
 public class CavemanModel extends SegmentedModel<Caveman> {
 
-    protected ModelRenderer villagerHead;
-    protected ModelRenderer hat;
-    protected final ModelRenderer hatBrim;
-    protected final ModelRenderer villagerBody;
-    protected final ModelRenderer clothing;
-    protected final ModelRenderer villagerArms;
-    protected final ModelRenderer rightVillagerLeg;
-    protected final ModelRenderer leftVillagerLeg;
-    protected final ModelRenderer villagerNose;
+    private final ModelRenderer head;
+    private final ModelRenderer nose;
+    private final ModelRenderer body;
+    private final ModelRenderer arms;
+    private final ModelRenderer rightLeg;
+    private final ModelRenderer leftLeg;
+    private final ModelRenderer rightArm;
+    private final ModelRenderer leftArm;
 
     public CavemanModel(){
-        float f = 0.5F;
-        this.villagerHead = (new ModelRenderer(this)).setTextureSize(64, 64);
-        this.villagerHead.setRotationPoint(0.0F, 0.0F, 0.0F);
-        this.villagerHead.setTextureOffset(0, 0).addBox(-4.0F, -10.0F, -4.0F, 8.0F, 10.0F, 8.0F, 0);
-        this.hat = (new ModelRenderer(this)).setTextureSize(64, 64);
-        this.hat.setRotationPoint(0.0F, 0.0F, 0.0F);
-        this.hat.setTextureOffset(32, 0).addBox(-4.0F, -10.0F, -4.0F, 8.0F, 10.0F, 8.0F, 0 + 0.5F);
-        this.villagerHead.addChild(this.hat);
-        this.hatBrim = (new ModelRenderer(this)).setTextureSize(64, 64);
-        this.hatBrim.setRotationPoint(0.0F, 0.0F, 0.0F);
-        this.hatBrim.setTextureOffset(30, 47).addBox(-8.0F, -8.0F, -6.0F, 16.0F, 16.0F, 1.0F, 0);
-        this.hatBrim.rotateAngleX = (-(float)Math.PI / 2F);
-        this.hat.addChild(this.hatBrim);
-        this.villagerNose = (new ModelRenderer(this)).setTextureSize(64, 64);
-        this.villagerNose.setRotationPoint(0.0F, -2.0F, 0.0F);
-        this.villagerNose.setTextureOffset(24, 0).addBox(-1.0F, -1.0F, -6.0F, 2.0F, 4.0F, 2.0F, 0);
-        this.villagerHead.addChild(this.villagerNose);
-        this.villagerBody = (new ModelRenderer(this)).setTextureSize(64, 64);
-        this.villagerBody.setRotationPoint(0.0F, 0.0F, 0.0F);
-        this.villagerBody.setTextureOffset(16, 20).addBox(-4.0F, 0.0F, -3.0F, 8.0F, 12.0F, 6.0F, 0);
-        this.clothing = (new ModelRenderer(this)).setTextureSize(64, 64);
-        this.clothing.setRotationPoint(0.0F, 0.0F, 0.0F);
-        this.clothing.setTextureOffset(0, 38).addBox(-4.0F, 0.0F, -3.0F, 8.0F, 18.0F, 6.0F, 0 + 0.5F);
-        this.villagerBody.addChild(this.clothing);
-        this.villagerArms = (new ModelRenderer(this)).setTextureSize(64, 64);
-        this.villagerArms.setRotationPoint(0.0F, 2.0F, 0.0F);
-        this.villagerArms.setTextureOffset(44, 22).addBox(-8.0F, -2.0F, -2.0F, 4.0F, 8.0F, 4.0F, 0);
-        this.villagerArms.setTextureOffset(44, 22).addBox(4.0F, -2.0F, -2.0F, 4.0F, 8.0F, 4.0F, 0, true);
-        this.villagerArms.setTextureOffset(40, 38).addBox(-4.0F, 2.0F, -2.0F, 8.0F, 4.0F, 4.0F, 0);
-        this.rightVillagerLeg = (new ModelRenderer(this, 0, 22)).setTextureSize(64, 64);
-        this.rightVillagerLeg.setRotationPoint(-2.0F, 12.0F, 0.0F);
-        this.rightVillagerLeg.addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, 0);
-        this.leftVillagerLeg = (new ModelRenderer(this, 0, 22)).setTextureSize(64, 64);
-        this.leftVillagerLeg.mirror = true;
-        this.leftVillagerLeg.setRotationPoint(2.0F, 12.0F, 0.0F);
-        this.leftVillagerLeg.addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, 0);
+        textureWidth = 64;
+        textureHeight = 64;
+
+        head = new ModelRenderer(this);
+        head.setRotationPoint(0.0F, 0.0F, 0.0F);
+        head.setTextureOffset(0, 0).addBox(-4.0F, -10.0F, -4.0F, 8.0F, 10.0F, 8.0F, 0.0F, false);
+
+        nose = new ModelRenderer(this);
+        nose.setRotationPoint(0.0F, -2.0F, 0.0F);
+        head.addChild(nose);
+        nose.setTextureOffset(24, 0).addBox(-1.0F, -1.0F, -6.0F, 2.0F, 4.0F, 2.0F, 0.0F, false);
+
+        body = new ModelRenderer(this);
+        body.setRotationPoint(0.0F, 0.0F, 0.0F);
+        body.setTextureOffset(16, 20).addBox(-4.0F, 0.0F, -3.0F, 8.0F, 12.0F, 6.0F, 0.0F, false);
+        body.setTextureOffset(0, 38).addBox(-4.0F, 0.0F, -3.0F, 8.0F, 18.0F, 6.0F, 0.5F, false);
+
+        arms = new ModelRenderer(this);
+        arms.setRotationPoint(0.0F, 2.0F, 0.0F);
+        arms.setTextureOffset(44, 22).addBox(-8.0F, -2.0F, -2.0F, 4.0F, 8.0F, 4.0F, 0.0F, false);
+        arms.setTextureOffset(44, 22).addBox(4.0F, -2.0F, -2.0F, 4.0F, 8.0F, 4.0F, 0.0F, false);
+        arms.setTextureOffset(40, 38).addBox(-4.0F, 2.0F, -2.0F, 8.0F, 4.0F, 4.0F, 0.0F, false);
+
+        rightLeg = new ModelRenderer(this);
+        rightLeg.setRotationPoint(-2.0F, 12.0F, 0.0F);
+        rightLeg.setTextureOffset(0, 22).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, 0.0F, false);
+
+        leftLeg = new ModelRenderer(this);
+        leftLeg.setRotationPoint(2.0F, 12.0F, 0.0F);
+        leftLeg.setTextureOffset(0, 22).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, 0.0F, true);
+
+        rightArm = new ModelRenderer(this);
+        rightArm.setRotationPoint(-5.0F, 2.0F, 0.0F);
+        rightArm.setTextureOffset(40, 46).addBox(-3.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, 0.0F, false);
+
+        leftArm = new ModelRenderer(this);
+        leftArm.setRotationPoint(5.0F, 2.0F, 0.0F);
+        leftArm.setTextureOffset(40, 46).addBox(-1.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, 0.0F, true);
     }
     @Override
     public Iterable<ModelRenderer> getParts() {
-        return Lists.newArrayList(this.villagerHead, this.villagerBody, this.rightVillagerLeg, this.leftVillagerLeg, this.villagerArms);
+        return Lists.newArrayList(head, nose, body, arms, rightArm, rightLeg, leftArm, leftLeg);
     }
 
     @Override
     public void setRotationAngles(Caveman entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {;
         boolean flag = entityIn.getShakeHeadTicks() > 0;
 
-        this.villagerHead.rotateAngleY = netHeadYaw * ((float)Math.PI / 180F);
-        this.villagerHead.rotateAngleX = headPitch * ((float)Math.PI / 180F);
-        if (flag) {
-            this.villagerHead.rotateAngleZ = 0.3F * MathHelper.sin(0.45F * ageInTicks);
-            this.villagerHead.rotateAngleX = 0.4F;
-        } else {
-            this.villagerHead.rotateAngleZ = 0.0F;
+        /*
+        if (entityIn.getHeldItem(Hand.MAIN_HAND).isEmpty() && entityIn.getHeldItem(Hand.OFF_HAND).isEmpty()) {
+            this.arms.rotateAngleX = (float) -(3 / Math.PI);
         }
 
-        this.villagerArms.rotationPointY = 3.0F;
-        this.villagerArms.rotationPointZ = -1.0F;
-        this.villagerArms.rotateAngleX = -0.75F;
-        this.rightVillagerLeg.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount * 0.5F;
-        this.leftVillagerLeg.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.4F * limbSwingAmount * 0.5F;
-        this.rightVillagerLeg.rotateAngleY = 0.0F;
-        this.leftVillagerLeg.rotateAngleY = 0.0F;
+         */
+        this.arms.showModel = false;
+        this.rightArm.showModel = true;
+        this.leftArm.showModel = true;
+
+        //converting angles to radians
+        this.head.rotateAngleY = netHeadYaw * ((float)Math.PI / 180F);
+        this.head.rotateAngleX = headPitch * ((float)Math.PI / 180F);
+        //head shaking
+        if (flag) {
+            this.head.rotateAngleZ = 0.3F * MathHelper.sin(0.45F * ageInTicks);
+            this.head.rotateAngleX = 0.4F;
+        } else {
+            this.head.rotateAngleZ = 0.0F;
+        }
+        //walking
+        this.rightLeg.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount * 0.5F;
+        this.leftLeg.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.4F * limbSwingAmount * 0.5F;
+        this.rightLeg.rotateAngleY = 0.0F;
+        this.leftLeg.rotateAngleY = 0.0F;
     }
 }
