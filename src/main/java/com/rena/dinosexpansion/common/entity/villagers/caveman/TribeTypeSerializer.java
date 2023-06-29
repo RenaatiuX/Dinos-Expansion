@@ -1,5 +1,6 @@
 package com.rena.dinosexpansion.common.entity.villagers.caveman;
 
+import com.google.common.collect.Lists;
 import com.google.gson.*;
 import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.common.trades.TradeSerializer;
@@ -48,7 +49,7 @@ public class TribeTypeSerializer {
             throw new JsonParseException("the file: " + name + " doesnt have a valid AggressionLevel: " + JSONUtils.getString(obj, "aggression"));
         Int2ObjectMap<VillagerTrades.ITrade[]> normalTrades = serializeLevelTrades(obj, "normaltrades", name);
         Int2ObjectMap<VillagerTrades.ITrade[]> bossTrades = serializeLevelTrades(obj, "bosstrades", name);
-        Tribe.TYPES.add(new Tribe.TribeType(normalTrades, bossTrades, formats, level, bossTexture, normalTexture, bossItems, normalItems));
+        Tribe.TYPES.add(new Tribe.TribeType(normalTrades, bossTrades, formats, level, bossTexture, normalTexture, Lists.newArrayList(), Lists.newArrayList()));
 
 
     }
@@ -57,6 +58,7 @@ public class TribeTypeSerializer {
         if (obj.has(memberName) && obj.get(memberName).isJsonArray()) {
             JsonArray array = obj.getAsJsonArray(memberName);
             Int2ObjectMap<VillagerTrades.ITrade[]> trades = new Int2ObjectOpenHashMap<>();
+            //trades per level
             for (int i = 0; i < array.size(); i++) {
                 JsonElement el = array.get(i);
                 if (el.isJsonArray()) {

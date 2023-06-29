@@ -33,7 +33,6 @@ public class Tribe {
     });
 
     private static ResourceLocation getCaveman(String textureName) {
-        Pair<Supplier<IItemProvider>, Float> pair = Pair.of(() -> ItemInit.DIAMOND_SPEAR.get(), 0.25f);
         return DinosExpansion.modLoc("textures/entity/caveman/" + textureName);
     }
 
@@ -204,6 +203,7 @@ public class Tribe {
                 pos = RandomPositionGenerator.findRandomTarget(boss2, 10, 7);
         }
         this.bossFightCenter = new BlockPos(pos);
+        this.cavemen.forEach(c -> c.setInBossfight(true));
     }
 
     public BlockPos getBossFightCenter() {
@@ -242,7 +242,7 @@ public class Tribe {
         this.bossFightCenter = null;
         this.bossfightCounterCircle = 0;
         startCounter = 0;
-        System.out.println("ended");
+        this.cavemen.forEach(c -> c.setInBossfight(false));
     }
 
     /**

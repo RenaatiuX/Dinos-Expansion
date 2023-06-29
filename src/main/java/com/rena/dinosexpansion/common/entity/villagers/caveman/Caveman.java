@@ -41,6 +41,7 @@ public class Caveman extends AbstractVillagerEntity {
     public static final int BOSSFIGHT_START_COOLDOWN = 100;
 
     public static final DataParameter<Boolean> BOSS = EntityDataManager.createKey(Caveman.class, DataSerializers.BOOLEAN);
+    public static final DataParameter<Boolean> BOSSFIGHT = EntityDataManager.createKey(Caveman.class, DataSerializers.BOOLEAN);
     public static final DataParameter<Integer> LEVEL = EntityDataManager.createKey(Caveman.class, DataSerializers.VARINT);
     public static final DataParameter<Integer> TYPE = EntityDataManager.createKey(Caveman.class, DataSerializers.VARINT);
 
@@ -102,7 +103,6 @@ public class Caveman extends AbstractVillagerEntity {
                 if (!this.world.isRemote) {
                     this.setCustomer(playerIn);
                     this.openMerchantContainer(playerIn, this.getDisplayName(), getLevel());
-                    System.out.println("should open");
                 }
 
             } else if (!this.tribe.canTrade(playerIn)) {
@@ -185,6 +185,8 @@ public class Caveman extends AbstractVillagerEntity {
         super.readAdditional(nbt);
         if (nbt.contains("boss"))
             this.dataManager.set(BOSS, nbt.getBoolean("boss"));
+        if (nbt.contains("bossfight"))
+            this.dataManager.set(BOSSFIGHT, nbt.getBoolean("bossfight"));
         if (nbt.contains("level"))
             this.dataManager.set(LEVEL, nbt.getInt("level"));
         if (nbt.contains("type"))
@@ -213,7 +215,6 @@ public class Caveman extends AbstractVillagerEntity {
     protected void loadTribe(String name) {
         if (!this.world.isRemote) {
             TribeSaveData data = TribeSaveData.getData((ServerWorld) this.world);
-            System.out.println(data.getSize());
             Tribe t = data.getTribeWithName(name);
             if (t != null) {
                 t.addCaveman(this);
@@ -229,6 +230,7 @@ public class Caveman extends AbstractVillagerEntity {
     public void writeAdditional(CompoundNBT nbt) {
         super.writeAdditional(nbt);
         nbt.putBoolean("boss", isBoss());
+        nbt.putBoolean("bossfight", this.dataManager.get(BOSSFIGHT));
         nbt.putInt("level", getLevel());
         nbt.putInt("type", this.dataManager.get(TYPE));
         if (this.tribe != null && !this.world.isRemote)
@@ -250,6 +252,7 @@ public class Caveman extends AbstractVillagerEntity {
     protected void registerData() {
         super.registerData();
         this.dataManager.register(BOSS, false);
+        this.dataManager.register(BOSSFIGHT, false);
         this.dataManager.register(LEVEL, 1);
         this.dataManager.register(TYPE, -1);
     }
@@ -271,12 +274,16 @@ public class Caveman extends AbstractVillagerEntity {
     }
 
     /**
-     * only works on client side
+     * only works on server side
      *
      * @return
      */
     public boolean isInBossfight() {
-        return getTribe() != null && getTribe().isBossFight();
+        return getTribe() != null && this.dataManager.get(BOSSFIGHT);
+    }
+
+    protected void setInBossfight(boolean bossfight){
+       this.dataManager.set(BOSSFIGHT, bossfight);
     }
 
     /**
