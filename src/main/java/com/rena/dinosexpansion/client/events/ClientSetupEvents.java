@@ -13,18 +13,14 @@ import com.rena.dinosexpansion.client.renderer.projectiles.TinyRockRenderer;
 import com.rena.dinosexpansion.client.screens.MortarScreen;
 import com.rena.dinosexpansion.client.screens.OrderScreen;
 import com.rena.dinosexpansion.client.screens.TamingScreen;
-import com.rena.dinosexpansion.common.container.MortarContainer;
-import com.rena.dinosexpansion.common.entity.aquatic.Aegirocassis;
-import com.rena.dinosexpansion.common.entity.aquatic.Anomalocaris;
+import com.rena.dinosexpansion.common.entity.aquatic.*;
 import com.rena.dinosexpansion.common.entity.aquatic.fish.Acanthodes;
 import com.rena.dinosexpansion.common.entity.aquatic.fish.Belantsea;
 import com.rena.dinosexpansion.common.entity.aquatic.fish.Wetherellus;
 import com.rena.dinosexpansion.common.entity.flying.Meganeura;
 import com.rena.dinosexpansion.common.entity.terrestrial.Dryosaurus;
 import com.rena.dinosexpansion.common.entity.villagers.Hermit;
-import com.rena.dinosexpansion.common.entity.aquatic.Eosqualodon;
 import com.rena.dinosexpansion.common.entity.aquatic.fish.MegaPiranha;
-import com.rena.dinosexpansion.common.entity.aquatic.Parapuzosia;
 import com.rena.dinosexpansion.common.entity.flying.Dimorphodon;
 import com.rena.dinosexpansion.common.entity.semiaquatic.Astorgosuchus;
 import com.rena.dinosexpansion.common.entity.terrestrial.ambient.Campanile;
@@ -80,6 +76,7 @@ public class ClientSetupEvents {
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.HERMIT.get(), HermitRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.BOOMERANG.get(), BoomerangRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.CAVEMAN.get(), CavemanRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityInit.SQUALODON.get(), SqualodongRenderer::new);
 
         ClientRegistry.bindTileEntityRenderer(BlockEntityInit.MORTAR.get(), MortarRenderer::new);
     }
@@ -101,6 +98,7 @@ public class ClientSetupEvents {
         event.put(EntityInit.ACANTHODES.get(), Acanthodes.createAttributes().create());
         event.put(EntityInit.BELANTSEA.get(), Belantsea.createAttributes().create());
         event.put(EntityInit.MEGANEURA.get(), Meganeura.createAttributes().create());
+        event.put(EntityInit.SQUALODON.get(), Squalodon.createAttributes().create());
     }
 
     public static void registerPlantsRenderer() {
