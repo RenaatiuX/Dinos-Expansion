@@ -232,13 +232,13 @@ public class Campanile extends AmbientDinosaur implements IAnimatable, IAnimatio
 
     private PlayState predicate(AnimationEvent<Campanile> event) {
         if (this.isInShell()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("campanile.hiding", ILoopType.EDefaultLoopTypes.LOOP));
+            event.getController().setAnimation(new AnimationBuilder().loop("hiding"));
             return PlayState.CONTINUE;
         } else if (event.isMoving()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("campanile.move", ILoopType.EDefaultLoopTypes.LOOP));
+            event.getController().setAnimation(new AnimationBuilder().loop("move"));
             return PlayState.CONTINUE;
         }
-        event.getController().setAnimation(new AnimationBuilder().addAnimation("campanile.idle", ILoopType.EDefaultLoopTypes.LOOP));
+        event.getController().setAnimation(new AnimationBuilder().loop("idle"));
         return PlayState.CONTINUE;
     }
 

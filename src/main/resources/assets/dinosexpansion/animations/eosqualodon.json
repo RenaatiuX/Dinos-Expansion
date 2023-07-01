@@ -1,7 +1,7 @@
 {
 	"format_version": "1.8.0",
 	"animations": {
-		"eosqualodon_swim": {
+		"swim": {
 			"loop": true,
 			"animation_length": 1.56,
 			"bones": {
@@ -292,7 +292,7 @@
 				}
 			}
 		},
-		"eosqualodon_bite": {
+		"bite": {
 			"animation_length": 1.56,
 			"bones": {
 				"Torso": {
@@ -595,7 +595,7 @@
 				}
 			}
 		},
-		"eosqualodon_knockout": {
+		"knockout": {
 			"loop": true,
 			"animation_length": 0.04,
 			"bones": {

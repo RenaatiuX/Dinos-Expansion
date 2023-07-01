@@ -1,17 +1,25 @@
 package com.rena.dinosexpansion.common.entity.aquatic;
 
+import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.common.entity.Dinosaur;
 import com.rena.dinosexpansion.common.entity.ia.*;
+import com.rena.dinosexpansion.common.entity.ia.movecontroller.AquaticMoveController;
 import com.rena.dinosexpansion.core.init.EntityInit;
 import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
+import net.minecraft.entity.ai.goal.*;
+import net.minecraft.entity.passive.SquidEntity;
 import net.minecraft.entity.passive.fish.AbstractGroupFishEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import org.w3c.dom.Attr;
@@ -33,37 +41,56 @@ import java.util.List;
 public class Squalodon extends DinosaurAquatic implements IAnimatable, IAnimationTickable {
 
 
-    public static final String CONTROLLER_NAME = "controller", ATTACK_CONTROLLER = "attack_controller";
+    public static final String CONTROLLER_NAME = "controller";
+    public static final String ATTACK_CONTROLLER = "attack_controller";
 
 
-    public static AttributeModifierMap.MutableAttribute createAttributes(){
-        return Dinosaur.registerAttributes()
-                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.3f)
-                .createMutableAttribute(Attributes.MAX_HEALTH, 35f)
-                .createMutableAttribute(Attributes.ATTACK_DAMAGE, 5f)
-                .createMutableAttribute(Attributes.FOLLOW_RANGE, 20f);
+    public static AttributeModifierMap.MutableAttribute createAttributes() {
+        return MobEntity.func_233666_p_()
+                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.3F)
+                .createMutableAttribute(Attributes.MAX_HEALTH, 35F)
+                .createMutableAttribute(Attributes.ATTACK_DAMAGE, 5F);
     }
 
     protected AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
-
-    public Squalodon(World world) {
-        super(EntityInit.SQUALODON.get(), world, new DinosaurInfo("esqualodon", 400, 200, 50, SleepRhythmGoal.SleepRhythm.NONE), Dinosaur.generateLevelWithinBounds(20, 40));
+    public Squalodon(EntityType<Squalodon> type, World world) {
+        super(type, world, new DinosaurInfo("squalodon", 400, 200, 50, SleepRhythmGoal.SleepRhythm.NONE), generateLevelWithinBounds(20, 100));
+        this.moveController = new AquaticMoveController(this, 1F);
+        updateInfo();
     }
 
-    public Squalodon(EntityType<? extends Squalodon> type, World world) {
-        this(world);
+    public Squalodon(World world) {
+        this(EntityInit.SQUALODON.get(), world);
     }
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(1, new DinosaurMeleeAttackGoal(this, 0.6, true));
-        this.goalSelector.addGoal(2, new DinosaurHurByTargetGoal(this));
-        this.goalSelector.addGoal(3, new DinosaurNearestTargetGoal<>(this, PlayerEntity.class, true));
-        this.goalSelector.addGoal(4, new DinosaurNearestTargetGoal<>(this, AbstractGroupFishEntity.class, true));
+        this.goalSelector.addGoal(1, new DinosaurMeleeAttackGoal(this, 1.0D, false));
+        this.goalSelector.addGoal(2, new DinosaurFollowOwnerGoal(this, 0.5D, 10F, 2F, false));
+        this.goalSelector.addGoal(3, new DinosaurRandomSwimmingGoal(this, 0.8D, 10, 24, true) {
+            @Override
+            public boolean shouldExecute() {
+                return !Squalodon.this.isMovementDisabled() && super.shouldExecute();
+            }
+        });
         this.goalSelector.addGoal(5, new DinosaurLookRandomGoal(this));
-        this.goalSelector.addGoal(6, new DinosaurRandomSwimmingGoal(this, 0.5, 30, 5));
+        this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)));
+        this.targetSelector.addGoal(2, new DinosaurNearestTargetGoal<>(this, SquidEntity.class, 40, false, true, true, null));
+        this.targetSelector.addGoal(3, new DinosaurNearestTargetGoal<>(this, AbstractGroupFishEntity.class, 100, false, true, true, null));
+    }
 
+    @Override
+    public ActionResultType applyPlayerInteraction(PlayerEntity player, Vector3d vec, Hand hand) {
+        this.getInfo().print();
+        DinosExpansion.LOGGER.debug("Narcotic: [" + getNarcoticValue() + "/" + getInfo().getMaxNarcotic() + "]");
+        DinosExpansion.LOGGER.debug("IsKnockout: " + this.isKnockout());
+        if (!world.isRemote() && hand == Hand.MAIN_HAND) {
+            if (player.getHeldItem(hand).isEmpty() && isKnockedOutBy(player)) {
+                openTamingGui(this, (ServerPlayerEntity) player);
+            }
+        }
+        return super.applyPlayerInteraction(player, vec, hand);
     }
 
     @Override
@@ -81,17 +108,22 @@ public class Squalodon extends DinosaurAquatic implements IAnimatable, IAnimatio
 
     private PlayState predicate(AnimationEvent<Squalodon> event) {
         if (isKnockout()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.squalodon.knockout", ILoopType.EDefaultLoopTypes.LOOP));
-        }else if (event.isMoving()){
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.squalodon.swim", ILoopType.EDefaultLoopTypes.LOOP));
-        }else
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.squalodon.idle", ILoopType.EDefaultLoopTypes.LOOP));
+            event.getController().setAnimation(new AnimationBuilder().loop("knockout"));
+        } else if (event.isMoving()) {
+            event.getController().setAnimation(new AnimationBuilder().loop("swim"));
+        } else if (this.isOnGround()) {
+            event.getController().setAnimation(new AnimationBuilder().loop("beached"));
+        } else {
+            event.getController().setAnimation(new AnimationBuilder().loop("idle"));
+        }
         return PlayState.CONTINUE;
     }
 
     private PlayState attackPredicate(AnimationEvent<Squalodon> event) {
-        if (this.isSwingInProgress && event.getController().getAnimationState() == AnimationState.Stopped) {
-            event.getController().setAnimation(new AnimationBuilder().playOnce("animation.squalodon.attack"));
+        if (!isKnockout() && this.isSwingInProgress && event.getController().getAnimationState().equals(AnimationState.Stopped)) {
+            event.getController().markNeedsReload();
+            event.getController().setAnimation(new AnimationBuilder().playOnce("attack"));
+            this.isSwingInProgress = false;
         }
         return PlayState.CONTINUE;
     }
@@ -104,8 +136,9 @@ public class Squalodon extends DinosaurAquatic implements IAnimatable, IAnimatio
 
     @Override
     public void registerControllers(AnimationData data) {
-        data.addAnimationController(new AnimationController(this, CONTROLLER_NAME, 20, this::predicate));
-        data.addAnimationController(new AnimationController(this, ATTACK_CONTROLLER, 0, this::attackPredicate));
+        data.setResetSpeedInTicks(10);
+        data.addAnimationController(new AnimationController<>(this, CONTROLLER_NAME, 10, this::predicate));
+        data.addAnimationController(new AnimationController<>(this, ATTACK_CONTROLLER, 0, this::attackPredicate));
     }
 
 
@@ -121,7 +154,7 @@ public class Squalodon extends DinosaurAquatic implements IAnimatable, IAnimatio
 
     @Override
     protected Rarity getinitialRarity() {
-        if(getRNG().nextDouble() <= 0.3)
+        if (getRNG().nextDouble() <= 0.3)
             return Rarity.UNCOMMON;
         return Rarity.COMMON;
     }

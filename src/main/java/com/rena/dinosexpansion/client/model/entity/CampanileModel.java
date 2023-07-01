@@ -18,6 +18,6 @@ public class CampanileModel extends AnimatedTickingGeoModel<Campanile> {
 
     @Override
     public ResourceLocation getAnimationFileLocation(Campanile animatable) {
-        return DinosExpansion.modLoc("animations/campanile.animation.json");
+        return DinosExpansion.modLoc("animations/campanile.json");
     }
 }

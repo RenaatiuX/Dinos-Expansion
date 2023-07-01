@@ -1,7 +1,7 @@
 {
   "format_version": "1.8.0",
   "animations": {
-    "wetherellus.swim": {
+    "swim": {
       "loop": true,
       "animation_length": 1.04,
       "bones": {
@@ -39,7 +39,7 @@
         }
       }
     },
-    "wetherellus.outofwater": {
+    "outofwater": {
       "loop": true,
       "animation_length": 0.96,
       "bones": {

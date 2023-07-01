@@ -1,7 +1,7 @@
 {
 	"format_version": "1.8.0",
 	"animations": {
-		"dryosaurus.idle": {
+		"idle": {
 			"loop": true,
 			"animation_length": 2,
 			"bones": {
@@ -75,7 +75,7 @@
 				}
 			}
 		},
-		"dryosaurus.sleep": {
+		"sleep": {
 			"loop": true,
 			"animation_length": 4,
 			"bones": {
@@ -237,7 +237,7 @@
 				}
 			}
 		},
-		"dryosaurus.sit": {
+		"sit": {
 			"loop": true,
 			"animation_length": 2,
 			"bones": {
@@ -381,7 +381,7 @@
 				}
 			}
 		},
-		"dryosaurus.knockout": {
+		"knockout": {
 			"loop": true,
 			"animation_length": 2,
 			"bones": {
@@ -502,7 +502,7 @@
 				}
 			}
 		},
-		"dryosaurus.eat": {
+		"eat": {
 			"animation_length": 0.36,
 			"bones": {
 				"jaw": {
@@ -541,7 +541,7 @@
 				}
 			}
 		},
-		"dryosaurus.attack": {
+		"attack": {
 			"animation_length": 0.28,
 			"bones": {
 				"jaw": {
@@ -607,7 +607,7 @@
 				}
 			}
 		},
-		"dryosaurus.walk": {
+		"walk": {
 			"loop": true,
 			"animation_length": 2,
 			"bones": {
@@ -942,7 +942,7 @@
 				}
 			}
 		},
-		"dryosaurus.run": {
+		"run": {
 			"loop": true,
 			"animation_length": 1,
 			"bones": {

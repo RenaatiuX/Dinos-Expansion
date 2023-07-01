@@ -115,7 +115,8 @@ public class ItemInit {
             () -> new Item(new Item.Properties()));
 
     //Spawn Eggs
-    public static final RegistryObject<Item> SQUALODON_SPAWN_EGG = ITEMS.register("squalodon_spawn_egg", () -> new ForgeSpawnEggItem(EntityInit.SQUALODON::get, 0x392829, 0x77554c, new Item.Properties().group(ModItemGroups.SPAWN_EGGS)));
+    public static final RegistryObject<Item> SQUALODON_SPAWN_EGG = ITEMS.register("squalodon_spawn_egg",
+            () -> new ForgeSpawnEggItem(EntityInit.SQUALODON, 13097436, 8431015, new Item.Properties().group(ModItemGroups.SPAWN_EGGS)));
     public static final RegistryObject<Item> PARAPUZOSIA_SPAWN_EGG = ITEMS.register("parapuzosia_spawn_egg",
             () -> new ForgeSpawnEggItem(EntityInit.PARAPUZOSIA, 0x392829, 0x77554c, new Item.Properties().group(ModItemGroups.SPAWN_EGGS)));
     public static final RegistryObject<Item> EOSQUALODON_SPAWN_EGG = ITEMS.register("eosqualodon_spawn_egg",

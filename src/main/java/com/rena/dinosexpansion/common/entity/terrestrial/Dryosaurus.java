@@ -261,36 +261,36 @@ public class Dryosaurus extends Dinosaur implements IAnimatable, IAnimationTicka
 
     private PlayState predicate(AnimationEvent<Dryosaurus> event) {
         if (this.isKnockout()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("dryosaurus.knockout", ILoopType.EDefaultLoopTypes.LOOP));
+            event.getController().setAnimation(new AnimationBuilder().loop("knockout"));
             return PlayState.CONTINUE;
         }
         if (event.isMoving()) {
             if (this.isSprinting()) {
-                event.getController().setAnimation(new AnimationBuilder().addAnimation("dryosaurus.run", ILoopType.EDefaultLoopTypes.LOOP));
+                event.getController().setAnimation(new AnimationBuilder().loop("run"));
                 event.getController().setAnimationSpeed(1.5D);
             } else {
-                event.getController().setAnimation(new AnimationBuilder().addAnimation("dryosaurus.walk", ILoopType.EDefaultLoopTypes.LOOP));
+                event.getController().setAnimation(new AnimationBuilder().loop("walk"));
                 event.getController().setAnimationSpeed(1.2D);
             }
             return PlayState.CONTINUE;
         } else if (this.isEating()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("dryosaurus.eat", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
+            event.getController().setAnimation(new AnimationBuilder().playOnce("eat"));
             return PlayState.CONTINUE;
         } else if (this.isSleeping()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("dryosaurus.sleep", ILoopType.EDefaultLoopTypes.LOOP));
+            event.getController().setAnimation(new AnimationBuilder().loop("sleep"));
             return PlayState.CONTINUE;
         } else if (this.getMoveOrder() == MoveOrder.SIT) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("dryosaurus.sit", ILoopType.EDefaultLoopTypes.LOOP));
+            event.getController().setAnimation(new AnimationBuilder().loop("sit"));
             return PlayState.CONTINUE;
         }
-        event.getController().setAnimation(new AnimationBuilder().addAnimation("dryosaurus.idle", ILoopType.EDefaultLoopTypes.LOOP));
+        event.getController().setAnimation(new AnimationBuilder().loop("idle"));
         return PlayState.CONTINUE;
     }
 
     private PlayState attackPredicate(AnimationEvent<Dryosaurus> event) {
         if (!isKnockout() && this.isSwingInProgress && event.getController().getAnimationState().equals(AnimationState.Stopped)) {
             event.getController().markNeedsReload();
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("dryosaurus.attack"));
+            event.getController().setAnimation(new AnimationBuilder().playOnce("attack"));
             this.isSwingInProgress = false;
         }
         return PlayState.CONTINUE;

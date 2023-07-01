@@ -18,6 +18,6 @@ public class AegirocassisModel extends AnimatedTickingGeoModel<Aegirocassis> {
 
     @Override
     public ResourceLocation getAnimationFileLocation(Aegirocassis animatable) {
-        return DinosExpansion.modLoc("animations/aegirocassis.animation.json");
+        return DinosExpansion.modLoc("animations/aegirocassis.json");
     }
 }

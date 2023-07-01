@@ -19,6 +19,6 @@ public class WetherellusModel extends AnimatedTickingGeoModel<Wetherellus> {
 
     @Override
     public ResourceLocation getAnimationFileLocation(Wetherellus animatable) {
-        return DinosExpansion.modLoc("animations/wetherellus.animation.json");
+        return DinosExpansion.modLoc("animations/wetherellus.json");
     }
 }

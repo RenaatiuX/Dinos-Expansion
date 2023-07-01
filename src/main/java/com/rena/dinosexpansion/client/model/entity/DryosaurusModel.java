@@ -40,7 +40,7 @@ public class DryosaurusModel extends AnimatedTickingGeoModel<Dryosaurus> {
 
     @Override
     public ResourceLocation getAnimationFileLocation(Dryosaurus animatable) {
-        return DinosExpansion.modLoc("animations/dryosaurus.animation.json");
+        return DinosExpansion.modLoc("animations/dryosaurus.json");
     }
 
     @Override

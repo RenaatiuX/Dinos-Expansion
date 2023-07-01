@@ -47,8 +47,8 @@ public class EntityInit {
             () -> EntityType.Builder.<GlowStickEntity>create(GlowStickEntity::new, EntityClassification.MISC).size(0.5F, 0.5F).build(DinosExpansion.modLoc("glowstick").toString()));
     public static final RegistryObject<EntityType<BoomerangEntity>> BOOMERANG = register("boomerang", () -> EntityType.Builder.<BoomerangEntity>create(BoomerangEntity::new, EntityClassification.MISC).size(.5f, .5f));
 
-    public static final RegistryObject<EntityType<Squalodon>> SQUALODON = register("squalodon", () -> EntityType.Builder.<Squalodon>create(Squalodon::new, EntityClassification.MONSTER).size(1.9f, 0.8f));
-
+    public static final RegistryObject<EntityType<Squalodon>> SQUALODON = register("squalodon",
+            () -> EntityType.Builder.<Squalodon>create(Squalodon::new, EntityClassification.WATER_CREATURE).size(1.9f, 0.8f));
     public static final RegistryObject<EntityType<Parapuzosia>> PARAPUZOSIA = register("parapuzosia",
             () -> EntityType.Builder.<Parapuzosia>create(Parapuzosia::new, EntityClassification.WATER_CREATURE).size(2.4F, 2.0F));
     public static final RegistryObject<EntityType<Eosqualodon>> EOSQUALODON = register("eosqualodon",

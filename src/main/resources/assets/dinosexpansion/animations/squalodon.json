@@ -1,7 +1,7 @@
 {
 	"format_version": "1.8.0",
 	"animations": {
-		"animation.squalodon.swim": {
+		"swim": {
 			"loop": true,
 			"animation_length": 1,
 			"bones": {
@@ -45,7 +45,7 @@
 				}
 			}
 		},
-		"animation.squalodon.idle": {
+		"idle": {
 			"loop": true,
 			"animation_length": 1,
 			"bones": {
@@ -89,7 +89,7 @@
 				}
 			}
 		},
-		"animation.squalodon.attack": {
+		"attack": {
 			"animation_length": 0.41667,
 			"bones": {
 				"jaw": {
@@ -116,7 +116,7 @@
 				}
 			}
 		},
-		"animation.squalodon.beached": {
+		"beached": {
 			"loop": true,
 			"animation_length": 1,
 			"bones": {
@@ -155,7 +155,7 @@
 				}
 			}
 		},
-		"animation.squalodon.knockout": {
+		"knockout": {
 			"loop": true,
 			"animation_length": 1,
 			"bones": {

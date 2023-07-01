@@ -1,7 +1,7 @@
 {
 	"format_version": "1.8.0",
 	"animations": {
-		"animation.dimorphodon.fly": {
+		"fly": {
 			"loop": true,
 			"animation_length": 2,
 			"bones": {
@@ -133,7 +133,7 @@
 				}
 			}
 		},
-		"animation.dimorphodon.idle": {
+		"idle": {
 			"loop": true,
 			"animation_length": 2,
 			"bones": {
@@ -215,7 +215,7 @@
 				}
 			}
 		},
-		"animation.dimorphodon.knockout": {
+		"knockout": {
 			"loop": true,
 			"animation_length": 2,
 			"bones": {
@@ -279,7 +279,7 @@
 				}
 			}
 		},
-		"animation.dimorphodon.sleep": {
+		"sleep": {
 			"loop": true,
 			"animation_length": 2,
 			"bones": {
@@ -376,7 +376,7 @@
 				}
 			}
 		},
-		"animation.dimorphodon.sit": {
+		"sit": {
 			"loop": true,
 			"animation_length": 2,
 			"bones": {
@@ -485,7 +485,7 @@
 				}
 			}
 		},
-		"animation.dimorphodon.attack": {
+		"attack": {
 			"animation_length": 0.64,
 			"bones": {
 				"head": {
@@ -569,7 +569,7 @@
 				}
 			}
 		},
-		"animation.dimorphodon.walk": {
+		"walk": {
 			"loop": true,
 			"animation_length": 1,
 			"bones": {
