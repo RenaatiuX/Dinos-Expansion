@@ -11,6 +11,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.ai.controller.DolphinLookController;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.passive.SquidEntity;
 import net.minecraft.entity.passive.fish.AbstractGroupFishEntity;
@@ -57,6 +58,7 @@ public class Squalodon extends DinosaurAquatic implements IAnimatable, IAnimatio
     public Squalodon(EntityType<Squalodon> type, World world) {
         super(type, world, new DinosaurInfo("squalodon", 400, 200, 50, SleepRhythmGoal.SleepRhythm.NONE), generateLevelWithinBounds(20, 100));
         this.moveController = new AquaticMoveController(this, 1F);
+        this.lookController = new DolphinLookController(this,10);
         updateInfo();
     }
 
@@ -66,6 +68,7 @@ public class Squalodon extends DinosaurAquatic implements IAnimatable, IAnimatio
 
     @Override
     protected void registerGoals() {
+        this.goalSelector.addGoal(0, new DinosaurJumLikeDolphin(this, 30));
         this.goalSelector.addGoal(1, new DinosaurMeleeAttackGoal(this, 1.0D, false));
         this.goalSelector.addGoal(2, new DinosaurFollowOwnerGoal(this, 0.5D, 10F, 2F, false));
         this.goalSelector.addGoal(3, new DinosaurRandomSwimmingGoal(this, 0.8D, 10, 24, true) {
