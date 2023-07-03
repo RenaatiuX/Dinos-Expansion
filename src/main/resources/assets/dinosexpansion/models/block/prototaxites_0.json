@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:block/cross",
   "textures": {
-    "cross": "dinosexpansion:block/horsetail_top"
+    "cross": "dinosexpansion:block/prototaxites_base"
   }
 }

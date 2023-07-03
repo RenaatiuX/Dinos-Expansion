@@ -1,0 +1,48 @@
+{
+  "parent": "builtin/entity",
+  "gui_light": "front",
+  "ambientocclusion": true,
+  "textures": {
+    "particle": "#spear"
+  },
+  "display": {
+    "thirdperson_righthand": {
+      "rotation": [ 0, 60, 0 ],
+      "translation": [ 0, 9, 1.25],
+      "scale": [ 1, 1, 1 ]
+    },
+    "thirdperson_lefthand": {
+      "rotation": [ 0, 60, 0 ],
+      "translation": [ 0, 9, 1.25],
+      "scale": [ 1, 1, 1 ]
+    },
+    "firstperson_righthand": {
+      "rotation": [ 0, -90, 25 ],
+      "translation": [ 1, 7, 1.5 ],
+      "scale": [ 0.7, 0.7, 0.7 ]
+    },
+    "firstperson_lefthand": {
+      "rotation": [ 0, 90, -25 ],
+      "translation": [ 1, 7, 1.5 ],
+      "scale": [ 0.7, 0.7, 0.7 ]
+    },
+    "gui": {
+      "translation": [ 0, 0.0, 0.0]
+    },
+    "fixed": {
+      "translation": [ 0, 0.0, 0.0]
+    },
+    "ground": {
+      "translation": [ 0, 0.0, 0.0]
+    }
+  },
+
+  "overrides": [
+    {
+      "predicate": {
+        "minecraft:throwing": 1
+      },
+      "model": "dinosexpansion:item/sapphire_spear_throwing"
+    }
+  ]
+}

@@ -10,7 +10,9 @@ public enum SpearTiers implements TieredSpear.SpearTier {
     DIAMOND_SPEAR(5.0D, 0.3D, 10, 1561,1.4d, true),
     GOLD_SPEAR(2.0D, 0.4D,22, 32,0.7d, false),
     NETHERITE_SPEAR(6.0D, 0.5D, 15, 2031, 2d, true),
-    EMERALD_SPEAR(7.0D, 0.6D, 5, 2580,1.5d, true);
+    EMERALD_SPEAR(7.0D, 0.6D, 5, 2580,1.5d, true),
+    RUBY_SPEAR(8.0D, 0.7D, 10, 2897, 2.1D, true),
+    SAPPHIRE_SPEAR(9.0D, 0.8D, 15, 3217, 2.2D, true);
 
     private final double damageAddition, speedAddition, knockbackAddition;
     private final int enchantability, durability;

@@ -8,9 +8,6 @@
     },
     "height=2": {
       "model": "dinosexpansion:block/prototaxites_2"
-    },
-    "height=3": {
-      "model": "dinosexpansion:block/prototaxites_3"
     }
   }
 }
