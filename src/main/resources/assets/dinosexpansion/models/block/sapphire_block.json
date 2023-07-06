@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:block/cube_all",
   "textures": {
-    "all": "lost:block/sapphire_block"
+    "all": "dinosexpansion:block/sapphire_block"
   }
 }

@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "lost:block/ruby_block"
+      "model": "dinosexpansion:block/ruby_block"
     }
   }
 }

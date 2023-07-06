@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "lost:block/sapphire_ore"
+      "model": "dinosexpansion:block/sapphire_ore"
     }
   }
 }

@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "lost:block/ruby_ore"
+      "model": "dinosexpansion:block/ruby_ore"
     }
   }
 }

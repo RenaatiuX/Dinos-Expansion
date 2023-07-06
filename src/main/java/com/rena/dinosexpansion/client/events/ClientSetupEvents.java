@@ -130,6 +130,8 @@ public class ClientSetupEvents {
 
         RenderTypeLookup.setRenderLayer(BlockInit.NARCOTIC_BERRY_BUSH.get(), RenderType.getCutout());
 
+        RenderTypeLookup.setRenderLayer(BlockInit.CRATAEGUS_DOOR.get(), RenderType.getCutout());
+
         RenderTypeLookup.setRenderLayer(BlockInit.EGGPLANT_CROP.get(), RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(BlockInit.CORN_CROP.get(), RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(BlockInit.SPINACH_CROP.get(), RenderType.getCutout());

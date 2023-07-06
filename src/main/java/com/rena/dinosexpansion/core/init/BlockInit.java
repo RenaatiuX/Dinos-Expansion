@@ -141,7 +141,19 @@ public class BlockInit {
             () -> new RotatedPillarBlock((AbstractBlock.Properties.create(Material.WOOD).sound(SoundType.WOOD).hardnessAndResistance(2.0F))), ModItemGroups.BLOCKS);
     public static final RegistryObject<Block> REDWOOD_SAPLING = register("redwood_sapling",
             () -> new BaseSaplingBlock(ModTreeSpawners.REDWOOD, AbstractBlock.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().zeroHardnessAndResistance().sound(SoundType.PLANT)), ModItemGroups.BLOCKS);
-
+    public static final RegistryObject<Block> CRATAEGUS_PLANKS = register("crataegus_planks",
+            () -> new Block(AbstractBlock.Properties.create(Material.WOOD, MaterialColor.ADOBE).hardnessAndResistance(2.0F, 3.0F)
+                    .sound(SoundType.WOOD)), ModItemGroups.BLOCKS);
+    public static final RegistryObject<Block> CRATAEGUS_LOG = register("crataegus_log",
+            () -> new RotatedPillarBlock((AbstractBlock.Properties.create(Material.WOOD).sound(SoundType.WOOD).hardnessAndResistance(2.0F))), ModItemGroups.BLOCKS);
+    public static final RegistryObject<Block> STRIPPED_CRATAEGUS_LOG = register("stripped_crataegus_log",
+            () -> new RotatedPillarBlock((AbstractBlock.Properties.create(Material.WOOD).sound(SoundType.WOOD).hardnessAndResistance(2.0F))), ModItemGroups.BLOCKS);
+    public static final RegistryObject<Block> CRATAEGUS_DOOR = register("crataegus_door",
+            () -> new DoorBlock(AbstractBlock.Properties.create(Material.WOOD, CRATAEGUS_PLANKS.get().getMaterialColor())
+                    .hardnessAndResistance(3.0F).sound(SoundType.WOOD).notSolid()), ModItemGroups.BLOCKS);
+    public static final RegistryObject<Block> CRATAEGUS_LEAVES = register("crataegus_leaves",
+            () -> new LeavesBlock(AbstractBlock.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).tickRandomly().sound(SoundType.PLANT).notSolid()
+                    .setBlocksVision((state, world, pos) -> false).setSuffocates((state, world, pos) -> false).harvestTool(ToolType.HOE)), ModItemGroups.BLOCKS);
     //Crops
     public static final RegistryObject<Block> EGGPLANT_CROP = BLOCKS.register("eggplant_crop",
             () -> new DoubleCropBaseBlock(AbstractBlock.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().hardnessAndResistance(0).sound(SoundType.CROP), ItemInit.EGGPLANT_SEED));
