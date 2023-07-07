@@ -10,7 +10,9 @@ public enum ChakramTiers implements TieredChakram.ChakramTier {
     GOLD_CHAKRAM(0.3D, 0.3D, 25, 42),
     DIAMOND_CHAKRAM(0.9D, 0.9D, 13, 1320),
     EMERALD_CHAKRAM(1.0D, 1.0D, 10, 1872),
-    NETHERITE_CHAKRAM(1.1D, 1.1D, 15, 2343);
+    NETHERITE_CHAKRAM(1.1D, 1.1D, 15, 2343),
+    RUBY_CHAKRAM(1.2D, 1.2D, 20, 2579),
+    SAPPHIRE_CHAKRAM(1.3D, 1.3D, 9, 2861);
 
     private final double damageAddition, speedAddition;
     private final int enchantability, durability;

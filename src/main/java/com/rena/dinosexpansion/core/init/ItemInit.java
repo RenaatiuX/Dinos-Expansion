@@ -26,16 +26,42 @@ public class ItemInit {
             () -> new TieredBow(new Item.Properties().group(ModItemGroups.WEAPONS), BowTiers.COMPOUND_BOW));
     public static final RegistryObject<Item> BLOWGUN = ITEMS.register("blowgun",
             () -> new BlowgunItem(new Item.Properties().group(ModItemGroups.WEAPONS).maxStackSize(1).maxDamage(300)));
-    public static final RegistryObject<Item> COMPOUND_ARROW = ITEMS.register("compound_arrow", () -> new CustomArrowItem(new Item.Properties().group(ModItemGroups.WEAPONS), (world, arrow, shooter) -> new CustomArrow(shooter, world, arrow, 4.5d)));
-    public static final RegistryObject<Item> TRANQUILLIZER_ARROW = ITEMS.register("tranquillizer_arrow", () -> new CustomArrowItem(new Item.Properties().group(ModItemGroups.WEAPONS), (world, arrow, shooter) -> new CustomArrow(shooter, world, arrow, 0.2, 10)));
-    public static final RegistryObject<Item> BONE_ARROW = ITEMS.register("bone_arrow", () -> new CustomArrowItem(new Item.Properties().group(ModItemGroups.WEAPONS), (world, arrow, shooter) -> new CustomArrow(shooter, world, arrow, 2.2d)));
-    public static final RegistryObject<Item> DIAMOND_ARROW = ITEMS.register("diamond_arrow", () -> new CustomArrowItem(new Item.Properties().group(ModItemGroups.WEAPONS), (world, arrow, shooter) -> new CustomArrow(shooter, world, arrow, 3.5)));
-    public static final RegistryObject<Item> EMERALD_ARROW = ITEMS.register("emerald_arrow", () -> new CustomArrowItem(new Item.Properties().group(ModItemGroups.WEAPONS), (world, arrow, shooter) -> new CustomArrow(shooter, world, arrow, 5d)));
-    public static final RegistryObject<Item> GOLD_ARROW = ITEMS.register("golden_arrow", () -> new CustomArrowItem(new Item.Properties().group(ModItemGroups.WEAPONS), (world, arrow, shooter) -> new CustomArrow(shooter, world, arrow, 0.5)));
-    public static final RegistryObject<Item> IRON_ARROW = ITEMS.register("iron_arrow", () -> new CustomArrowItem(new Item.Properties().group(ModItemGroups.WEAPONS), (world, arrow, shooter) -> new CustomArrow(shooter, world, arrow, 2.5)));
-    public static final RegistryObject<Item> NETHERITE_ARROW = ITEMS.register("netherite_arrow", () -> new CustomArrowItem(new Item.Properties().group(ModItemGroups.WEAPONS), (world, arrow, shooter) -> new CustomArrow(shooter, world, arrow, 4d)));
-    public static final RegistryObject<Item> STONE_ARROW = ITEMS.register("stone_arrow", () -> new CustomArrowItem(new Item.Properties().group(ModItemGroups.WEAPONS), (world, arrow, shooter) -> new CustomArrow(shooter, world, arrow, 1)));
-    public static final RegistryObject<Item> WOODEN_ARROW = ITEMS.register("wooden_arrow", () -> new CustomArrowItem(new Item.Properties().group(ModItemGroups.WEAPONS), (world, arrow, shooter) -> new CustomArrow(shooter, world, arrow, 0.5d)));
+    public static final RegistryObject<Item> COMPOUND_ARROW = ITEMS.register("compound_arrow",
+            () -> new CustomArrowItem(new Item.Properties().group(ModItemGroups.WEAPONS), (world, arrow, shooter) ->
+                    new CustomArrow(shooter, world, arrow, 4.5D)));
+    public static final RegistryObject<Item> TRANQUILLIZER_ARROW = ITEMS.register("tranquillizer_arrow",
+            () -> new CustomArrowItem(new Item.Properties().group(ModItemGroups.WEAPONS), (world, arrow, shooter) ->
+                    new CustomArrow(shooter, world, arrow, 0.2D, 10)));
+    public static final RegistryObject<Item> BONE_ARROW = ITEMS.register("bone_arrow",
+            () -> new CustomArrowItem(new Item.Properties().group(ModItemGroups.WEAPONS), (world, arrow, shooter) ->
+                    new CustomArrow(shooter, world, arrow, 2.2D)));
+    public static final RegistryObject<Item> DIAMOND_ARROW = ITEMS.register("diamond_arrow",
+            () -> new CustomArrowItem(new Item.Properties().group(ModItemGroups.WEAPONS), (world, arrow, shooter) ->
+                    new CustomArrow(shooter, world, arrow, 3.5D)));
+    public static final RegistryObject<Item> EMERALD_ARROW = ITEMS.register("emerald_arrow",
+            () -> new CustomArrowItem(new Item.Properties().group(ModItemGroups.WEAPONS), (world, arrow, shooter) ->
+                    new CustomArrow(shooter, world, arrow, 5.0D)));
+    public static final RegistryObject<Item> GOLD_ARROW = ITEMS.register("golden_arrow",
+            () -> new CustomArrowItem(new Item.Properties().group(ModItemGroups.WEAPONS), (world, arrow, shooter) ->
+                    new CustomArrow(shooter, world, arrow, 0.5D)));
+    public static final RegistryObject<Item> IRON_ARROW = ITEMS.register("iron_arrow",
+            () -> new CustomArrowItem(new Item.Properties().group(ModItemGroups.WEAPONS), (world, arrow, shooter) ->
+                    new CustomArrow(shooter, world, arrow, 2.5D)));
+    public static final RegistryObject<Item> NETHERITE_ARROW = ITEMS.register("netherite_arrow",
+            () -> new CustomArrowItem(new Item.Properties().group(ModItemGroups.WEAPONS), (world, arrow, shooter) ->
+                    new CustomArrow(shooter, world, arrow, 4.0D)));
+    public static final RegistryObject<Item> STONE_ARROW = ITEMS.register("stone_arrow",
+            () -> new CustomArrowItem(new Item.Properties().group(ModItemGroups.WEAPONS), (world, arrow, shooter) ->
+                    new CustomArrow(shooter, world, arrow, 1.0D)));
+    public static final RegistryObject<Item> WOODEN_ARROW = ITEMS.register("wooden_arrow",
+            () -> new CustomArrowItem(new Item.Properties().group(ModItemGroups.WEAPONS), (world, arrow, shooter) ->
+                    new CustomArrow(shooter, world, arrow, 0.5D)));
+    public static final RegistryObject<Item> RUBY_ARROW = ITEMS.register("ruby_arrow",
+            () -> new CustomArrowItem(new Item.Properties().group(ModItemGroups.WEAPONS), (world, arrow, shooter) ->
+                    new CustomArrow(shooter, world, arrow, 5.25D)));
+    public static final RegistryObject<Item> SAPPHIRE_ARROW = ITEMS.register("sapphire_arrow",
+            () -> new CustomArrowItem(new Item.Properties().group(ModItemGroups.WEAPONS), (world, arrow, shooter) ->
+                    new CustomArrow(shooter, world, arrow, 5.5D)));
     public static final RegistryObject<Item> DART = ITEMS.register("dart",
             () -> new DartItem(new Item.Properties().group(ModItemGroups.WEAPONS)));
     public static final RegistryObject<Item> TINY_ROCK = ITEMS.register("tiny_rock",
@@ -64,6 +90,10 @@ public class ItemInit {
             () -> new TieredChakram(new Item.Properties().group(ModItemGroups.WEAPONS), ChakramTiers.EMERALD_CHAKRAM));
     public static final RegistryObject<Item> NETHERITE_CHAKRAM = ITEMS.register("netherite_chakram",
             () -> new TieredChakram(new Item.Properties().group(ModItemGroups.WEAPONS), ChakramTiers.NETHERITE_CHAKRAM));
+    public static final RegistryObject<Item> RUBY_CHAKRAM = ITEMS.register("ruby_chakram",
+            () -> new TieredChakram(new Item.Properties().group(ModItemGroups.WEAPONS), ChakramTiers.RUBY_CHAKRAM));
+    public static final RegistryObject<Item> SAPPHIRE_CHAKRAM = ITEMS.register("sapphire_chakram",
+            () -> new TieredChakram(new Item.Properties().group(ModItemGroups.WEAPONS), ChakramTiers.SAPPHIRE_CHAKRAM));
     public static final RegistryObject<Item> WOODEN_HATCHET = ITEMS.register("wooden_hatchet",
             () -> new TieredHatchet(new Item.Properties().group(ModItemGroups.WEAPONS), HatchetTiers.WOODEN_HATCHET));
     public static final RegistryObject<Item> STONE_HATCHET = ITEMS.register("stone_hatchet",
@@ -78,6 +108,10 @@ public class ItemInit {
             () -> new TieredHatchet(new Item.Properties().group(ModItemGroups.WEAPONS), HatchetTiers.NETHERITE_HATCHET));
     public static final RegistryObject<Item> EMERALD_HATCHET = ITEMS.register("emerald_hatchet",
             () -> new TieredHatchet(new Item.Properties().group(ModItemGroups.WEAPONS), HatchetTiers.EMERALD_HATCHET));
+    public static final RegistryObject<Item> RUBY_HATCHET = ITEMS.register("ruby_hatchet",
+            () -> new TieredHatchet(new Item.Properties().group(ModItemGroups.WEAPONS), HatchetTiers.RUBY_HATCHET));
+    public static final RegistryObject<Item> SAPPHIRE_HATCHET = ITEMS.register("sapphire_hatchet",
+            () -> new TieredHatchet(new Item.Properties().group(ModItemGroups.WEAPONS), HatchetTiers.SAPPHIRE_HATCHET));
     public static final RegistryObject<Item> WOODEN_SPEAR = ITEMS.register("wooden_spear",
             () -> new TieredSpear(new Item.Properties().group(ModItemGroups.WEAPONS).setISTER(
                     () -> () -> ClientISTERProvider.bakeSpearISTER("wooden_spear")), SpearTiers.WOODEN_SPEAR));
@@ -113,7 +147,16 @@ public class ItemInit {
                     () -> () -> ClientISTERProvider.bakeSpearISTER("emerald_spear")), SpearTiers.EMERALD_SPEAR));
     public static final RegistryObject<Item> EMERALD_SPEAR_INVENTORY = ITEMS.register("emerald_spear_inventory",
             () -> new Item(new Item.Properties()));
-
+    public static final RegistryObject<Item> RUBY_SPEAR = ITEMS.register("ruby_spear",
+            () -> new TieredSpear(new Item.Properties().group(ModItemGroups.WEAPONS).setISTER(
+                    () -> () -> ClientISTERProvider.bakeSpearISTER("ruby_spear")), SpearTiers.RUBY_SPEAR));
+    public static final RegistryObject<Item> RUBY_SPEAR_INVENTORY = ITEMS.register("ruby_spear_inventory",
+            () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> SAPPHIRE_SPEAR = ITEMS.register("sapphire_spear",
+            () -> new TieredSpear(new Item.Properties().group(ModItemGroups.WEAPONS).setISTER(
+                    () -> () -> ClientISTERProvider.bakeSpearISTER("sapphire_spear")), SpearTiers.SAPPHIRE_SPEAR));
+    public static final RegistryObject<Item> SAPPHIRE_SPEAR_INVENTORY = ITEMS.register("sapphire_spear_inventory",
+            () -> new Item(new Item.Properties()));
     //Spawn Eggs
     public static final RegistryObject<Item> SQUALODON_SPAWN_EGG = ITEMS.register("squalodon_spawn_egg",
             () -> new ForgeSpawnEggItem(EntityInit.SQUALODON, 13097436, 8431015, new Item.Properties().group(ModItemGroups.SPAWN_EGGS)));
@@ -255,4 +298,8 @@ public class ItemInit {
             () -> new ZoomItem(new Item.Properties().group(ModItemGroups.ITEMS), 2, 10));
     public static final RegistryObject<Item> TELEPORT_ITEM = ITEMS.register("teleport_machine",
             () -> new TeleportedItem(new Item.Properties().group(ModItemGroups.ITEMS).rarity(Rarity.EPIC)));
+    public static final RegistryObject<Item> RUBY = ITEMS.register("ruby",
+            () -> new Item(new Item.Properties().group(ModItemGroups.ITEMS)));
+    public static final RegistryObject<Item> SAPPHIRE = ITEMS.register("sapphire",
+            () -> new Item(new Item.Properties().group(ModItemGroups.ITEMS)));
 }

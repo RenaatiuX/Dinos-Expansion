@@ -29,43 +29,47 @@ public class DinosExpansionISTER extends ItemStackTileEntityRenderer {
 
     @Override
     public void func_239207_a_(ItemStack stack, ItemCameraTransforms.TransformType p_239207_2_, MatrixStack matrixStack, IRenderTypeBuffer buffer, int combinedLight, int combinedOverlay) {
-            if (stack.getItem() == ItemInit.DIAMOND_SPEAR.get() || stack.getItem() == ItemInit.GOLD_SPEAR.get() || stack.getItem() == ItemInit.STONE_SPEAR.get() || stack.getItem() == ItemInit.IRON_SPEAR.get() || stack.getItem() == ItemInit.WOODEN_SPEAR.get() || stack.getItem() == ItemInit.NETHERITE_SPEAR.get() || stack.getItem() == ItemInit.EMERALD_SPEAR.get()) {
-                matrixStack.translate(0.5F, 0.5F, 0.5F);
-                if (p_239207_2_ == ItemCameraTransforms.TransformType.GUI || p_239207_2_ == ItemCameraTransforms.TransformType.FIXED || p_239207_2_ == ItemCameraTransforms.TransformType.NONE || p_239207_2_ == ItemCameraTransforms.TransformType.GROUND) {
-                    ItemStack tridentInventory = null;
-                    if (stack.getItem() == ItemInit.DIAMOND_SPEAR.get()) {
-                        tridentInventory = new ItemStack(ItemInit.DIAMOND_SPEAR_INVENTORY.get());
-                    } else if (stack.getItem() == ItemInit.GOLD_SPEAR.get()) {
-                        tridentInventory = new ItemStack(ItemInit.GOLD_SPEAR_INVENTORY.get());
-                    } else if (stack.getItem() == ItemInit.STONE_SPEAR.get()) {
-                        tridentInventory = new ItemStack(ItemInit.STONE_SPEAR_INVENTORY.get());
-                    } else if (stack.getItem() == ItemInit.IRON_SPEAR.get()) {
-                        tridentInventory = new ItemStack(ItemInit.IRON_SPEAR_INVENTORY.get());
-                    } else if (stack.getItem() == ItemInit.WOODEN_SPEAR.get()) {
-                        tridentInventory = new ItemStack(ItemInit.WOODEN_SPEAR_INVENTORY.get());
-                    } else if (stack.getItem() == ItemInit.NETHERITE_SPEAR.get()) {
-                        tridentInventory = new ItemStack(ItemInit.NETHERITE_SPEAR_INVENTORY.get());
-                    } else if (stack.getItem() == ItemInit.EMERALD_SPEAR.get()) {
-                        tridentInventory = new ItemStack(ItemInit.EMERALD_SPEAR_INVENTORY.get());
-                    }
-                    if (stack.isEnchanted()) {
-                        ListNBT enchantments = stack.getTag().getList("Enchantments", 10);
-                        tridentInventory.setTagInfo("Enchantments", enchantments);
-                    }
-                    Minecraft.getInstance().getItemRenderer().renderItem(tridentInventory, p_239207_2_, p_239207_2_ == ItemCameraTransforms.TransformType.GROUND ? combinedLight : 240, combinedOverlay, matrixStack, buffer);
-                } else {
-                    matrixStack.push();
-                    matrixStack.scale(-1.0F, -1.0F, 1.0F);
-                    IVertexBuilder vertexBuilder = ItemRenderer.getEntityGlintVertexBuilder(buffer, RenderType.getEntityCutout(texture), false, stack.hasEffect());
-                    SPEAR_MODEL.render(matrixStack, vertexBuilder, combinedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
-                    matrixStack.pop();
+        if (stack.getItem() == ItemInit.DIAMOND_SPEAR.get() || stack.getItem() == ItemInit.GOLD_SPEAR.get() || stack.getItem() == ItemInit.STONE_SPEAR.get() || stack.getItem() == ItemInit.IRON_SPEAR.get() || stack.getItem() == ItemInit.WOODEN_SPEAR.get() || stack.getItem() == ItemInit.NETHERITE_SPEAR.get() || stack.getItem() == ItemInit.EMERALD_SPEAR.get()
+                || stack.getItem() == ItemInit.RUBY_SPEAR.get() || stack.getItem() == ItemInit.SAPPHIRE_SPEAR.get()) {
+            matrixStack.translate(0.5F, 0.5F, 0.5F);
+            if (p_239207_2_ == ItemCameraTransforms.TransformType.GUI || p_239207_2_ == ItemCameraTransforms.TransformType.FIXED || p_239207_2_ == ItemCameraTransforms.TransformType.NONE || p_239207_2_ == ItemCameraTransforms.TransformType.GROUND) {
+                ItemStack tridentInventory = null;
+                if (stack.getItem() == ItemInit.DIAMOND_SPEAR.get()) {
+                    tridentInventory = new ItemStack(ItemInit.DIAMOND_SPEAR_INVENTORY.get());
+                } else if (stack.getItem() == ItemInit.GOLD_SPEAR.get()) {
+                    tridentInventory = new ItemStack(ItemInit.GOLD_SPEAR_INVENTORY.get());
+                } else if (stack.getItem() == ItemInit.STONE_SPEAR.get()) {
+                    tridentInventory = new ItemStack(ItemInit.STONE_SPEAR_INVENTORY.get());
+                } else if (stack.getItem() == ItemInit.IRON_SPEAR.get()) {
+                    tridentInventory = new ItemStack(ItemInit.IRON_SPEAR_INVENTORY.get());
+                } else if (stack.getItem() == ItemInit.WOODEN_SPEAR.get()) {
+                    tridentInventory = new ItemStack(ItemInit.WOODEN_SPEAR_INVENTORY.get());
+                } else if (stack.getItem() == ItemInit.NETHERITE_SPEAR.get()) {
+                    tridentInventory = new ItemStack(ItemInit.NETHERITE_SPEAR_INVENTORY.get());
+                } else if (stack.getItem() == ItemInit.EMERALD_SPEAR.get()) {
+                    tridentInventory = new ItemStack(ItemInit.EMERALD_SPEAR_INVENTORY.get());
+                } else if (stack.getItem() == ItemInit.RUBY_SPEAR.get()) {
+                    tridentInventory = new ItemStack(ItemInit.RUBY_SPEAR_INVENTORY.get());
+                } else if (stack.getItem() == ItemInit.SAPPHIRE_SPEAR.get()) {
+                    tridentInventory = new ItemStack(ItemInit.SAPPHIRE_SPEAR_INVENTORY.get());
                 }
+                if (stack.isEnchanted()) {
+                    ListNBT enchantments = stack.getTag().getList("Enchantments", 10);
+                    tridentInventory.setTagInfo("Enchantments", enchantments);
+                }
+                Minecraft.getInstance().getItemRenderer().renderItem(tridentInventory, p_239207_2_, p_239207_2_ == ItemCameraTransforms.TransformType.GROUND ? combinedLight : 240, combinedOverlay, matrixStack, buffer);
+            } else {
+                matrixStack.push();
+                matrixStack.scale(-1.0F, -1.0F, 1.0F);
+                IVertexBuilder vertexBuilder = ItemRenderer.getEntityGlintVertexBuilder(buffer, RenderType.getEntityCutout(texture), false, stack.hasEffect());
+                SPEAR_MODEL.render(matrixStack, vertexBuilder, combinedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+                matrixStack.pop();
             }
+        }
     }
 
 
-
-    private static ResourceLocation spear(String name){
+    private static ResourceLocation spear(String name) {
         return DinosExpansion.modLoc("textures/entity/misc/" + name);
     }
 }
