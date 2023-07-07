@@ -26,7 +26,7 @@ public class Tyrannosaurus extends Dinosaur implements IAnimatable, IAnimationTi
     }
 
     @Override
-    protected Rarity getinitialRarity() {
+    protected Rarity getInitialRarity() {
         return null;
     }
 

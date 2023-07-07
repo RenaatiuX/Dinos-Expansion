@@ -17,7 +17,7 @@ public abstract class AmbientDinosaur extends Dinosaur {
     }
 
     @Override
-    protected Rarity getinitialRarity() {
+    protected Rarity getInitialRarity() {
         double rand = this.getRNG().nextDouble();
         if (rand <= 0.05)
             return Rarity.LEGENDARY;
@@ -30,9 +30,20 @@ public abstract class AmbientDinosaur extends Dinosaur {
         return Rarity.COMMON;
     }
 
+
     @Override
     protected Gender getInitialGender() {
         //bring a bit of real life in the random distribution :-)
         return getRNG().nextDouble() <= 0.51 ? Gender.MALE : Gender.FEMALE;
+    }
+
+    @Override
+    public boolean canBeKnockedOut() {
+        return false;
+    }
+
+    @Override
+    public boolean canBeTamed() {
+        return false;
     }
 }

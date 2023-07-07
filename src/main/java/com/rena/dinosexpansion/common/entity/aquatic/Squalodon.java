@@ -156,7 +156,7 @@ public class Squalodon extends DinosaurAquatic implements IAnimatable, IAnimatio
     }
 
     @Override
-    protected Rarity getinitialRarity() {
+    protected Rarity getInitialRarity() {
         if (getRNG().nextDouble() <= 0.3)
             return Rarity.UNCOMMON;
         return Rarity.COMMON;

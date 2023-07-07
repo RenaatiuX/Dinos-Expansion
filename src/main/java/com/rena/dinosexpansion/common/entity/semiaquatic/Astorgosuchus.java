@@ -353,7 +353,7 @@ public class Astorgosuchus extends Dinosaur implements IAnimatable, IAnimationTi
     }
 
     @Override
-    protected Rarity getinitialRarity() {
+    protected Rarity getInitialRarity() {
         return Rarity.COMMON;
     }
 

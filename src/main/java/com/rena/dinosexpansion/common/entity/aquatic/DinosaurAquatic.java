@@ -157,7 +157,7 @@ public abstract class DinosaurAquatic extends Dinosaur{
     }
 
     @Override
-    protected Rarity getinitialRarity() {
+    protected Rarity getInitialRarity() {
         double rand = this.getRNG().nextDouble();
         if (rand <= 0.05)
             return Rarity.LEGENDARY;

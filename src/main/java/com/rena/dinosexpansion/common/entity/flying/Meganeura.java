@@ -207,7 +207,7 @@ public class Meganeura extends AmbientDinosaur implements IAnimatable, IAnimatio
 
     //TODO do this for all other entities
     @Override
-    protected Rarity getinitialRarity() {
+    protected Rarity getInitialRarity() {
         //in here we have a 20% chance that the entity is uncommon and a 80% chance that the entity is uncommon
         //as u see this method can only return Common or Uncommon so the entity can never have anything else as the rarity never changes throughout the game
         double random = this.getRNG().nextDouble();

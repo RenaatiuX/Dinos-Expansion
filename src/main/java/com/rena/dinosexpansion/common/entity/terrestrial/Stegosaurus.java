@@ -26,7 +26,7 @@ public class Stegosaurus extends ChestedDinosaur implements IAnimatable, IAnimat
     }
 
     @Override
-    protected Rarity getinitialRarity() {
+    protected Rarity getInitialRarity() {
         return null;
     }
 

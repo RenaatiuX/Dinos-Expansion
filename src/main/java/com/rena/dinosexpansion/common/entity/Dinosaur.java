@@ -38,7 +38,6 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -105,7 +104,7 @@ public abstract class Dinosaur extends TameableEntity {
         super(type, world);
         this.maxNarcotic = (int) ((float) info.maxNarcotic * (float) DinosExpansionConfig.NARCOTIC_NEEDED_PERCENT.get() / 100f);
         this.maxHunger = info.maxHunger;
-        this.dataManager.register(RARITY, getinitialRarity().ordinal());
+        this.dataManager.register(RARITY, getInitialRarity().ordinal());
         this.dataManager.register(GENDER, getInitialGender().ordinal());
         this.dataManager.register(LEVEL, level);
         setHungerValue(maxHunger);
@@ -218,7 +217,7 @@ public abstract class Dinosaur extends TameableEntity {
                         new TranslationTextComponent(DinosExpansion.MOD_ID + ".order_screen." + this.getInfo().name)), buf -> buf.writeVarInt(this.getEntityId()));
                 return ActionResultType.SUCCESS;
             }
-            if ((isOwner(player) || isKnockedOutBy(player)) && canEat(stack)) {
+            if (canBeTamed() && (isOwner(player) || isKnockedOutBy(player)) && canEat(stack)) {
                 this.addHungerValue(stack, player);
                 if (!player.isCreative())
                     stack.shrink(1);
@@ -489,7 +488,7 @@ public abstract class Dinosaur extends TameableEntity {
                 if (isKnockout()){
                     this.dataManager.set(TAMING_EFFICIENCY, getTamingEfficiency() * .8f);
                 }
-                if (source.getImmediateSource() instanceof INarcoticProjectile && source.getTrueSource() instanceof LivingEntity)
+                if (canBeKnockedOut() && source.getImmediateSource() instanceof INarcoticProjectile && source.getTrueSource() instanceof LivingEntity)
                     this.addNarcoticValue(((INarcoticProjectile) source.getImmediateSource()).getNarcoticValue(), (LivingEntity) source.getTrueSource());
             }
         }
@@ -501,6 +500,10 @@ public abstract class Dinosaur extends TameableEntity {
     public DinosaurInfo getInfo() {
         this.updateInfo();
         return info;
+    }
+
+    public boolean canBeKnockedOut(){
+        return true;
     }
 
     /**
@@ -530,6 +533,11 @@ public abstract class Dinosaur extends TameableEntity {
             if (hasArmor() == armor)
                 setArmor(armor);
         }
+    }
+
+
+    public  boolean canBeTamed(){
+        return true;
     }
 
     /**
@@ -587,7 +595,7 @@ public abstract class Dinosaur extends TameableEntity {
      *
      * @return
      */
-    protected abstract Rarity getinitialRarity();
+    protected abstract Rarity getInitialRarity();
 
     /**
      * this is called at the constructor to define its initial gender

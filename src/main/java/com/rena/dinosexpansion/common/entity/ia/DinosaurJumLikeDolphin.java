@@ -106,7 +106,6 @@ public class DinosaurJumLikeDolphin extends JumpGoal {
             double d1 = Math.signum(-vector3d.y) * Math.acos(d0 / vector3d.length()) * (double)(180F / (float)Math.PI);
             this.dolphin.rotationPitch = (float)d1;
         }
-        System.out.println("still executing");
 
     }
 }

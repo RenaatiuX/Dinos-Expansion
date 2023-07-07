@@ -26,7 +26,7 @@ public class Parasaurolophus extends Dinosaur implements IAnimatable, IAnimation
     }
 
     @Override
-    protected Rarity getinitialRarity() {
+    protected Rarity getInitialRarity() {
         return null;
     }
 

@@ -26,7 +26,7 @@ public class Diplodocus extends Dinosaur implements IAnimatable, IAnimationTicka
     }
 
     @Override
-    protected Rarity getinitialRarity() {
+    protected Rarity getInitialRarity() {
         return null;
     }
 
