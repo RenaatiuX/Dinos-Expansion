@@ -3,6 +3,7 @@ package com.rena.dinosexpansion.core.init;
 import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.client.renderer.ClientISTERProvider;
 import com.rena.dinosexpansion.common.entity.projectile.CustomArrow;
+import com.rena.dinosexpansion.common.entity.util.BoatType;
 import com.rena.dinosexpansion.common.item.*;
 import com.rena.dinosexpansion.common.item.arrow.DartItem;
 import com.rena.dinosexpansion.common.item.arrow.TinyRockItem;
@@ -302,4 +303,7 @@ public class ItemInit {
             () -> new Item(new Item.Properties().group(ModItemGroups.ITEMS)));
     public static final RegistryObject<Item> SAPPHIRE = ITEMS.register("sapphire",
             () -> new Item(new Item.Properties().group(ModItemGroups.ITEMS)));
+
+    //Boats
+    public static final RegistryObject<CustomBoatItem> CRATAEGUS_BOAT_ITEM = ITEMS.register("crataegus_boat_item", () -> new CustomBoatItem(BoatType.CRATAEGUS, new Item.Properties().group(ModItemGroups.ITEMS)));
 }

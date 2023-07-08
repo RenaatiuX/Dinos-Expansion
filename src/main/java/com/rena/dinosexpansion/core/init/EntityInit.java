@@ -23,6 +23,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.apache.http.client.entity.EntityBuilder;
 
 import javax.swing.plaf.PanelUI;
 import java.util.function.Supplier;
@@ -78,6 +79,8 @@ public class EntityInit {
 
     public static final RegistryObject<EntityType<Hermit>> HERMIT = register("hermit", () -> EntityType.Builder.create(Hermit::new, EntityClassification.CREATURE));
     public static final RegistryObject<EntityType<Caveman>> CAVEMAN = register("caveman", () -> EntityType.Builder.create(Caveman::new, EntityClassification.CREATURE));
+
+    public static final RegistryObject<EntityType<CustomBoatEntity>> CUSTOM_BOAT = register("custom_boat", () -> EntityType.Builder.<CustomBoatEntity>create(CustomBoatEntity::new, EntityClassification.MISC).size(1.375F, 0.5625F).trackingRange(10));
 
     public static final <T extends Entity> RegistryObject<EntityType<T>> register(String name, Supplier<EntityType.Builder<T>> builder){
         return ENTITY_TYPES.register(name, () -> builder.get().build(DinosExpansion.modLoc(name).toString()));

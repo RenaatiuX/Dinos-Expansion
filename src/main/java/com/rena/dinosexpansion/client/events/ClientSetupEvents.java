@@ -78,6 +78,8 @@ public class ClientSetupEvents {
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.CAVEMAN.get(), CavemanRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.SQUALODON.get(), SqualodongRenderer::new);
 
+        RenderingRegistry.registerEntityRenderingHandler(EntityInit.CUSTOM_BOAT.get(), CustomBoatRenderer::new);
+
         ClientRegistry.bindTileEntityRenderer(BlockEntityInit.MORTAR.get(), MortarRenderer::new);
     }
 
