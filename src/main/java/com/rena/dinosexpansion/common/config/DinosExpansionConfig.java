@@ -6,8 +6,11 @@ public class DinosExpansionConfig {
 
     public static final ForgeConfigSpec.Builder BUILDER;
     public static final ForgeConfigSpec.IntValue MAX_LEVEL, MAX_XP, XP_INCREASE, NARCOTIC_NEEDED_PERCENT,
-            WOOD_BOOMERANG_RANGE, WOOD_BOOMERANG_DAMAGE, IRON_BOOMERANG_RANGE, IRON_BOOMERANG_DAMAGE,
-            DIAMOND_BOOMERANG_RANGE, DIAMOND_BOOMERANG_DAMAGE, LEVEL_OFFSET, MAX_TRIBE_APPROVAL, TRIBE_HOSTILE_THRESHOLD, TRIBE_TRADING_THRESHOLD;
+            WOOD_BOOMERANG_RANGE, WOOD_BOOMERANG_DAMAGE, STONE_BOOMERANG_RANGE, STONE_BOOMERANG_DAMAGE,
+            IRON_BOOMERANG_RANGE, IRON_BOOMERANG_DAMAGE, GOLDEN_BOOMERANG_RANGE,  GOLDEN_BOOMERANG_DAMAGE,
+            DIAMOND_BOOMERANG_RANGE, DIAMOND_BOOMERANG_DAMAGE, NETHERITE_BOOMERANG_RANGE, NETHERITE_BOOMERANG_DAMAGE,
+            EMERALD_BOOMERANG_RANGE, EMERALD_BOOMERANG_DAMAGE, RUBY_BOOMERANG_RANGE, RUBY_BOOMERANG_DAMAGE,
+            SAPPHIRE_BOOMERANG_RANGE, SAPPHIRE_BOOMERANG_DAMAGE, LEVEL_OFFSET, MAX_TRIBE_APPROVAL, TRIBE_HOSTILE_THRESHOLD, TRIBE_TRADING_THRESHOLD;
     public static final ForgeConfigSpec.DoubleValue ATTACK_DAMAGE_PER_LEVEL, HEALTH_PER_LEVEL, ARMOR_PER_LEVEL;
     public static final ForgeConfigSpec.BooleanValue TURN_AROUND_ITEM, TURN_AROUND_MOB, TURN_AROUND_BUTTON,
             BREAKS_TORCHES, BREAKS_FLOWERS, BREAKS_GRASS, BREAKS_TALLGRASS,
@@ -44,12 +47,24 @@ public class DinosExpansionConfig {
         TURN_AROUND_ITEM = builder.comment("Comes back to the player after picking up items.").define("turnAroundItem", true);
         TURN_AROUND_MOB = builder.comment("Comes back to the player after hitting a mob.").define("turnAroundMob", true);
         TURN_AROUND_BUTTON = builder.comment("Comes back to player after hitting a button.").define("turnAroundButton", true);
-        WOOD_BOOMERANG_RANGE = builder.comment("The maximum range of travel before returning to player.").defineInRange("WoodBoomerangRange", 30, 1, 200);
-        WOOD_BOOMERANG_DAMAGE = builder.comment("The amount of damage that is done when hitting any living entity.").defineInRange("WoodBoomerangDamage", 4, 1, 500);
-        IRON_BOOMERANG_RANGE = builder.comment("The maximum range of travel before returning to player.").defineInRange("IronBoomerangRange", 35, 1, 200);
-        IRON_BOOMERANG_DAMAGE = builder.comment("The amount of damage that is done when hitting any living entity.").defineInRange("IronBoomerangDamage", 6, 1, 500);
-        DIAMOND_BOOMERANG_RANGE = builder.comment("The maximum range of travel before returning to player.").defineInRange("DiamondBoomerangRange", 40, 1, 200);
-        DIAMOND_BOOMERANG_DAMAGE = builder.comment("The amount of damage that is done when hitting any living entity.").defineInRange("DiamondBoomerangDamage", 7, 1, 500);
+        WOOD_BOOMERANG_RANGE = builder.comment("The maximum range of travel before returning to player.").defineInRange("WoodBoomerangRange", 10, 1, 200);
+        WOOD_BOOMERANG_DAMAGE = builder.comment("The amount of damage that is done when hitting any living entity.").defineInRange("WoodBoomerangDamage", 2, 1, 500);
+        STONE_BOOMERANG_RANGE = builder.comment("The maximum range of travel before returning to player.").defineInRange("StoneBoomerangRange", 15, 1, 200);
+        STONE_BOOMERANG_DAMAGE = builder.comment("The amount of damage that is done when hitting any living entity.").defineInRange("StoneBoomerangRange", 3, 1, 500);
+        IRON_BOOMERANG_RANGE = builder.comment("The maximum range of travel before returning to player.").defineInRange("IronBoomerangRange", 20, 1, 200);
+        IRON_BOOMERANG_DAMAGE = builder.comment("The amount of damage that is done when hitting any living entity.").defineInRange("IronBoomerangDamage", 4, 1, 500);
+        GOLDEN_BOOMERANG_RANGE = builder.comment("The maximum range of travel before returning to player.").defineInRange("GoldenBoomerangRange", 10, 1, 200);
+        GOLDEN_BOOMERANG_DAMAGE = builder.comment("The amount of damage that is done when hitting any living entity.").defineInRange("GoldenBoomerangRange", 2, 1, 500);
+        DIAMOND_BOOMERANG_RANGE = builder.comment("The maximum range of travel before returning to player.").defineInRange("DiamondBoomerangRange", 25, 1, 200);
+        DIAMOND_BOOMERANG_DAMAGE = builder.comment("The amount of damage that is done when hitting any living entity.").defineInRange("DiamondBoomerangDamage", 5, 1, 500);
+        NETHERITE_BOOMERANG_RANGE = builder.comment("The maximum range of travel before returning to player.").defineInRange("NetheriteBoomerangRange", 30, 1, 200);
+        NETHERITE_BOOMERANG_DAMAGE = builder.comment("The amount of damage that is done when hitting any living entity.").defineInRange("NetheriteBoomerangRange", 6, 1, 500);
+        EMERALD_BOOMERANG_RANGE = builder.comment("The maximum range of travel before returning to player.").defineInRange("EmeraldBoomerangRange", 30, 1, 200);
+        EMERALD_BOOMERANG_DAMAGE = builder.comment("The amount of damage that is done when hitting any living entity.").defineInRange("EmeraldBoomerangRange", 7, 1, 500);
+        RUBY_BOOMERANG_RANGE = builder.comment("The maximum range of travel before returning to player.").defineInRange("RubyBoomerangRange", 32, 1, 200);
+        RUBY_BOOMERANG_DAMAGE = builder.comment("The amount of damage that is done when hitting any living entity.").defineInRange("RubyBoomerangRange", 9, 1, 500);
+        SAPPHIRE_BOOMERANG_RANGE = builder.comment("The maximum range of travel before returning to player.").defineInRange("SapphireBoomerangRange", 35, 1, 200);
+        SAPPHIRE_BOOMERANG_DAMAGE = builder.comment("The amount of damage that is done when hitting any living entity.").defineInRange("SapphireBoomerangRange", 9, 1, 500);
         BREAKS_TORCHES = builder.comment("Can boomerang break torches.").define("breaksTorches", true);
         BREAKS_FLOWERS = builder.comment("Can boomerang break Flowers.").define("breaksFlowers", true);
         BREAKS_GRASS = builder.comment("Can boomerang break Grass.").define("breaksGrass", true);

@@ -43,7 +43,8 @@ public class TieredBoomerang extends Item {
         showDurabilityBar(playerIn.getHeldItem(handIn));
         playerIn.setActiveHand(handIn);
 
-        return ActionResult.resultSuccess(playerIn.getHeldItem(handIn));    }
+        return ActionResult.resultSuccess(playerIn.getHeldItem(handIn));
+    }
 
     @Override
     public int getItemEnchantability() {
@@ -52,32 +53,46 @@ public class TieredBoomerang extends Item {
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        if (this == ItemInit.WOOD_BOOMERANG.get()){
+        TieredBoomerang boomerang = getBoomerang();
+        if (boomerang != null) {
             tooltip.add(StringTextComponent.EMPTY);
             tooltip.add((new TranslationTextComponent("dinosexpansion.modifiers.hand")).mergeStyle(TextFormatting.GRAY));
             tooltip.add((new StringTextComponent(" ")).appendSibling(new TranslationTextComponent("dinosexpansion.boomerang.damage", boomerangTier.getDamageAddition()).mergeStyle(TextFormatting.DARK_GREEN)));
-        }
-        if (this == ItemInit.IRON_BOOMERANG.get()){
-            tooltip.add(StringTextComponent.EMPTY);
-            tooltip.add((new TranslationTextComponent("dinosexpansion.modifiers.hand")).mergeStyle(TextFormatting.GRAY));
-            tooltip.add((new StringTextComponent(" ")).appendSibling(new TranslationTextComponent("dinosexpansion.boomerang.damage", boomerangTier.getDamageAddition()).mergeStyle(TextFormatting.DARK_GREEN)));
-        }
-        if (this == ItemInit.DIAMOND_BOOMERANG.get()){
-            tooltip.add(StringTextComponent.EMPTY);
-            tooltip.add((new TranslationTextComponent("dinosexpansion.modifiers.hand")).mergeStyle(TextFormatting.GRAY));
-            tooltip.add((new StringTextComponent(" ")).appendSibling(new TranslationTextComponent("dinosexpansion.boomerang.damage", boomerangTier.getDamageAddition()).mergeStyle(TextFormatting.DARK_GREEN)));
+            tooltip.add((new StringTextComponent(" ")).appendSibling(new TranslationTextComponent("dinosexpansion.boomerang.range", boomerangTier.getRange()).mergeStyle(TextFormatting.DARK_AQUA)));
         }
     }
 
-    public interface BoomerangTier{
+    private TieredBoomerang getBoomerang() {
+        TieredBoomerang[] boomerangs = {
+                ItemInit.WOOD_BOOMERANG.get(),
+                ItemInit.STONE_BOOMERANG.get(),
+                ItemInit.IRON_BOOMERANG.get(),
+                ItemInit.GOLDEN_BOOMERANG.get(),
+                ItemInit.DIAMOND_BOOMERANG.get(),
+                ItemInit.NETHERITE_BOOMERANG.get(),
+                ItemInit.EMERALD_BOOMERANG.get(),
+                ItemInit.RUBY_BOOMERANG.get(),
+                ItemInit.SAPPHIRE_BOOMERANG.get()
+        };
+
+        for (TieredBoomerang boomerang : boomerangs) {
+            if (this == boomerang) {
+                return boomerang;
+            }
+        }
+        return null;
+    }
+
+    public interface BoomerangTier {
         double getDamageAddition();
+
         int getEnchantability();
 
         /**
-         *
          * @return how long the boomerang will fly until it will return by itself 30 is normal
          */
         int getRange();
+
         int getDurability();
     }
 }
