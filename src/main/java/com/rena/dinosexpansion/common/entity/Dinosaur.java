@@ -5,6 +5,7 @@ import com.rena.dinosexpansion.common.BitUtils;
 import com.rena.dinosexpansion.common.config.DinosExpansionConfig;
 import com.rena.dinosexpansion.common.container.OrderContainer;
 import com.rena.dinosexpansion.common.container.TamingContainer;
+import com.rena.dinosexpansion.common.entity.flying.Dimorphodon;
 import com.rena.dinosexpansion.common.entity.ia.SleepRhythmGoal;
 import com.rena.dinosexpansion.common.entity.projectile.INarcoticProjectile;
 import com.rena.dinosexpansion.common.item.util.INarcotic;
@@ -33,11 +34,13 @@ import net.minecraft.stats.Stats;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -45,6 +48,11 @@ import javax.annotation.Nullable;
 import java.util.*;
 
 public abstract class Dinosaur extends TameableEntity {
+
+    public static ResourceLocation getLootTableForRarity(ResourceLocation entityId, Rarity rarity){
+        return DinosExpansion.entityLoot(entityId.getPath() + "_" + rarity.name().toLowerCase(Locale.ROOT));
+    }
+
 
     /**
      * use this to generate a random level as it already contains all relevant config values

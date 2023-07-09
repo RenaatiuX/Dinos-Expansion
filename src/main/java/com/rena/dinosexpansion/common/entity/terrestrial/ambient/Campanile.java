@@ -20,6 +20,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3f;
@@ -43,6 +44,28 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 public class Campanile extends AmbientDinosaur implements IAnimatable, IAnimationTickable {
+
+    public static ResourceLocation getLootTable(boolean shell, Rarity rarity){
+        if (shell){
+            if (rarity == Rarity.UNCOMMON){
+                return DinosExpansion.entityLoot("campanile_shell_uncommon");
+            }else if (rarity == Rarity.COMMON)
+                return DinosExpansion.entityLoot("campanile_shell_common");
+            else
+                throw new IllegalArgumentException("there are just common and uncommon rarities allowed for the campanile with shell not: " + rarity.name());
+        }else {
+            if (rarity == Rarity.UNCOMMON){
+                return DinosExpansion.entityLoot("campanile_no_shell_uncommon");
+            }else if (rarity == Rarity.COMMON)
+                return DinosExpansion.entityLoot("campanile_no_shell_common");
+            else
+                throw new IllegalArgumentException("there are just common and uncommon rarities allowed for the campanile without shell not: " + rarity.name());
+        }
+    }
+
+
+
+
     private static final DataParameter<Boolean> IS_IN_SHELL = EntityDataManager.createKey(Campanile.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> HAS_SHELL = EntityDataManager.createKey(Campanile.class, DataSerializers.BOOLEAN);
     private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
@@ -284,7 +307,6 @@ public class Campanile extends AmbientDinosaur implements IAnimatable, IAnimatio
         }else if(this.wasInShell && !this.isInShell()){
             event.getController().setAnimation(new AnimationBuilder().playOnce("animation.campanile.hide_out"));
         } else if (new Vector3d(this.prevPosX - this.getPosX(), 0, this.prevPosZ - this.getPosZ()).lengthSquared() >= 1E-6) {
-            System.out.println("this should be executed when walking");
             event.getController().setAnimation(new AnimationBuilder().loop("animation.campanile.walk"));
         }else
             event.getController().setAnimation(new AnimationBuilder().loop("animation.campanile.idle"));
@@ -307,6 +329,10 @@ public class Campanile extends AmbientDinosaur implements IAnimatable, IAnimatio
         return this.ticksExisted;
     }
 
+    @Override
+    protected ResourceLocation getLootTable() {
+        return getLootTable(this.isInShell(), this.getRarity());
+    }
 
     public static class CampanileHideGoal extends Goal {
 

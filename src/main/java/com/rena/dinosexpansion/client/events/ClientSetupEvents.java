@@ -126,6 +126,8 @@ public class ClientSetupEvents {
         RenderTypeLookup.setRenderLayer(BlockInit.TEMPSKYA.get(), RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(BlockInit.COOKSONIA.get(), RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(BlockInit.PROTOTAXITES.get(), RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(BlockInit.CAMPANILE_SHELL_UNCOMMON.get(), RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(BlockInit.CAMPANILE_SHELL_COMMON.get(), RenderType.getCutout());
 
         RenderTypeLookup.setRenderLayer(BlockInit.REDWOOD_SAPLING.get(), RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(BlockInit.REDWOOD_LEAVES.get(), RenderType.getCutout());

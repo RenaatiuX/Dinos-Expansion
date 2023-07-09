@@ -60,6 +60,9 @@ public class BlockInit {
                     .zeroHardnessAndResistance())));
     public static final RegistryObject<MortarBlock> MORTAR = register("mortar",
             MortarBlock::new, ModItemGroups.BLOCKS, () -> MortarItemRenderer::new);
+
+    public static final RegistryObject<CampanileShell> CAMPANILE_SHELL_COMMON = register("campanile_common_shell", CampanileShell::new, ModItemGroups.BLOCKS);
+    public static final RegistryObject<CampanileShell> CAMPANILE_SHELL_UNCOMMON = register("campanile_uncommon_shell", CampanileShell::new, ModItemGroups.BLOCKS);
     public static final RegistryObject<Block> RUBY_ORE = register("ruby_ore",
             () -> new TypeOreBlock(AbstractBlock.Properties.create(Material.ROCK).setRequiresTool()
                     .harvestTool(ToolType.PICKAXE).harvestLevel(2)

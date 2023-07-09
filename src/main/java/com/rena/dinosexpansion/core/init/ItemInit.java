@@ -304,6 +304,8 @@ public class ItemInit {
     public static final RegistryObject<Item> SAPPHIRE = ITEMS.register("sapphire",
             () -> new Item(new Item.Properties().group(ModItemGroups.ITEMS)));
 
+    public static final RegistryObject<Item> CAMPANILE_GOO = ITEMS.register("snail_goo", () -> new Item(new Item.Properties().group(ModItemGroups.ITEMS)));
+
     //Boats
     public static final RegistryObject<CustomBoatItem> CRATAEGUS_BOAT_ITEM = ITEMS.register("crataegus_boat_item", () -> new CustomBoatItem(BoatType.CRATAEGUS, new Item.Properties().group(ModItemGroups.ITEMS)));
 }

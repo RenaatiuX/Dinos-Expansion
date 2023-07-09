@@ -1,12 +1,9 @@
 package com.rena.dinosexpansion.common.entity.misc;
 
 import com.rena.dinosexpansion.api.BoatTypeRegistry;
-import com.rena.dinosexpansion.common.entity.util.BoatType;
 import com.rena.dinosexpansion.core.init.EntityInit;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.entity.model.BoatModel;
-import net.minecraft.client.renderer.entity.model.EntityModel;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.item.BoatEntity;
 import net.minecraft.item.Item;

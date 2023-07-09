@@ -267,6 +267,11 @@ public class Dimorphodon extends DinosaurFlying implements IAnimatable, IAnimati
         return false;
     }
 
+    @Override
+    protected ResourceLocation getLootTable() {
+        return getLootTableForRarity(EntityInit.DIMORPHODON.getId(), this.getRarity());
+    }
+
     @Nullable
     @Override
     protected SoundEvent getAmbientSound() {
@@ -295,41 +300,6 @@ public class Dimorphodon extends DinosaurFlying implements IAnimatable, IAnimati
             playSound(SoundInit.DIMORPHODON_DEATH.get(i).get(), 1, 1.5F);
         }
         return null;
-    }
-
-    @Override
-    protected void spawnDrops(DamageSource damageSourceIn) {
-        if (this.getRarity() == Rarity.LEGENDARY) {
-            float probability = rand.nextFloat();
-            if (probability <= 0.2F) {
-                float itemCount = rand.nextInt(3) + 1;
-                for (int i = 0; i < itemCount; i++) {
-                    this.entityDropItem(new ItemStack(ItemInit.ELECTRONICS_PARTS.get()));
-                }
-            }
-            probability = rand.nextFloat();
-            if (probability <= 0.3F) {
-                float itemCount = rand.nextInt(3) + 1;
-                for (int i = 0; i < itemCount; i++) {
-                    this.entityDropItem(new ItemStack(ItemInit.OIL.get()));
-                }
-            }
-            probability = rand.nextFloat();
-            if (probability <= 0.6F) {
-                float itemCount = rand.nextInt(3) + 1;
-                for (int i = 0; i < itemCount; i++) {
-                    this.entityDropItem(new ItemStack(ItemInit.SCRAP.get()));
-                }
-            }
-        } else if (this.getRarity() != Rarity.LEGENDARY) {
-            float probability = rand.nextFloat();
-            if (probability <= 0.8F) {
-                int itemCount = rand.nextInt(3) + 1;
-                for (int i = 0; i < itemCount; i++) {
-                    this.entityDropItem(new ItemStack(ItemInit.RAW_DIMORPHODON_MEAT.get()));
-                }
-            }
-        }
     }
 
     public boolean isOnShoulder() {
