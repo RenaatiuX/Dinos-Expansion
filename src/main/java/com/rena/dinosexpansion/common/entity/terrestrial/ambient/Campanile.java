@@ -63,7 +63,6 @@ public class Campanile extends AmbientDinosaur implements IAnimatable, IAnimatio
 
     @Override
     protected void registerGoals() {
-        super.registerGoals();
         this.goalSelector.addGoal(0, new CampanileHideGoal(this, 200, 200));
         this.goalSelector.addGoal(0, new SwimGoal(this));
         this.goalSelector.addGoal(1, new PanicGoal(this, 0.8D){

@@ -72,10 +72,22 @@ public class ItemInit {
 
     public static final RegistryObject<TieredBoomerang> WOOD_BOOMERANG = ITEMS.register("wood_boomerang",
             () -> new TieredBoomerang(new Item.Properties().group(ModItemGroups.WEAPONS), BoomerangTiers.WOOD));
+    public static final RegistryObject<TieredBoomerang> STONE_BOOMERANG = ITEMS.register("stone_boomerang",
+            () -> new TieredBoomerang(new Item.Properties().group(ModItemGroups.WEAPONS), BoomerangTiers.STONE));
     public static final RegistryObject<TieredBoomerang> IRON_BOOMERANG = ITEMS.register("iron_boomerang",
             () -> new TieredBoomerang(new Item.Properties().group(ModItemGroups.WEAPONS), BoomerangTiers.IRON));
+    public static final RegistryObject<TieredBoomerang> GOLDEN_BOOMERANG = ITEMS.register("golden_boomerang",
+            () -> new TieredBoomerang(new Item.Properties().group(ModItemGroups.WEAPONS), BoomerangTiers.GOLDEN));
     public static final RegistryObject<TieredBoomerang> DIAMOND_BOOMERANG = ITEMS.register("diamond_boomerang",
             () -> new TieredBoomerang(new Item.Properties().group(ModItemGroups.WEAPONS), BoomerangTiers.DIAMOND));
+    public static final RegistryObject<TieredBoomerang> NETHERITE_BOOMERANG = ITEMS.register("netherite_boomerang",
+            () -> new TieredBoomerang(new Item.Properties().group(ModItemGroups.WEAPONS), BoomerangTiers.NETHERITE));
+    public static final RegistryObject<TieredBoomerang> EMERALD_BOOMERANG = ITEMS.register("emerald_boomerang",
+            () -> new TieredBoomerang(new Item.Properties().group(ModItemGroups.WEAPONS), BoomerangTiers.EMERALD));
+    public static final RegistryObject<TieredBoomerang> RUBY_BOOMERANG = ITEMS.register("ruby_boomerang",
+            () -> new TieredBoomerang(new Item.Properties().group(ModItemGroups.WEAPONS), BoomerangTiers.RUBY));
+    public static final RegistryObject<TieredBoomerang> SAPPHIRE_BOOMERANG = ITEMS.register("sapphire_boomerang",
+            () -> new TieredBoomerang(new Item.Properties().group(ModItemGroups.WEAPONS), BoomerangTiers.SAPPHIRE));
 
     public static final RegistryObject<Item> WOODEN_CHAKRAM = ITEMS.register("wooden_chakram",
             () -> new TieredChakram(new Item.Properties().group(ModItemGroups.WEAPONS), ChakramTiers.WOODEN_CHAKRAM));
