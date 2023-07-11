@@ -20,6 +20,9 @@ public class RoundedHillsSB extends SurfaceBuilder<SurfaceBuilderConfig> {
         int surfaceHeight = startHeight + (int) (noise / 3.0D + 3.0D + random.nextDouble() * 0.25D);
         int roundedHeight = startHeight + 3;
 
+        double frequency = 0.1D;
+        double amplitude = 0.5D;
+
         for (int y = seaLevel; y <= surfaceHeight; ++y) {
             if (y <= roundedHeight) {
                 double distanceToTop = (double) (roundedHeight - y + 1) / 4.0D;

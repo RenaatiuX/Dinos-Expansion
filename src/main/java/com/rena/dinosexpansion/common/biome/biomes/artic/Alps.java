@@ -4,6 +4,7 @@ import com.rena.dinosexpansion.common.biome.BiomeBase;
 import com.rena.dinosexpansion.common.world.gen.surfacebuilder.DinoSurfaceBuilders;
 import net.minecraft.util.WeightedList;
 import net.minecraft.world.biome.*;
+import net.minecraft.world.gen.surfacebuilders.ConfiguredSurfaceBuilder;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeManager;
 
@@ -20,7 +21,7 @@ public class Alps extends BiomeBase {
 
     private static final Biome.Climate WEATHER = new Biome.Climate(PRECIPITATION, TEMPERATURE, Biome.TemperatureModifier.NONE, DOWNFALL);
     private static final MobSpawnInfo.Builder SPAWN_SETTINGS = new MobSpawnInfo.Builder();
-    private static final BiomeGenerationSettings.Builder GENERATION_SETTINGS = (new BiomeGenerationSettings.Builder()).withSurfaceBuilder(DinoSurfaceBuilders.ROUNDED_HILLS);
+    private static final BiomeGenerationSettings.Builder GENERATION_SETTINGS = (new BiomeGenerationSettings.Builder()).withSurfaceBuilder(() -> DinoSurfaceBuilders.ROUNDED_HILLS.get());
 
     public Alps() {
         super(WEATHER, CATEGORY, DEPTH, SCALE, (new BiomeAmbience.Builder()).setWaterColor(BiomeBase.BASE_WATER_COLOUR)
