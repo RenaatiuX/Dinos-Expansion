@@ -26,4 +26,8 @@ public class EnchantmentInit {
     public static final RegistryObject<GuidanceEnchantment> GUIDANCE_ENCHANTMENT = ENCHANTMENTS.register("guidance_enchantment", GuidanceEnchantment::new);
     public static final RegistryObject<WildRoarEnchantment> WILD_ROAR_ENCHANTMENT = ENCHANTMENTS.register("wild_roar_enchantment", WildRoarEnchantment::new);
     public static final RegistryObject<SurvivalInstinctEnchantment> SURVIVAL_INSTINCT = ENCHANTMENTS.register("survival_instinct_enchantment", SurvivalInstinctEnchantment::new);
+    public static final RegistryObject<ResilientSkin> RESILIENT_SKIN = ENCHANTMENTS.register("resilient_skin", ResilientSkin::new);
+    public static final RegistryObject<AncientResurrection> ANCIENT_RESURRECTION = ENCHANTMENTS.register("ancient_resurrection", AncientResurrection::new);
+    public static final RegistryObject<PrehistorciStrike> PREHISTORIC_STRIKE = ENCHANTMENTS.register("prehistoric_strike", PrehistorciStrike::new);
+    public static final RegistryObject<PrimalFrenzy> PRIMAL_FRENZY = ENCHANTMENTS.register("primal_frenzy", PrimalFrenzy::new);
 }

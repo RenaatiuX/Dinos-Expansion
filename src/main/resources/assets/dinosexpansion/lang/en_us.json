@@ -179,5 +179,9 @@
   "order_type.dinosexpansion.sit": "Sit",
   "order_type.dinosexpansion.sit_shoulder": "Sit On Shoulder",
   "order_type.dinosexpansion.follow": "Follow",
-  "order_type.dinosexpansion.idle": "Idle"
+  "order_type.dinosexpansion.idle": "Idle",
+
+  "_comment": "tooltips",
+
+  "dinosexpansion.survival_instinct_cooldown": "Cooldown: %d"
 }
