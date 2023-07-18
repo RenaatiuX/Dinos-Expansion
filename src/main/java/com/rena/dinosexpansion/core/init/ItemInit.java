@@ -279,6 +279,10 @@ public class ItemInit {
             () -> new Item(new Item.Properties().group(ModItemGroups.ITEMS).food(FoodInit.KIBBLE_SUPERIOR)));
     public static final RegistryObject<Item> KIBBLE_EXTRAORDINARY = ITEMS.register("kibble_extraordinary",
             () -> new Item(new Item.Properties().group(ModItemGroups.ITEMS).food(FoodInit.KIBBLE_EXTRAORDINARY)));
+    public static final RegistryObject<Item> RAW_ANOMALOCARIS_TAIL = ITEMS.register("raw_anomalocaris_tail",
+            () -> new Item(new Item.Properties().group(ModItemGroups.ITEMS).food(FoodInit.RAW_ANOMALOCARIS_TAIL)));
+    public static final RegistryObject<Item> COOKED_ANOMALOCARIS_TAIL = ITEMS.register("cooked_anomalocaris_tail",
+            () -> new Item(new Item.Properties().group(ModItemGroups.ITEMS).food(FoodInit.COOKED_ANOMALOCARIS_TAIL)));
 
     public static final RegistryObject<Item> SPECIAL_FRUIT = ITEMS.register("special_fruit",
             () -> new SpecialFruitItem(new Item.Properties().group(ModItemGroups.ITEMS).food(FoodInit.SPECIAL_FRUIT)));

@@ -1,8 +1,5 @@
 package com.rena.dinosexpansion.common.enchantments.util;
 
-import com.rena.dinosexpansion.common.entity.misc.SpearEntity;
-import com.rena.dinosexpansion.common.item.TieredBow;
-import com.rena.dinosexpansion.common.item.TieredSpear;
 import com.rena.dinosexpansion.core.tags.ModTags;
 import net.minecraft.enchantment.EnchantmentType;
 

@@ -24,4 +24,6 @@ public class EnchantmentInit {
     public static final RegistryObject<BetterJumpEnchantment> BETTER_JUMP = ENCHANTMENTS.register("better_jump", BetterJumpEnchantment::new);
     public static final RegistryObject<AmmoReservationEnchantment> AMMO_RESERVATION = ENCHANTMENTS.register("ammo_reservation", AmmoReservationEnchantment::new);
     public static final RegistryObject<GuidanceEnchantment> GUIDANCE_ENCHANTMENT = ENCHANTMENTS.register("guidance_enchantment", GuidanceEnchantment::new);
+    public static final RegistryObject<WildRoarEnchantment> WILD_ROAR_ENCHANTMENT = ENCHANTMENTS.register("wild_roar_enchantment", WildRoarEnchantment::new);
+    public static final RegistryObject<SurvivalInstinctEnchantment> SURVIVAL_INSTINCT = ENCHANTMENTS.register("survival_instinct_enchantment", SurvivalInstinctEnchantment::new);
 }

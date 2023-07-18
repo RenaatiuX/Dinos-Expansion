@@ -8,16 +8,23 @@ import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
+import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
 import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.ProjectileImpactEvent;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingHealEvent;
 import net.minecraftforge.event.entity.living.PotionEvent;
@@ -26,6 +33,8 @@ import net.minecraftforge.event.entity.player.ArrowNockEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+
+import java.util.List;
 
 @Mod.EventBusSubscriber(modid = DinosExpansion.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ServerForgeEvents {
@@ -133,6 +142,19 @@ public class ServerForgeEvents {
                 if (event.hasAmmo()) {
                     ammo.grow(1);
                 }
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onLivingUpdate(LivingEvent.LivingUpdateEvent event) {
+        if (event.getEntityLiving() instanceof PlayerEntity) {
+            PlayerEntity player = (PlayerEntity) event.getEntityLiving();
+            int enchantmentLevel = EnchantmentHelper.getEnchantmentLevel(EnchantmentInit.SURVIVAL_INSTINCT.get(), player.getItemStackFromSlot(EquipmentSlotType.FEET));
+
+            if (enchantmentLevel > 0 && player.getHealth() < 4.0F) {
+                player.addPotionEffect(new EffectInstance(Effects.SPEED, 200, enchantmentLevel - 1));
+                player.addPotionEffect(new EffectInstance(Effects.STRENGTH, 200, enchantmentLevel - 1));
             }
         }
     }
