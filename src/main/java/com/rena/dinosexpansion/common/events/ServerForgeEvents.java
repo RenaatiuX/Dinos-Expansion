@@ -241,4 +241,35 @@ public class ServerForgeEvents {
             }
         }
     }
+
+    @SubscribeEvent
+    public static void onArmorEquipped(LivingEquipmentChangeEvent event) {
+        if (event.getSlot() == EquipmentSlotType.CHEST || event.getSlot() == EquipmentSlotType.HEAD || event.getSlot() == EquipmentSlotType.LEGS || event.getSlot() == EquipmentSlotType.FEET) {
+            LivingEntity livingEntity = event.getEntityLiving();
+            ItemStack stack = event.getTo();
+
+            if (stack.getItem() instanceof ArmorItem && EnchantmentHelper.getEnchantmentLevel(EnchantmentInit.PREHISTORIC_WEIGHT.get(), stack) > 0) {
+                livingEntity.addPotionEffect(new EffectInstance(Effects.SLOWNESS, Integer.MAX_VALUE, 1, false, false, false));
+                livingEntity.addPotionEffect(new EffectInstance(Effects.HUNGER, Integer.MAX_VALUE, 0, false, false, false));
+            } else {
+                livingEntity.removePotionEffect(Effects.SLOWNESS);
+                livingEntity.removePotionEffect(Effects.HUNGER);
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onEquipmentTick(LivingEquipmentChangeEvent event) {
+        ItemStack stack = event.getTo();
+
+        if (stack.getItem() instanceof ArmorItem && EnchantmentHelper.getEnchantmentLevel(EnchantmentInit.PREHISTORIC_WEAR.get(), stack) > 0) {
+            // Apply the equipment wear effect to the player
+            int damageRate = 2; // Adjust this value based on how much faster the equipment should wear out
+            if (event.getSlot() == EquipmentSlotType.MAINHAND || event.getSlot() == EquipmentSlotType.OFFHAND) {
+                damageRate *= 2; // Optionally, increase the wear rate for main hand and offhand items
+            }
+
+            stack.setDamage(stack.getDamage() + damageRate);
+        }
+    }
 }

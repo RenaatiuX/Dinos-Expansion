@@ -14,7 +14,9 @@ public class EnchantmentInit {
     public static final DeferredRegister<Enchantment> ENCHANTMENTS = DeferredRegister.create(ForgeRegistries.ENCHANTMENTS, DinosExpansion.MOD_ID);
 
     //Vanilla
-   /**overriding vanilla enchants is a big nono, use {@link net.minecraftforge.common.extensions.IForgeItem#canApplyAtEnchantingTable(ItemStack, Enchantment)}*/
+    /**
+     * overriding vanilla enchants is a big nono, use {@link net.minecraftforge.common.extensions.IForgeItem#canApplyAtEnchantingTable(ItemStack, Enchantment)}
+     */
 
     //Custom
     public static final RegistryObject<ElectricEnchantment> ELECTRIC_ENCHANTMENT = ENCHANTMENTS.register("electric", ElectricEnchantment::new);
@@ -30,4 +32,8 @@ public class EnchantmentInit {
     public static final RegistryObject<AncientResurrection> ANCIENT_RESURRECTION = ENCHANTMENTS.register("ancient_resurrection", AncientResurrection::new);
     public static final RegistryObject<PrehistorciStrike> PREHISTORIC_STRIKE = ENCHANTMENTS.register("prehistoric_strike", PrehistorciStrike::new);
     public static final RegistryObject<PrimalFrenzy> PRIMAL_FRENZY = ENCHANTMENTS.register("primal_frenzy", PrimalFrenzy::new);
+
+    //Curse
+    public static final RegistryObject<PrehistoricWeightCurse> PREHISTORIC_WEIGHT = ENCHANTMENTS.register("prehistoric_weight", PrehistoricWeightCurse::new);
+    public static final RegistryObject<PrehistoricWearCurse> PREHISTORIC_WEAR = ENCHANTMENTS.register("prehistoric_wear", PrehistoricWearCurse::new);
 }
