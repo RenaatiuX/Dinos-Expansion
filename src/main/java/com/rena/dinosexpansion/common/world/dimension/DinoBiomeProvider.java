@@ -6,6 +6,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.common.biome.BiomeBase;
+import com.rena.dinosexpansion.common.world.dimension.noises.SimpleNoiseWithOctaves;
 import com.rena.dinosexpansion.core.init.BiomeInit;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.SharedConstants;
@@ -60,8 +61,8 @@ public class DinoBiomeProvider extends BiomeProvider {
         this.seed = seed;
         this.registry = registry;
         this.genBiomes = DinoLayerUtil.makeLayers(WorldSeedHolder.getSeed(), registry);
-        surface = new InterpolatedNoise(new OctavesNoiseGenerator(new SharedSeedRandom(this.seed), IntStream.rangeClosed(-7, 0)), new Point(-15,-15), new Point(-5, -15), new Point(5, 10), new Point(8, 15), new Point(15, 15));
-        //surface = new InterpolatedNoise(new OctavesNoiseGenerator(new SharedSeedRandom(), IntStream.rangeClosed(-3, 0)), new Point(-15,-15), new Point(15, 15));
+        surface = new InterpolatedNoise(new SimpleNoiseWithOctaves(2048, .2d, seed), new Point(-1,40), new Point2D.Double(-.2d, 63), new Point2D.Double(.2d, 70), new Point2D.Double(.3d, 95), new Point2D.Double(1, 100));
+        //surface = new InterpolatedNoise(new SimpleNoiseWithOctaves(2048, .2d, seed), new Point(-1,50), new Point(1, 100));
     }
 
     public InterpolatedNoise getSurface() {
@@ -100,13 +101,13 @@ public class DinoBiomeProvider extends BiomeProvider {
         }
     }
 
-    public static class InterpolatedNoise implements INoiseGenerator {
-        protected final OctavesNoiseGenerator generator;
+    public static class InterpolatedNoise{
+        protected final SimpleNoiseWithOctaves generator;
         protected LinearInterpolator[] interpolators;
         protected double max;
         protected double min;
 
-        public InterpolatedNoise(OctavesNoiseGenerator generator, Point2D... points) {
+        public InterpolatedNoise(SimpleNoiseWithOctaves generator, Point2D... points) {
             if (points.length < 2)
                 throw new IllegalArgumentException("we must have at least 2 points to interpolate them to a line");
             this.generator = generator;
@@ -126,18 +127,16 @@ public class DinoBiomeProvider extends BiomeProvider {
             return min;
         }
 
-        @Override
-        public double noiseAt(double x, double y, double z, double p_215460_7_) {
-            double range = max - min;
-            double noise = min + this.generator.noiseAt(x,y,z,p_215460_7_) * range;
-            noise = MathHelper.clamp(noise, min, max);
-            System.out.println(noise);
+        public double noiseAt(int x, int z) {
+            double noise = this.generator.getNoise2D((int) x, (int) z);
+            noise = interpolateRange(noise, -0.21524397845109344, 0.20785927926271314, min, max);
             for (LinearInterpolator interpolator : this.interpolators){
                 if (interpolator.isInRange(noise)) {
                     return interpolator.get(noise);
                 }
             }
             throw new IllegalStateException(String.format("noise was not in range od the points range was [%s, %s] and noise was %s", min, max, noise));
+
         }
     }
 
@@ -172,5 +171,26 @@ public class DinoBiomeProvider extends BiomeProvider {
             double c = start.getY() - derivative * start.getX();
             return (x) -> derivative * x + c;
         }
+    }
+
+    public static double interpolateRange(double number, double sourceMin, double sourceMax, double targetMin, double targetMax) {
+        // Make sure the source range is valid
+        if (sourceMin >= sourceMax) {
+            throw new IllegalArgumentException("Invalid source range");
+        }
+
+        // Make sure the target range is valid
+        if (targetMin >= targetMax) {
+            throw new IllegalArgumentException("Invalid target range");
+        }
+
+        // Clamp the input number to the source range
+        double clampedNumber = Math.max(sourceMin, Math.min(sourceMax, number));
+
+        // Calculate the normalized position of the clamped number within the source range
+        double normalizedPosition = (clampedNumber - sourceMin) / (sourceMax - sourceMin);
+
+        // Interpolate the normalized position to the target range
+        return targetMin + normalizedPosition * (targetMax - targetMin);
     }
 }

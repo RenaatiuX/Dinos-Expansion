@@ -15,6 +15,7 @@ import net.minecraft.world.chunk.IChunk;
 import net.minecraft.world.gen.*;
 import net.minecraft.world.gen.feature.structure.StructureManager;
 
+import java.util.Random;
 import java.util.function.Supplier;
 
 public class DinoChunkGenerator extends ChunkGenerator {
@@ -35,13 +36,12 @@ public class DinoChunkGenerator extends ChunkGenerator {
 
     public DinoChunkGenerator(BiomeProvider provider, long seed, Supplier<DimensionSettings> settingsIn) {
         super(provider, settingsIn.get().getStructures());
-        this.seed = WorldSeedHolder.getSeed();
+        this.seed = seed;
         this.settings = settingsIn;
     }
 
     @Override
-    protected Codec<? extends ChunkGenerator> func_230347_a_()
-    {
+    protected Codec<? extends ChunkGenerator> func_230347_a_() {
         return CODEC;
     }
 
@@ -58,18 +58,19 @@ public class DinoChunkGenerator extends ChunkGenerator {
         double d0 = 0.0625D;
         BlockPos.Mutable blockpos$mutable = new BlockPos.Mutable();
 
-        for(int i1 = 0; i1 < 16; ++i1) {
-            for(int j1 = 0; j1 < 16; ++j1) {
+        for (int i1 = 0; i1 < 16; ++i1) {
+            for (int j1 = 0; j1 < 16; ++j1) {
                 int k1 = k + i1;
                 int l1 = l + j1;
                 int i2 = chunk.getTopBlockY(Heightmap.Type.WORLD_SURFACE_WG, i1, j1) + 1;
-                double d1 = getIfPossible().surface.noiseAt((double)k1, (double)l1, d0, (double)i1) + 100;
-                //genRegion.getBiome(blockpos$mutable.setPos(k + i1, i2, l + j1)).buildSurface(sharedseedrandom, chunk, k1, l1, i2, d1, this.defaultBlock, this.defaultFluid, this.getSeaLevel(), genRegion.getSeed());
-                chunk.setBlockState(blockpos$mutable.setPos(k1, d1, l1), Blocks.DIAMOND_BLOCK.getDefaultState(), false);
+                double d1 = getIfPossible().surface.noiseAt(k1, l1);
+                genRegion.getBiome(blockpos$mutable.setPos(k + i1, i2, l + j1)).buildSurface(sharedseedrandom, chunk, k1, l1, i2, d1, this.settings.get().getDefaultBlock(), this.settings.get().getDefaultFluid(), this.getSeaLevel(), genRegion.getSeed());
+                //chunk.setBlockState(blockpos$mutable.setPos(k1, d1, l1), Blocks.DIAMOND_BLOCK.getDefaultState(), false);
             }
         }
 
-        //this.makeBedrock(chunk, sharedseedrandom);
+        this.makeBedrock(chunk, sharedseedrandom);
+
     }
 
     @Override
@@ -77,29 +78,79 @@ public class DinoChunkGenerator extends ChunkGenerator {
 
     }
 
+    public void makeBedrock(IChunk chunkIn, Random rand) {
+        BlockPos.Mutable blockpos$mutable = new BlockPos.Mutable();
+        int i = chunkIn.getPos().getXStart();
+        int j = chunkIn.getPos().getZStart();
+        DimensionSettings dimensionsettings = this.settings.get();
+        int k = dimensionsettings.getBedrockFloorPosition();
+        int l = this.getMaxBuildHeight() - 1 - dimensionsettings.getBedrockRoofPosition();
+        int i1 = 5;
+        boolean flag = l + 4 >= 0 && l < this.getMaxBuildHeight();
+        boolean flag1 = k + 4 >= 0 && k < this.getMaxBuildHeight();
+        if (flag || flag1) {
+            for (BlockPos blockpos : BlockPos.getAllInBoxMutable(i, 0, j, i + 15, 0, j + 15)) {
+                if (flag) {
+                    for (int j1 = 0; j1 < 5; ++j1) {
+                        if (j1 <= rand.nextInt(5)) {
+                            chunkIn.setBlockState(blockpos$mutable.setPos(blockpos.getX(), l - j1, blockpos.getZ()), Blocks.BEDROCK.getDefaultState(), false);
+                        }
+                    }
+                }
+
+                if (flag1) {
+                    for (int k1 = 4; k1 >= 0; --k1) {
+                        if (k1 <= rand.nextInt(5)) {
+                            chunkIn.setBlockState(blockpos$mutable.setPos(blockpos.getX(), k + k1, blockpos.getZ()), Blocks.BEDROCK.getDefaultState(), false);
+                        }
+                    }
+                }
+            }
+
+        }
+    }
+
+    public int getSeaLevel() {
+        return this.settings.get().getSeaLevel();
+    }
+
+
     @Override
     public int getHeight(int x, int z, Heightmap.Type heightmapType) {
-        return (int) getIfPossible().surface.noiseAt((double)x * 0.0625D, (double)z * 0.0625D, 0.0625D, (double)x * 0.0625D);
+        return (int) getIfPossible().surface.noiseAt(x, z);
     }
 
     @Override
-    public IBlockReader func_230348_a_(int p_230348_1_, int p_230348_2_) {
-        return new Blockreader(new BlockState[0]);
+    public IBlockReader func_230348_a_(int x, int z) {
+        int height = Math.max(this.getSeaLevel(), getHeight(x, z, Heightmap.Type.WORLD_SURFACE_WG));
+
+        BlockState[] states = new BlockState[height + 1];
+        for (int y = 0; y <= height; y++) {
+            states[y] = getStateForY(y, height);
+        }
+
+        return new Blockreader(states);
+    }
+
+    protected BlockState getStateForY(int y, int maxHeight) {
+        if (y < this.getSeaLevel() && y <= maxHeight) {
+            return this.settings.get().getDefaultFluid();
+        }
+        return this.settings.get().getDefaultBlock();
+
     }
 
     @Override
-    public ChunkGenerator func_230349_a_(long seed)
-    {
-        return new DinoChunkGenerator(biomeProvider.getBiomeProvider(WorldSeedHolder.getSeed()), WorldSeedHolder.getSeed(), getDimensionSettings());
+    public ChunkGenerator func_230349_a_(long seed) {
+        return new DinoChunkGenerator(biomeProvider.getBiomeProvider(seed), seed, getDimensionSettings());
     }
 
-    private Supplier<DimensionSettings> getDimensionSettings()
-    {
+    private Supplier<DimensionSettings> getDimensionSettings() {
         return this.settings;
     }
 
-    protected DinoBiomeProvider getIfPossible(){
-        if (this.biomeProvider instanceof DinoBiomeProvider){
+    protected DinoBiomeProvider getIfPossible() {
+        if (this.biomeProvider instanceof DinoBiomeProvider) {
             return (DinoBiomeProvider) this.biomeProvider;
         }
         return null;
