@@ -16,17 +16,21 @@ public enum DinoRiverLayer implements ICastleTransformer {
 
     @Override
     public int apply(INoiseRandom context, int north, int west, int south, int east, int center) {
-        if (shouldRiver(center, west, south, east, north)) {
+        if (!isOneRiver(north, west, south, east, center) && shouldRiver(center, west, south, east, north)) {
             return DinoLayerUtil.getBiomeId(BiomeInit.RIVER.getKey());
         } else {
             return -1;
         }
     }
 
+    boolean isOneRiver(int north, int west, int south, int east, int center){
+        return DinoLayerUtil.isRiver(center) || DinoLayerUtil.isRiver(north) || DinoLayerUtil.isRiver(west) || DinoLayerUtil.isRiver(south) || DinoLayerUtil.isRiver(east);
+    }
+
     boolean shouldRiver(int mid, int left, int down, int right, int up) {
         if (isOcean(left) || isOcean(down) || isOcean(right) || isOcean(up))
             return false;
-        return shouldRiver(mid, left) || shouldRiver(mid, right) || shouldRiver(mid, down) || shouldRiver(mid, up);
+        return shouldRiver(right, left) || shouldRiver(down, up);
     }
 
     boolean shouldRiver(int id1, int id2) {

@@ -8,6 +8,6 @@ public enum OceanLandLayer implements IAreaTransformer0 {
 
     @Override
     public int apply(INoiseRandom noiseRandom, int x, int z) {
-        return noiseRandom.random(4) == 0 ? 1 : 0;
+        return noiseRandom.random(2) == 0 ? 1 : 0;
     }
 }

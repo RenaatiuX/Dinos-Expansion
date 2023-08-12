@@ -1,8 +1,10 @@
 package com.rena.dinosexpansion.common.world.dimension;
 
 import com.mojang.datafixers.util.Pair;
+import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.common.biome.BiomeBase;
 import com.rena.dinosexpansion.common.world.dimension.layers.*;
+import com.rena.dinosexpansion.common.world.dimension.noises.SimpleNoiseWithOctaves;
 import com.rena.dinosexpansion.core.init.BiomeInit;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.registry.Registry;
@@ -13,10 +15,7 @@ import net.minecraft.world.gen.LazyAreaLayerContext;
 import net.minecraft.world.gen.area.IArea;
 import net.minecraft.world.gen.area.IAreaFactory;
 import net.minecraft.world.gen.area.LazyArea;
-import net.minecraft.world.gen.layer.Layer;
-import net.minecraft.world.gen.layer.LayerUtil;
-import net.minecraft.world.gen.layer.SmoothLayer;
-import net.minecraft.world.gen.layer.ZoomLayer;
+import net.minecraft.world.gen.layer.*;
 import sun.security.provider.SHA;
 
 import java.util.Arrays;
@@ -25,6 +24,8 @@ import java.util.function.LongFunction;
 public class DinoLayerUtil {
 
     private static Registry<Biome> biomeRegistry;
+    private static double minNoise, maxNoise;
+    private static SimpleNoiseWithOctaves temperatureNoise;
 
     public static int getBiomeId(RegistryKey<Biome> define) {
         Biome biome = biomeRegistry.getValueForKey(define);
@@ -45,44 +46,24 @@ public class DinoLayerUtil {
 
     public static <T extends IArea, C extends IExtendedNoiseRandom<T>> IAreaFactory<T> makeLayers(LongFunction<C> contextFactory, Registry<Biome> registry) {
         biomeRegistry = registry;
+        IAreaFactory<T> oceanLand = OceanLandLayer.INSTANCE.apply(contextFactory.apply(1L));
+        oceanLand = LayerUtil.repeat(2L, ZoomLayer.NORMAL, oceanLand, 3, contextFactory);
+        oceanLand = DinoAddIslandLayer.INSTANCE.apply(contextFactory.apply(10L), oceanLand);
+        DinoBiomeLayer biomeLayer = new DinoBiomeLayer();
+        oceanLand = biomeLayer.apply(contextFactory.apply(11L), oceanLand);
+        oceanLand = LayerUtil.repeat(12L, ZoomLayer.NORMAL, oceanLand, 4, contextFactory);
 
+        //IAreaFactory<T> rivers = DinoRiverLayer.INSTANCE.apply(contextFactory.apply(30L), oceanLand);
+        //rivers = LayerUtil.repeat(31L, ZoomLayer.NORMAL, rivers, 1, contextFactory);
 
-        //defining the temperature distribution
-        IAreaFactory<T> tempreature = TemperatureLayer.INSTANCE.apply(contextFactory.apply(2L));
-        tempreature = LayerUtil.repeat(160000L, ZoomLayer.NORMAL, tempreature, 4, contextFactory);
-        //tempreature = LayerUtil.repeat(170000L, SmoothLayer.INSTANCE, tempreature, 4, contextFactory);
-
-
-        //defining ocean and land
-        IAreaFactory<T> oceanLand = OceanLandLayer.INSTANCE.apply(contextFactory.apply(0L));
-        oceanLand = ZoomLayer.FUZZY.apply(contextFactory.apply(999L), oceanLand);
-        oceanLand = DinoAddIslandLayer.INSTANCE.apply(contextFactory.apply(998L), oceanLand);
-        oceanLand = LayerUtil.repeat(10000L, ZoomLayer.NORMAL, oceanLand, 2, contextFactory);
-        oceanLand = LayerUtil.repeat(1500L, DinoAddIslandLayer.INSTANCE, oceanLand, 2, contextFactory);
-        oceanLand = LayerUtil.repeat(11000L, ZoomLayer.NORMAL, oceanLand, 4, contextFactory);
-
-        //making the oceans
-        IAreaFactory<T> oceans = DinoOceanLayer.INSTANCE.apply(contextFactory.apply(5L), tempreature);
-        oceans = LayerUtil.repeat(150000L, ZoomLayer.NORMAL, oceans, 4, contextFactory);
-        oceanLand = DinoMixOceansLayer.INSTANCE.apply(contextFactory.apply(99L), oceans, oceanLand);
-
-
-        //making the biomes
-        IAreaFactory<T> biomes = new DinoBiomeLayer().apply(contextFactory.apply(1L), tempreature);
-        biomes = ZoomLayer.NORMAL.apply(contextFactory.apply(1000), biomes);
-        biomes = ZoomLayer.NORMAL.apply(contextFactory.apply(1001), biomes);
-        biomes = DinoSubbiomeLayer.INSTANCE.apply(contextFactory.apply(1006L), biomes);
-        biomes = LayerUtil.repeat(2000L, ZoomLayer.NORMAL, biomes, 2, contextFactory);
-
-        oceanLand = DinoMixLand.INSTANCE.apply(contextFactory.apply(76L), oceanLand, biomes);
-
-        IAreaFactory<T> riverLayer = DinoRiverLayer.INSTANCE.apply(contextFactory.apply(1L), oceanLand);
-        riverLayer = SmoothLayer.INSTANCE.apply(contextFactory.apply(7000L), riverLayer);
-        oceanLand = DinoRiverMixLayer.INSTANCE.apply(contextFactory.apply(100L), oceanLand, riverLayer);
-        //oceanLand = DeepOceanLayer.INSTANCE.apply(contextFactory.apply(98L), oceanLand);
+        //oceanLand = DinoRiverMixLayer.INSTANCE.apply(contextFactory.apply(40L), oceanLand, rivers);
 
 
         return oceanLand;
+    }
+
+    public static double getTemperatureNoise(int x, int z) {
+        return DinoBiomeProvider.interpolateRange(temperatureNoise.getNoise2D(x, z), minNoise, maxNoise, -1.5, 1.5);
     }
 
     public static boolean isShallowDinoOcean(int id) {
@@ -97,13 +78,17 @@ public class DinoLayerUtil {
         return isDeepOcean(id) || isShallowDinoOcean(id);
     }
 
+    public static boolean isRiver(int id){
+        return BiomeBase.BIOMES.stream().filter(BiomeBase::isRiver).map(DinoLayerUtil::getBiomeId).filter(i -> i == id).count() > 0;
+    }
+
     public static boolean areSubbiomes(int id1, int id2) {
         for (BiomeBase base : BiomeBase.BIOMES) {
             if (id1 == DinoLayerUtil.getBiomeId(base)) {
-                if (base.getSubBiomes().stream().map(Pair::getFirst).filter(b -> DinoLayerUtil.getBiomeId(b.get()) == id2).count() > 0)
+                if (base.getSubBiomes().stream().map(BiomeBase.Subbiome::getBiome).filter(b -> DinoLayerUtil.getBiomeId(b.get()) == id2).count() > 0)
                     return true;
             } else if (id2 == DinoLayerUtil.getBiomeId(base)) {
-                if (base.getSubBiomes().stream().map(Pair::getFirst).filter(b -> DinoLayerUtil.getBiomeId(b.get()) == id1).count() > 0)
+                if (base.getSubBiomes().stream().map(BiomeBase.Subbiome::getBiome).filter(b -> DinoLayerUtil.getBiomeId(b.get()) == id1).count() > 0)
                     return true;
             }
 
@@ -118,8 +103,8 @@ public class DinoLayerUtil {
         int randomWeight = random.random(totalWeight);
         for (BiomeBase base : biomes) {
             randomWeight -= base.getWeight();
-           if (randomWeight < 0)
-               return base;
+            if (randomWeight < 0)
+                return base;
         }
         throw new IllegalStateException("something went horribly wrong in the weighted random");
     }
@@ -135,8 +120,22 @@ public class DinoLayerUtil {
 
     public static Layer makeLayers(long seed, Registry<Biome> registry) {
         biomeRegistry = registry;
+        temperatureNoise = new SimpleNoiseWithOctaves(512, .6d, seed);
+        testNoise();
         IAreaFactory<LazyArea> areaFactory = makeLayers((contextSeed) -> new LazyAreaLayerContext(25, seed, contextSeed), registry);
         return new Layer(areaFactory);
+    }
+
+    protected static void testNoise() {
+        double[] noises = new double[4000 * 4000];
+        for (int x = 0; x < 4000; x++) {
+            for (int z = 0; z < 4000; z++) {
+                noises[x * 4000 + z] = temperatureNoise.getNoise2D(x,z);
+            }
+        }
+        minNoise = Arrays.stream(noises).min().getAsDouble();
+        maxNoise = Arrays.stream(noises).max().getAsDouble();
+        DinosExpansion.LOGGER.debug(String.format("temperature noise in range: [%s, %s]", minNoise, maxNoise));
     }
 
 }

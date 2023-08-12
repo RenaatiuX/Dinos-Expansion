@@ -39,7 +39,6 @@ public class DinoBiomeProvider extends BiomeProvider {
             .forGetter((obj) -> obj.registry)).apply(instance, instance.
             stable(DinoBiomeProvider::new)));
 
-
     private final long seed;
     private final Registry<Biome> registry;
     private final Layer genBiomes;
@@ -60,7 +59,7 @@ public class DinoBiomeProvider extends BiomeProvider {
         super(POSSIBLE_BIOMES.stream().map(define -> () -> registry.getOrThrow(define)));
         this.seed = seed;
         this.registry = registry;
-        this.genBiomes = DinoLayerUtil.makeLayers(WorldSeedHolder.getSeed(), registry);
+        this.genBiomes = DinoLayerUtil.makeLayers(seed, registry);
         surface = new InterpolatedNoise(new SimpleNoiseWithOctaves(2048, .2d, seed), new Point(-1,40), new Point2D.Double(-.2d, 63), new Point2D.Double(.2d, 70), new Point2D.Double(.3d, 95), new Point2D.Double(1, 100));
         //surface = new InterpolatedNoise(new SimpleNoiseWithOctaves(2048, .2d, seed), new Point(-1,50), new Point(1, 100));
     }
@@ -81,7 +80,7 @@ public class DinoBiomeProvider extends BiomeProvider {
 
     @Override
     public Biome getNoiseBiome(int x, int y, int z) {
-        return this.registry.getValueForKey(Biomes.PLAINS);
+        return sample(registry, x,z);
     }
 
     public Biome sample(Registry<Biome> dynamicBiomeRegistry, int x, int z) {
