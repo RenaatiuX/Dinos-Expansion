@@ -2,10 +2,11 @@ package com.rena.dinosexpansion.core.init;
 
 import com.google.common.collect.ImmutableList;
 import com.rena.dinosexpansion.DinosExpansion;
-import com.rena.dinosexpansion.common.world.gen.trees.ModTreeSpawners;
+import com.rena.dinosexpansion.common.world.gen.feature.vulcano.VulcanoConfig;
 import com.rena.dinosexpansion.common.world.gen.trees.redwood.RedWoodTree2;
 import com.rena.dinosexpansion.common.world.gen.trees.redwood.RedwoodTree1;
 import com.rena.dinosexpansion.common.world.gen.trees.util.ModTreeConfig;
+import net.minecraft.block.Blocks;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.WorldGenRegistries;
@@ -43,7 +44,7 @@ public class FeatureInit {
                         new AtSurfaceWithExtraConfig(1, 0.3F, 2))));
     }
 
-    private static <FC extends IFeatureConfig> void register(String name, ConfiguredFeature<FC, ?> feature) {
-        Registry.register(WorldGenRegistries.CONFIGURED_FEATURE, new ResourceLocation(DinosExpansion.MOD_ID, name), feature);
+    private static <FC extends IFeatureConfig> ConfiguredFeature<FC, ?> register(String name, ConfiguredFeature<FC, ?> feature) {
+        return Registry.register(WorldGenRegistries.CONFIGURED_FEATURE, new ResourceLocation(DinosExpansion.MOD_ID, name), feature);
     }
 }

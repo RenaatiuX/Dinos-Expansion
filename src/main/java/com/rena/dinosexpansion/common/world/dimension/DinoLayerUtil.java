@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Pair;
 import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.common.biome.BiomeBase;
 import com.rena.dinosexpansion.common.world.dimension.layers.*;
+import com.rena.dinosexpansion.common.world.dimension.layers.DeepOceanLayer;
 import com.rena.dinosexpansion.common.world.dimension.noises.SimpleNoiseWithOctaves;
 import com.rena.dinosexpansion.core.init.BiomeInit;
 import net.minecraft.util.RegistryKey;
@@ -53,10 +54,16 @@ public class DinoLayerUtil {
         oceanLand = biomeLayer.apply(contextFactory.apply(11L), oceanLand);
         oceanLand = LayerUtil.repeat(12L, ZoomLayer.NORMAL, oceanLand, 4, contextFactory);
 
-        //IAreaFactory<T> rivers = DinoRiverLayer.INSTANCE.apply(contextFactory.apply(30L), oceanLand);
-        //rivers = LayerUtil.repeat(31L, ZoomLayer.NORMAL, rivers, 1, contextFactory);
+        oceanLand = DinoSubbiomeLayer.INSTANCE.apply(contextFactory.apply(17L), oceanLand);
 
-        //oceanLand = DinoRiverMixLayer.INSTANCE.apply(contextFactory.apply(40L), oceanLand, rivers);
+        oceanLand = LayerUtil.repeat(18L, ZoomLayer.NORMAL, oceanLand, 2, contextFactory);
+
+        oceanLand = DeepOceanLayer.INSTANCE.apply(contextFactory.apply(29L), oceanLand);
+
+        IAreaFactory<T> rivers = DinoRiverLayer.INSTANCE.apply(contextFactory.apply(30L), oceanLand);
+        rivers = LayerUtil.repeat(31L, ZoomLayer.NORMAL, rivers, 2, contextFactory);
+
+        oceanLand = DinoRiverMixLayer.INSTANCE.apply(contextFactory.apply(40L), oceanLand, rivers);
 
 
         return oceanLand;

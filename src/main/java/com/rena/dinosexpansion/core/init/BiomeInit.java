@@ -4,6 +4,7 @@ import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.common.biome.BiomeBase;
 import com.rena.dinosexpansion.common.biome.biomes.artic.Alps;
 import com.rena.dinosexpansion.common.biome.biomes.desert.Desert;
+import com.rena.dinosexpansion.common.biome.biomes.desert.Dunes;
 import com.rena.dinosexpansion.common.biome.biomes.desert.RedDesert;
 import com.rena.dinosexpansion.common.biome.biomes.desert.subbiomes.DesertHills;
 import com.rena.dinosexpansion.common.biome.biomes.forest.CherryForest;
@@ -12,6 +13,7 @@ import com.rena.dinosexpansion.common.biome.biomes.ocean.subbiome.*;
 import com.rena.dinosexpansion.common.biome.biomes.river.River;
 import com.rena.dinosexpansion.common.biome.biomes.swamp.DenseSwamp;
 import com.rena.dinosexpansion.common.biome.biomes.swamp.Floodplain;
+import com.rena.dinosexpansion.common.biome.biomes.vulcano.VulcanoBiome;
 import com.rena.dinosexpansion.common.biome.util.BiomeData;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
@@ -36,6 +38,8 @@ public class BiomeInit {
     private static Set<Integer> integerList = new HashSet<>();
 
     public static final BiomeBase DESERT = new Desert();
+
+    public static final BiomeBase DUNES = new Dunes();
     public static final BiomeBase DESERT_HILLS = new DesertHills();
     public static final BiomeBase RIVER = new River();
     public static final BiomeBase RED_DESERT = new RedDesert();
@@ -53,6 +57,8 @@ public class BiomeInit {
     public static final BiomeBase DENSE_SWAMP = new DenseSwamp();
     public static final BiomeBase CHERRY_FOREST = new CherryForest();
     public static final BiomeBase FLOODPLAIN = new Floodplain();
+
+    public static final BiomeBase VULCANO = new VulcanoBiome();
 
     public static final RegistryObject<Biome> DESERT_BIOME = register("desert", DESERT::getBiome, 1);
     public static final RegistryObject<Biome> DESERT_HILLS_BIOME = register("desert_hills", DESERT_HILLS::getBiome, 2);
@@ -72,6 +78,9 @@ public class BiomeInit {
     public static final RegistryObject<Biome> DENSE_SWAMP_BIOME = register("dense_swamp", DENSE_SWAMP::getBiome, 16);
     public static final RegistryObject<Biome> CHERRY_FOREST_BIOME = register("cherry_forest", CHERRY_FOREST::getBiome, 17);
     public static final RegistryObject<Biome> FLOODPLAIN_BIOME = register("floodplain", FLOODPLAIN::getBiome, 18);
+
+    public static final RegistryObject<Biome> DUNES_BIOME = register("dunes", DUNES::getBiome, 19);
+    public static final RegistryObject<Biome> VULCANO_BIOME = register("vulcano", VULCANO::getBiome, 20);
 
     public static RegistryObject<Biome> register(String name, Supplier<? extends Biome> biomeSupplier, int numericalID) {
         ResourceLocation id = new ResourceLocation(DinosExpansion.MOD_ID, name);

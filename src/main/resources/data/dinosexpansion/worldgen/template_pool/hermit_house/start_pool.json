@@ -1,5 +1,5 @@
 {
-  "name": "tutorialmod:house/start_pool",
+  "name": "dinosexpansion:hermit_house/start_pool",
   "fallback": "minecraft:empty",
   "elements": [
     {
