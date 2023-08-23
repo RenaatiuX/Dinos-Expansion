@@ -267,6 +267,11 @@ public class Dimorphodon extends DinosaurFlying implements IAnimatable, IAnimati
         return false;
     }
 
+    @Override
+    protected ResourceLocation getLootTable() {
+        return getLootTableForRarity(EntityInit.DIMORPHODON.getId(), this.getRarity());
+    }
+
     @Nullable
     @Override
     protected SoundEvent getAmbientSound() {
@@ -295,41 +300,6 @@ public class Dimorphodon extends DinosaurFlying implements IAnimatable, IAnimati
             playSound(SoundInit.DIMORPHODON_DEATH.get(i).get(), 1, 1.5F);
         }
         return null;
-    }
-
-    @Override
-    protected void spawnDrops(DamageSource damageSourceIn) {
-        if (this.getRarity() == Rarity.LEGENDARY) {
-            float probability = rand.nextFloat();
-            if (probability <= 0.2F) {
-                float itemCount = rand.nextInt(3) + 1;
-                for (int i = 0; i < itemCount; i++) {
-                    this.entityDropItem(new ItemStack(ItemInit.ELECTRONICS_PARTS.get()));
-                }
-            }
-            probability = rand.nextFloat();
-            if (probability <= 0.3F) {
-                float itemCount = rand.nextInt(3) + 1;
-                for (int i = 0; i < itemCount; i++) {
-                    this.entityDropItem(new ItemStack(ItemInit.OIL.get()));
-                }
-            }
-            probability = rand.nextFloat();
-            if (probability <= 0.6F) {
-                float itemCount = rand.nextInt(3) + 1;
-                for (int i = 0; i < itemCount; i++) {
-                    this.entityDropItem(new ItemStack(ItemInit.SCRAP.get()));
-                }
-            }
-        } else if (this.getRarity() != Rarity.LEGENDARY) {
-            float probability = rand.nextFloat();
-            if (probability <= 0.8F) {
-                int itemCount = rand.nextInt(3) + 1;
-                for (int i = 0; i < itemCount; i++) {
-                    this.entityDropItem(new ItemStack(ItemInit.RAW_DIMORPHODON_MEAT.get()));
-                }
-            }
-        }
     }
 
     public boolean isOnShoulder() {
@@ -369,31 +339,31 @@ public class Dimorphodon extends DinosaurFlying implements IAnimatable, IAnimati
 
     private PlayState predicate(AnimationEvent<Dimorphodon> event) {
         if (this.isKnockout()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.dimorphodon.knockout", ILoopType.EDefaultLoopTypes.LOOP));
+            event.getController().setAnimation(new AnimationBuilder().loop("knockout"));
             return PlayState.CONTINUE;
         }
         if (this.getMoveOrder() == MoveOrder.SIT || this.isOnShoulder()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.dimorphodon.sit", ILoopType.EDefaultLoopTypes.LOOP));
+            event.getController().setAnimation(new AnimationBuilder().loop("sit"));
             return PlayState.CONTINUE;
         }
         if (this.isOnGround()) {
             if (this.isSleeping()) {
-                event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.dimorphodon.sleep", ILoopType.EDefaultLoopTypes.LOOP));
+                event.getController().setAnimation(new AnimationBuilder().loop("sleep"));
                 return PlayState.CONTINUE;
             }
             if (prevPosX != getPosX() || prevPosY != getPosY() || prevPosZ != getPosZ()) {
-                event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.dimorphodon.walk", ILoopType.EDefaultLoopTypes.LOOP));
+                event.getController().setAnimation(new AnimationBuilder().loop("walk"));
             } else {
-                event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.dimorphodon.idle", ILoopType.EDefaultLoopTypes.LOOP));
+                event.getController().setAnimation(new AnimationBuilder().loop("idle"));
             }
             return PlayState.CONTINUE;
         }
         if (this.isFlying()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.dimorphodon.fly", ILoopType.EDefaultLoopTypes.LOOP));
+            event.getController().setAnimation(new AnimationBuilder().loop("fly"));
             return PlayState.CONTINUE;
         }
         if ((!this.isFlying() && this.getMoveOrder() == MoveOrder.SIT) || isOnShoulder()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.dimorphodon.sit", ILoopType.EDefaultLoopTypes.LOOP));
+            event.getController().setAnimation(new AnimationBuilder().loop("sit"));
             return PlayState.CONTINUE;
         }
         return PlayState.CONTINUE;
@@ -402,7 +372,7 @@ public class Dimorphodon extends DinosaurFlying implements IAnimatable, IAnimati
     private PlayState attackPredicate(AnimationEvent<Dimorphodon> event) {
         if (!isKnockout() && this.isSwingInProgress && event.getController().getAnimationState().equals(AnimationState.Stopped)) {
             event.getController().markNeedsReload();
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.dimorphodon.attack"));
+            event.getController().setAnimation(new AnimationBuilder().playOnce("attack"));
             this.isSwingInProgress = false;
         }
         return PlayState.CONTINUE;

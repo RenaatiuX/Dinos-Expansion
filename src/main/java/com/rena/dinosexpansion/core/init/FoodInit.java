@@ -39,6 +39,10 @@ public class FoodInit {
             .saturation(0.3F).meat().build();
     public static final Food COOKED_DRYOSAURUS_MEAT = new Food.Builder().hunger(8)
             .saturation(0.8F).meat().build();
+    public static final Food RAW_ANOMALOCARIS_TAIL = new Food.Builder().hunger(2)
+            .saturation(0.2F).build();
+    public static final Food COOKED_ANOMALOCARIS_TAIL = new Food.Builder().hunger(6)
+            .saturation(0.7F).build();
 
     public static final Food SPECIAL_FRUIT = new Food.Builder().hunger(0)
             .saturation(0.0F).setAlwaysEdible().build();

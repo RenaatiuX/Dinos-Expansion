@@ -7,6 +7,7 @@ import com.rena.dinosexpansion.common.entity.ia.helper.ISemiAquatic;
 import com.rena.dinosexpansion.common.entity.ia.movecontroller.AquaticMoveController;
 import com.rena.dinosexpansion.common.entity.ia.navigator.GroundPathNavigatorWide;
 import com.rena.dinosexpansion.common.entity.ia.navigator.SemiAquaticPathNavigator;
+import com.rena.dinosexpansion.common.util.enums.AttackOrder;
 import com.rena.dinosexpansion.core.init.EntityInit;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
@@ -96,13 +97,13 @@ public class Astorgosuchus extends Dinosaur implements IAnimatable, IAnimationTi
         this.goalSelector.addGoal(2, new DinosaurLeaveWaterGoal(this));
         this.goalSelector.addGoal(4, new CrocodileMeleeGoal(this, 1, true));
         this.goalSelector.addGoal(5, new CrocodileRandomSwimmingGoal(this, 1.0D, 7));
-        this.goalSelector.addGoal(6, new LookRandomlyGoal(this));
-        this.goalSelector.addGoal(7, new LookAtGoal(this, PlayerEntity.class, 6.0F));
+        this.goalSelector.addGoal(6, new DinosaurLookRandomGoal(this));
+        this.goalSelector.addGoal(7, new DinosaurLookAtGoal(this, PlayerEntity.class, 6.0F));
         this.targetSelector.addGoal(2, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(3, new OwnerHurtTargetGoal(this));
         this.targetSelector.addGoal(4, new NearestAttackableTargetGoal(this, PlayerEntity.class, 80, false, true, null) {
             public boolean shouldExecute() {
-                return !isChild() && !isTamed() && world.getDifficulty() != Difficulty.PEACEFUL && super.shouldExecute();
+                return !isMovementDisabled() && !isChild() && (isTamed() || getAttackOrder() == AttackOrder.HOSTILE) && world.getDifficulty() != Difficulty.PEACEFUL && super.shouldExecute();
             }
         });
     }
@@ -352,7 +353,7 @@ public class Astorgosuchus extends Dinosaur implements IAnimatable, IAnimationTi
     }
 
     @Override
-    protected Rarity getinitialRarity() {
+    protected Rarity getInitialRarity() {
         return Rarity.COMMON;
     }
 

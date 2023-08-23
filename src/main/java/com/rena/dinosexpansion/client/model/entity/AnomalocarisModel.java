@@ -36,7 +36,7 @@ public class AnomalocarisModel extends AnimatedTickingGeoModel<Anomalocaris> {
 
     @Override
     public ResourceLocation getAnimationFileLocation(Anomalocaris animatable) {
-        return DinosExpansion.modLoc("animations/anomalocaris.animation.json");
+        return DinosExpansion.modLoc("animations/anomalocaris.json");
     }
 
 }

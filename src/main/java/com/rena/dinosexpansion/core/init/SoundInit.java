@@ -15,6 +15,7 @@ public class SoundInit {
 
     //Item
     public static final RegistryObject<SoundEvent> DART = create("dart");
+    public static final RegistryObject<SoundEvent> CAMPANILE_SHELL_OCEAN = create("campanile_shell_ocean");
 
     //Entities
     public static final RegistryObject<SoundEvent> DIMORPHODON_AMBIENT1 = create("dimorphodon_ambient1");

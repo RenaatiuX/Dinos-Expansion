@@ -26,7 +26,7 @@ public class Velociraptor extends Dinosaur implements IAnimatable, IAnimationTic
     }
 
     @Override
-    protected Rarity getinitialRarity() {
+    protected Rarity getInitialRarity() {
         return null;
     }
 

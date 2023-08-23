@@ -1,6 +1,7 @@
 package com.rena.dinosexpansion.common.entity.aquatic.fish;
 
 import com.rena.dinosexpansion.common.entity.ia.DinosaurMeleeAttackGoal;
+import com.rena.dinosexpansion.common.entity.ia.GroupFishSwimming;
 import com.rena.dinosexpansion.common.entity.ia.SleepRhythmGoal;
 import com.rena.dinosexpansion.common.entity.ia.movecontroller.AquaticMoveController;
 import com.rena.dinosexpansion.core.init.EntityInit;
@@ -53,7 +54,7 @@ public class MegaPiranha extends PrehistoricFish implements IAnimatable, IAnimat
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new FindWaterGoal(this));
         this.goalSelector.addGoal(2, new DinosaurMeleeAttackGoal(this, 1.2D, false));
-        this.goalSelector.addGoal(4, new RandomSwimmingGoal(this, 1.0F, 10));
+        this.goalSelector.addGoal(4, new GroupFishSwimming(this, 1.0F, 9));
         this.goalSelector.addGoal(5, new LookRandomlyGoal(this));
         this.goalSelector.addGoal(6, new FollowBoatGoal(this));
         this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)));
@@ -90,10 +91,10 @@ public class MegaPiranha extends PrehistoricFish implements IAnimatable, IAnimat
 
     private PlayState predicate(AnimationEvent<MegaPiranha> event) {
         if (this.isInWater()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("de.megapiranha.swim", ILoopType.EDefaultLoopTypes.LOOP));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("swim", ILoopType.EDefaultLoopTypes.LOOP));
         } else {
             if (this.isOnGround()) {
-                event.getController().setAnimation(new AnimationBuilder().addAnimation("de.megapiranha.outofwater", ILoopType.EDefaultLoopTypes.LOOP));
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("outofwater", ILoopType.EDefaultLoopTypes.LOOP));
             }
         }
         return PlayState.CONTINUE;
@@ -102,7 +103,7 @@ public class MegaPiranha extends PrehistoricFish implements IAnimatable, IAnimat
     private PlayState attackPredicate(AnimationEvent<MegaPiranha> event) {
         if (!isKnockout() && this.isSwingInProgress && event.getController().getAnimationState().equals(AnimationState.Stopped)) {
             event.getController().markNeedsReload();
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("de.megapiranha.bite"));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("attack"));
             this.isSwingInProgress = false;
         }
         return PlayState.CONTINUE;

@@ -26,7 +26,7 @@ public class Dodo extends Dinosaur implements IAnimatable, IAnimationTickable {
     }
 
     @Override
-    protected Rarity getinitialRarity() {
+    protected Rarity getInitialRarity() {
         return null;
     }
 

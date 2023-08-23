@@ -1,13 +1,17 @@
 package com.rena.dinosexpansion.common.entity.villagers.caveman;
 
+import com.google.common.collect.Lists;
+import com.mojang.datafixers.util.Pair;
 import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.common.config.DinosExpansionConfig;
+import com.rena.dinosexpansion.core.init.ItemInit;
 import com.rena.dinosexpansion.core.init.ModVillagerTrades;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.merchant.villager.VillagerTrades;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.IItemProvider;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Util;
@@ -19,12 +23,13 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.server.ServerWorld;
 
 import java.util.*;
+import java.util.function.Supplier;
 
 public class Tribe {
 
     public static final List<TribeType> TYPES = Util.make(new ArrayList<>(), list -> {
-        list.add(new TribeType(ModVillagerTrades.WHITE_NORMAL_TRADES, ModVillagerTrades.WHITE_BOSS_TRADES, new TextFormatting[]{TextFormatting.RED}, AggresionLevel.HOSTILE, getCaveman("caveman_boss_white.png"), getCaveman("caveman_normal_white.png")));
-        list.add(new TribeType(ModVillagerTrades.ORANGE_NORMAL_TRADES, ModVillagerTrades.ORANGE_BOSS_TRADES, new TextFormatting[]{TextFormatting.GOLD}, AggresionLevel.PASSIVE, getCaveman("caveman_boss_orange.png"), getCaveman("caveman_normal_orange.png")));
+        list.add(new TribeType(ModVillagerTrades.WHITE_NORMAL_TRADES, ModVillagerTrades.WHITE_BOSS_TRADES, new TextFormatting[]{TextFormatting.RED}, AggresionLevel.HOSTILE, getCaveman("caveman_boss_white.png"), getCaveman("caveman_normal_white.png"), Lists.newArrayList(Pair.of(ItemInit.DIAMOND_SPEAR::get, 0.1f)), Lists.newArrayList()));
+        list.add(new TribeType(ModVillagerTrades.ORANGE_NORMAL_TRADES, ModVillagerTrades.ORANGE_BOSS_TRADES, new TextFormatting[]{TextFormatting.GOLD}, AggresionLevel.PASSIVE, getCaveman("caveman_boss_orange.png"), getCaveman("caveman_normal_orange.png"), Lists.newArrayList(), Lists.newArrayList()));
     });
 
     private static ResourceLocation getCaveman(String textureName) {
@@ -198,6 +203,7 @@ public class Tribe {
                 pos = RandomPositionGenerator.findRandomTarget(boss2, 10, 7);
         }
         this.bossFightCenter = new BlockPos(pos);
+        this.cavemen.forEach(c -> c.setInBossfight(true));
     }
 
     public BlockPos getBossFightCenter() {
@@ -236,7 +242,7 @@ public class Tribe {
         this.bossFightCenter = null;
         this.bossfightCounterCircle = 0;
         startCounter = 0;
-        System.out.println("ended");
+        this.cavemen.forEach(c -> c.setInBossfight(false));
     }
 
     /**
@@ -284,14 +290,17 @@ public class Tribe {
         protected final TextFormatting[] formats;
         protected final AggresionLevel aggro;
         private final ResourceLocation bossTexture, normalTexture;
+        protected final List<Pair<Supplier<IItemProvider>, Float>> bossItems, normalItems;
 
-        public TribeType(Int2ObjectMap<VillagerTrades.ITrade[]> normalTrades, Int2ObjectMap<VillagerTrades.ITrade[]> bossTrades, TextFormatting[] formats, AggresionLevel aggro, ResourceLocation bossTexture, ResourceLocation normalTexture) {
+        public TribeType(Int2ObjectMap<VillagerTrades.ITrade[]> normalTrades, Int2ObjectMap<VillagerTrades.ITrade[]> bossTrades, TextFormatting[] formats, AggresionLevel aggro, ResourceLocation bossTexture, ResourceLocation normalTexture, List<Pair<Supplier<IItemProvider>, Float>> bossItems, List<Pair<Supplier<IItemProvider>, Float>> normalItems) {
             this.normalTrades = normalTrades;
             this.bossTrades = bossTrades;
             this.formats = formats;
             this.aggro = aggro;
             this.bossTexture = bossTexture;
             this.normalTexture = normalTexture;
+            this.bossItems = bossItems;
+            this.normalItems = normalItems;
         }
 
         public Int2ObjectMap<VillagerTrades.ITrade[]> getNormalTrades() {
@@ -316,6 +325,14 @@ public class Tribe {
 
         public ResourceLocation getNormalTexture() {
             return normalTexture;
+        }
+
+        public List<Pair<Supplier<IItemProvider>, Float>> getBossItems() {
+            return bossItems;
+        }
+
+        public List<Pair<Supplier<IItemProvider>, Float>> getNormalItems() {
+            return normalItems;
         }
     }
 

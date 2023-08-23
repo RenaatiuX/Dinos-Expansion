@@ -1,7 +1,7 @@
 package com.rena.dinosexpansion.common.entity.villagers.caveman;
 
+import com.google.common.collect.Lists;
 import com.google.gson.*;
-import com.mojang.realmsclient.util.JsonUtils;
 import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.common.trades.TradeSerializer;
 import com.rena.dinosexpansion.core.init.ModVillagerTrades;
@@ -9,18 +9,14 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.entity.merchant.villager.VillagerTrades;
 import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ObjectIntIdentityMap;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.loading.FMLPaths;
-import org.apache.commons.io.filefilter.FileFilterUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public class TribeTypeSerializer {
 
@@ -53,7 +49,7 @@ public class TribeTypeSerializer {
             throw new JsonParseException("the file: " + name + " doesnt have a valid AggressionLevel: " + JSONUtils.getString(obj, "aggression"));
         Int2ObjectMap<VillagerTrades.ITrade[]> normalTrades = serializeLevelTrades(obj, "normaltrades", name);
         Int2ObjectMap<VillagerTrades.ITrade[]> bossTrades = serializeLevelTrades(obj, "bosstrades", name);
-        Tribe.TYPES.add(new Tribe.TribeType(normalTrades, bossTrades, formats, level, bossTexture, normalTexture));
+        Tribe.TYPES.add(new Tribe.TribeType(normalTrades, bossTrades, formats, level, bossTexture, normalTexture, Lists.newArrayList(), Lists.newArrayList()));
 
 
     }
@@ -62,6 +58,7 @@ public class TribeTypeSerializer {
         if (obj.has(memberName) && obj.get(memberName).isJsonArray()) {
             JsonArray array = obj.getAsJsonArray(memberName);
             Int2ObjectMap<VillagerTrades.ITrade[]> trades = new Int2ObjectOpenHashMap<>();
+            //trades per level
             for (int i = 0; i < array.size(); i++) {
                 JsonElement el = array.get(i);
                 if (el.isJsonArray()) {

@@ -16,5 +16,95 @@
         "stream": true
       }
     ]
+  },
+  "campanile_shell_ocean": {
+    "subtitle": "sound.campanile_shell_ocean",
+    "sounds": [
+      {
+        "name": "dinosexpansion:item/sea_song",
+        "stream": true
+      }
+    ]
+  },
+  "dimorphodon_ambient1": {
+    "subtitle": "sound.dimorphodon_ambient1",
+    "sounds": [
+      {
+        "name": "dinosexpansion:entity/dinosaur/dimorphodon/dimorphodon_idle1",
+        "stream": true
+      }
+    ]
+  },
+  "dimorphodon_ambient2": {
+    "subtitle": "sound.dimorphodon_ambient2",
+    "sounds": [
+      {
+        "name": "dinosexpansion:entity/dinosaur/dimorphodon/dimorphodon_idle2",
+        "stream": true
+      }
+    ]
+  },
+  "dimorphodon_ambient3": {
+    "subtitle": "sound.dimorphodon_ambient3",
+    "sounds": [
+      {
+        "name": "dinosexpansion:entity/dinosaur/dimorphodon/dimorphodon_idle3",
+        "stream": true
+      }
+    ]
+  },
+  "dimorphodon_hurt1": {
+    "subtitle": "sound.dimorphodon_hurt1",
+    "sounds": [
+      {
+        "name": "dinosexpansion:entity/dinosaur/dimorphodon/dimorphodon_hurt1",
+        "stream": true
+      }
+    ]
+  },
+  "dimorphodon_hurt2": {
+    "subtitle": "sound.dimorphodon_hurt2",
+    "sounds": [
+      {
+        "name": "dinosexpansion:entity/dinosaur/dimorphodon/dimorphodon_hurt2",
+        "stream": true
+      }
+    ]
+  },
+  "dimorphodon_hurt3": {
+    "subtitle": "sound.dimorphodon_hurt3",
+    "sounds": [
+      {
+        "name": "dinosexpansion:entity/dinosaur/dimorphodon/dimorphodon_hurt3",
+        "stream": true
+      }
+    ]
+  },
+  "dimorphodon_hurt4": {
+    "subtitle": "sound.dimorphodon_hurt4",
+    "sounds": [
+      {
+        "name": "dinosexpansion:entity/dinosaur/dimorphodon/dimorphodon_hurt4",
+        "stream": true
+      }
+    ]
+  },
+  "dimorphodon_death1": {
+    "subtitle": "sound.dimorphodon_death1",
+    "sounds": [
+      {
+        "name": "dinosexpansion:entity/dinosaur/dimorphodon/dimorphodon_dead1",
+        "stream": true
+      }
+    ]
+  },
+  "dimorphodon_death2": {
+    "subtitle": "sound.dimorphodon_death2",
+    "sounds": [
+      {
+        "name": "dinosexpansion:entity/dinosaur/dimorphodon/dimorphodon_dead2",
+        "stream": true
+      }
+    ]
   }
 }

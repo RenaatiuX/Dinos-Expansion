@@ -38,7 +38,7 @@ public class Sarcosuchus extends Dinosaur implements IAnimatable, IAnimationTick
     }
 
     @Override
-    protected Rarity getinitialRarity() {
+    protected Rarity getInitialRarity() {
         return null;
     }
 

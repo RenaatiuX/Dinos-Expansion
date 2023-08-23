@@ -136,6 +136,8 @@
   "item.dinosexpansion.wooden_chakram": "Wood Chakram",
   "item.dinosexpansion.wooden_hatchet": "Wooden Hatchet",
   "item.dinosexpansion.wooden_spear": "Wood Spear",
+  "item.dinosexpansion.crataegus_boat_item": "Crataegus Boat",
+
   "itemGroup.dinosexpansion.blocks": "Blocks",
   "itemGroup.dinosexpansion.items": "Items",
   "itemGroup.dinosexpansion.spawn_eggs": "Spawn Eggs",
@@ -143,6 +145,7 @@
 
   "dinosexpansion.modifiers.hand": "When Throwing:",
   "dinosexpansion.boomerang.damage": "%d Damage",
+  "dinosexpansion.boomerang.range": "%d Range",
 
 
   "_comment": "screens",
@@ -176,5 +179,11 @@
   "order_type.dinosexpansion.sit": "Sit",
   "order_type.dinosexpansion.sit_shoulder": "Sit On Shoulder",
   "order_type.dinosexpansion.follow": "Follow",
-  "order_type.dinosexpansion.idle": "Idle"
+  "order_type.dinosexpansion.idle": "Idle",
+
+  "_comment": "tooltips",
+
+  "dinosexpansion.survival_instinct_cooldown": "Cooldown: %d"
+
+
 }

@@ -80,7 +80,7 @@ public class Megalania extends Dinosaur implements IAnimatable, IAnimationTickab
     }
 
     @Override
-    protected Rarity getinitialRarity() {
+    protected Rarity getInitialRarity() {
         return null;
     }
 

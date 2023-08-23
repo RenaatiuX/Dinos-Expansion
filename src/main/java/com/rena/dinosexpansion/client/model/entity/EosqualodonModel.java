@@ -19,6 +19,6 @@ public class EosqualodonModel extends AnimatedTickingGeoModel<Eosqualodon> {
 
     @Override
     public ResourceLocation getAnimationFileLocation(Eosqualodon animatable) {
-        return DinosExpansion.modLoc("animations/eosqualodon.animation.json");
+        return DinosExpansion.modLoc("animations/eosqualodon.json");
     }
 }

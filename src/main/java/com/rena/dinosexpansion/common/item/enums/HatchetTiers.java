@@ -9,7 +9,9 @@ public enum HatchetTiers implements TieredHatchet.HatchetTier {
     GOLD_HATCHET(0.4D, 0.1D, 32, 72),
     DIAMOND_HATCHET(0.7D, 0.4D, 10, 643),
     NETHERITE_HATCHET(0.8D, 0.5D, 10, 840),
-    EMERALD_HATCHET(0.9D, 0.6D, 20, 1253);
+    EMERALD_HATCHET(0.9D, 0.6D, 20, 1253),
+    RUBY_HATCHET(1.0D, 0.7D, 15, 1498),
+    SAPPHIRE_HATCHET(1.1D, 0.8D, 10, 1673);
 
     private final double damageAddition, speedAddition;
     private final int enchantability, durability;

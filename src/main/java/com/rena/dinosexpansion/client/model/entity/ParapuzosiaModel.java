@@ -20,6 +20,6 @@ public class ParapuzosiaModel extends AnimatedTickingGeoModel<Parapuzosia> {
 
     @Override
     public ResourceLocation getAnimationFileLocation(Parapuzosia animatable) {
-        return DinosExpansion.modLoc("animations/parapuzosia.animation.json");
+        return DinosExpansion.modLoc("animations/parapuzosia.json");
     }
 }

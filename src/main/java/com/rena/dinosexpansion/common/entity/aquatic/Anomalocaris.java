@@ -1,10 +1,7 @@
 package com.rena.dinosexpansion.common.entity.aquatic;
 
-import com.rena.dinosexpansion.common.config.DinosExpansionConfig;
-import com.rena.dinosexpansion.common.entity.ia.AnomalocarisGrabItemGoal;
-import com.rena.dinosexpansion.common.entity.ia.DinosaurLookRandomGoal;
-import com.rena.dinosexpansion.common.entity.ia.DinosaurSwimBottomGoal;
-import com.rena.dinosexpansion.common.entity.ia.SleepRhythmGoal;
+import com.google.common.collect.Lists;
+import com.rena.dinosexpansion.common.entity.ia.*;
 import com.rena.dinosexpansion.common.entity.ia.movecontroller.AquaticMoveController;
 import com.rena.dinosexpansion.core.init.EntityInit;
 import net.minecraft.block.Blocks;
@@ -12,8 +9,6 @@ import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.FindWaterGoal;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.goal.LookAtGoal;
 import net.minecraft.entity.ai.goal.RandomSwimmingGoal;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -29,14 +24,15 @@ import net.minecraft.particles.ItemParticleData;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimationTickable;
 import software.bernie.geckolib3.core.PlayState;
@@ -59,11 +55,11 @@ public class Anomalocaris extends DinosaurAquatic implements IAnimatable, IAnima
     private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
     public static final Predicate<ItemEntity> ITEMS = (obj) -> !obj.cannotPickup() && obj.isAlive();
     private int eatTimer;
+
     public Anomalocaris(EntityType<Anomalocaris> type, World world) {
         super(type, world, new DinosaurInfo("anomalocaris", 100, 50, 40, SleepRhythmGoal.SleepRhythm.NONE), generateLevelWithinBounds(1, 100));
         this.moveController = new AquaticMoveController(this, 1F);
         this.updateInfo();
-        this.setCanPickUpLoot(true);
     }
 
     public Anomalocaris(World world) {
@@ -74,11 +70,11 @@ public class Anomalocaris extends DinosaurAquatic implements IAnimatable, IAnima
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(1, new FindWaterGoal(this));
-        this.goalSelector.addGoal(2, new RandomSwimmingGoal(this, 0.8F, 1));
-        this.goalSelector.addGoal(3, new DinosaurSwimBottomGoal(this, 0.8F, 9));
-        this.goalSelector.addGoal(4, new AnomalocarisGrabItemGoal(this));
+        this.goalSelector.addGoal(2, new AnomalocarisGrabItemGoal(this, 1.2F));
+        this.goalSelector.addGoal(3, new RandomSwimmingGoal(this, 0.8F, 1));
+        this.goalSelector.addGoal(4, new DinosaurSwimBottomGoal(this, 0.8F, 9));
         this.goalSelector.addGoal(5, new DinosaurLookRandomGoal(this));
-        this.goalSelector.addGoal(6, new LookAtGoal(this, PlayerEntity.class, 6.0F));
+        this.goalSelector.addGoal(6, new DinosaurLookAtGoal(this, PlayerEntity.class, 6.0F));
     }
 
     public static AttributeModifierMap.MutableAttribute createAttributes() {
@@ -104,14 +100,14 @@ public class Anomalocaris extends DinosaurAquatic implements IAnimatable, IAnima
     public void writeAdditional(CompoundNBT nbt) {
         super.writeAdditional(nbt);
         nbt.putBoolean("grab", this.isGrabbing());
-        nbt.put("item", this.hasHeldItem().write(new CompoundNBT()));
+        nbt.put("item", this.getHeldItem().write(new CompoundNBT()));
     }
 
     @Override
     public void readAdditional(CompoundNBT nbt) {
         super.readAdditional(nbt);
         this.setGrabbing(nbt.getBoolean("grab"));
-        this.setHeldItem(ItemStack.read(nbt));
+        this.setHeldItem(ItemStack.read(nbt.getCompound("item")));
     }
 
     public boolean isGrabbing() {
@@ -122,8 +118,12 @@ public class Anomalocaris extends DinosaurAquatic implements IAnimatable, IAnima
         this.dataManager.set(IS_GRABBING, isGrab);
     }
 
-    public ItemStack hasHeldItem() {
+    public ItemStack getHeldItem() {
         return this.dataManager.get(HELD_ITEM);
+    }
+
+    public boolean hasHeldItem() {
+        return !getHeldItem().isEmpty();
     }
 
     public void setHeldItem(ItemStack itemStack) {
@@ -133,26 +133,44 @@ public class Anomalocaris extends DinosaurAquatic implements IAnimatable, IAnima
     @Override
     public void livingTick() {
         if (!this.world.isRemote && this.isAlive() && this.isServerWorld()) {
-            ++this.eatTimer;
-            ItemStack itemstack = this.getItemStackFromSlot(EquipmentSlotType.MAINHAND);
-            if (this.canEatItem(itemstack)) {
+            ItemStack itemstack = getHeldItem();
+            if (!itemstack.isEmpty() && this.canEatItem(itemstack)) {
+                ++this.eatTimer;
                 if (this.eatTimer > 600) {
                     ItemStack itemstack1 = itemstack.onItemUseFinish(this.world, this);
-                    if (!itemstack1.isEmpty()) {
-                        this.setItemStackToSlot(EquipmentSlotType.MAINHAND, itemstack1);
+                    if (itemstack1.isEmpty()){
+                        setHeldItem(ItemStack.EMPTY);
+                    }else{
+                        this.setHeldItem(itemstack1.copy());
                     }
 
                     this.eatTimer = 0;
                 } else if (this.eatTimer > 560 && this.rand.nextFloat() < 0.1F) {
                     this.playSound(this.getEatSound(itemstack), 1.0F, 1.0F);
-                    this.world.setEntityState(this, (byte)45);
+                    this.world.setEntityState(this, (byte) 45);
                 }
             }
         }
         super.livingTick();
     }
 
-    private boolean canEatItem(ItemStack itemStackIn) {
+    @OnlyIn(Dist.CLIENT)
+    public void handleStatusUpdate(byte id) {
+        if (id == 45) {
+            ItemStack itemstack = this.getHeldItem();
+            if (!itemstack.isEmpty()) {
+                for(int i = 0; i < 8; ++i) {
+                    Vector3d vector3d = (new Vector3d(((double)this.rand.nextFloat() - 0.5D) * 0.1D, Math.random() * 0.1D + 0.1D, 0.0D)).rotatePitch(-this.rotationPitch * ((float)Math.PI / 180F)).rotateYaw(-this.rotationYaw * ((float)Math.PI / 180F));
+                    this.world.addParticle(new ItemParticleData(ParticleTypes.ITEM, itemstack), this.getPosX() + this.getLookVec().x / 2.0D, this.getPosY(), this.getPosZ() + this.getLookVec().z / 2.0D, vector3d.x, vector3d.y + 0.05D, vector3d.z);
+                }
+            }
+        } else {
+            super.handleStatusUpdate(id);
+        }
+
+    }
+
+    protected boolean canEatItem(ItemStack itemStackIn) {
         return itemStackIn.getItem().isFood() && this.getAttackTarget() == null && this.isInWater();
     }
 
@@ -186,12 +204,12 @@ public class Anomalocaris extends DinosaurAquatic implements IAnimatable, IAnima
 
     @Override
     public List<Item> getFood() {
-        return null;
+        return Lists.newArrayList(Items.TROPICAL_FISH);
     }
 
     @Override
     protected int reduceNarcotic(int narcoticValue) {
-        return 0;
+        return this.getRNG().nextInt(10000) == 0 ? narcoticValue - 1 : narcoticValue;
     }
 
     @Nullable
@@ -215,7 +233,7 @@ public class Anomalocaris extends DinosaurAquatic implements IAnimatable, IAnima
     private PlayState attackAndGrabPredicate(AnimationEvent<Anomalocaris> event) {
         if (this.isGrabbing()) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("grab", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
-        } else if (!this.hasHeldItem().isEmpty()) {
+        } else if (!this.getHeldItem().isEmpty()) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("grabbed", ILoopType.EDefaultLoopTypes.LOOP));
         }
         return PlayState.CONTINUE;

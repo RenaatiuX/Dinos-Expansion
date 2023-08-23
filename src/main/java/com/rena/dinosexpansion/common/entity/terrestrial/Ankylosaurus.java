@@ -25,7 +25,7 @@ public class Ankylosaurus extends ChestedDinosaur implements IAnimatable, IAnima
     }
 
     @Override
-    protected Rarity getinitialRarity() {
+    protected Rarity getInitialRarity() {
         return null;
     }
 

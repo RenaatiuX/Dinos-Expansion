@@ -36,7 +36,7 @@ public class Megalodon extends DinosaurAquatic implements IAnimatable, IAnimatio
     }
 
     @Override
-    protected Rarity getinitialRarity() {
+    protected Rarity getInitialRarity() {
         return null;
     }
 

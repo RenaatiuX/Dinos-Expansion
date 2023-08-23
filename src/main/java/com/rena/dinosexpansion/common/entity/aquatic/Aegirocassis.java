@@ -80,12 +80,12 @@ public class Aegirocassis extends DinosaurAquatic implements IAnimatable, IAnima
     private PlayState predicate(AnimationEvent<Aegirocassis> event) {
         if (this.isInWater()) {
             if (event.isMoving()){
-                event.getController().setAnimation(new AnimationBuilder().addAnimation("aegirocassis.swim", ILoopType.EDefaultLoopTypes.LOOP));
+                event.getController().setAnimation(new AnimationBuilder().loop("swim"));
             } else {
-                event.getController().setAnimation(new AnimationBuilder().addAnimation("aegirocassis.idle", ILoopType.EDefaultLoopTypes.LOOP));
+                event.getController().setAnimation(new AnimationBuilder().loop("idle"));
             }
         } else if (this.isOnGround()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("aegirocassis.idle", ILoopType.EDefaultLoopTypes.LOOP));
+            event.getController().setAnimation(new AnimationBuilder().loop("idle"));
         }
         return PlayState.CONTINUE;
     }

@@ -23,6 +23,7 @@ public class ModBlockStatesProvider extends BlockStateProvider {
         block(BlockInit.FUTURISTIC_BLOCK_ON2.get());
         block(BlockInit.MOSSY_FUTURISTIC_BLOCK1.get());
         block(BlockInit.MOSSY_FUTURISTIC_BLOCK2.get());
+        blockWithoutBlockItem(BlockInit.CAMPANILE_SHELL_COMMON.get(), BlockInit.CAMPANILE_SHELL_UNCOMMON.get());
 
         /*block(BlockInit.LAVENDER.get());
         block(BlockInit.LEMON_VERBENA.get());
@@ -50,8 +51,16 @@ public class ModBlockStatesProvider extends BlockStateProvider {
         block(BlockInit.GEYSER.get());*/
     }
 
-    private void block(Block block){
-        simpleBlock(block);
-        simpleBlockItem(block, cubeAll(block));
+    protected void block(Block... blocks){
+        for (Block b : blocks){
+            simpleBlock(b);
+            simpleBlockItem(b, cubeAll(b));
+        }
+    }
+
+    protected void blockWithoutBlockItem(Block... blocks){
+        for (Block b : blocks){
+            simpleBlock(b);
+        }
     }
 }

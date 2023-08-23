@@ -71,10 +71,10 @@ public class Wetherellus extends PrehistoricFish implements IAnimatable, IAnimat
 
     private PlayState predicate(AnimationEvent<Wetherellus> event) {
         if (this.isOnGround()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("wetherellus.outofwater", ILoopType.EDefaultLoopTypes.LOOP));
+            event.getController().setAnimation(new AnimationBuilder().loop("outofwater"));
         }
         else if(this.isInWater()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("wetherellus.swim", ILoopType.EDefaultLoopTypes.LOOP));
+            event.getController().setAnimation(new AnimationBuilder().loop("swim"));
         }
         return PlayState.CONTINUE;
     }

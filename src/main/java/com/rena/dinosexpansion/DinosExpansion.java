@@ -59,6 +59,14 @@ public class DinosExpansion
         return new ResourceLocation(MOD_ID, name);
     }
 
+    public static ResourceLocation entityLoot(String name){
+        return modLoc("entities/" + name);
+    }
+
+    public static ResourceLocation blockLoot(String name){
+        return modLoc("blocks/" + name);
+    }
+
     private void setup(final FMLCommonSetupEvent event) {
         event.enqueueWork(() ->  {
             BiomeInit.addBiomeEntries();

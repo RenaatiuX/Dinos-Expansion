@@ -37,6 +37,6 @@ public class DimorphodonModel extends AnimatedTickingGeoModel<Dimorphodon> {
 
     @Override
     public ResourceLocation getAnimationFileLocation(Dimorphodon animatable) {
-        return DinosExpansion.modLoc("animations/dimorphodon.animation.json");
+        return DinosExpansion.modLoc("animations/dimorphodon.json");
     }
 }

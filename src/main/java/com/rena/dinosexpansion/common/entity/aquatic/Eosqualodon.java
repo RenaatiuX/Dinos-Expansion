@@ -63,7 +63,6 @@ public class Eosqualodon extends DinosaurAquatic implements IAnimatable, IAnimat
 
     @Override
     protected void registerGoals() {
-        super.registerGoals();
         this.goalSelector.addGoal(1, new FindWaterGoal(this));
         this.goalSelector.addGoal(2, new DinosaurMeleeAttackGoal(this, 1.2D, false));
         this.goalSelector.addGoal(3, new DinosaurFollowOwnerGoal(this, 0.5, 10f, 2f, false));
@@ -116,10 +115,10 @@ public class Eosqualodon extends DinosaurAquatic implements IAnimatable, IAnimat
             //DinosExpansion.LOGGER.debug(event.getController().getCurrentAnimation().animationName);
         }
         if (isKnockout()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("eosqualodon_knockout", ILoopType.EDefaultLoopTypes.LOOP));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("knockout", ILoopType.EDefaultLoopTypes.LOOP));
         }
         if (this.isInWater()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("eosqualodon_swim", ILoopType.EDefaultLoopTypes.LOOP));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("swim", ILoopType.EDefaultLoopTypes.LOOP));
         }
         return PlayState.CONTINUE;
     }
@@ -127,7 +126,7 @@ public class Eosqualodon extends DinosaurAquatic implements IAnimatable, IAnimat
     private PlayState attackPredicate(AnimationEvent<Eosqualodon> event) {
         if (!isKnockout() && this.isSwingInProgress && event.getController().getAnimationState().equals(AnimationState.Stopped)) {
             event.getController().markNeedsReload();
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("eosqualodon_bite"));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("bite"));
             this.isSwingInProgress = false;
         }
         return PlayState.CONTINUE;

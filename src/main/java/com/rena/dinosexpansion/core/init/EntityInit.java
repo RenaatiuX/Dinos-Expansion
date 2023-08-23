@@ -1,8 +1,7 @@
 package com.rena.dinosexpansion.core.init;
 
 import com.rena.dinosexpansion.DinosExpansion;
-import com.rena.dinosexpansion.common.entity.aquatic.Aegirocassis;
-import com.rena.dinosexpansion.common.entity.aquatic.Anomalocaris;
+import com.rena.dinosexpansion.common.entity.aquatic.*;
 import com.rena.dinosexpansion.common.entity.aquatic.fish.Acanthodes;
 import com.rena.dinosexpansion.common.entity.aquatic.fish.Belantsea;
 import com.rena.dinosexpansion.common.entity.aquatic.fish.Wetherellus;
@@ -10,9 +9,7 @@ import com.rena.dinosexpansion.common.entity.flying.Meganeura;
 import com.rena.dinosexpansion.common.entity.projectile.TinyRockEntity;
 import com.rena.dinosexpansion.common.entity.terrestrial.Dryosaurus;
 import com.rena.dinosexpansion.common.entity.villagers.Hermit;
-import com.rena.dinosexpansion.common.entity.aquatic.Eosqualodon;
 import com.rena.dinosexpansion.common.entity.aquatic.fish.MegaPiranha;
-import com.rena.dinosexpansion.common.entity.aquatic.Parapuzosia;
 import com.rena.dinosexpansion.common.entity.flying.Dimorphodon;
 import com.rena.dinosexpansion.common.entity.misc.*;
 import com.rena.dinosexpansion.common.entity.projectile.CustomArrow;
@@ -26,6 +23,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.apache.http.client.entity.EntityBuilder;
 
 import javax.swing.plaf.PanelUI;
 import java.util.function.Supplier;
@@ -50,6 +48,8 @@ public class EntityInit {
             () -> EntityType.Builder.<GlowStickEntity>create(GlowStickEntity::new, EntityClassification.MISC).size(0.5F, 0.5F).build(DinosExpansion.modLoc("glowstick").toString()));
     public static final RegistryObject<EntityType<BoomerangEntity>> BOOMERANG = register("boomerang", () -> EntityType.Builder.<BoomerangEntity>create(BoomerangEntity::new, EntityClassification.MISC).size(.5f, .5f));
 
+    public static final RegistryObject<EntityType<Squalodon>> SQUALODON = register("squalodon",
+            () -> EntityType.Builder.<Squalodon>create(Squalodon::new, EntityClassification.WATER_CREATURE).size(1.9f, 0.8f));
     public static final RegistryObject<EntityType<Parapuzosia>> PARAPUZOSIA = register("parapuzosia",
             () -> EntityType.Builder.<Parapuzosia>create(Parapuzosia::new, EntityClassification.WATER_CREATURE).size(2.4F, 2.0F));
     public static final RegistryObject<EntityType<Eosqualodon>> EOSQUALODON = register("eosqualodon",
@@ -79,6 +79,8 @@ public class EntityInit {
 
     public static final RegistryObject<EntityType<Hermit>> HERMIT = register("hermit", () -> EntityType.Builder.create(Hermit::new, EntityClassification.CREATURE));
     public static final RegistryObject<EntityType<Caveman>> CAVEMAN = register("caveman", () -> EntityType.Builder.create(Caveman::new, EntityClassification.CREATURE));
+
+    public static final RegistryObject<EntityType<CustomBoatEntity>> CUSTOM_BOAT = register("custom_boat", () -> EntityType.Builder.<CustomBoatEntity>create(CustomBoatEntity::new, EntityClassification.MISC).size(1.375F, 0.5625F).trackingRange(10));
 
     public static final <T extends Entity> RegistryObject<EntityType<T>> register(String name, Supplier<EntityType.Builder<T>> builder){
         return ENTITY_TYPES.register(name, () -> builder.get().build(DinosExpansion.modLoc(name).toString()));

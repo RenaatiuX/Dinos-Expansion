@@ -5,6 +5,7 @@ import com.rena.dinosexpansion.common.BitUtils;
 import com.rena.dinosexpansion.common.config.DinosExpansionConfig;
 import com.rena.dinosexpansion.common.container.OrderContainer;
 import com.rena.dinosexpansion.common.container.TamingContainer;
+import com.rena.dinosexpansion.common.entity.flying.Dimorphodon;
 import com.rena.dinosexpansion.common.entity.ia.SleepRhythmGoal;
 import com.rena.dinosexpansion.common.entity.projectile.INarcoticProjectile;
 import com.rena.dinosexpansion.common.item.util.INarcotic;
@@ -33,12 +34,13 @@ import net.minecraft.stats.Stats;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -46,6 +48,11 @@ import javax.annotation.Nullable;
 import java.util.*;
 
 public abstract class Dinosaur extends TameableEntity {
+
+    public static ResourceLocation getLootTableForRarity(ResourceLocation entityId, Rarity rarity){
+        return DinosExpansion.entityLoot(entityId.getPath() + "_" + rarity.name().toLowerCase(Locale.ROOT));
+    }
+
 
     /**
      * use this to generate a random level as it already contains all relevant config values
@@ -105,7 +112,7 @@ public abstract class Dinosaur extends TameableEntity {
         super(type, world);
         this.maxNarcotic = (int) ((float) info.maxNarcotic * (float) DinosExpansionConfig.NARCOTIC_NEEDED_PERCENT.get() / 100f);
         this.maxHunger = info.maxHunger;
-        this.dataManager.register(RARITY, getinitialRarity().ordinal());
+        this.dataManager.register(RARITY, getInitialRarity().ordinal());
         this.dataManager.register(GENDER, getInitialGender().ordinal());
         this.dataManager.register(LEVEL, level);
         setHungerValue(maxHunger);
@@ -218,7 +225,7 @@ public abstract class Dinosaur extends TameableEntity {
                         new TranslationTextComponent(DinosExpansion.MOD_ID + ".order_screen." + this.getInfo().name)), buf -> buf.writeVarInt(this.getEntityId()));
                 return ActionResultType.SUCCESS;
             }
-            if ((isOwner(player) || isKnockedOutBy(player)) && canEat(stack)) {
+            if (canBeTamed() && (isOwner(player) || isKnockedOutBy(player)) && canEat(stack)) {
                 this.addHungerValue(stack, player);
                 if (!player.isCreative())
                     stack.shrink(1);
@@ -489,7 +496,7 @@ public abstract class Dinosaur extends TameableEntity {
                 if (isKnockout()){
                     this.dataManager.set(TAMING_EFFICIENCY, getTamingEfficiency() * .8f);
                 }
-                if (source.getImmediateSource() instanceof INarcoticProjectile && source.getTrueSource() instanceof LivingEntity)
+                if (canBeKnockedOut() && source.getImmediateSource() instanceof INarcoticProjectile && source.getTrueSource() instanceof LivingEntity)
                     this.addNarcoticValue(((INarcoticProjectile) source.getImmediateSource()).getNarcoticValue(), (LivingEntity) source.getTrueSource());
             }
         }
@@ -501,6 +508,10 @@ public abstract class Dinosaur extends TameableEntity {
     public DinosaurInfo getInfo() {
         this.updateInfo();
         return info;
+    }
+
+    public boolean canBeKnockedOut(){
+        return true;
     }
 
     /**
@@ -530,6 +541,11 @@ public abstract class Dinosaur extends TameableEntity {
             if (hasArmor() == armor)
                 setArmor(armor);
         }
+    }
+
+
+    public  boolean canBeTamed(){
+        return true;
     }
 
     /**
@@ -587,7 +603,7 @@ public abstract class Dinosaur extends TameableEntity {
      *
      * @return
      */
-    protected abstract Rarity getinitialRarity();
+    protected abstract Rarity getInitialRarity();
 
     /**
      * this is called at the constructor to define its initial gender
@@ -725,9 +741,9 @@ public abstract class Dinosaur extends TameableEntity {
     public enum Rarity {
         COMMON(new TranslationTextComponent("rarity." + DinosExpansion.MOD_ID + ".common"), 0, 0, 0, 0),
         UNCOMMON(new TranslationTextComponent("rarity." + DinosExpansion.MOD_ID + ".uncommon"), 4f, 1f, 0, 2),
-        RARE(new TranslationTextComponent("rarity." + DinosExpansion.MOD_ID + ".rare"), 8, 2, .3f, 4),
-        EPIC(new TranslationTextComponent("rarity." + DinosExpansion.MOD_ID + ".epic"), 16, 4, .3f, 8),
-        LEGENDARY(new TranslationTextComponent("rarity." + DinosExpansion.MOD_ID + ".legendary"), 32, 16, .5f, 16);
+        RARE(new TranslationTextComponent("rarity." + DinosExpansion.MOD_ID + ".rare"), 8, 2, 0, 4),
+        EPIC(new TranslationTextComponent("rarity." + DinosExpansion.MOD_ID + ".epic"), 16, 4, 0, 8),
+        LEGENDARY(new TranslationTextComponent("rarity." + DinosExpansion.MOD_ID + ".legendary"), 32, 16, 0, 16);
 
         private final float healthBonus, attackDamageBonus, speedBonus, armorBonus;
         private final ITextComponent name;
