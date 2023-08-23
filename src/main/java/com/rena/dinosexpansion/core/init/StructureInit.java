@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.common.world.structure.structures.HermitHouse;
+import com.rena.dinosexpansion.common.world.structure.structures.vulcano.VulcanoStructure;
 import net.minecraft.util.registry.WorldGenRegistries;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.gen.feature.structure.Structure;
@@ -21,15 +22,15 @@ public class StructureInit {
     public static final DeferredRegister<Structure<?>> STRUCTURES = DeferredRegister.create(ForgeRegistries.STRUCTURE_FEATURES, DinosExpansion.MOD_ID);
 
     public static final RegistryObject<Structure<NoFeatureConfig>> HERMIT_HOSE = STRUCTURES.register("hermit_house", HermitHouse::new);
+    public static final RegistryObject<VulcanoStructure> VULCANO = STRUCTURES.register("vulcano", VulcanoStructure::new);
 
     /* average distance apart in chunks between spawn attempts */
     /* minimum distance apart in chunks between spawn attempts. MUST BE LESS THAN ABOVE VALUE*/
     /* this modifies the seed of the structure so no two structures always spawn over each-other.
     Make this large and unique. */
     public static void setupStructures() {
-        setupMapSpacingAndLand(HERMIT_HOSE.get(),
-                new StructureSeparationSettings(100,50, 1234567890),
-                true);
+        setupMapSpacingAndLand(HERMIT_HOSE.get(), new StructureSeparationSettings(100,50, 1234567890), true);
+        setupMapSpacingAndLand(VULCANO.get(), new StructureSeparationSettings(100, 50, 10354454), true);
     }
 
     /**

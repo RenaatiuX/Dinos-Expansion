@@ -5,7 +5,6 @@ import com.google.common.collect.Sets;
 import com.mojang.serialization.Codec;
 import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.common.world.util.FastNoise;
-import com.rena.dinosexpansion.core.init.DimensionInit;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;

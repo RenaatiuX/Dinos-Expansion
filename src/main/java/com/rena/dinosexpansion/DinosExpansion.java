@@ -20,6 +20,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import software.bernie.geckolib3.GeckoLib;
 
+import java.util.Comparator;
+
 @Mod(DinosExpansion.MOD_ID)
 public class DinosExpansion
 {
@@ -67,11 +69,13 @@ public class DinosExpansion
 
     private void setup(final FMLCommonSetupEvent event) {
         event.enqueueWork(() ->  {
+            BiomeInit.addBiomeEntries();
+            BiomeInit.fillBiomeDictionary();
             CriteriaTriggerInit.REGISTRY.forEach(CriteriaTriggers::register);
             Network.register();
-            FeatureInit.registerConfiguredFeatures();
+            //FeatureInit.registerConfiguredFeatures();
+            DimensionInit.registerDimension();
             StructureInit.setupStructures();
-            DimensionInit.setupDimension();
             ModVillagerTrades.registerTrades();
             TribeTypeSerializer.serializeTribeTypes();
         });

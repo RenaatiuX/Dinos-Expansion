@@ -65,6 +65,14 @@ public class Acanthodes extends PrehistoricFish implements IAnimatable, IAnimati
     }
 
     @Override
+    protected Rarity getinitialRarity() {
+        double rand = this.getRNG().nextDouble();
+        if (rand <= 0.2)
+            return Rarity.UNCOMMON;
+        return Rarity.COMMON;
+    }
+
+    @Override
     public void registerControllers(AnimationData data) {
         data.addAnimationController(new AnimationController<>(this, "controller", 10, this::predicate));
     }

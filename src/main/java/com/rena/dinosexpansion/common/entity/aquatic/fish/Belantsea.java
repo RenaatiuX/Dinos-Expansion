@@ -69,7 +69,7 @@ public class Belantsea extends PrehistoricFish implements IAnimatable, IAnimatio
     @Override
     protected Rarity getInitialRarity() {
         double rand = this.getRNG().nextDouble();
-        if (rand <= 0.5)
+        if (rand <= 0.2)
             return Rarity.UNCOMMON;
         return Rarity.COMMON;
     }

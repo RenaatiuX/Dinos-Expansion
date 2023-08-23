@@ -1,362 +1,71 @@
 package com.rena.dinosexpansion.common.world.dimension;
 
+import com.google.common.collect.ImmutableList;
+import com.mojang.datafixers.types.Func;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.rena.dinosexpansion.DinosExpansion;
-import com.rena.dinosexpansion.common.world.dimension.layer.*;
+import com.rena.dinosexpansion.common.biome.BiomeBase;
+import com.rena.dinosexpansion.common.world.dimension.noises.SimpleNoiseWithOctaves;
+import com.rena.dinosexpansion.core.init.BiomeInit;
 import net.minecraft.util.RegistryKey;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SharedConstants;
+import net.minecraft.util.SharedSeedRandom;
 import net.minecraft.util.Util;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryLookupCodec;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeRegistry;
+import net.minecraft.world.biome.Biomes;
 import net.minecraft.world.biome.provider.BiomeProvider;
-import net.minecraft.world.gen.IExtendedNoiseRandom;
-import net.minecraft.world.gen.LazyAreaLayerContext;
-import net.minecraft.world.gen.area.IArea;
-import net.minecraft.world.gen.area.IAreaFactory;
-import net.minecraft.world.gen.area.LazyArea;
-import net.minecraft.world.gen.layer.*;
-import net.minecraft.world.gen.layer.traits.IAreaTransformer1;
+import net.minecraft.world.gen.INoiseGenerator;
+import net.minecraft.world.gen.OctavesNoiseGenerator;
+import net.minecraft.world.gen.layer.Layer;
 
-import java.util.ArrayList;
+import java.awt.*;
+import java.awt.geom.Point2D;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-import java.util.function.LongFunction;
-import java.util.stream.Collectors;
+import java.util.function.Function;
+import java.util.stream.IntStream;
+
 public class DinoBiomeProvider extends BiomeProvider {
 
-    public static final Codec<DinoBiomeProvider> CODEC =
-            RecordCodecBuilder.create((instance) -> instance.group(
-                            RegistryLookupCodec.getLookUpCodec(Registry.BIOME_KEY)
-                                    .forGetter((vanillaLayeredBiomeSource) ->
-                                            vanillaLayeredBiomeSource.BIOME_REGISTRY))
-                    .apply(instance, instance.stable(DinoBiomeProvider::new)));
 
-    public static ResourceLocation ARCTIC = new ResourceLocation(DinosExpansion.MOD_ID, "arctic");
-    public static ResourceLocation BADLANDS = new ResourceLocation(DinosExpansion.MOD_ID, "badlands");
-    public static ResourceLocation BEACH = new ResourceLocation(DinosExpansion.MOD_ID, "beach");
-    public static ResourceLocation SNOW_BEACH = new ResourceLocation(DinosExpansion.MOD_ID, "snow_beach");
-    public static ResourceLocation STONE_SHORE = new ResourceLocation(DinosExpansion.MOD_ID, "stone_shore");
-    public static ResourceLocation SWAMP = new ResourceLocation(DinosExpansion.MOD_ID, "swamp");
-    public static ResourceLocation CANYON = new ResourceLocation(DinosExpansion.MOD_ID, "canyon");
-    public static ResourceLocation DUNES = new ResourceLocation(DinosExpansion.MOD_ID, "dunes");
-    public static ResourceLocation GRASSLAND = new ResourceLocation(DinosExpansion.MOD_ID, "grassland");
-    public static ResourceLocation HIGH_DESERT = new ResourceLocation(DinosExpansion.MOD_ID, "high_desert");
-    public static ResourceLocation LOW_DESERT = new ResourceLocation(DinosExpansion.MOD_ID, "low_desert");
-    public static ResourceLocation JUNGLE = new ResourceLocation(DinosExpansion.MOD_ID, "jungle");
-    public static ResourceLocation MOUNTAIN = new ResourceLocation(DinosExpansion.MOD_ID, "mountain");
-    public static ResourceLocation OCEAN = new ResourceLocation(DinosExpansion.MOD_ID, "ocean");
-    public static ResourceLocation FROZEN_OCEAN = new ResourceLocation(DinosExpansion.MOD_ID, "frozen_ocean");
-    public static ResourceLocation WARM_OCEAN = new ResourceLocation(DinosExpansion.MOD_ID, "warm_ocean");
-    public static ResourceLocation LUKEWARM_OCEAN = new ResourceLocation(DinosExpansion.MOD_ID, "lukewarm_ocean");
-    public static ResourceLocation COLD_OCEAN = new ResourceLocation(DinosExpansion.MOD_ID, "cold_ocean");
-    public static ResourceLocation DEEP_OCEAN = new ResourceLocation(DinosExpansion.MOD_ID, "deep_ocean");
-    public static ResourceLocation DEEP_FROZEN_OCEAN = new ResourceLocation(DinosExpansion.MOD_ID, "deep_frozen_ocean");
-    public static ResourceLocation DEEP_WARM_OCEAN = new ResourceLocation(DinosExpansion.MOD_ID, "deep_warm_ocean");
-    public static ResourceLocation DEEP_LUKEWARM_OCEAN = new ResourceLocation(DinosExpansion.MOD_ID, "deep_lukewarm_ocean");
-    public static ResourceLocation DEEP_COLD_OCEAN = new ResourceLocation(DinosExpansion.MOD_ID, "deep_cold_ocean");
-    public static ResourceLocation REDWOOD_FOREST = new ResourceLocation(DinosExpansion.MOD_ID, "redwood_forest");
-    public static ResourceLocation TUNDRA = new ResourceLocation(DinosExpansion.MOD_ID, "tundra");
-    public static ResourceLocation RIVER = new ResourceLocation(DinosExpansion.MOD_ID, "river");
-    public static ResourceLocation FROZEN_RIVER = new ResourceLocation(DinosExpansion.MOD_ID, "frozen_river");
+    public static final Codec<DinoBiomeProvider> CODEC = RecordCodecBuilder.create((instance)
+            -> instance.group(Codec.LONG.fieldOf("seed").orElse(DinoChunkGenerator.hackSeed)
+            .forGetter((obj) -> obj.seed), RegistryLookupCodec.getLookUpCodec(Registry.BIOME_KEY)
+            .forGetter((obj) -> obj.registry)).apply(instance, instance.
+            stable(DinoBiomeProvider::new)));
 
+    private final long seed;
+    private final Registry<Biome> registry;
     private final Layer genBiomes;
-    private final Registry<Biome> BIOME_REGISTRY;
-    public static Registry<Biome> LAYERS_BIOME_REGISTRY;
-    public static List<Biome> NONSTANDARD_BIOME = new ArrayList<>();
-    private static int gen = 4;
 
-    public DinoBiomeProvider(Registry<Biome> biomeRegistry) {
-        this(0, biomeRegistry);
+    protected InterpolatedNoise surface;
+    private static final List<RegistryKey<Biome>> POSSIBLE_BIOMES = ImmutableList.of(
+            BiomeInit.DESERT.getKey(), BiomeInit.RIVER.getKey(), BiomeInit.RED_DESERT.getKey(),
+            BiomeInit.DESERT_HILLS.getKey(), BiomeInit.ALPS.getKey(), BiomeInit.OCEAN.getKey(),
+            BiomeInit.DEEP_OCEAN.getKey(), BiomeInit.COLD_OCEAN.getKey(), BiomeInit.DEEP_COLD_OCEAN.getKey(),
+            BiomeInit.LUKEWARM_DEEP_OCEAN.getKey(), BiomeInit.LUKEWARM_DEEP_OCEAN.getKey(),
+            BiomeInit.WARM_OCEAN.getKey(), BiomeInit.DEEP_WARM_OCEAN.getKey(),
+            BiomeInit.FROZEN_OCEAN.getKey(), BiomeInit.DEEP_FROZEN_OCEAN.getKey(),
+            BiomeInit.DENSE_SWAMP.getKey(), BiomeInit.CHERRY_FOREST.getKey(),
+            BiomeInit.FLOODPLAIN.getKey()
+    );
+
+    public DinoBiomeProvider(long seed, Registry<Biome> registry) {
+        super(POSSIBLE_BIOMES.stream().map(define -> () -> registry.getOrThrow(define)));
+        this.seed = seed;
+        this.registry = registry;
+        this.genBiomes = DinoLayerUtil.makeLayers(seed, registry);
+        surface = new InterpolatedNoise(new SimpleNoiseWithOctaves(2048, .2d, seed), new Point(-1,40), new Point2D.Double(-.2d, 63), new Point2D.Double(.2d, 70), new Point2D.Double(.3d, 95), new Point2D.Double(1, 100));
+        //surface = new InterpolatedNoise(new SimpleNoiseWithOctaves(2048, .2d, seed), new Point(-1,50), new Point(1, 100));
     }
 
-    public DinoBiomeProvider(long seed, Registry<Biome> biomeRegistry) {
-        super(biomeRegistry.getEntries().stream()
-                .filter(entry -> entry.getKey().getLocation().getNamespace().equals(DinosExpansion.MOD_ID))
-                .map(Map.Entry::getValue)
-                .collect(Collectors.toList()));
-
-        NONSTANDARD_BIOME = this.biomes.stream()
-                .filter(biome -> {
-                    ResourceLocation rlKey = biomeRegistry.getKey(biome);
-                    return !rlKey.equals(ARCTIC) &&
-                            !rlKey.equals(BADLANDS) &&
-                            !rlKey.equals(BEACH) &&
-                            !rlKey.equals(SNOW_BEACH) &&
-                            !rlKey.equals(STONE_SHORE) &&
-                            !rlKey.equals(SWAMP) &&
-                            !rlKey.equals(CANYON) &&
-                            !rlKey.equals(DUNES) &&
-                            !rlKey.equals(GRASSLAND) &&
-                            !rlKey.equals(HIGH_DESERT) &&
-                            !rlKey.equals(LOW_DESERT) &&
-                            !rlKey.equals(JUNGLE) &&
-                            !rlKey.equals(MOUNTAIN) &&
-                            !rlKey.equals(OCEAN) &&
-                            !rlKey.equals(COLD_OCEAN) &&
-                            !rlKey.equals(FROZEN_OCEAN) &&
-                            !rlKey.equals(WARM_OCEAN) &&
-                            !rlKey.equals(LUKEWARM_OCEAN) &&
-                            !rlKey.equals(DEEP_OCEAN) &&
-                            !rlKey.equals(DEEP_FROZEN_OCEAN) &&
-                            !rlKey.equals(DEEP_WARM_OCEAN) &&
-                            !rlKey.equals(DEEP_LUKEWARM_OCEAN) &&
-                            !rlKey.equals(DEEP_COLD_OCEAN) &&
-                            !rlKey.equals(REDWOOD_FOREST) &&
-                            !rlKey.equals(TUNDRA) &&
-                            !rlKey.equals(RIVER) &&
-                            !rlKey.equals(FROZEN_RIVER);
-                })
-                .collect(Collectors.toList());
-
-        SeedBearer.putInSeed(seed);
-        this.BIOME_REGISTRY = biomeRegistry;
-        DinoBiomeProvider.LAYERS_BIOME_REGISTRY = biomeRegistry;
-        this.genBiomes = buildWorldProcedure(seed);
-    }
-
-    public static Layer buildWorldProcedure(long seed) {
-        IAreaFactory<LazyArea> layerFactory = customTry((salt) ->
-                new LazyAreaLayerContext(25, seed, salt));
-        return new Layer(layerFactory);
-    }
-
-    public static <T extends IArea, C extends IExtendedNoiseRandom<T>> IAreaFactory<T> repeat(long seed, IAreaTransformer1 parent, IAreaFactory<T> p_202829_3_, int count, LongFunction<C> contextFactory) {
-        IAreaFactory<T> iareafactory = p_202829_3_;
-        for (int i = 0; i < count; ++i) {
-            iareafactory = parent.apply(contextFactory.apply(seed + (long) i), iareafactory);
-        }
-        return iareafactory;
-    }
-
-    /*public static <T extends IArea, C extends IExtendedNoiseRandom<T>> IAreaFactory<T> build(LongFunction<C> contextFactory) {
-
-        IAreaFactory<T> iareafactory = DinoIslandLayer.INSTANCE.apply(contextFactory.apply(1L));
-        iareafactory = ZoomLayer.FUZZY.apply(contextFactory.apply(2000L), iareafactory);
-        iareafactory = DinoAddIslandLayer.INSTANCE.apply(contextFactory.apply(1L), iareafactory);
-        iareafactory = ZoomLayer.NORMAL.apply(contextFactory.apply(2001L), iareafactory);
-        iareafactory = DinoAddIslandLayer.INSTANCE.apply(contextFactory.apply(2L), iareafactory);
-        iareafactory = DinoAddIslandLayer.INSTANCE.apply(contextFactory.apply(50L), iareafactory);
-        iareafactory = DinoAddIslandLayer.INSTANCE.apply(contextFactory.apply(70L), iareafactory);
-        iareafactory = DinoRemoveTooMuchOceanLayer.INSTANCE.apply(contextFactory.apply(2L), iareafactory);
-
-        IAreaFactory<T> iareafactory1 = DinoOceanLayer.INSTANCE.apply(contextFactory.apply(2L));
-        iareafactory1 = repeat(2001L, ZoomLayer.NORMAL, iareafactory1, 6, contextFactory);
-        iareafactory = DinoSnowLayer.INSTANCE.apply(contextFactory.apply(2L), iareafactory);
-        iareafactory = DinoAddIslandLayer.INSTANCE.apply(contextFactory.apply(3L), iareafactory);
-        iareafactory = DinoEdgeLayer.CoolWarm.INSTANCE.apply(contextFactory.apply(2L), iareafactory);
-        iareafactory = DinoEdgeLayer.HeatIce.INSTANCE.apply(contextFactory.apply(2L), iareafactory);
-        iareafactory = ZoomLayer.NORMAL.apply(contextFactory.apply(2002L), iareafactory);
-        iareafactory = ZoomLayer.NORMAL.apply(contextFactory.apply(2003L), iareafactory);
-        iareafactory = DinoAddIslandLayer.INSTANCE.apply(contextFactory.apply(4L), iareafactory);
-        iareafactory = DinoDeepOceanLayer.INSTANCE.apply(contextFactory.apply(4L), iareafactory);
-        iareafactory = repeat(1000L, ZoomLayer.NORMAL, iareafactory, 0, contextFactory);
-        IAreaFactory<T> iareafactory2 = repeat(1000L, ZoomLayer.NORMAL, iareafactory, 0, contextFactory);
-        iareafactory2 = StartRiverLayer.INSTANCE.apply(contextFactory.apply(100L), iareafactory2);
-        IAreaFactory<T> iareafactory3 = DinoBiomeLayer.INSTANCE.apply(contextFactory.apply(200L), iareafactory);
-        IAreaFactory<T> iareafactory4 = repeat(1000L, ZoomLayer.NORMAL, iareafactory3, 2, contextFactory);
-        iareafactory2 = repeat(1000L, ZoomLayer.NORMAL, iareafactory2, 2, contextFactory);
-
-        iareafactory2 = RiverLayer.INSTANCE.apply(contextFactory.apply(1L), iareafactory2);
-        iareafactory2 = SmoothLayer.INSTANCE.apply(contextFactory.apply(1000L), iareafactory2);
-
-        for (int i = 0; i < gen; ++i) {
-            iareafactory3 = ZoomLayer.NORMAL.apply(contextFactory.apply(1000 + i), iareafactory3);
-            if (i == 0) {
-                iareafactory3 = DinoAddIslandLayer.INSTANCE.apply(contextFactory.apply(3L), iareafactory3);
-            }
-
-            if (i == 1 || gen == 1) {
-                iareafactory3 = DinoShoreLayer.INSTANCE.apply(contextFactory.apply(1000L), iareafactory3);
-            }
-        }
-
-        iareafactory3 = SmoothLayer.INSTANCE.apply(contextFactory.apply(1000L), iareafactory3);
-        iareafactory3 = DinoRiverMixLayer.INSTANCE.apply(contextFactory.apply(100L), iareafactory3, iareafactory2);
-        iareafactory3 = DinoMixOceansLayer.INSTANCE.apply(contextFactory.apply(100L), iareafactory3, iareafactory);
-
-        return iareafactory3;
-    }*/
-
-
-    public static <T extends IArea, C extends IExtendedNoiseRandom<T>> IAreaFactory<T> customTry(LongFunction<C> contextFactory) {
-        //creates water and land "dots" in the world noted with 0 = ocean and 1 = land
-        IAreaFactory<T> areaFactory = WaterLandLayer.INSTANCE.apply(contextFactory.apply(1000L));
-        //makes these generated dos bigger
-        areaFactory = repeat(1001L, ZoomLayer.NORMAL, areaFactory, 3, contextFactory);
-        //from here there are little islands over ocean biomes spread, they share as biomeId 2
-        areaFactory = AddSmallIslands.INSTANCE.apply(contextFactory.apply(2001L), areaFactory);
-        //makes the islands bigger without connecting them to land
-       areaFactory = EnlargeIslands.INSTANCE.apply(contextFactory.apply(2002L), areaFactory);
-       areaFactory = AddNotDeepOceanAroundIslands.INSTANCE.apply(contextFactory.apply(2003L), areaFactory);
-       //0 = ocean
-        // 1 = land
-        //2 = island
-        //3 = not deep ocean(sourrounding of the islands so they come on top
-        IAreaFactory<T> temperature = AddTemperature.INSTANCE.apply(contextFactory.apply(2004L));
-        temperature = repeat(2005L, ZoomLayer.NORMAL, temperature, 4, contextFactory);
-        temperature = repeat(2005L, SmoothLayer.INSTANCE, temperature, 10, contextFactory);
-
-        //adding rivers to the map and smoothing them out and make the regard temperature
-        IAreaFactory<T> river = DinoStartRiver.INSTANCE.apply(contextFactory.apply(2101L), areaFactory);
-        river = repeat(2102L, DinoRiverGrow.INSTANCE, river,3,  contextFactory);
-        //this makes everyting above and equal to 7 to 7 and everything else to -1
-        river = CleanRiverLayer.INSTANCE.apply(contextFactory.apply(2250L), river);
-        //at this point there are actual BiomeIds of the DinoRiver
-        river = RiverTemperatureMixer.INSTANCE.apply(contextFactory.apply(2301L), river, temperature);
-
-        //TODO OCEAN
-
-        //adding Biomes regarding  the local temperature
-        areaFactory = DinoBiomeLayerMixer.INSTANCE.apply(contextFactory.apply(1L), areaFactory, temperature);
-
-        areaFactory = TransformOcean.INSTANCE.apply(contextFactory.apply(3000L), areaFactory);
-        areaFactory = MakeBeaches.INSTANCE.apply(contextFactory.apply(3001L), areaFactory);
-        areaFactory = repeat(1001L, ZoomLayer.NORMAL, areaFactory, 4, contextFactory);
-        areaFactory = repeat(5001L, SmoothLayer.INSTANCE, areaFactory, 2, contextFactory);
-        //areaFactory = DinoMixRiverIntoArea.INSTANCE.apply(contextFactory.apply(6000L), areaFactory, river);
-
-        //just to help to fill with ocean and beach biomes so i can see the generated map
-        //command: /execute in dinosexpansion:dino_dimension run tp ~ ~ ~
-
-
-        return areaFactory;
-    }
-
-    public static boolean isLand(int biomeIn) {
-        return biomeIn == DinoBiomeProvider.LAYERS_BIOME_REGISTRY
-                .getId(DinoBiomeProvider.LAYERS_BIOME_REGISTRY
-                        .getOrDefault(DinoBiomeProvider.ARCTIC)) ||
-                biomeIn == DinoBiomeProvider.LAYERS_BIOME_REGISTRY
-                        .getId(DinoBiomeProvider.LAYERS_BIOME_REGISTRY
-                                .getOrDefault(DinoBiomeProvider.BADLANDS)) ||
-                biomeIn == DinoBiomeProvider.LAYERS_BIOME_REGISTRY.getId(
-                        DinoBiomeProvider.LAYERS_BIOME_REGISTRY.getOrDefault(DinoBiomeProvider.SWAMP)) ||
-                biomeIn == DinoBiomeProvider.LAYERS_BIOME_REGISTRY
-                        .getId(DinoBiomeProvider.LAYERS_BIOME_REGISTRY
-                                .getOrDefault(DinoBiomeProvider.CANYON)) ||
-                biomeIn == DinoBiomeProvider.LAYERS_BIOME_REGISTRY
-                        .getId(DinoBiomeProvider.LAYERS_BIOME_REGISTRY
-                                .getOrDefault(DinoBiomeProvider.DUNES)) ||
-                biomeIn == DinoBiomeProvider.LAYERS_BIOME_REGISTRY.getId(
-                        DinoBiomeProvider.LAYERS_BIOME_REGISTRY.getOrDefault(DinoBiomeProvider.GRASSLAND)) ||
-                biomeIn == DinoBiomeProvider.LAYERS_BIOME_REGISTRY.getId(
-                        DinoBiomeProvider.LAYERS_BIOME_REGISTRY.getOrDefault(DinoBiomeProvider.HIGH_DESERT)) ||
-                biomeIn == DinoBiomeProvider.LAYERS_BIOME_REGISTRY.getId(
-                        DinoBiomeProvider.LAYERS_BIOME_REGISTRY.getOrDefault(DinoBiomeProvider.LOW_DESERT)) ||
-                biomeIn == DinoBiomeProvider.LAYERS_BIOME_REGISTRY.getId(
-                        DinoBiomeProvider.LAYERS_BIOME_REGISTRY.getOrDefault(DinoBiomeProvider.JUNGLE)) ||
-                biomeIn == DinoBiomeProvider.LAYERS_BIOME_REGISTRY.getId(
-                        DinoBiomeProvider.LAYERS_BIOME_REGISTRY.getOrDefault(DinoBiomeProvider.MOUNTAIN)) ||
-                biomeIn == DinoBiomeProvider.LAYERS_BIOME_REGISTRY.getId(
-                        DinoBiomeProvider.LAYERS_BIOME_REGISTRY.getOrDefault(DinoBiomeProvider.REDWOOD_FOREST)) ||
-                biomeIn == DinoBiomeProvider.LAYERS_BIOME_REGISTRY.getId(
-                        DinoBiomeProvider.LAYERS_BIOME_REGISTRY.getOrDefault(DinoBiomeProvider.TUNDRA));
-    }
-
-
-    public static int[] getAllOceanBiomes(){
-        return new int[]{
-                getId(OCEAN),
-                getId(WARM_OCEAN),
-                getId(LUKEWARM_OCEAN),
-                getId(COLD_OCEAN),
-                getId(FROZEN_OCEAN),
-                getId(DEEP_OCEAN),
-                getId(DEEP_WARM_OCEAN),
-                getId(DEEP_LUKEWARM_OCEAN),
-                getId(DEEP_COLD_OCEAN),
-                getId(DEEP_FROZEN_OCEAN)
-        };
-    }
-
-    public static int[] getColdOceanBiomes(){
-        return new int[]{
-                getId(DEEP_COLD_OCEAN),
-                getId(DEEP_FROZEN_OCEAN),
-                getId(COLD_OCEAN),
-                getId(FROZEN_OCEAN)
-        };
-    }
-
-    public static int[] getWarmOceanBiomes(){
-        return new int[]{
-                getId(WARM_OCEAN),
-                getId(LUKEWARM_OCEAN),
-                getId(DEEP_WARM_OCEAN),
-                getId(DEEP_LUKEWARM_OCEAN)
-        };
-    }
-
-    public static int[] getNormalOceanBiomes(){
-        return new int[]{
-                getId(OCEAN),
-                getId(DEEP_OCEAN)
-        };
-    }
-
-    public static boolean isOcean(int biomeIn) {
-        return biomeIn == DinoBiomeProvider.LAYERS_BIOME_REGISTRY
-                .getId(DinoBiomeProvider.LAYERS_BIOME_REGISTRY
-                        .getOrDefault(DinoBiomeProvider.OCEAN)) ||
-                biomeIn == DinoBiomeProvider.LAYERS_BIOME_REGISTRY
-                        .getId(DinoBiomeProvider.LAYERS_BIOME_REGISTRY
-                                .getOrDefault(DinoBiomeProvider.WARM_OCEAN)) ||
-                biomeIn == DinoBiomeProvider.LAYERS_BIOME_REGISTRY
-                        .getId(DinoBiomeProvider.LAYERS_BIOME_REGISTRY
-                                .getOrDefault(DinoBiomeProvider.LUKEWARM_OCEAN)) ||
-                biomeIn == DinoBiomeProvider.LAYERS_BIOME_REGISTRY
-                        .getId(DinoBiomeProvider.LAYERS_BIOME_REGISTRY
-                                .getOrDefault(DinoBiomeProvider.COLD_OCEAN)) ||
-                biomeIn == DinoBiomeProvider.LAYERS_BIOME_REGISTRY
-                        .getId(DinoBiomeProvider.LAYERS_BIOME_REGISTRY
-                                .getOrDefault(DinoBiomeProvider.FROZEN_OCEAN)) ||
-                biomeIn == DinoBiomeProvider.LAYERS_BIOME_REGISTRY
-                        .getId(DinoBiomeProvider.LAYERS_BIOME_REGISTRY
-                                .getOrDefault(DinoBiomeProvider.DEEP_OCEAN)) ||
-                biomeIn == DinoBiomeProvider.LAYERS_BIOME_REGISTRY
-                        .getId(DinoBiomeProvider.LAYERS_BIOME_REGISTRY
-                                .getOrDefault(DinoBiomeProvider.DEEP_WARM_OCEAN)) ||
-                biomeIn == DinoBiomeProvider.LAYERS_BIOME_REGISTRY
-                        .getId(DinoBiomeProvider.LAYERS_BIOME_REGISTRY
-                                .getOrDefault(DinoBiomeProvider.DEEP_LUKEWARM_OCEAN)) ||
-                biomeIn == DinoBiomeProvider.LAYERS_BIOME_REGISTRY
-                        .getId(DinoBiomeProvider.LAYERS_BIOME_REGISTRY
-                                .getOrDefault(DinoBiomeProvider.DEEP_COLD_OCEAN)) ||
-                biomeIn == DinoBiomeProvider.LAYERS_BIOME_REGISTRY
-                        .getId(DinoBiomeProvider.LAYERS_BIOME_REGISTRY
-                                .getOrDefault(DinoBiomeProvider.DEEP_FROZEN_OCEAN));
-    }
-
-    public static boolean isShallowOcean(int biomeIn) {
-        return biomeIn == DinoBiomeProvider.LAYERS_BIOME_REGISTRY
-                .getId(DinoBiomeProvider.LAYERS_BIOME_REGISTRY
-                        .getOrDefault(DinoBiomeProvider.OCEAN)) ||
-                biomeIn == DinoBiomeProvider.LAYERS_BIOME_REGISTRY
-                        .getId(DinoBiomeProvider.LAYERS_BIOME_REGISTRY
-                                .getOrDefault(DinoBiomeProvider.WARM_OCEAN)) ||
-                biomeIn == DinoBiomeProvider.LAYERS_BIOME_REGISTRY
-                        .getId(DinoBiomeProvider.LAYERS_BIOME_REGISTRY
-                                .getOrDefault(DinoBiomeProvider.LUKEWARM_OCEAN)) ||
-                biomeIn == DinoBiomeProvider.LAYERS_BIOME_REGISTRY
-                        .getId(DinoBiomeProvider.LAYERS_BIOME_REGISTRY
-                                .getOrDefault(DinoBiomeProvider.COLD_OCEAN)) ||
-                biomeIn == DinoBiomeProvider.LAYERS_BIOME_REGISTRY
-                        .getId(DinoBiomeProvider.LAYERS_BIOME_REGISTRY
-                                .getOrDefault(DinoBiomeProvider.FROZEN_OCEAN));
-    }
-
-
-
-    public static boolean isBeach(int id){
-        return id == getId(BEACH) || id == getId(SNOW_BEACH);
-    }
-
-    public static int getId(ResourceLocation biome){
-        return LAYERS_BIOME_REGISTRY.getId(LAYERS_BIOME_REGISTRY.getOrDefault(biome));
+    public InterpolatedNoise getSurface() {
+        return surface;
     }
 
     @Override
@@ -365,18 +74,15 @@ public class DinoBiomeProvider extends BiomeProvider {
     }
 
     @Override
-    public BiomeProvider getBiomeProvider(long seed) {
-        return new DinoBiomeProvider(seed, this.BIOME_REGISTRY);
+    public BiomeProvider getBiomeProvider(long l) {
+        return new DinoBiomeProvider(l, registry);
     }
 
     @Override
     public Biome getNoiseBiome(int x, int y, int z) {
-        return this.sample(this.BIOME_REGISTRY, x, z);
+        return sample(registry, x,z);
     }
 
-    //TODO Don't delete this, the reason for this is because the original
-    // sample method vanilla uses is bugged with json biomes. This version is safer
-    // and wont throw errors in console about unknown biomes
     public Biome sample(Registry<Biome> dynamicBiomeRegistry, int x, int z) {
         int resultBiomeID = this.genBiomes.field_215742_b.getValue(x, z);
         Biome biome = dynamicBiomeRegistry.getByValue(resultBiomeID);
@@ -392,5 +98,98 @@ public class DinoBiomeProvider extends BiomeProvider {
         } else {
             return biome;
         }
+    }
+
+    public static class InterpolatedNoise{
+        protected final SimpleNoiseWithOctaves generator;
+        protected LinearInterpolator[] interpolators;
+        protected double max;
+        protected double min;
+
+        public InterpolatedNoise(SimpleNoiseWithOctaves generator, Point2D... points) {
+            if (points.length < 2)
+                throw new IllegalArgumentException("we must have at least 2 points to interpolate them to a line");
+            this.generator = generator;
+            interpolators = new LinearInterpolator[points.length - 1];
+            for (int i = 1; i < points.length; i++) {
+                interpolators[i-1] = new LinearInterpolator(points[i-1], points[i]);
+            }
+            max = Arrays.stream(this.interpolators).mapToDouble(l -> l.getEnd().getX()).max().getAsDouble();
+            min = Arrays.stream(this.interpolators).mapToDouble(l -> l.getStart().getX()).min().getAsDouble();
+        }
+
+        public double getMax() {
+            return max;
+        }
+
+        public double getMin() {
+            return min;
+        }
+
+        public double noiseAt(int x, int z) {
+            double noise = this.generator.getNoise2D((int) x, (int) z);
+            noise = interpolateRange(noise, -0.21524397845109344, 0.20785927926271314, min, max);
+            for (LinearInterpolator interpolator : this.interpolators){
+                if (interpolator.isInRange(noise)) {
+                    return interpolator.get(noise);
+                }
+            }
+            throw new IllegalStateException(String.format("noise was not in range od the points range was [%s, %s] and noise was %s", min, max, noise));
+
+        }
+    }
+
+    public static class LinearInterpolator {
+        protected final Function<Double, Double> linearFunction;
+        protected final Point2D start, end;
+
+        public LinearInterpolator(Point2D start, Point2D end) {
+            this.linearFunction = interpolate(start, end);
+            this.start = start;
+            this.end = end;
+        }
+
+        public Point2D getStart() {
+            return start;
+        }
+
+        public Point2D getEnd() {
+            return end;
+        }
+
+        public double get(double x) {
+            return linearFunction.apply(x);
+        }
+
+        public boolean isInRange(double x) {
+            return start.getX() <= x && end.getX() >= x;
+        }
+
+        protected Function<Double, Double> interpolate(Point2D start, Point2D end) {
+            double derivative = (start.getY() - end.getY()) / (start.getX() - end.getX());
+            double c = start.getY() - derivative * start.getX();
+            return (x) -> derivative * x + c;
+        }
+    }
+
+    public static double interpolateRange(double number, double sourceMin, double sourceMax, double targetMin, double targetMax) {
+        // Make sure the source range is valid
+        if (sourceMin >= sourceMax) {
+            throw new IllegalArgumentException("Invalid source range");
+        }
+
+        // Make sure the target range is valid
+        if (targetMin >= targetMax) {
+            throw new IllegalArgumentException("Invalid target range");
+        }
+
+        // Clamp the input number to the source range
+        double clampedNumber = Math.max(sourceMin, Math.min(sourceMax, number));
+
+        // Calculate the normalized position of the clamped number within the source range
+        double normalizedPosition = (clampedNumber - sourceMin) / (sourceMax - sourceMin);
+
+        // Interpolate the normalized position to the target range
+        return targetMin + normalizedPosition * (targetMax - targetMin);
     }
 }
