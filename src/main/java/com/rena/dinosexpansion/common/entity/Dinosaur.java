@@ -761,6 +761,10 @@ public abstract class Dinosaur extends TameableEntity {
             this.name = name;
             this.armorBonus = armorBonus;
         }
+
+        public ITextComponent getDisplayName() {
+            return name;
+        }
     }
 
     public enum Gender {

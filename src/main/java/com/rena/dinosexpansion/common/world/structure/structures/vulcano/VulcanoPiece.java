@@ -2,6 +2,7 @@ package com.rena.dinosexpansion.common.world.structure.structures.vulcano;
 
 import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.common.world.gen.feature.vulcano.VulcanoConfig;
+import com.rena.dinosexpansion.core.init.ModLootTables;
 import com.rena.dinosexpansion.core.init.StructurePieceInit;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -109,6 +110,9 @@ public class VulcanoPiece extends ScatteredStructurePiece {
                 this.fillWithBlocksChanceFluid(world, boundingBox, rand, x, 0, z, x, (int) vulcanoHeight, z, this.vulcanoFluid.getDefaultState(), this.vulcanoBlock.getDefaultState());
                 //this.setBlockState(world,this.vulcanoBlock.getDefaultState(), x, (int) vulcanoHeight, z, boundingBox);
                 this.fillWithAir(world, boundingBox, x, (int) vulcanoHeight, z, x, height + 10, z);
+                if (x == width && z == width){
+                    this.generateChest(world, boundingBox, rand,x, (int) vulcanoHeight, z, ModLootTables.VULCANO_CHEST);
+                }
             }
         }
 
@@ -119,12 +123,12 @@ public class VulcanoPiece extends ScatteredStructurePiece {
             functionValue = normalVulcanoFunction(0, 0, x, 0, height, scale);
             innerCircleWidth = Math.abs(x);
         }
-
+        //filling the inner circle with lava
         for (int x = -innerCircleWidth; x <= innerCircleWidth; x++) {
             for (int z = -innerCircleWidth; z <= innerCircleWidth; z++) {
                 double vulcanoHeight = normalVulcanoFunction(0, 0, x, z, height, scale);
                 if (vulcanoHeight < this.lavaLevel) {
-                    this.fillWithBlocks(world, boundingBox, x + width, (int) vulcanoHeight, z + width, x + width, lavaLevel, z + width, this.vulcanoFluid.getDefaultState(), this.vulcanoFluid.getDefaultState(), false);
+                    this.fillWithBlocks(world, boundingBox, x + width, (int) vulcanoHeight + 1, z + width, x + width, lavaLevel, z + width, this.vulcanoFluid.getDefaultState(), this.vulcanoFluid.getDefaultState(), false);
                 }
             }
         }
@@ -205,7 +209,7 @@ public class VulcanoPiece extends ScatteredStructurePiece {
     }
 
     protected int getSurfaceHeight(ChunkGenerator generator, int x, int z){
-        return generator.getHeight(this.getXWithOffset(x, z), this.getZWithOffset(x, z), Heightmap.Type.WORLD_SURFACE_WG);
+        return generator.getNoiseHeight(this.getXWithOffset(x, z), this.getZWithOffset(x, z), Heightmap.Type.WORLD_SURFACE_WG);
     }
 
     protected boolean hasAnywhereAir(BlockPos pos, ISeedReader world, MutableBoundingBox boundingBox) {

@@ -6,6 +6,7 @@ import com.rena.dinosexpansion.common.entity.terrestrial.ambient.Campanile;
 import com.rena.dinosexpansion.core.init.BlockInit;
 import com.rena.dinosexpansion.core.init.EntityInit;
 import com.rena.dinosexpansion.core.init.ItemInit;
+import com.rena.dinosexpansion.core.init.ModLootTables;
 import net.minecraft.data.loot.EntityLootTables;
 import net.minecraft.entity.EntityType;
 import net.minecraft.loot.*;
@@ -43,7 +44,7 @@ public class ModEntityLoot extends EntityLootTables {
     }
 
 
-    protected LootPool.Builder makePool(IItemProvider drop, int uniformMin, int uniformMax, int lootingBonusMin, int lootingBonusMax, boolean killedByPlayer){
+    public static LootPool.Builder makePool(IItemProvider drop, int uniformMin, int uniformMax, int lootingBonusMin, int lootingBonusMax, boolean killedByPlayer){
         LootPool.Builder builderPool = LootPool.builder().rolls(ConstantRange.of(1)).addEntry(
                 ItemLootEntry.builder(drop.asItem())
                         .acceptFunction(SetCount.builder(RandomValueRange.of(uniformMin, uniformMax)))
@@ -54,7 +55,7 @@ public class ModEntityLoot extends EntityLootTables {
         return builderPool;
     }
 
-    protected LootPool.Builder makePool(IItemProvider drop, int constantAmount, int lootingBonusMin, int lootingBonusMax, boolean killedByPlayer){
+    public static LootPool.Builder makePool(IItemProvider drop, int constantAmount, int lootingBonusMin, int lootingBonusMax, boolean killedByPlayer){
         LootPool.Builder builderPool = LootPool.builder().rolls(ConstantRange.of(1)).addEntry(
                 ItemLootEntry.builder(drop.asItem())
                         .acceptFunction(SetCount.builder(ConstantRange.of(constantAmount)))
@@ -65,7 +66,7 @@ public class ModEntityLoot extends EntityLootTables {
         return builderPool;
     }
 
-    protected LootPool.Builder makePool(IItemProvider drop, float chance, float lootingBonusChance, boolean killedByPlayer){
+    public static LootPool.Builder makePool(IItemProvider drop, float chance, float lootingBonusChance, boolean killedByPlayer){
         LootPool.Builder builderPool = LootPool.builder().rolls(ConstantRange.of(1)).addEntry(
                 ItemLootEntry.builder(drop.asItem())
                         .acceptCondition(RandomChanceWithLooting.builder(chance, lootingBonusChance)));
@@ -75,7 +76,7 @@ public class ModEntityLoot extends EntityLootTables {
         return builderPool;
     }
 
-    protected LootPool.Builder makePool(IItemProvider drop, int count, float chance, float lootingBonusChance, boolean killedByPlayer){
+    public static LootPool.Builder makePool(IItemProvider drop, int count, float chance, float lootingBonusChance, boolean killedByPlayer){
         LootPool.Builder builderPool = LootPool.builder().rolls(ConstantRange.of(1)).addEntry(
                 ItemLootEntry.builder(drop.asItem())
                         .acceptFunction(SetCount.builder(ConstantRange.of(count)))
@@ -86,7 +87,7 @@ public class ModEntityLoot extends EntityLootTables {
         return builderPool;
     }
 
-    protected LootPool.Builder makePool(IItemProvider drop, int minCount,int maxCount, float chance, float lootingBonusChance, boolean killedByPlayer){
+    public static LootPool.Builder makePool(IItemProvider drop, int minCount,int maxCount, float chance, float lootingBonusChance, boolean killedByPlayer){
         LootPool.Builder builderPool = LootPool.builder().rolls(ConstantRange.of(1)).addEntry(
                 ItemLootEntry.builder(drop.asItem())
                         .acceptFunction(SetCount.builder(RandomValueRange.of(minCount, maxCount)))

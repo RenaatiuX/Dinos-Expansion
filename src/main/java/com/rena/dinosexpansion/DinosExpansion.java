@@ -63,6 +63,10 @@ public class DinosExpansion
         return modLoc("entities/" + name);
     }
 
+    public static ResourceLocation chestLoot(String name){
+        return modLoc("chests/" + name);
+    }
+
     public static ResourceLocation blockLoot(String name){
         return modLoc("blocks/" + name);
     }

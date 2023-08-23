@@ -78,9 +78,9 @@ public class VulcanoStructure extends Structure<VulcanoConfig> {
             List<VulcanoConfig.VulcanoOreHolder> ores = config.getOres();
             MinecraftForge.EVENT_BUS.post(new VulcanoGatherOresEvent(ores, dynamicRegistryManager, chunkGenerator, templateManagerIn, chunkX, chunkZ, biomeIn, config));
 
-            this.components.add(new VulcanoPiece(chunkX * 16, chunkZ * 16, rand, height, scale, vulcanoBlock.getBlockState(rand, new BlockPos(chunkMiddleX, 0, chunkMiddleZ)).getBlock(), vulcanoFluid.getBlockState(rand, new BlockPos(0, 0, 0)).getBlock(), ores));
-            int landheight = chunkGenerator.getNoiseHeight(chunkMiddleX, chunkMiddleZ, Heightmap.Type.WORLD_SURFACE_WG);
-            this.components.get(0).offset(0, Math.max(0, landheight - 64), 0);
+            this.components.add(new VulcanoPiece(chunkX * 16, chunkZ * 16, rand, height, scale, vulcanoBlock.getBlockState(rand, new BlockPos(chunkMiddleX, 0, chunkMiddleZ)).getBlock(), vulcanoFluid.getBlockState(rand, new BlockPos(chunkMiddleX, 0, chunkMiddleZ)).getBlock(), ores));
+            //int landheight = chunkGenerator.getNoiseHeight(chunkMiddleX, chunkMiddleZ, Heightmap.Type.WORLD_SURFACE_WG);
+            //this.components.get(0).offset(0, Math.max(0, landheight - 64), 0);
             this.recalculateStructureSize();
 
 

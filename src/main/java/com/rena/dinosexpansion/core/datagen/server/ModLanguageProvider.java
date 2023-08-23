@@ -1,11 +1,21 @@
 package com.rena.dinosexpansion.core.datagen.server;
 
 import com.rena.dinosexpansion.DinosExpansion;
+import com.rena.dinosexpansion.common.entity.Dinosaur;
+import com.rena.dinosexpansion.common.entity.ia.SleepRhythmGoal;
+import com.rena.dinosexpansion.common.util.enums.AttackOrder;
+import com.rena.dinosexpansion.common.util.enums.MoveOrder;
 import com.rena.dinosexpansion.core.init.*;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.data.LanguageProvider;
+import net.minecraftforge.fml.RegistryObject;
+
+import java.util.Arrays;
 
 public class ModLanguageProvider extends LanguageProvider {
     public ModLanguageProvider(DataGenerator gen) {
@@ -155,9 +165,88 @@ public class ModLanguageProvider extends LanguageProvider {
         add(EntityInit.DRYOSAURUS.get(), "Dryosaurus");
         add(EntityInit.AEGIROCASSIS.get(), "Aegirocassis");
         add(EntityInit.HERMIT.get(), "Hermit");
+
+
+        BiomeInit.BIOMES.getEntries().forEach(this::add);
+
+        add(Dinosaur.Gender.FEMALE.getDisplayName(), "Female");
+        add(Dinosaur.Gender.MALE.getDisplayName(), "Male");
+
+        add(Dinosaur.Rarity.COMMON.getDisplayName(), "Common");
+        add(Dinosaur.Rarity.UNCOMMON.getDisplayName(), "Uncommon");
+        add(Dinosaur.Rarity.RARE.getDisplayName(), "Rare");
+        add(Dinosaur.Rarity.EPIC.getDisplayName(), "Epic");
+        add(Dinosaur.Rarity.LEGENDARY.getDisplayName(), "Legendary");
+
+        add(AttackOrder.NEUTRAL.getDisplayName(), "Neutral");
+        add(AttackOrder.HOSTILE.getDisplayName(), "Hostile");
+        add(AttackOrder.PASSIVE.getDisplayName(), "Passive");
+        add(AttackOrder.PROTECTING.getDisplayName(), "Protecting");
+
+        add(MoveOrder.IDLE.getDisplayName(), "Idle");
+        add(MoveOrder.FOLLOW.getDisplayName(), "Follow");
+        add(MoveOrder.WANDER.getDisplayName(), "Wander");
+        add(MoveOrder.SIT_SHOULDER.getDisplayName(), "Sit Shoulder");
+
+        add(SleepRhythmGoal.SleepRhythm.NONE.getDisplayName(), "None");
+        add(SleepRhythmGoal.SleepRhythm.NOCTURNAL.getDisplayName(), "Nocturnal");
+        add(SleepRhythmGoal.SleepRhythm.DIURNAL.getDisplayName(), "Diurnal");
+
+        add("dinosexpansion.taming_gui.dryosaurus", "Dryosaurus");
+        add("dinosexpansion.order_screen.dryosaurus", "Dryosaurus");
+
+
+        add("taming_screen.dinosexpansion.narcotic", "Narcotic: %s / %d");
+        add("taming_screen.dinosexpansion.hunger", "Hunger: %s / %d");
+        add("taming_screen.dinosexpansion.taming_progress", "Taming Progress: %s / 100");
+
+        add("dinosexpansion.gender", "Gender: %s");
+        add("dinosexpansion.level", "Level: %s");
+        add("dinosexpansion.sleep_rhythm", "Sleep Rhythm: %s");
+
+        add("dinosexpansion.survival_instinct_cooldown", "Cooldown: %d");
+
+        add("dinosexpansion.modifiers.hand", "When Throwing:");
+        add("dinosexpansion.boomerang.damage", "%d Damage");
+        add("dinosexpansion.boomerang.range", "%d Range");
+
+
     }
 
-    public void add(ItemGroup group, String key){
+    public void add(ItemGroup group, String key) {
         add(group.getGroupName().getString(), key);
+    }
+
+    public void add(RegistryObject<Biome> obj) {
+        add("biome." + DinosExpansion.MOD_ID + "." + obj.getId().getPath(), toTitleCase(obj.getId().getPath()));
+    }
+
+    public void add(ITextComponent component, String name) {
+        add(component.getString(), name);
+    }
+
+
+    public static String toTitleCase(String input) {
+        StringBuilder titleCase = new StringBuilder();
+        boolean nextTitleCase = true;
+
+        for (char c : input.toCharArray()) {
+            if (c == '_') {
+                nextTitleCase = true;
+                titleCase.append(" ");
+                continue;
+            }
+
+            if (nextTitleCase) {
+                c = Character.toTitleCase(c);
+                nextTitleCase = false;
+            } else {
+                c = Character.toLowerCase(c);
+            }
+
+            titleCase.append(c);
+        }
+
+        return titleCase.toString();
     }
 }
