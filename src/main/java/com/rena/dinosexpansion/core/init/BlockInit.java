@@ -170,8 +170,10 @@ public class BlockInit {
             () -> new CropBaseBlock(AbstractBlock.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().hardnessAndResistance(0).sound(SoundType.CROP), ItemInit.SPINACH_SEED));
 
     //Blocks
-    public static final RegistryObject<Block> GEYSER = register("geyser",
-            () -> new GeyserBlock(AbstractBlock.Properties.create(Material.ROCK).zeroHardnessAndResistance().sound(SoundType.GROUND).tickRandomly().notSolid()), ModItemGroups.BLOCKS);
+    public static final RegistryObject<Block> GEYSER = register("geyser", ()-> new GeyserBlock(AbstractBlock.Properties.create(Material.ROCK).zeroHardnessAndResistance().sound(SoundType.GROUND).tickRandomly().notSolid()), ModItemGroups.BLOCKS);
+    public static final RegistryObject<Block> MUD = register("mud",
+            ()-> new Block(AbstractBlock.Properties.create(Material.EARTH, MaterialColor.DIRT).hardnessAndResistance(0.5F).sound(SoundType.GROUND)), ModItemGroups.BLOCKS);
+
 
     public static <T extends Block> RegistryObject<T> register(String name, Supplier<T> blockSupplier, ItemGroup tab) {
         return register(name, blockSupplier, () -> new Item.Properties().group(tab));

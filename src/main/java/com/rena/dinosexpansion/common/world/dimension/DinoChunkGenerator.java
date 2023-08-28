@@ -2,26 +2,42 @@ package com.rena.dinosexpansion.common.world.dimension;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.util.SharedSeedRandom;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
+import net.minecraft.world.Blockreader;
+import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.biome.provider.BiomeProvider;
+import net.minecraft.world.chunk.IChunk;
 import net.minecraft.world.gen.*;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.world.gen.feature.structure.StructureManager;
 
+import java.util.Random;
 import java.util.function.Supplier;
 
 public class DinoChunkGenerator extends NoiseChunkGenerator {
-    public static final Codec<DinoChunkGenerator> CODEC = RecordCodecBuilder.create((c) ->
-            c.group(BiomeProvider.CODEC.fieldOf("biome_source")
-            .forGetter((chunkGenerator) -> chunkGenerator.biomeProvider),
-            Codec.LONG.fieldOf("seed").orElseGet(SeedBearer::giveMeSeed)
-                    .forGetter((chunkGenerator) ->
-                    chunkGenerator.field_236084_w_),
-            DimensionSettings.DIMENSION_SETTINGS_CODEC.fieldOf("settings")
-                    .forGetter((chunkGenerator) -> chunkGenerator.field_236080_h_))
-            .apply(c, c.stable(DinoChunkGenerator::new)));
 
-    public DinoChunkGenerator(BiomeProvider biomeProvider, long seed, Supplier<DimensionSettings> settings) {
-        super(biomeProvider, seed, settings);
+    public static final Codec<DinoChunkGenerator> CODEC = RecordCodecBuilder.create((c) -> {
+        return c.group(BiomeProvider.CODEC.fieldOf("biome_source").forGetter((chunkGenerator) -> {
+            return chunkGenerator.biomeProvider;
+        }), Codec.LONG.fieldOf("seed").orElseGet(() -> 0L).forGetter((chunkGenerator) -> {
+            return chunkGenerator.seed;
+        }), DimensionSettings.DIMENSION_SETTINGS_CODEC.fieldOf("settings").forGetter((chunkGenerator) -> {
+            return chunkGenerator.settings;
+        })).apply(c, c.stable(DinoChunkGenerator::new));
+    });
+    private long seed;
+    public static long hackSeed;
+
+    public Supplier<DimensionSettings> settings;
+
+    public DinoChunkGenerator(BiomeProvider provider, long seed, Supplier<DimensionSettings> settingsIn) {
+        super(provider, seed, settingsIn);
+        this.seed = seed;
+        this.settings = settingsIn;
     }
 
     @Override
@@ -30,8 +46,20 @@ public class DinoChunkGenerator extends NoiseChunkGenerator {
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
     public ChunkGenerator func_230349_a_(long seed) {
-        return new DinoChunkGenerator(biomeProvider.getBiomeProvider(seed), seed, field_236080_h_);
+        return new DinoChunkGenerator(biomeProvider.getBiomeProvider(seed), seed, getDimensionSettings());
     }
+
+    private Supplier<DimensionSettings> getDimensionSettings() {
+        return this.settings;
+    }
+
+    protected DinoBiomeProvider getIfPossible() {
+        if (this.biomeProvider instanceof DinoBiomeProvider) {
+            return (DinoBiomeProvider) this.biomeProvider;
+        }
+        return null;
+    }
+
+
 }

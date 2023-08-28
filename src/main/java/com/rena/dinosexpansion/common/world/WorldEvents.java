@@ -4,12 +4,17 @@ package com.rena.dinosexpansion.common.world;
 import com.mojang.serialization.Codec;
 import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.common.world.gen.StructureGeneration;
+import com.rena.dinosexpansion.core.init.FeatureInit;
 import com.rena.dinosexpansion.core.init.StructureInit;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.Biomes;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.FlatChunkGenerator;
+import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.settings.DimensionStructuresSettings;
 import net.minecraft.world.gen.settings.StructureSeparationSettings;
@@ -31,6 +36,11 @@ public class WorldEvents {
     @SubscribeEvent
     public static void biomeLoading(final BiomeLoadingEvent event){
         StructureGeneration.generateStructures(event);//this has to be called before all following generations
+
+        RegistryKey<Biome> key = RegistryKey.getOrCreateKey(Registry.BIOME_KEY, event.getName());
+        if (key == Biomes.PLAINS){
+            //event.getGeneration().withFeature(GenerationStage.Decoration.TOP_LAYER_MODIFICATION, FeatureInit.ConfiguredFeatures.VULCANO);
+        }
     }
 
     @SubscribeEvent
@@ -61,8 +71,10 @@ public class WorldEvents {
             // Adding our Structure to the Map
             Map<Structure<?>, StructureSeparationSettings> tempMap =
                     new HashMap<>(serverWorld.getChunkProvider().generator.func_235957_b_().func_236195_a_());
-            tempMap.putIfAbsent(StructureInit.HERMIT_HOSE.get(),
-                    DimensionStructuresSettings.field_236191_b_.get(StructureInit.HERMIT_HOSE.get()));
+            StructureInit.STRUCTURES.getEntries().forEach(e -> {
+                tempMap.putIfAbsent(e.get(), DimensionStructuresSettings.field_236191_b_.get(e.get()));
+            });
+
             serverWorld.getChunkProvider().generator.func_235957_b_().field_236193_d_ = tempMap;
         }
     }
