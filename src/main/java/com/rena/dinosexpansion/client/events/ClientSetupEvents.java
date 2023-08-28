@@ -17,7 +17,7 @@ import com.rena.dinosexpansion.common.entity.aquatic.*;
 import com.rena.dinosexpansion.common.entity.aquatic.fish.Acanthodes;
 import com.rena.dinosexpansion.common.entity.aquatic.fish.Belantsea;
 import com.rena.dinosexpansion.common.entity.aquatic.fish.Wetherellus;
-import com.rena.dinosexpansion.common.entity.flying.Meganeura;
+import com.rena.dinosexpansion.common.entity.terrestrial.ambient.Meganeura;
 import com.rena.dinosexpansion.common.entity.terrestrial.Dryosaurus;
 import com.rena.dinosexpansion.common.entity.villagers.Hermit;
 import com.rena.dinosexpansion.common.entity.aquatic.fish.MegaPiranha;

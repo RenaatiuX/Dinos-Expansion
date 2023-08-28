@@ -4,6 +4,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import com.rena.dinosexpansion.client.model.entity.AnomalocarisModel;
 import com.rena.dinosexpansion.client.renderer.layer.AnomalocarisHelItemLayer;
+import com.rena.dinosexpansion.client.renderer.layer.AnomalocarisLayer;
 import com.rena.dinosexpansion.common.entity.aquatic.Anomalocaris;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
@@ -23,6 +24,7 @@ public class AnomalocarisRenderer extends GeoEntityRenderer<Anomalocaris> {
     public AnomalocarisRenderer(EntityRendererManager renderManager) {
         super(renderManager, new AnomalocarisModel());
         this.addLayer(new AnomalocarisHelItemLayer(this));
+        this.addLayer(new AnomalocarisLayer(this));
     }
 
     @Override

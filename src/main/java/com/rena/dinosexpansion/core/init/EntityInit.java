@@ -5,7 +5,7 @@ import com.rena.dinosexpansion.common.entity.aquatic.*;
 import com.rena.dinosexpansion.common.entity.aquatic.fish.Acanthodes;
 import com.rena.dinosexpansion.common.entity.aquatic.fish.Belantsea;
 import com.rena.dinosexpansion.common.entity.aquatic.fish.Wetherellus;
-import com.rena.dinosexpansion.common.entity.flying.Meganeura;
+import com.rena.dinosexpansion.common.entity.terrestrial.ambient.Meganeura;
 import com.rena.dinosexpansion.common.entity.projectile.TinyRockEntity;
 import com.rena.dinosexpansion.common.entity.terrestrial.Dryosaurus;
 import com.rena.dinosexpansion.common.entity.villagers.Hermit;
@@ -23,9 +23,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.apache.http.client.entity.EntityBuilder;
 
-import javax.swing.plaf.PanelUI;
 import java.util.function.Supplier;
 
 public class EntityInit {

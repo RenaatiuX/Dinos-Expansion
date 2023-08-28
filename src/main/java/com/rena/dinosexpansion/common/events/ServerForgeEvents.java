@@ -9,10 +9,9 @@ import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.RandomPositionGenerator;
+import net.minecraft.entity.effect.LightningBoltEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
@@ -22,12 +21,16 @@ import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.EffectType;
 import net.minecraft.potion.Effects;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.EntityStruckByLightningEvent;
 import net.minecraftforge.event.entity.ProjectileImpactEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
@@ -185,7 +188,7 @@ public class ServerForgeEvents {
         if (level > 0) {
             List<CreatureEntity> nearbyEntities = event.getEntityLiving().world.getEntitiesWithinAABB(CreatureEntity.class, event.getEntityLiving().getBoundingBox().grow(16, 8, 16));
 
-            if (nearbyEntities.stream().filter(e -> !(e instanceof TameableEntity) || !((TameableEntity)e).isOwner(event.getEntityLiving())).count() >= 4) {
+            if (nearbyEntities.stream().filter(e -> !(e instanceof TameableEntity) || !((TameableEntity) e).isOwner(event.getEntityLiving())).count() >= 4) {
                 event.getEntityLiving().addPotionEffect(new EffectInstance(Effects.STRENGTH, 100, level - 1));
                 event.getEntityLiving().addPotionEffect(new EffectInstance(Effects.SPEED, 100, Math.max(0, level - 2)));
                 event.getEntityLiving().addPotionEffect(new EffectInstance(Effects.SATURATION, 100, level - 1));
@@ -268,7 +271,6 @@ public class ServerForgeEvents {
             if (event.getSlot() == EquipmentSlotType.MAINHAND || event.getSlot() == EquipmentSlotType.OFFHAND) {
                 damageRate *= 2; // Optionally, increase the wear rate for main hand and offhand items
             }
-
             stack.setDamage(stack.getDamage() + damageRate);
         }
     }

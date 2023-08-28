@@ -3,7 +3,7 @@ package com.rena.dinosexpansion.client.model.entity;
 import com.google.common.collect.Maps;
 import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.common.entity.Dinosaur;
-import com.rena.dinosexpansion.common.entity.flying.Meganeura;
+import com.rena.dinosexpansion.common.entity.terrestrial.ambient.Meganeura;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Util;
 import software.bernie.geckolib3.model.AnimatedTickingGeoModel;

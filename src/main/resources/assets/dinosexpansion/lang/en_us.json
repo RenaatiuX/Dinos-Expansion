@@ -33,15 +33,15 @@
   "enchantment.dinosexpansion.aquatic_enchant": "Aquatic Throwing",
   "enchantment.dinosexpansion.electric": "Electrified",
   "enchantment.dinosexpansion.iced_arrow": "Iced",
+
   "entity.dinosexpansion.aegirocassis": "Aegirocassis",
-  "entity.dinosexpansion.astorgosuchus": "Astorgosuchus",
   "entity.dinosexpansion.campanile": "Campanile",
   "entity.dinosexpansion.dimorphodon": "Dimorphodon",
   "entity.dinosexpansion.dryosaurus": "Dryosaurus",
-  "entity.dinosexpansion.eosqualodon": "Eosqualodon",
   "entity.dinosexpansion.hermit": "Hermit",
   "entity.dinosexpansion.megapiranha": "Mega Piranha",
-  "entity.dinosexpansion.parapuzosia": "Parapuzosia",
+  "entity.dinosexpansion.anomalocaris": "Anomalocaris",
+
   "item.dinosexpansion.aegirocassis_spawn_egg": "Aegirocassis Spawn Egg",
   "item.dinosexpansion.astorgosuchus_spawn_egg": "Astorgosuchus Spawn Egg",
   "item.dinosexpansion.blowgun": "Blowgun",

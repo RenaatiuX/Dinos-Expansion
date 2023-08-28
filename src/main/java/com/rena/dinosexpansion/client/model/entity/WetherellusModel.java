@@ -1,11 +1,27 @@
 package com.rena.dinosexpansion.client.model.entity;
 
+import com.google.common.collect.Maps;
 import com.rena.dinosexpansion.DinosExpansion;
+import com.rena.dinosexpansion.common.entity.Dinosaur;
+import com.rena.dinosexpansion.common.entity.aquatic.fish.Acanthodes;
 import com.rena.dinosexpansion.common.entity.aquatic.fish.Wetherellus;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Util;
 import software.bernie.geckolib3.model.AnimatedTickingGeoModel;
 
+import java.util.Map;
+
 public class WetherellusModel extends AnimatedTickingGeoModel<Wetherellus> {
+
+    public WetherellusModel() {
+        super();
+    }
+
+    private static final Map<Acanthodes.Rarity, ResourceLocation> RARITY = Util.make(Maps.newEnumMap(Acanthodes.Rarity.class),
+            (rarity) -> {
+                rarity.put(Acanthodes.Rarity.COMMON, DinosExpansion.modLoc("textures/entity/wetherellus/wetherellus_common.png"));
+                rarity.put(Acanthodes.Rarity.UNCOMMON, DinosExpansion.modLoc("textures/entity/wetherellus/wetherellus_uncommon.png"));
+            });
 
     @Override
     public ResourceLocation getModelLocation(Wetherellus object) {
@@ -14,7 +30,7 @@ public class WetherellusModel extends AnimatedTickingGeoModel<Wetherellus> {
 
     @Override
     public ResourceLocation getTextureLocation(Wetherellus object) {
-        return DinosExpansion.modLoc("textures/entity/wetherellus.png");
+        return RARITY.get(object.getRarity());
     }
 
     @Override

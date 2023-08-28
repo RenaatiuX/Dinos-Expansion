@@ -1,6 +1,5 @@
 package com.rena.dinosexpansion.common.entity.aquatic;
 
-import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.common.entity.ia.DinosaurLookRandomGoal;
 import com.rena.dinosexpansion.common.entity.ia.SleepRhythmGoal;
 import com.rena.dinosexpansion.common.entity.ia.movecontroller.AquaticMoveController;
@@ -12,7 +11,6 @@ import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.FindWaterGoal;
 import net.minecraft.entity.ai.goal.LookAtGoal;
-import net.minecraft.entity.ai.goal.LookRandomlyGoal;
 import net.minecraft.entity.ai.goal.RandomSwimmingGoal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -22,7 +20,6 @@ import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimationTickable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.builder.ILoopType;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
@@ -34,13 +31,14 @@ import java.util.List;
 
 public class Aegirocassis extends DinosaurAquatic implements IAnimatable, IAnimationTickable {
     private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
+
     public Aegirocassis(EntityType<Aegirocassis> type, World world) {
         super(type, world, new DinosaurInfo("aegirocassis", 100, 80, 30, SleepRhythmGoal.SleepRhythm.NONE), generateLevelWithinBounds(20, 70));
         this.moveController = new AquaticMoveController(this, 1F);
         updateInfo();
     }
 
-    public Aegirocassis(World world){
+    public Aegirocassis(World world) {
         this(EntityInit.AEGIROCASSIS.get(), world);
     }
 
@@ -71,6 +69,11 @@ public class Aegirocassis extends DinosaurAquatic implements IAnimatable, IAnima
         return 0;
     }
 
+    @Override
+    protected Rarity getInitialRarity() {
+        return getRNG().nextInt(3) == 0 ? Rarity.UNCOMMON : Rarity.COMMON;
+    }
+
     @Nullable
     @Override
     public AgeableEntity createChild(ServerWorld world, AgeableEntity mate) {
@@ -78,15 +81,10 @@ public class Aegirocassis extends DinosaurAquatic implements IAnimatable, IAnima
     }
 
     private PlayState predicate(AnimationEvent<Aegirocassis> event) {
-        if (this.isInWater()) {
-            if (event.isMoving()){
-                event.getController().setAnimation(new AnimationBuilder().loop("swim"));
-            } else {
-                event.getController().setAnimation(new AnimationBuilder().loop("idle"));
-            }
-        } else if (this.isOnGround()) {
-            event.getController().setAnimation(new AnimationBuilder().loop("idle"));
+        if (this.isOnGround()) {
+            event.getController().setAnimation(new AnimationBuilder().loop("beached"));
         }
+        event.getController().setAnimation(new AnimationBuilder().loop("swim"));
         return PlayState.CONTINUE;
     }
 

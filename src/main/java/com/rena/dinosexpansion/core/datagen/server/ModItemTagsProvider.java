@@ -41,7 +41,7 @@ public class ModItemTagsProvider extends ItemTagsProvider {
         }
         //add more food here
         getOrCreateBuilder(ModTags.Items.EOSQUALODON_FOOD).add(Items.SALMON);
-        getOrCreateBuilder(ModTags.Items.XIPHACTINUS_FOOD).add(Items.BEEF).add(Items.CHICKEN).add(Items.COD).add(Items.MUTTON).add(Items.SALMON).add(Items.TROPICAL_FISH).add(Items.PORKCHOP);
         getOrCreateBuilder(ModTags.Items.DIMORPHODON_FOOD).add(Items.COD).add(Items.SALMON).add(Items.TROPICAL_FISH).add(Items.PUFFERFISH);
+        getOrCreateBuilder(ModTags.Items.CERATOSAURUS_FOOD).add(Items.CHICKEN).add(Items.COOKED_CHICKEN).add(Items.BEEF).add(Items.COOKED_CHICKEN).add(Items.COOKED_MUTTON).add(Items.MUTTON).add(Items.PORKCHOP).add(Items.COOKED_PORKCHOP);
     }
 }

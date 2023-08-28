@@ -28,7 +28,7 @@ public class BelantseaModel extends AnimatedTickingGeoModel<Belantsea> {
 
     @Override
     public ResourceLocation getTextureLocation(Belantsea object) {
-        return DinosExpansion.modLoc("textures/entity/belantsea/belantsea_common.png");
+        return RARITY.get(object.getRarity());
     }
 
     @Override

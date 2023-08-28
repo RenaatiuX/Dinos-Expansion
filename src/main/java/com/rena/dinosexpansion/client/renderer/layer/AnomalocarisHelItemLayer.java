@@ -23,8 +23,8 @@ public class AnomalocarisHelItemLayer extends GeoLayerRenderer<Anomalocaris> {
         if (!stack.isEmpty()) {
             matrixStackIn.push();
             matrixStackIn.translate(-0.1, -.1, -.5);
-            matrixStackIn.rotate(Vector3f.YP.rotationDegrees(180.0F)); // Rotación horizontal en el eje Y
-            matrixStackIn.rotate(Vector3f.ZP.rotationDegrees(90.0F)); // Rotación adicional de 180 grados para ajustar la orientación
+            matrixStackIn.rotate(Vector3f.YP.rotationDegrees(180.0F));
+            matrixStackIn.rotate(Vector3f.ZP.rotationDegrees(90.0F));
             Minecraft.getInstance().getItemRenderer().renderItem(stack, ItemCameraTransforms.TransformType.GROUND, packedLightIn, OverlayTexture.NO_OVERLAY, matrixStackIn, bufferIn);
             matrixStackIn.pop();
         }
