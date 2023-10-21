@@ -22,7 +22,7 @@ public class Ceratosaurus extends Dinosaur implements IAnimatable, IAnimationTic
     private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
     public Ceratosaurus(EntityType<Ceratosaurus> type, World world) {
-        super(type, world, new DinosaurInfo("ceratosaurus", 200, 150, 100, SleepRhythmGoal.SleepRhythm.DIURNAL), generateLevelWithinBounds(10, 100));
+        super(type, world, new DinosaurInfo("ceratosaurus", 400, 300, 50, SleepRhythmGoal.SleepRhythm.DIURNAL), generateLevelWithinBounds(10, 100));
         updateInfo();
     }
 

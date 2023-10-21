@@ -1,6 +1,7 @@
 package com.rena.dinosexpansion.common.entity.terrestrial;
 
 import com.rena.dinosexpansion.common.entity.ChestedDinosaur;
+import com.rena.dinosexpansion.common.entity.ia.SleepRhythmGoal;
 import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
@@ -10,13 +11,16 @@ import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimationTickable;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
 public class Ankylosaurus extends ChestedDinosaur implements IAnimatable, IAnimationTickable {
-    public Ankylosaurus(EntityType<Ankylosaurus> type, World world, DinosaurInfo info, int level, int chestInventorySize) {
-        super(type, world, info, level, chestInventorySize);
+    private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
+    public Ankylosaurus(EntityType<Ankylosaurus> type, World world) {
+        super(type, world, new DinosaurInfo("ankylosaurus", 200, 150, 100, SleepRhythmGoal.SleepRhythm.DIURNAL), generateLevelWithinBounds(10, 100), 16);
+        updateInfo();
     }
 
     @Override
@@ -52,11 +56,11 @@ public class Ankylosaurus extends ChestedDinosaur implements IAnimatable, IAnima
 
     @Override
     public AnimationFactory getFactory() {
-        return null;
+        return this.factory;
     }
 
     @Override
     public int tickTimer() {
-        return 0;
+        return this.ticksExisted;
     }
 }

@@ -49,10 +49,9 @@ import java.util.*;
 
 public abstract class Dinosaur extends TameableEntity {
 
-    public static ResourceLocation getLootTableForRarity(ResourceLocation entityId, Rarity rarity){
+    public static ResourceLocation getLootTableForRarity(ResourceLocation entityId, Rarity rarity) {
         return DinosExpansion.entityLoot(entityId.getPath() + "_" + rarity.name().toLowerCase(Locale.ROOT));
     }
-
 
     /**
      * use this to generate a random level as it already contains all relevant config values
@@ -218,7 +217,7 @@ public abstract class Dinosaur extends TameableEntity {
                     stack.shrink(1);
                 return ActionResultType.SUCCESS;
             }
-            if (player instanceof ServerPlayerEntity && isOwner(player) && player.getHeldItem(hand).getItem() == getOrderItem()){
+            if (player instanceof ServerPlayerEntity && isOwner(player) && player.getHeldItem(hand).getItem() == getOrderItem()) {
                 ServerPlayerEntity serverPlayer = (ServerPlayerEntity) player;
                 //sends the packet to the client where it will get executed and then opens the screen
                 NetworkHooks.openGui(serverPlayer, new SimpleNamedContainerProvider((id, inv, p) -> new OrderContainer(id, inv, Dinosaur.this),
@@ -308,7 +307,7 @@ public abstract class Dinosaur extends TameableEntity {
                     setKnockout(false);
                     setTamingProgress((byte) 0);
                     this.feedHungerTaming = 0;
-                }else
+                } else
                     throw new IllegalStateException("dinosaur got knocked out by no Player, what went wrong here?");
             }
         }
@@ -417,7 +416,7 @@ public abstract class Dinosaur extends TameableEntity {
      * client synced
      */
     protected void setHungerValue(float value) {
-        this.dataManager.set(HUNGER_VALUE, MathHelper.clamp(value,0, maxHunger));
+        this.dataManager.set(HUNGER_VALUE, MathHelper.clamp(value, 0, maxHunger));
     }
 
     /**
@@ -493,7 +492,7 @@ public abstract class Dinosaur extends TameableEntity {
                 this.getCombatTracker().trackDamage(source, f1, f2);
                 this.setHealth(f1 - f2); // Forge: moved to fix MC-121048
                 this.setAbsorptionAmount(this.getAbsorptionAmount() - f2);
-                if (isKnockout()){
+                if (isKnockout()) {
                     this.dataManager.set(TAMING_EFFICIENCY, getTamingEfficiency() * .8f);
                 }
                 if (canBeKnockedOut() && source.getImmediateSource() instanceof INarcoticProjectile && source.getTrueSource() instanceof LivingEntity)
@@ -510,15 +509,16 @@ public abstract class Dinosaur extends TameableEntity {
         return info;
     }
 
-    public boolean canBeKnockedOut(){
+    public boolean canBeKnockedOut() {
         return true;
     }
 
     /**
      * client synced
+     *
      * @return the taming efficiancy between 0.0 and 1.0
      */
-    public float getTamingEfficiency(){
+    public float getTamingEfficiency() {
         return this.dataManager.get(TAMING_EFFICIENCY);
     }
 
@@ -544,7 +544,7 @@ public abstract class Dinosaur extends TameableEntity {
     }
 
 
-    public  boolean canBeTamed(){
+    public boolean canBeTamed() {
         return true;
     }
 
@@ -552,23 +552,22 @@ public abstract class Dinosaur extends TameableEntity {
      * only use when knocked out and should be tamed
      * be careful this isnt checked os when u try to reduce it below 0 it will just clamp at 0
      * its also clamped to maxHunger in caes u want to add Hunger threw this method
+     *
      * @param reduce the amount u want it to reduce
      */
-    public void reduceTamingFeed(float reduce){
+    public void reduceTamingFeed(float reduce) {
         this.feedHungerTaming = MathHelper.clamp(this.feedHungerTaming - reduce, 0, this.maxHunger);
     }
 
     /**
-     *
      * @param reduce the amount u want to reduce the hunger during taming
      * @return if u can reduce that amount of tamingFeed from the hunger
      */
-    public boolean canReduceTamingFeed(float reduce){
+    public boolean canReduceTamingFeed(float reduce) {
         return reduce <= feedHungerTaming;
     }
 
     /**
-     *
      * @return whether the dino is knocked out or sleeps
      */
     public boolean isMovementDisabled() {
@@ -677,7 +676,7 @@ public abstract class Dinosaur extends TameableEntity {
     public EntitySize getSize(Pose poseIn) {
         if (getMoveOrder() == MoveOrder.SIT)
             return getSitSize(poseIn);
-        if (this.isSleeping()){
+        if (this.isSleeping()) {
             return getSleepSize(poseIn);
         }
         if (this.isKnockout())
@@ -685,15 +684,15 @@ public abstract class Dinosaur extends TameableEntity {
         return super.getSize(poseIn);
     }
 
-    protected EntitySize getSitSize(Pose pose){
+    protected EntitySize getSitSize(Pose pose) {
         return super.getSize(pose);
     }
 
-    protected EntitySize getSleepSize(Pose pose){
+    protected EntitySize getSleepSize(Pose pose) {
         return super.getSize(pose);
     }
 
-    protected EntitySize getKnockoutSize(Pose pose){
+    protected EntitySize getKnockoutSize(Pose pose) {
         return super.getSize(pose);
     }
 
@@ -733,7 +732,7 @@ public abstract class Dinosaur extends TameableEntity {
      * this item is the item the player has to right-click on the dino in order to change orders
      * make sure it isn´t food that the dino can potentially eat
      */
-    public Item getOrderItem(){
+    public Item getOrderItem() {
         return Items.STICK;
     }
 
