@@ -8,6 +8,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -67,5 +68,17 @@ public abstract class ChestedDinosaur extends Dinosaur{
 
     public ItemStackHandler getChestInventory() {
         return chestInventory;
+    }
+
+    @Override
+    protected void dropSpecialItems(DamageSource source, int looting, boolean recentlyHitIn) {
+        super.dropSpecialItems(source, looting, recentlyHitIn);
+        //with 0 looting this should be around 70% drop chance for each item, with looting this can be increased up to 98% never exactly reaching 1
+        double sigmoid = 1 / (1 + Math.exp(-looting - 1));
+        for (int i = 0; i < this.chestInventory.getSlots(); i++) {
+            if (this.rand.nextDouble() < sigmoid){
+                this.entityDropItem(this.chestInventory.getStackInSlot(i));
+            }
+        }
     }
 }

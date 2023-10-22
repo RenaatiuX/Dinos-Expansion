@@ -19,7 +19,6 @@
   "biome.dinosexpansion.river": "River",
   "biome.dinosexpansion.vulcano": "Vulcano",
   "biome.dinosexpansion.warm_ocean": "Warm Ocean",
-
   "block.dinosexpansion.amorphophallus": "Amorphophallus",
   "block.dinosexpansion.archaeosigillaria": "Archaeosigillaria",
   "block.dinosexpansion.bennettitales": "Bennettitales",
@@ -51,18 +50,33 @@
   "block.dinosexpansion.vaccinium": "Vaccinium",
   "block.dinosexpansion.welwitschia": "Welwitschia",
   "block.dinosexpansion.zamites": "Zamites",
+  "command.dinosexpansion.tame_no_dinosaur": "the entity you are pointing at is no dinosaur, was %s instead",
+  "command.dinosexpansion.tame_no_hit": "you have to point with ur cursor to an entity",
+  "command.dinosexpansion.tame_success": "this dinosaur %s was successfully tamed",
+  "dinosexpansion.boomerang.damage": "%d Damage",
+  "dinosexpansion.boomerang.range": "%d Range",
+  "dinosexpansion.gender": "Gender: %s",
+  "dinosexpansion.level": "Level: %s",
+  "dinosexpansion.modifiers.hand": "When Throwing:",
+  "dinosexpansion.order_screen.dryosaurus": "Dryosaurus",
+  "dinosexpansion.sleep_rhythm": "Sleep Rhythm: %s",
+  "dinosexpansion.survival_instinct_cooldown": "Cooldown: %d",
+  "dinosexpansion.taming_gui.dryosaurus": "Dryosaurus",
   "enchantment.dinosexpansion.aquatic_enchant": "Aquatic Throwing",
   "enchantment.dinosexpansion.electric": "Electrified",
   "enchantment.dinosexpansion.iced_arrow": "Iced",
-
   "entity.dinosexpansion.aegirocassis": "Aegirocassis",
+  "entity.dinosexpansion.astorgosuchus": "Astorgosuchus",
   "entity.dinosexpansion.campanile": "Campanile",
+  "entity.dinosexpansion.ceratosaurus": "Ceratosaurus",
   "entity.dinosexpansion.dimorphodon": "Dimorphodon",
   "entity.dinosexpansion.dryosaurus": "Dryosaurus",
+  "entity.dinosexpansion.eosqualodon": "Eosqualodon",
   "entity.dinosexpansion.hermit": "Hermit",
   "entity.dinosexpansion.megapiranha": "Mega Piranha",
-  "entity.dinosexpansion.anomalocaris": "Anomalocaris",
-
+  "entity.dinosexpansion.parapuzosia": "Parapuzosia",
+  "gender.dinosexpansion.female": "Female",
+  "gender.dinosexpansion.male": "Male",
   "item.dinosexpansion.aegirocassis_spawn_egg": "Aegirocassis Spawn Egg",
   "item.dinosexpansion.astorgosuchus_spawn_egg": "Astorgosuchus Spawn Egg",
   "item.dinosexpansion.blowgun": "Blowgun",
@@ -76,7 +90,7 @@
   "item.dinosexpansion.cooked_dimorphodon_meat": "Cooked Dimorphodon Meat",
   "item.dinosexpansion.cooked_dryosaurus_meat": "Cooked Dryosaurus Meat",
   "item.dinosexpansion.cooked_gallimimus_meat": "Cooked Gallimimus Meat",
-  "item.dinosexpansion.cooked_parapuzosia_tentacle": "Cooked Astorgosuchus Tentacle",
+  "item.dinosexpansion.cooked_parapuzosia_tentacle": "Cooked Parapuzosia Tentacle",
   "item.dinosexpansion.cooked_triceratops_meat": "Cooked Triceratops Meat",
   "item.dinosexpansion.corn": "Corn",
   "item.dinosexpansion.corn_seed": "Corn Seed",
@@ -135,7 +149,7 @@
   "item.dinosexpansion.raw_dimorphodon_meat": "Raw Dimorphodon Meat",
   "item.dinosexpansion.raw_dryosaurus_meat": "Raw Dryosaurus Meat",
   "item.dinosexpansion.raw_gallimimus_meat": "Raw Gallimimus Meat",
-  "item.dinosexpansion.raw_parapuzosia_tentacle": "Raw Astorgosuchus Tentacle",
+  "item.dinosexpansion.raw_parapuzosia_tentacle": "Raw Parapuzosia Tentacle",
   "item.dinosexpansion.raw_triceratops_meat": "Raw Triceratops Meat",
   "item.dinosexpansion.scrap": "Scrap",
   "item.dinosexpansion.slingshot": "Slingshot",
@@ -157,54 +171,27 @@
   "item.dinosexpansion.wooden_chakram": "Wood Chakram",
   "item.dinosexpansion.wooden_hatchet": "Wooden Hatchet",
   "item.dinosexpansion.wooden_spear": "Wood Spear",
-  "item.dinosexpansion.crataegus_boat_item": "Crataegus Boat",
-
   "itemGroup.dinosexpansion.blocks": "Blocks",
   "itemGroup.dinosexpansion.items": "Items",
   "itemGroup.dinosexpansion.spawn_eggs": "Spawn Eggs",
   "itemGroup.dinosexpansion.weapons": "Weapons",
-
-  "dinosexpansion.modifiers.hand": "When Throwing:",
-  "dinosexpansion.boomerang.damage": "%d Damage",
-  "dinosexpansion.boomerang.range": "%d Range",
-
-
-  "_comment": "screens",
-
-  "dinosexpansion.taming_gui.dryosaurus": "Dryosaurus",
-  "dinosexpansion.order_screen.dryosaurus": "Dryosaurus",
-
-  "taming_screen.dinosexpansion.narcotic": "Narcotic: %s / %d",
-  "taming_screen.dinosexpansion.hunger": "Hunger: %s / %d",
-  "taming_screen.dinosexpansion.taming_progress": "Taming Progress: %s / 100",
-
-  "dinosexpansion.gender": "Gender: %s",
-  "dinosexpansion.level": "Level: %s",
-  "dinosexpansion.sleep_rhythm": "Sleep Rhythm: %s",
-
-  "_comment": "enums",
-
-  "gender.dinosexpansion.male": "Male",
-  "gender.dinosexpansion.female": "Female",
-
+  "order_type.dinosexpansion.follow": "Follow",
+  "order_type.dinosexpansion.hostile": "Hostile",
+  "order_type.dinosexpansion.idle": "Idle",
+  "order_type.dinosexpansion.neutral": "Neutral",
+  "order_type.dinosexpansion.passive": "Passive",
+  "order_type.dinosexpansion.protecting": "Protecting",
+  "order_type.dinosexpansion.sit_shoulder": "Sit Shoulder",
+  "order_type.dinosexpansion.wander": "Wander",
+  "rarity.dinosexpansion.common": "Common",
+  "rarity.dinosexpansion.epic": "Epic",
+  "rarity.dinosexpansion.legendary": "Legendary",
+  "rarity.dinosexpansion.rare": "Rare",
+  "rarity.dinosexpansion.uncommon": "Uncommon",
   "sleep_rhythm.dinosexpansion.diurnal": "Diurnal",
   "sleep_rhythm.dinosexpansion.nocturnal": "Nocturnal",
   "sleep_rhythm.dinosexpansion.none": "None",
-
-  "order_type.dinosexpansion.neutral": "Neutral",
-  "order_type.dinosexpansion.protecting": "Protecting",
-  "order_type.dinosexpansion.hostile": "Hostile",
-  "order_type.dinosexpansion.passive": "Passive",
-
-  "order_type.dinosexpansion.wander": "Wander",
-  "order_type.dinosexpansion.sit": "Sit",
-  "order_type.dinosexpansion.sit_shoulder": "Sit On Shoulder",
-  "order_type.dinosexpansion.follow": "Follow",
-  "order_type.dinosexpansion.idle": "Idle",
-
-  "_comment": "tooltips",
-
-  "dinosexpansion.survival_instinct_cooldown": "Cooldown: %d"
-
-
+  "taming_screen.dinosexpansion.hunger": "Hunger: %s / %d",
+  "taming_screen.dinosexpansion.narcotic": "Narcotic: %s / %d",
+  "taming_screen.dinosexpansion.taming_progress": "Taming Progress: %s / 100"
 }

@@ -17,6 +17,7 @@ import com.rena.dinosexpansion.common.entity.aquatic.*;
 import com.rena.dinosexpansion.common.entity.aquatic.fish.Acanthodes;
 import com.rena.dinosexpansion.common.entity.aquatic.fish.Belantsea;
 import com.rena.dinosexpansion.common.entity.aquatic.fish.Wetherellus;
+import com.rena.dinosexpansion.common.entity.terrestrial.Ceratosaurus;
 import com.rena.dinosexpansion.common.entity.terrestrial.ambient.Meganeura;
 import com.rena.dinosexpansion.common.entity.terrestrial.Dryosaurus;
 import com.rena.dinosexpansion.common.entity.villagers.Hermit;
@@ -77,6 +78,7 @@ public class ClientSetupEvents {
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.BOOMERANG.get(), BoomerangRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.CAVEMAN.get(), CavemanRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.SQUALODON.get(), SqualodongRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityInit.CERATOSAURUS.get(), CeratosaurusRenderer::new);
 
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.CUSTOM_BOAT.get(), CustomBoatRenderer::new);
 
@@ -101,6 +103,7 @@ public class ClientSetupEvents {
         event.put(EntityInit.BELANTSEA.get(), Belantsea.createAttributes().create());
         event.put(EntityInit.MEGANEURA.get(), Meganeura.createAttributes().create());
         event.put(EntityInit.SQUALODON.get(), Squalodon.createAttributes().create());
+        event.put(EntityInit.CERATOSAURUS.get(), Ceratosaurus.createAttributes().create());
     }
 
     public static void registerPlantsRenderer() {

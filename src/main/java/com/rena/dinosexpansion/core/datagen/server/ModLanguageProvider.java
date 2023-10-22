@@ -1,6 +1,7 @@
 package com.rena.dinosexpansion.core.datagen.server;
 
 import com.rena.dinosexpansion.DinosExpansion;
+import com.rena.dinosexpansion.common.commands.TameCommand;
 import com.rena.dinosexpansion.common.entity.Dinosaur;
 import com.rena.dinosexpansion.common.entity.ia.SleepRhythmGoal;
 import com.rena.dinosexpansion.common.util.enums.AttackOrder;
@@ -165,6 +166,7 @@ public class ModLanguageProvider extends LanguageProvider {
         add(EntityInit.DRYOSAURUS.get(), "Dryosaurus");
         add(EntityInit.AEGIROCASSIS.get(), "Aegirocassis");
         add(EntityInit.HERMIT.get(), "Hermit");
+        add(EntityInit.CERATOSAURUS.get(), "Ceratosaurus");
 
 
         BiomeInit.BIOMES.getEntries().forEach(this::add);
@@ -208,7 +210,11 @@ public class ModLanguageProvider extends LanguageProvider {
 
         add("dinosexpansion.modifiers.hand", "When Throwing:");
         add("dinosexpansion.boomerang.damage", "%d Damage");
-        add("dinosexpansion.boomerang.range", "%d Range");
+        add("dinosexpansion.boomerang.range", "%d Range");;
+
+        add(TameCommand.TAME_NO_DINOSAUR, "the entity you are pointing at is no dinosaur, was %s instead");
+        add(TameCommand.TAME_SUCCESS, "this dinosaur %s was successfully tamed");
+        add(TameCommand.TAME_NO_HIT, "you have to point with ur cursor to an entity");
 
 
     }

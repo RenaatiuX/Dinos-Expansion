@@ -73,7 +73,7 @@ public abstract class DinosaurFlying extends Dinosaur implements IFlyingAnimal {
     }
 
     @Override
-    protected void setKnockout(boolean knockout) {
+    public void setKnockout(boolean knockout) {
         if (knockout && isFlying()) {
             setFlying(false);
         }

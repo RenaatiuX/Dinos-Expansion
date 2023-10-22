@@ -51,7 +51,6 @@ public class DinosaurBall extends Item {
         world.addEntity(entity);
         if (this.isDamageable(stack)) {
             stack.damageItem(2, player, playerEntity -> playerEntity.sendBreakAnimation(context.getHand()));
-            System.out.println(getDamage(stack));
             player.setActiveHand(context.getHand());
             player.getCooldownTracker().setCooldown(this, 200);
         }

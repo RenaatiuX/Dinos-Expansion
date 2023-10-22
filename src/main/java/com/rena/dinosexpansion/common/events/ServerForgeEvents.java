@@ -1,6 +1,7 @@
 package com.rena.dinosexpansion.common.events;
 
 import com.rena.dinosexpansion.DinosExpansion;
+import com.rena.dinosexpansion.common.commands.TameCommand;
 import com.rena.dinosexpansion.common.entity.Dinosaur;
 import com.rena.dinosexpansion.core.init.DamageSourceInit;
 import com.rena.dinosexpansion.core.init.EffectInit;
@@ -29,6 +30,7 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityStruckByLightningEvent;
 import net.minecraftforge.event.entity.ProjectileImpactEvent;
@@ -273,5 +275,10 @@ public class ServerForgeEvents {
             }
             stack.setDamage(stack.getDamage() + damageRate);
         }
+    }
+
+    @SubscribeEvent
+    public static void onCommandRegister(RegisterCommandsEvent event){
+        new TameCommand(event.getDispatcher());
     }
 }
