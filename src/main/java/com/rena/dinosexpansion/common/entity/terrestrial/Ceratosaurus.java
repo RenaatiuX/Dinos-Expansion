@@ -113,7 +113,10 @@ public class Ceratosaurus extends Dinosaur implements IAnimatable, IAnimationTic
         } else if (this.getMoveOrder() == MoveOrder.SIT) {
             event.getController().setAnimation(new AnimationBuilder().loop("animation.ceratosaurus.sit"));
         } else if (event.isMoving()) {
-            event.getController().setAnimation(new AnimationBuilder().loop("animation.ceratosaurus.walk"));
+            if (this.isRunning()) {
+                event.getController().setAnimation(new AnimationBuilder().loop("animation.ceratosaurus.run"));
+            } else
+                event.getController().setAnimation(new AnimationBuilder().loop("animation.ceratosaurus.walk"));
         } else {
             event.getController().setAnimation(new AnimationBuilder().loop("animation.ceratosaurus.idle"));
         }
@@ -132,14 +135,14 @@ public class Ceratosaurus extends Dinosaur implements IAnimatable, IAnimationTic
 
     @Override
     public ActionResultType applyPlayerInteraction(PlayerEntity player, Vector3d vec, Hand hand) {
-        this.getInfo().print();
-        DinosExpansion.LOGGER.debug("Narcotic: [" + getNarcoticValue() + "/" + this.getMaxNarcotic() + "]");
-        DinosExpansion.LOGGER.debug("IsKnockout: " + this.isKnockout());
+        //this.getInfo().print();
+        //DinosExpansion.LOGGER.debug("Narcotic: [" + getNarcoticValue() + "/" + this.getMaxNarcotic() + "]");
+        //DinosExpansion.LOGGER.debug("IsKnockout: " + this.isKnockout());
         if (!world.isRemote() && hand == Hand.MAIN_HAND && isKnockedOutBy(player) && player.getHeldItem(hand).isEmpty()) {
             openTamingGui(this, (ServerPlayerEntity) player);
             return ActionResultType.SUCCESS;
         }
-        System.out.println(String.format("%s|%s|%s|%s|%s|%s", !this.world.isRemote , this.isTamed() , isOwner(player) , hand == Hand.MAIN_HAND , player.getHeldItem(hand).getItem() == Items.SADDLE, !hasSaddle()));
+        System.out.println(String.format("%s|%s|%s|%s|%s|%s", !this.world.isRemote, this.isTamed(), isOwner(player), hand == Hand.MAIN_HAND, player.getHeldItem(hand).getItem() == Items.SADDLE, !hasSaddle()));
         if (!this.world.isRemote && this.isTamed() && isOwner(player) && hand == Hand.MAIN_HAND && player.getHeldItem(hand).getItem() == Items.SADDLE && !hasSaddle()) {
             this.setArmor(DinosaurArmorSlotType.SADDLE, player.getHeldItem(hand).copy());
             player.getHeldItem(hand).shrink(1);
@@ -148,7 +151,6 @@ public class Ceratosaurus extends Dinosaur implements IAnimatable, IAnimationTic
         if (!this.world.isRemote && this.isTamed() && isOwner(player) && this.canFitPassenger(player) && hasSaddle()) {
             player.rotationYaw = this.rotationYaw;
             player.rotationPitch = this.rotationPitch;
-            System.out.println("test");
             player.startRiding(this);
             return ActionResultType.SUCCESS;
         }
@@ -171,7 +173,7 @@ public class Ceratosaurus extends Dinosaur implements IAnimatable, IAnimationTic
                 if (f1 <= 0.0F) {
                     f1 *= 0.25F;
                 }
-                this.setAIMoveSpeed(0.4f);
+                this.setAIMoveSpeed(0.2f);
                 super.travel(new Vector3d(f, pos.y, f1));
             } else
                 super.travel(pos);
@@ -181,8 +183,8 @@ public class Ceratosaurus extends Dinosaur implements IAnimatable, IAnimationTic
     @Override
     public void updatePassenger(Entity passenger) {
         super.updatePassenger(passenger);
-        Vector3d look = getLookVec().scale(0.7);
-        passenger.setPosition(this.getPosX() - look.getX(), this.getPosY() + 2.5F, this.getPosZ() - look.getZ());
+        Vector3d look = getLookVec().scale(-0.2);
+        passenger.setPosition(this.getPosX() - look.getX(), this.getPosY() + 1.5F, this.getPosZ() - look.getZ());
     }
 
     @Override

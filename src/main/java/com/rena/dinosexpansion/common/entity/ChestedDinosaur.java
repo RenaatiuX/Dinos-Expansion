@@ -1,6 +1,7 @@
 package com.rena.dinosexpansion.common.entity;
 
 import com.rena.dinosexpansion.common.BitUtils;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.passive.TameableEntity;
@@ -12,13 +13,17 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraftforge.items.ItemStackHandler;
 
+import javax.annotation.Nullable;
+
 public abstract class ChestedDinosaur extends Dinosaur{
 
-    private ItemStackHandler chestInventory = new ItemStackHandler(27);
+   public  static final int MAX_INVENTORY_SIZE = 27;
+
+    private ItemStackHandler chestInventory;
 
     public ChestedDinosaur(EntityType<? extends TameableEntity> type, World world, DinosaurInfo info, int level, int chestInventorySize) {
         this(type, world, info, level);
-        this.chestInventory = new ItemStackHandler(chestInventorySize);
+        this.chestInventory = new ItemStackHandler(Math.min(MAX_INVENTORY_SIZE, chestInventorySize));
     }
 
     public ChestedDinosaur(EntityType<? extends TameableEntity> type, World world, DinosaurInfo info, int level) {
@@ -34,6 +39,10 @@ public abstract class ChestedDinosaur extends Dinosaur{
 
     public boolean hasChest(){
         return BitUtils.getBit(5, this.dataManager.get(BOOLS)) > 0;
+    }
+
+    public int getChestSize(){
+        return this.chestInventory.getSlots();
     }
 
     @Override

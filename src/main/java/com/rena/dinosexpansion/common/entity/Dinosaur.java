@@ -13,10 +13,9 @@ import com.rena.dinosexpansion.common.util.enums.AttackOrder;
 import com.rena.dinosexpansion.common.util.enums.MoveOrder;
 import com.rena.dinosexpansion.core.init.CriteriaTriggerInit;
 import com.rena.dinosexpansion.core.tags.ModTags;
-import net.minecraft.entity.EntitySize;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.Pose;
+import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.entity.*;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -73,9 +72,11 @@ public abstract class Dinosaur extends TameableEntity {
      * @param player the player that opens this gui
      */
     public static final void openTamingGui(Dinosaur dino, ServerPlayerEntity player) {
-        SimpleNamedContainerProvider provider = new SimpleNamedContainerProvider((id, inv, p) -> new TamingContainer(id, inv, dino), new TranslationTextComponent(DinosExpansion.MOD_ID + ".taming_gui." + dino.getInfo().name));
+        SimpleNamedContainerProvider provider = new SimpleNamedContainerProvider((id, inv, p) -> new TamingContainer(id, inv, dino), new TranslationTextComponent(DinosExpansion.MOD_ID + ".taming_gui.title", dino.getType().getName()));
         NetworkHooks.openGui(player, provider, buf -> buf.writeVarInt(dino.getEntityId()));
     }
+
+    public static final AttributeModifier RUNNING = new AttributeModifier(DinosExpansion.MOD_ID+ ".run", 0.2F, AttributeModifier.Operation.MULTIPLY_TOTAL);
 
     public static final DataParameter<Integer> LEVEL = EntityDataManager.createKey(Dinosaur.class, DataSerializers.VARINT);
     public static final DataParameter<Integer> XP = EntityDataManager.createKey(Dinosaur.class, DataSerializers.VARINT);
@@ -261,7 +262,7 @@ public abstract class Dinosaur extends TameableEntity {
                 ServerPlayerEntity serverPlayer = (ServerPlayerEntity) player;
                 //sends the packet to the client where it will get executed and then opens the screen
                 NetworkHooks.openGui(serverPlayer, new SimpleNamedContainerProvider((id, inv, p) -> new OrderContainer(id, inv, Dinosaur.this),
-                        new TranslationTextComponent(DinosExpansion.MOD_ID + ".order_screen." + this.getInfo().name)), buf -> buf.writeVarInt(this.getEntityId()));
+                        new TranslationTextComponent(DinosExpansion.MOD_ID + ".order_screen.title", this.getType().getName())), buf -> buf.writeVarInt(this.getEntityId()));
                 return ActionResultType.SUCCESS;
             }
             if (canBeTamed() && (isOwner(player) || isKnockedOutBy(player)) && canEat(stack)) {
@@ -333,15 +334,9 @@ public abstract class Dinosaur extends TameableEntity {
     }
 
     @Override
-    public boolean isOwner(LivingEntity entityIn) {
-        return entityIn.getUniqueID().equals(this.getUniqueID());
-    }
-
-    @Override
     public void livingTick() {
         super.livingTick();
         if (!this.world.isRemote()) {
-            //System.out.println(isTamed());
             if (this.getNarcoticValue() > 0)
                 this.setNarcoticValue(Math.max(0, reduceNarcotic(getNarcoticValue())));
             if (getNarcoticValue() <= this.info.narcoticThreshold && isKnockout())
@@ -359,7 +354,11 @@ public abstract class Dinosaur extends TameableEntity {
 
     public void onKnockoutTaming() {
         if (this.dataManager.get(KNOCKED_OUT).isPresent()) {
-            setTamedBy(Objects.requireNonNull(this.world.getPlayerByUuid(this.dataManager.get(KNOCKED_OUT).get())));
+            PlayerEntity player = this.world.getPlayerByUuid(Objects.requireNonNull(this.getOwnerId()));
+            setTamedBy(player);
+            if (player instanceof ServerPlayerEntity) {
+                CriteriaTriggers.TAME_ANIMAL.trigger((ServerPlayerEntity)player, this);
+            }
             setKnockout(false);
             setTamingProgress((byte) 0);
             int additionalLevels = (int) (((float) this.getLevel()) / getTamingEfficiency());
@@ -375,6 +374,16 @@ public abstract class Dinosaur extends TameableEntity {
     public void setKnockedOutBy(LivingEntity player) {
         this.setKnockout(true);
         this.dataManager.set(KNOCKED_OUT, Optional.of(player.getUniqueID()));
+    }
+
+    @Nullable
+    @Override
+    public Entity getControllingPassenger() {
+        return getPassengers().isEmpty() ? null : getPassengers().get(0);
+    }
+
+    public boolean isRunning() {
+        return isBeingRidden() || this.getAttribute(Attributes.MOVEMENT_SPEED).hasModifier(RUNNING);
     }
 
     public void setKnockout(boolean knockout) {
@@ -693,7 +702,7 @@ public abstract class Dinosaur extends TameableEntity {
             if (getRNG().nextDouble() <= 0.1)
                 this.addHungerValue(-1);
         }
-        if (this.isKnockout() && this.getRNG().nextDouble() <= 0.05) {
+        if (this.isKnockout() && this.getRNG().nextDouble() <= 0.1) {
             this.addHungerValue(-1);
         }
         if (getRNG().nextDouble() <= 0.001)

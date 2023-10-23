@@ -194,8 +194,7 @@ public class ModLanguageProvider extends LanguageProvider {
         add(SleepRhythmGoal.SleepRhythm.NOCTURNAL.getDisplayName(), "Nocturnal");
         add(SleepRhythmGoal.SleepRhythm.DIURNAL.getDisplayName(), "Diurnal");
 
-        add("dinosexpansion.taming_gui.dryosaurus", "Dryosaurus");
-        add("dinosexpansion.order_screen.dryosaurus", "Dryosaurus");
+        add("dinosexpansion.order_screen.title", "%s");
 
 
         add("taming_screen.dinosexpansion.narcotic", "Narcotic: %s / %d");
@@ -211,6 +210,8 @@ public class ModLanguageProvider extends LanguageProvider {
         add("dinosexpansion.modifiers.hand", "When Throwing:");
         add("dinosexpansion.boomerang.damage", "%d Damage");
         add("dinosexpansion.boomerang.range", "%d Range");;
+
+        add("dinosexpansion.taming_gui.title", "%s");
 
         add(TameCommand.TAME_NO_DINOSAUR, "the entity you are pointing at is no dinosaur, was %s instead");
         add(TameCommand.TAME_SUCCESS, "this dinosaur %s was successfully tamed");
