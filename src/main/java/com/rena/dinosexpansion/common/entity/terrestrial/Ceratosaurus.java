@@ -102,24 +102,24 @@ public class Ceratosaurus extends ChestedDinosaur implements IAnimatable, IAnima
 
     @Override
     public void registerControllers(AnimationData data) {
-        data.addAnimationController(new AnimationController(this, "controller", 20, this::predicate));
-        data.addAnimationController(new AnimationController(this, "attack_controller", 0, this::attackPredicate));
+        data.addAnimationController(new AnimationController<>(this, "controller", 20, this::predicate));
+        data.addAnimationController(new AnimationController<>(this, "attack_controller", 0, this::attackPredicate));
     }
 
     private PlayState predicate(AnimationEvent<Ceratosaurus> event) {
         if (this.isKnockout()) {
-            event.getController().setAnimation(new AnimationBuilder().loop("animation.ceratosaurus.knockedout"));
+            event.getController().setAnimation(new AnimationBuilder().loop("knockedout"));
         } else if (this.isSleeping()) {
-            event.getController().setAnimation(new AnimationBuilder().loop("animation.ceratosaurus.sleep"));
+            event.getController().setAnimation(new AnimationBuilder().loop("sleep"));
         } else if (this.getMoveOrder() == MoveOrder.SIT) {
-            event.getController().setAnimation(new AnimationBuilder().loop("animation.ceratosaurus.sit"));
+            event.getController().setAnimation(new AnimationBuilder().loop("sit"));
         } else if (event.isMoving()) {
             if (this.isRunning()) {
-                event.getController().setAnimation(new AnimationBuilder().loop("animation.ceratosaurus.run"));
+                event.getController().setAnimation(new AnimationBuilder().loop("run"));
             } else
-                event.getController().setAnimation(new AnimationBuilder().loop("animation.ceratosaurus.walk"));
+                event.getController().setAnimation(new AnimationBuilder().loop("walk"));
         } else {
-            event.getController().setAnimation(new AnimationBuilder().loop("animation.ceratosaurus.idle"));
+            event.getController().setAnimation(new AnimationBuilder().loop("idle"));
         }
 
         return PlayState.CONTINUE;
@@ -128,7 +128,7 @@ public class Ceratosaurus extends ChestedDinosaur implements IAnimatable, IAnima
     private PlayState attackPredicate(AnimationEvent<Ceratosaurus> event) {
         if (event.getController().getAnimationState() == AnimationState.Stopped && this.isSwingInProgress) {
             event.getController().markNeedsReload();
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.ceratosaurus.attack", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("attack", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
             return PlayState.CONTINUE;
         }
         return PlayState.STOP;

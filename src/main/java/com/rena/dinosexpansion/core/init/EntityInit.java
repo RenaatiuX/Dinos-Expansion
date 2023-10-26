@@ -79,7 +79,7 @@ public class EntityInit {
     public static final RegistryObject<EntityType<Hermit>> HERMIT = register("hermit", () -> EntityType.Builder.create(Hermit::new, EntityClassification.CREATURE));
     public static final RegistryObject<EntityType<Caveman>> CAVEMAN = register("caveman", () -> EntityType.Builder.create(Caveman::new, EntityClassification.CREATURE));
 
-    public static final RegistryObject<EntityType<Ceratosaurus>> CERATOSAURUS = register("ceratosaurus", () -> EntityType.Builder.create(Ceratosaurus::new, EntityClassification.CREATURE).size(1f, 1.9f));
+    public static final RegistryObject<EntityType<Ceratosaurus>> CERATOSAURUS = register("ceratosaurus", () -> EntityType.Builder.create(Ceratosaurus::new, EntityClassification.CREATURE).size(1f, 3.1f));
 
     public static final RegistryObject<EntityType<CustomBoatEntity>> CUSTOM_BOAT = register("custom_boat", () -> EntityType.Builder.<CustomBoatEntity>create(CustomBoatEntity::new, EntityClassification.MISC).size(1.375F, 0.5625F).trackingRange(10));
 

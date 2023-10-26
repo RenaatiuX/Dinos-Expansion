@@ -193,5 +193,8 @@
   "sleep_rhythm.dinosexpansion.none": "None",
   "taming_screen.dinosexpansion.hunger": "Hunger: %s / %d",
   "taming_screen.dinosexpansion.narcotic": "Narcotic: %s / %d",
-  "taming_screen.dinosexpansion.taming_progress": "Taming Progress: %s / 100"
+  "taming_screen.dinosexpansion.taming_progress": "Taming Progress: %s / 100",
+
+  "key.categories.dinosexpansion": "Dinos Expansion",
+  "key.dinosexpansion.dinosaur_attack": "Dinosaur Attack"
 }

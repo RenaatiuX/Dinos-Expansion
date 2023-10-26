@@ -16,6 +16,7 @@ public class Network {
     public static void register(){
         CHANNEL1.registerMessage(CHANNEL1_ID++, MoveOrderPacket.class, MoveOrderPacket::encode, MoveOrderPacket::decode, MoveOrderPacket::handle);
         CHANNEL1.registerMessage(CHANNEL1_ID++, AttackOrderPacket.class, AttackOrderPacket::encode, AttackOrderPacket::decode, AttackOrderPacket::handle);
+        CHANNEL1.registerMessage(CHANNEL1_ID++, AttackDinosaurPacket.class, AttackDinosaurPacket::encode, AttackDinosaurPacket::decode, AttackDinosaurPacket::handle);
     }
 
 

@@ -1,7 +1,7 @@
 {
 	"format_version": "1.8.0",
 	"animations": {
-		"animation.ceratosaurus.idle": {
+		"idle": {
 			"loop": true,
 			"animation_length": 2,
 			"bones": {
@@ -42,7 +42,7 @@
 				}
 			}
 		},
-		"animation.ceratosaurus.sit": {
+		"sit": {
 			"loop": true,
 			"animation_length": 2,
 			"bones": {
@@ -152,7 +152,7 @@
 				}
 			}
 		},
-		"animation.ceratosaurus.roar": {
+		"roar": {
 			"animation_length": 2.16667,
 			"bones": {
 				"head": {
@@ -303,7 +303,7 @@
 				}
 			}
 		},
-		"animation.ceratosaurus.attack": {
+		"attack": {
 			"animation_length": 0.58333,
 			"bones": {
 				"neck": {
@@ -381,7 +381,7 @@
 				}
 			}
 		},
-		"animation.ceratosaurus.sleep": {
+		"sleep": {
 			"loop": true,
 			"animation_length": 2.5,
 			"bones": {
@@ -479,7 +479,7 @@
 				}
 			}
 		},
-		"animation.ceratosaurus.knockedout": {
+		"knockedout": {
 			"loop": true,
 			"animation_length": 2.16667,
 			"bones": {
@@ -592,7 +592,7 @@
 				}
 			}
 		},
-		"animation.ceratosaurus.walk": {
+		"walk": {
 			"loop": true,
 			"animation_length": 1.25,
 			"bones": {
@@ -1196,7 +1196,7 @@
 				}
 			}
 		},
-		"animation.ceratosaurus.run": {
+		"run": {
 			"loop": true,
 			"animation_length": 0.5,
 			"bones": {

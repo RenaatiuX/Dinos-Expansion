@@ -11,6 +11,9 @@ import com.rena.dinosexpansion.common.entity.aquatic.Parapuzosia;
 import com.rena.dinosexpansion.common.item.BlowgunItem;
 import com.rena.dinosexpansion.core.init.EffectInit;
 import com.rena.dinosexpansion.core.init.EnchantmentInit;
+import com.rena.dinosexpansion.core.init.KeybindsInit;
+import com.rena.dinosexpansion.core.network.AttackDinosaurPacket;
+import com.rena.dinosexpansion.core.network.Network;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
@@ -19,10 +22,12 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.client.settings.PointOfView;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.player.PlayerEntity;
@@ -49,6 +54,8 @@ import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.LogManager;
 import software.bernie.shadowed.eliotlash.mclib.math.functions.limit.Min;
 
+import javax.annotation.Nullable;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -69,7 +76,7 @@ public class ClientForgeEvents {
         if (event.getEntity() instanceof Dinosaur && DinosExpansionConfig.SHOW_LEVEL_ABOVE_HEAD.get()) {
             event.setResult(Event.Result.DENY);
             Dinosaur dino = (Dinosaur) event.getEntity();
-            if (event.getEntityRenderer() instanceof ParapuzosiaRenderer){
+            if (event.getEntityRenderer() instanceof ParapuzosiaRenderer) {
                 event.getMatrixStack().rotate(Vector3f.YP.rotationDegrees(180));
             }
             if (dino.hasCustomName()) {
@@ -125,11 +132,11 @@ public class ClientForgeEvents {
     }
 
     @SubscribeEvent
-    public static void addCustomLayer(RenderPlayerEvent.Pre event){
-       if (!hasAddedLayer) {
-           event.getRenderer().addLayer(new DinosaurShoulderRidingLayer<>(event.getRenderer()));
-           hasAddedLayer = true;
-       }
+    public static void addCustomLayer(RenderPlayerEvent.Pre event) {
+        if (!hasAddedLayer) {
+            event.getRenderer().addLayer(new DinosaurShoulderRidingLayer<>(event.getRenderer()));
+            hasAddedLayer = true;
+        }
     }
 
     @SubscribeEvent
@@ -243,7 +250,7 @@ public class ClientForgeEvents {
     }
 
     @SubscribeEvent
-    public static void onPlayerJump(TickEvent.ClientTickEvent event){
+    public static void onPlayerJump(TickEvent.ClientTickEvent event) {
         ClientPlayerEntity pl = Minecraft.getInstance().player;
         if (event.phase != TickEvent.Phase.END || pl == null) return;
 

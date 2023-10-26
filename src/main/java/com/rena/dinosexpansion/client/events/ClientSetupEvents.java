@@ -40,6 +40,8 @@ import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
+import java.security.Key;
+
 import static net.minecraft.item.ItemModelsProperties.registerProperty;
 
 @Mod.EventBusSubscriber(modid = DinosExpansion.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
@@ -47,9 +49,9 @@ public class ClientSetupEvents {
 
     @SubscribeEvent
     public static void clientSetup(FMLClientSetupEvent event) {
-
         registerPlantsRenderer();
         registerModelProperties();
+        KeybindsInit.init();
 
         ScreenManager.registerFactory(ContainerInit.TAMING_CONTAINER.get(), TamingScreen::new);
         ScreenManager.registerFactory(ContainerInit.ORDER_CONTAINER.get(), OrderScreen::new);
