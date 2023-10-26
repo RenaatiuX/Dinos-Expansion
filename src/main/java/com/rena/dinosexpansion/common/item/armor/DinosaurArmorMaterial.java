@@ -36,5 +36,4 @@ public interface DinosaurArmorMaterial {
      * Gets the percentage of knockback resistance provided by armor of the material.
      */
     float getKnockbackResistance();
-    DinosaurArmorSlotType[] getArmorPieces();
 }

@@ -10,6 +10,7 @@ import com.rena.dinosexpansion.client.renderer.misc.SpearRenderer;
 import com.rena.dinosexpansion.client.renderer.projectiles.CustomArrowRenderer;
 import com.rena.dinosexpansion.client.renderer.projectiles.DartRenderer;
 import com.rena.dinosexpansion.client.renderer.projectiles.TinyRockRenderer;
+import com.rena.dinosexpansion.client.screens.DinoInventoryScreen;
 import com.rena.dinosexpansion.client.screens.MortarScreen;
 import com.rena.dinosexpansion.client.screens.OrderScreen;
 import com.rena.dinosexpansion.client.screens.TamingScreen;
@@ -53,6 +54,7 @@ public class ClientSetupEvents {
         ScreenManager.registerFactory(ContainerInit.TAMING_CONTAINER.get(), TamingScreen::new);
         ScreenManager.registerFactory(ContainerInit.ORDER_CONTAINER.get(), OrderScreen::new);
         ScreenManager.registerFactory(ContainerInit.MORTAR_CONTAINER.get(), MortarScreen::new);
+        ScreenManager.registerFactory(ContainerInit.DINO_INVENTORY_CONTAINER.get(), DinoInventoryScreen::new);
 
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.CUSTOM_ARROW.get(), CustomArrowRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.DART.get(), DartRenderer::new);

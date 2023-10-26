@@ -3,6 +3,7 @@ package com.rena.dinosexpansion;
 import com.rena.dinosexpansion.common.config.DinosExpansionConfig;
 import com.rena.dinosexpansion.common.entity.villagers.caveman.Tribe;
 import com.rena.dinosexpansion.common.entity.villagers.caveman.TribeTypeSerializer;
+import com.rena.dinosexpansion.common.events.DinoArmorRegistration;
 import com.rena.dinosexpansion.core.init.*;
 import com.rena.dinosexpansion.core.network.Network;
 import net.minecraft.advancements.CriteriaTriggers;
@@ -38,6 +39,7 @@ public class DinosExpansion
         bus.addGenericListener(IRecipeSerializer.class, RecipeInit::registerRecipes);
 
         bus.addListener(this::setup);
+        bus.addListener(DinoArmorRegistration::armorRegistration);
         ItemInit.ITEMS.register(bus);
         BlockInit.BLOCKS.register(bus);
         EntityInit.ENTITY_TYPES.register(bus);

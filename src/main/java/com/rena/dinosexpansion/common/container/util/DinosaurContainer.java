@@ -42,7 +42,7 @@ public abstract class DinosaurContainer<T extends Dinosaur> extends UtilContaine
 		return dinosaur;
 	}
 	
-	protected int addHorizontalSlots(IInventory handler, int Index, int x, int y, int amount,
+	protected int addHorizontalSlots(int Index, int x, int y, int amount,
 			int distanceBetweenSlots, IDinosaurInventorySlotProvider provider) {
 		for (int i = 0; i < amount; i++) {
 			addSlot(provider.createSlot(getDinosaur(), Index, x, y));
@@ -52,10 +52,10 @@ public abstract class DinosaurContainer<T extends Dinosaur> extends UtilContaine
 		return Index;
 	}
 	
-	protected int addSlotField(IInventory handler, int StartIndex, int x, int y, int horizontalAmount,
+	protected int addSlotField(int StartIndex, int x, int y, int horizontalAmount,
 			int horizontalDistance, int verticalAmount, int VerticalDistance, IDinosaurInventorySlotProvider provider) {
 		for (int i = 0; i < verticalAmount; i++) {
-			StartIndex = addHorizontalSlots(handler, StartIndex, x, y, horizontalAmount, horizontalDistance, provider);
+			StartIndex = addHorizontalSlots(StartIndex, x, y, horizontalAmount, horizontalDistance, provider);
 			y += VerticalDistance;
 		}
 		return StartIndex;

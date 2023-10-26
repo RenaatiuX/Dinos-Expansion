@@ -17,7 +17,7 @@ public class NbtUtils {
      * @param valueSetter this is the setter which will be given the value from the getter and then should set some value
      * @param <T> the type of the value
      */
-    public static<T> void setIfExists(CompoundNBT nbt, String name, BiFunction<CompoundNBT, String, T> valueGetter, Consumer<T> valueSetter){
+    public static <T> void setIfExists(CompoundNBT nbt, String name, BiFunction<CompoundNBT, String, T> valueGetter, Consumer<T> valueSetter){
         if (nbt.contains(name)){
             T value = valueGetter.apply(nbt, name);
             valueSetter.accept(value);

@@ -1,6 +1,7 @@
 package com.rena.dinosexpansion.common.entity.terrestrial;
 
 import com.rena.dinosexpansion.DinosExpansion;
+import com.rena.dinosexpansion.common.entity.ChestedDinosaur;
 import com.rena.dinosexpansion.common.entity.Dinosaur;
 import com.rena.dinosexpansion.common.entity.DinosaurArmorSlotType;
 import com.rena.dinosexpansion.common.entity.ia.*;
@@ -35,7 +36,7 @@ import software.bernie.geckolib3.util.GeckoLibUtil;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class Ceratosaurus extends Dinosaur implements IAnimatable, IAnimationTickable {
+public class Ceratosaurus extends ChestedDinosaur implements IAnimatable, IAnimationTickable {
 
     public static AttributeModifierMap.MutableAttribute createAttributes() {
         return MobEntity.func_233666_p_()
@@ -142,16 +143,20 @@ public class Ceratosaurus extends Dinosaur implements IAnimatable, IAnimationTic
             openTamingGui(this, (ServerPlayerEntity) player);
             return ActionResultType.SUCCESS;
         }
-        System.out.println(String.format("%s|%s|%s|%s|%s|%s", !this.world.isRemote, this.isTamed(), isOwner(player), hand == Hand.MAIN_HAND, player.getHeldItem(hand).getItem() == Items.SADDLE, !hasSaddle()));
+        //System.out.println(String.format("%s|%s|%s|%s|%s|%s", !this.world.isRemote, this.isTamed(), isOwner(player), hand == Hand.MAIN_HAND, player.getHeldItem(hand).getItem() == Items.SADDLE, !hasSaddle()));
         if (!this.world.isRemote && this.isTamed() && isOwner(player) && hand == Hand.MAIN_HAND && player.getHeldItem(hand).getItem() == Items.SADDLE && !hasSaddle()) {
             this.setArmor(DinosaurArmorSlotType.SADDLE, player.getHeldItem(hand).copy());
             player.getHeldItem(hand).shrink(1);
             return ActionResultType.SUCCESS;
         }
-        if (!this.world.isRemote && this.isTamed() && isOwner(player) && this.canFitPassenger(player) && hasSaddle()) {
+        if (!this.world.isRemote && this.isTamed() && isOwner(player) && this.canFitPassenger(player) && hasSaddle() && !player.isSneaking()) {
             player.rotationYaw = this.rotationYaw;
             player.rotationPitch = this.rotationPitch;
             player.startRiding(this);
+            return ActionResultType.SUCCESS;
+        }
+        if (!this.world.isRemote && this.isTamed() && isOwner(player) && player.getHeldItem(hand).isEmpty() && player.isSneaking()) {
+            Dinosaur.openMediumDinoGui(this, (ServerPlayerEntity) player);
             return ActionResultType.SUCCESS;
         }
         return super.applyPlayerInteraction(player, vec, hand);

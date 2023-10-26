@@ -3,6 +3,7 @@ package com.rena.dinosexpansion.common.entity;
 import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.common.BitUtils;
 import com.rena.dinosexpansion.common.config.DinosExpansionConfig;
+import com.rena.dinosexpansion.common.container.DinoInventoryContainer;
 import com.rena.dinosexpansion.common.container.OrderContainer;
 import com.rena.dinosexpansion.common.container.TamingContainer;
 import com.rena.dinosexpansion.common.entity.ia.SleepRhythmGoal;
@@ -76,11 +77,21 @@ public abstract class Dinosaur extends TameableEntity {
         NetworkHooks.openGui(player, provider, buf -> buf.writeVarInt(dino.getEntityId()));
     }
 
+    /**
+     * opens the dino inventory with the set of armor slots, this is just the medium variant so only medium slots will be displayed
+     * this will also support a chest with up to 27 slots
+     */
+    public static void openMediumDinoGui(Dinosaur dino, ServerPlayerEntity player){
+        SimpleNamedContainerProvider provider = new SimpleNamedContainerProvider((id, inv, p) -> new DinoInventoryContainer(id, inv, dino), new TranslationTextComponent(DinosExpansion.MOD_ID, ".inventory.title", dino.getType().getName()));
+        NetworkHooks.openGui(player, provider, buf -> buf.writeVarInt(dino.getEntityId()));
+    }
+
     public static final AttributeModifier RUNNING = new AttributeModifier(DinosExpansion.MOD_ID+ ".run", 0.2F, AttributeModifier.Operation.MULTIPLY_TOTAL);
 
     public static final DataParameter<Integer> LEVEL = EntityDataManager.createKey(Dinosaur.class, DataSerializers.VARINT);
     public static final DataParameter<Integer> XP = EntityDataManager.createKey(Dinosaur.class, DataSerializers.VARINT);
     public static final DataParameter<Integer> BOOLS = EntityDataManager.createKey(Dinosaur.class, DataSerializers.VARINT);
+    public static final DataParameter<Integer> ARMOR = EntityDataManager.createKey(Dinosaur.class, DataSerializers.VARINT);
     public static final DataParameter<Integer> RARITY = EntityDataManager.createKey(Dinosaur.class, DataSerializers.VARINT);
     public static final DataParameter<Integer> GENDER = EntityDataManager.createKey(Dinosaur.class, DataSerializers.VARINT);
     public static final DataParameter<Integer> NARCOTIC_VALUE = EntityDataManager.createKey(Dinosaur.class, DataSerializers.VARINT);
@@ -100,6 +111,11 @@ public abstract class Dinosaur extends TameableEntity {
         protected void onContentsChanged(int slot) {
             super.onContentsChanged(slot);
             Dinosaur.this.onContentsChanged(slot);
+        }
+
+        @Override
+        public int getSlotLimit(int slot) {
+            return 1;
         }
     };
 
@@ -145,6 +161,7 @@ public abstract class Dinosaur extends TameableEntity {
         this.dataManager.register(MOVE_ORDER, (byte) MoveOrder.IDLE.ordinal());
         this.dataManager.register(ATTACK_ORDER, (byte) AttackOrder.NEUTRAL.ordinal());
         this.dataManager.register(TAMING_EFFICIENCY, 1f);
+        this.dataManager.register(ARMOR, 0);
     }
 
     @Override
@@ -162,6 +179,7 @@ public abstract class Dinosaur extends TameableEntity {
         NbtUtils.setIfExists(nbt, "attack_order", CompoundNBT::getByte, f -> this.dataManager.set(ATTACK_ORDER, f));
         NbtUtils.setIfExists(nbt, "taming_progress", CompoundNBT::getByte, f -> this.dataManager.set(TAMING_PROGRESS, f));
         NbtUtils.setIfExists(nbt, "knocked_out_player", CompoundNBT::getUniqueId, f -> this.dataManager.set(KNOCKED_OUT, Optional.of(f)));
+        NbtUtils.setIfExists(nbt, "hasArmorBools", CompoundNBT::getInt, f -> this.dataManager.set(ARMOR, f));
         NbtUtils.setIfExists(nbt, "maxNarcotic", CompoundNBT::getInt, f -> this.maxNarcotic = f);
         NbtUtils.setIfExists(nbt, "maxHunger", CompoundNBT::getInt, f -> this.maxHunger = f);
         NbtUtils.setIfExists(nbt, "feedHungerTaming", CompoundNBT::getFloat, f -> this.feedHungerTaming = f);
@@ -183,6 +201,7 @@ public abstract class Dinosaur extends TameableEntity {
         nbt.putByte("move_order", this.dataManager.get(MOVE_ORDER));
         nbt.putByte("attack_order", this.dataManager.get(ATTACK_ORDER));
         nbt.putInt("narcos", this.getNarcoticValue());
+        nbt.putInt("hasArmorBools", this.dataManager.get(ARMOR));
         nbt.putInt("maxNarcotic", this.maxNarcotic);
         nbt.putInt("maxHunger", this.maxHunger);
         nbt.put("inventory", this.inventory.serializeNBT());
@@ -193,11 +212,11 @@ public abstract class Dinosaur extends TameableEntity {
     protected void increaseLevel() {
         this.dataManager.set(LEVEL, Math.min(this.dataManager.get(LEVEL) + 1, DinosExpansionConfig.MAX_LEVEL.get()));
         if (this.dataManager.get(LEVEL) < DinosExpansionConfig.MAX_LEVEL.get()) {
-            double health = this.getAttribute(Attributes.MAX_HEALTH).getValue();
-            double attackDamage = this.getAttribute(Attributes.ATTACK_DAMAGE).getValue();
+            double health = this.getAttribute(Attributes.MAX_HEALTH).getBaseValue();
+            double attackDamage = this.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue();
             this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(health + DinosExpansionConfig.HEALTH_PER_LEVEL.get());
             this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(attackDamage + DinosExpansionConfig.ATTACK_DAMAGE_PER_LEVEL.get());
-            getAttribute(Attributes.ARMOR).setBaseValue(getAttribute(Attributes.ARMOR).getValue() + DinosExpansionConfig.ARMOR_PER_LEVEL.get());
+            getAttribute(Attributes.ARMOR).setBaseValue(getAttribute(Attributes.ARMOR).getBaseValue() + DinosExpansionConfig.ARMOR_PER_LEVEL.get());
         }
     }
 
@@ -215,7 +234,7 @@ public abstract class Dinosaur extends TameableEntity {
      * @return the Slot types this dino is supporting, normally it is just the Chest Piece
      */
     public DinosaurArmorSlotType[] getArmorPieces() {
-        return new DinosaurArmorSlotType[]{DinosaurArmorSlotType.CHEST, DinosaurArmorSlotType.SADDLE};
+        return new DinosaurArmorSlotType[]{DinosaurArmorSlotType.SADDLE};
     }
 
     public void setArmor(DinosaurArmorSlotType slot, ItemStack stack) {
@@ -354,11 +373,8 @@ public abstract class Dinosaur extends TameableEntity {
 
     public void onKnockoutTaming() {
         if (this.dataManager.get(KNOCKED_OUT).isPresent()) {
-            PlayerEntity player = this.world.getPlayerByUuid(Objects.requireNonNull(this.getOwnerId()));
+            PlayerEntity player = this.world.getPlayerByUuid(this.dataManager.get(KNOCKED_OUT).get());
             setTamedBy(player);
-            if (player instanceof ServerPlayerEntity) {
-                CriteriaTriggers.TAME_ANIMAL.trigger((ServerPlayerEntity)player, this);
-            }
             setKnockout(false);
             setTamingProgress((byte) 0);
             int additionalLevels = (int) (((float) this.getLevel()) / getTamingEfficiency());
@@ -423,7 +439,7 @@ public abstract class Dinosaur extends TameableEntity {
      * client synced
      */
     public boolean hasSaddle() {
-        return BitUtils.getBit(3, this.dataManager.get(BOOLS)) > 0;
+        return hasArmor(DinosaurArmorSlotType.SADDLE);
     }
 
     /**
@@ -432,25 +448,7 @@ public abstract class Dinosaur extends TameableEntity {
     protected void setSaddle(boolean saddle) {
         if (saddle == hasSaddle())
             return;
-        int bools = this.dataManager.get(BOOLS);
-        this.dataManager.set(BOOLS, BitUtils.setBit(3, bools, saddle));
-    }
-
-    /**
-     * client synced
-     */
-    public boolean hasArmor() {
-        return BitUtils.getBit(4, this.dataManager.get(BOOLS)) > 0;
-    }
-
-    /**
-     * client synced
-     */
-    protected void setArmor(boolean armor) {
-        if (armor == hasArmor())
-            return;
-        int bools = this.dataManager.get(BOOLS);
-        this.dataManager.set(BOOLS, BitUtils.setBit(4, bools, armor));
+        setArmor(DinosaurArmorSlotType.SADDLE, saddle);
     }
 
     /**
@@ -589,7 +587,7 @@ public abstract class Dinosaur extends TameableEntity {
         return inventory;
     }
 
-    protected int getSlotIndex(DinosaurArmorSlotType slotType) {
+    public int getSlotIndex(DinosaurArmorSlotType slotType) {
         List<DinosaurArmorSlotType> types = Arrays.asList(this.getArmorPieces());
         if (types.contains(slotType)) {
             return types.indexOf(slotType);
@@ -603,15 +601,19 @@ public abstract class Dinosaur extends TameableEntity {
      * @param slot - the slot where the change happened
      */
     protected void onContentsChanged(int slot) {
-        if (slot == getSlotIndex(DinosaurArmorSlotType.SADDLE)) {
-            boolean saddle = !inventory.getStackInSlot(slot).isEmpty();
-            if (hasSaddle() != saddle)
-                setSaddle(saddle);
-        } else {
-            boolean armor = !inventory.getStackInSlot(slot).isEmpty();
-            if (hasArmor() == armor)
-                setArmor(armor);
+        if (!this.world.isRemote) {
+            this.dataManager.set(ARMOR, BitUtils.setBit(slot, this.dataManager.get(ARMOR), !this.inventory.getStackInSlot(slot).isEmpty()));
         }
+    }
+
+    public void setArmor(DinosaurArmorSlotType slot, boolean hasIt){
+        if (hasIt != hasArmor(slot)){
+            this.dataManager.set(ARMOR, BitUtils.setBit(getSlotIndex(slot), this.dataManager.get(ARMOR), hasIt));
+        }
+    }
+
+    public boolean hasArmor(DinosaurArmorSlotType slot){
+        return BitUtils.getBit(getSlotIndex(slot), this.dataManager.get(ARMOR)) > 0;
     }
 
 
@@ -702,7 +704,8 @@ public abstract class Dinosaur extends TameableEntity {
             if (getRNG().nextDouble() <= 0.1)
                 this.addHungerValue(-1);
         }
-        if (this.isKnockout() && this.getRNG().nextDouble() <= 0.1) {
+        //TODO change this back to something more realistic
+        if (this.isKnockout() && this.getRNG().nextDouble() <= 0.5) {
             this.addHungerValue(-1);
         }
         if (getRNG().nextDouble() <= 0.001)

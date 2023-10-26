@@ -3,8 +3,10 @@ package com.rena.dinosexpansion.common.entity;
 public enum DinosaurArmorSlotType {
 
     SADDLE,
-    HEAD,
+
     CHEST,
+    HEAD,
+    CHESTPLATE,
     LEG,
     FEET;
 }
