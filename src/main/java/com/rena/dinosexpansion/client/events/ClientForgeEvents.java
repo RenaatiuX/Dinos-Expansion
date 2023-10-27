@@ -7,35 +7,24 @@ import com.rena.dinosexpansion.client.renderer.entity.ParapuzosiaRenderer;
 import com.rena.dinosexpansion.client.renderer.layer.DinosaurShoulderRidingLayer;
 import com.rena.dinosexpansion.common.config.DinosExpansionConfig;
 import com.rena.dinosexpansion.common.entity.Dinosaur;
-import com.rena.dinosexpansion.common.entity.aquatic.Parapuzosia;
-import com.rena.dinosexpansion.common.item.BlowgunItem;
 import com.rena.dinosexpansion.core.init.EffectInit;
 import com.rena.dinosexpansion.core.init.EnchantmentInit;
-import com.rena.dinosexpansion.core.init.KeybindsInit;
-import com.rena.dinosexpansion.core.network.AttackDinosaurPacket;
-import com.rena.dinosexpansion.core.network.Network;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.entity.layers.LayerRenderer;
-import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.client.renderer.entity.EntityRendererManager;;
 import net.minecraft.client.settings.PointOfView;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Effects;
-import net.minecraft.stats.Stats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -51,15 +40,9 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import org.apache.logging.log4j.LogManager;
-import software.bernie.shadowed.eliotlash.mclib.math.functions.limit.Min;
 
-import javax.annotation.Nullable;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
-
-import static net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType.HEALTH;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE, modid = DinosExpansion.MOD_ID, value = Dist.CLIENT)
 public class ClientForgeEvents {

@@ -26,13 +26,15 @@ public class AttackDinosaurPacket {
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(() -> {
             ServerPlayerEntity player = context.getSender();
-            if(player.isPassenger()) {
+            if (player.isPassenger()) {
                 Entity ridden = player.getRidingEntity();
-                if(ridden instanceof Dinosaur) {
+                if (ridden instanceof Dinosaur) {
                     Dinosaur dino = (Dinosaur) ridden;
+                    System.out.println(getEntitiesInRange(dino));
                     LivingEntity toAttack = getEntitiesInRange(dino);
-                    if(toAttack != null && toAttack != dino)
-                        dino.setAttackTarget(toAttack);
+                    if (toAttack != null && toAttack != dino){
+                        dino.forceAttack(toAttack);
+                    }
                 }
             }
         });
@@ -42,11 +44,11 @@ public class AttackDinosaurPacket {
     private static LivingEntity getEntitiesInRange(Dinosaur dino) {
         AxisAlignedBB box = dino.getBoundingBox();
         Vector3d lookVec = dino.getLookVec();
-        lookVec = lookVec.scale(10);
-        box = box.offset(lookVec.x, 0, lookVec.z).grow(5, 0, 5);
+        lookVec = lookVec.scale(2);
+        box = box.offset(lookVec.x, 0, lookVec.z).grow(1, 0, 1);
 
         List<LivingEntity> list = dino.world.getLoadedEntitiesWithinAABB(LivingEntity.class, box);
-        if(list.isEmpty()) {
+        if (list.isEmpty()) {
             return null;
         }
         return list.get(0);

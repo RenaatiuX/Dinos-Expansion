@@ -35,6 +35,7 @@ public class InputEvents {
         if(mc.currentScreen == null) {
             if (KeybindsInit.DINOSAUR_ATTACK.isPressed()) {
                 Network.CHANNEL1.sendToServer(new AttackDinosaurPacket());
+                //System.out.println("work");
             }
         }
     }

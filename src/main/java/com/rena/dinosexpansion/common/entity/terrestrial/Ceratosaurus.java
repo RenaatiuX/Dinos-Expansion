@@ -126,12 +126,12 @@ public class Ceratosaurus extends ChestedDinosaur implements IAnimatable, IAnima
     }
 
     private PlayState attackPredicate(AnimationEvent<Ceratosaurus> event) {
-        if (event.getController().getAnimationState() == AnimationState.Stopped && this.isSwingInProgress) {
+        if (!isKnockout() && this.isSwingInProgress && event.getController().getAnimationState().equals(AnimationState.Stopped)) {
             event.getController().markNeedsReload();
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("attack", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
-            return PlayState.CONTINUE;
+            event.getController().setAnimation(new AnimationBuilder().playOnce("attack"));
+            this.isSwingInProgress = false;
         }
-        return PlayState.STOP;
+        return PlayState.CONTINUE;
     }
 
     @Override
