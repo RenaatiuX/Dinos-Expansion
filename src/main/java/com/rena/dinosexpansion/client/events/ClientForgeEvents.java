@@ -7,6 +7,7 @@ import com.rena.dinosexpansion.client.renderer.entity.ParapuzosiaRenderer;
 import com.rena.dinosexpansion.client.renderer.layer.DinosaurShoulderRidingLayer;
 import com.rena.dinosexpansion.common.config.DinosExpansionConfig;
 import com.rena.dinosexpansion.common.entity.Dinosaur;
+import com.rena.dinosexpansion.common.events.ServerForgeEvents;
 import com.rena.dinosexpansion.common.item.ZoomItem;
 import com.rena.dinosexpansion.core.init.EffectInit;
 import com.rena.dinosexpansion.core.init.EnchantmentInit;
@@ -39,6 +40,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.*;
 import net.minecraftforge.client.gui.ForgeIngameGui;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -295,6 +297,14 @@ public class ClientForgeEvents {
             event.setFOV(fov / Math.max(1, Math.min(increasingDuration / zoomSPeed, maxZoom)));
         }
 
+    }
+
+    @SubscribeEvent
+    public static void onToolTip(ItemTooltipEvent event) {
+        ItemStack stack = event.getItemStack();
+        if (stack.hasTag() && stack.getTag().contains(ServerForgeEvents.COOLDOWN_NAME)) {
+            event.getToolTip().add(new TranslationTextComponent(DinosExpansion.MOD_ID + ".survival_instinct_cooldown", Math.floorDiv(stack.getTag().getInt(ServerForgeEvents.COOLDOWN_NAME), 20)));
+        }
     }
 
     @SubscribeEvent

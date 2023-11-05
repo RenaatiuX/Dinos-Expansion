@@ -2,48 +2,33 @@ package com.rena.dinosexpansion.common.events;
 
 import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.common.commands.TameCommand;
-import com.rena.dinosexpansion.common.entity.Dinosaur;
 import com.rena.dinosexpansion.core.init.DamageSourceInit;
 import com.rena.dinosexpansion.core.init.EffectInit;
 import com.rena.dinosexpansion.core.init.EnchantmentInit;
-import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.*;
-import net.minecraft.entity.ai.RandomPositionGenerator;
-import net.minecraft.entity.effect.LightningBoltEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
-import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.EffectType;
 import net.minecraft.potion.Effects;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.EntityStruckByLightningEvent;
 import net.minecraftforge.event.entity.ProjectileImpactEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
-import net.minecraftforge.event.entity.player.ArrowNockEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -67,23 +52,26 @@ public class ServerForgeEvents {
     public static void playerTick(LivingEvent.LivingUpdateEvent event) {
         LivingEntity living = event.getEntityLiving();
         if (living.isPotionActive(EffectInit.PARALYSIS.get())) {
-            setStunned(living, event);
+            //setStunned(living, event);
             living.baseTick();
         }
         if (living.isPotionActive(EffectInit.FREEZE.get()) && living.getActivePotionEffect(EffectInit.FREEZE.get()).getDuration() > 40) {
-            setStunned(living, event);
+            //setStunned(living, event);
             living.baseTick();
         }
 
 
     }
 
+    /*
     private static void setStunned(LivingEntity entity, LivingEvent.LivingUpdateEvent event) {
         event.setCanceled(true);
         if (entity instanceof PlayerEntity) {
             KeyBinding.unPressAllKeys();
         }
     }
+
+     */
 
     @SubscribeEvent
     public static void onProjectileHit(ProjectileImpactEvent.Arrow event) {
@@ -195,14 +183,6 @@ public class ServerForgeEvents {
                 event.getEntityLiving().addPotionEffect(new EffectInstance(Effects.SPEED, 100, Math.max(0, level - 2)));
                 event.getEntityLiving().addPotionEffect(new EffectInstance(Effects.SATURATION, 100, level - 1));
             }
-        }
-    }
-
-    @SubscribeEvent
-    public static void onToolTip(ItemTooltipEvent event) {
-        ItemStack stack = event.getItemStack();
-        if (stack.hasTag() && stack.getTag().contains(COOLDOWN_NAME)) {
-            event.getToolTip().add(new TranslationTextComponent(DinosExpansion.MOD_ID + ".survival_instinct_cooldown", Math.floorDiv(stack.getTag().getInt(COOLDOWN_NAME), 20)));
         }
     }
 
