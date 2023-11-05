@@ -3,10 +3,12 @@ package com.rena.dinosexpansion.client.model.entity;
 import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.common.entity.terrestrial.ambient.Campanile;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import software.bernie.geckolib3.model.AnimatedTickingGeoModel;
 
 import java.util.Locale;
-
+@OnlyIn(Dist.CLIENT)
 public class CampanileModel extends AnimatedTickingGeoModel<Campanile> {
     @Override
     public ResourceLocation getModelLocation(Campanile object) {

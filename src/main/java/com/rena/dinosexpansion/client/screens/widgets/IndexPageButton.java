@@ -11,7 +11,10 @@ import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
+@OnlyIn(Dist.CLIENT)
 public class IndexPageButton extends Button {
     private final boolean playTurnSound;
     public IndexPageButton(int id, int x, int y, ITextComponent buttonText, IPressable butn, boolean playTurnSound) {

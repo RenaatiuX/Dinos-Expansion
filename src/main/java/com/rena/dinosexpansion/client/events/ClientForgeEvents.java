@@ -7,6 +7,7 @@ import com.rena.dinosexpansion.client.renderer.entity.ParapuzosiaRenderer;
 import com.rena.dinosexpansion.client.renderer.layer.DinosaurShoulderRidingLayer;
 import com.rena.dinosexpansion.common.config.DinosExpansionConfig;
 import com.rena.dinosexpansion.common.entity.Dinosaur;
+import com.rena.dinosexpansion.common.item.ZoomItem;
 import com.rena.dinosexpansion.core.init.EffectInit;
 import com.rena.dinosexpansion.core.init.EnchantmentInit;
 import net.minecraft.client.MainWindow;
@@ -34,6 +35,7 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.util.text.*;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.*;
 import net.minecraftforge.client.gui.ForgeIngameGui;
 import net.minecraftforge.event.TickEvent;
@@ -43,12 +45,14 @@ import net.minecraftforge.fml.common.Mod;
 
 import java.util.Map;
 import java.util.Random;
-
+@OnlyIn(Dist.CLIENT)
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE, modid = DinosExpansion.MOD_ID, value = Dist.CLIENT)
 public class ClientForgeEvents {
 
     public static final ResourceLocation FREEZE_OVERLAY = DinosExpansion.modLoc("textures/overlay/ice_overlay.png");
     public static final ResourceLocation FROZEN_HEARTS = DinosExpansion.modLoc("textures/overlay/frozen_heart.png");
+
+    public static final ResourceLocation ZOOM_OVERLAY = DinosExpansion.modLoc("textures/overlay/scope_overlay.png");
     public static final Random rand = new Random();
     protected static boolean hasAddedLayer = false;
     private static boolean hasReleasedJumpKey;
@@ -270,4 +274,40 @@ public class ClientForgeEvents {
         }
         return jumpCount;
     }
+
+    @SubscribeEvent
+    public static void changeFov(EntityViewRenderEvent.FOVModifier event){
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.player == null || mc.currentScreen != null) {
+            return;
+        }
+        boolean zooming = mc.player.getPersistentData().getBoolean(DinosExpansion.MOD_ID + "zooming");
+        ItemStack zoomItem = mc.player.getActiveItemStack();
+        if (zooming && zoomItem.getItem() instanceof ZoomItem) {
+            ZoomItem zoomItem1 = (ZoomItem) zoomItem.getItem();
+            double zoomSPeed = zoomItem1.getMaxZoom();
+            double maxZoom = zoomItem1.getZoomSPeed();
+            double fov = event.getFOV();
+            double useDuration = mc.player.getItemInUseCount();
+            double maxUse = mc.player.getActiveItemStack().getUseDuration();
+            double increasingDuration = maxUse - useDuration;
+
+            event.setFOV(fov / Math.max(1, Math.min(increasingDuration / zoomSPeed, maxZoom)));
+        }
+
+    }
+
+    @SubscribeEvent
+    public static void renderZoomOverlay(RenderGameOverlayEvent.Post event){
+        if (event.getType() == RenderGameOverlayEvent.ElementType.HOTBAR) {
+            if (Minecraft.getInstance() != null && Minecraft.getInstance().player != null){
+                if (Minecraft.getInstance().player.getPersistentData().contains(DinosExpansion.MOD_ID + "zooming") && Minecraft.getInstance().player.getPersistentData().getBoolean(DinosExpansion.MOD_ID + "zooming")){
+                    MainWindow res = event.getWindow();
+                    Minecraft.getInstance().textureManager.bindTexture(ZOOM_OVERLAY);
+                    AbstractGui.blit(event.getMatrixStack(), 0, 0, 0, 0, res.getScaledWidth(), res.getScaledHeight(), res.getScaledWidth(), res.getScaledHeight());
+                }
+            }
+        }
+    }
+
 }

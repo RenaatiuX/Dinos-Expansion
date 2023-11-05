@@ -24,8 +24,6 @@ import net.minecraftforge.fml.common.Mod;
 
 public class ZoomItem extends Item {
 
-    protected static final ResourceLocation ZOOM_OVERLAY = DinosExpansion.modLoc("textures/overlay/scope_overlay.png");
-
     protected double zoomSPeed, maxZoom;
 
     /**
@@ -87,42 +85,11 @@ public class ZoomItem extends Item {
         super.onPlayerStoppedUsing(stack, worldIn, entityLiving, timeLeft);
     }
 
-    @OnlyIn(Dist.CLIENT)
-    @Mod.EventBusSubscriber(modid = DinosExpansion.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
-    public static class MyZoomEventHandler {
+    public double getMaxZoom() {
+        return maxZoom;
+    }
 
-        @SubscribeEvent
-       public static void changeFov(EntityViewRenderEvent.FOVModifier event){
-           Minecraft mc = Minecraft.getInstance();
-           if (mc.player == null || mc.currentScreen != null) {
-               return;
-           }
-           boolean zooming = mc.player.getPersistentData().getBoolean(DinosExpansion.MOD_ID + "zooming");
-           ItemStack zoomItem = mc.player.getActiveItemStack();
-           if (zooming && zoomItem.getItem() instanceof ZoomItem) {
-               ZoomItem zoomItem1 = (ZoomItem) zoomItem.getItem();
-               double fov = event.getFOV();
-               double useDuration = mc.player.getItemInUseCount();
-               double maxUse = mc.player.getActiveItemStack().getUseDuration();
-               double increasingDuration = maxUse - useDuration;
-
-               event.setFOV(fov / Math.max(1, Math.min(increasingDuration / zoomItem1.zoomSPeed, zoomItem1.maxZoom)));
-           }
-
-       }
-
-       @SubscribeEvent
-       public static void renderOverlay(RenderGameOverlayEvent.Post event){
-           if (event.getType() == RenderGameOverlayEvent.ElementType.HOTBAR) {
-               if (Minecraft.getInstance() != null && Minecraft.getInstance().player != null){
-                   if (Minecraft.getInstance().player.getPersistentData().contains(DinosExpansion.MOD_ID + "zooming") && Minecraft.getInstance().player.getPersistentData().getBoolean(DinosExpansion.MOD_ID + "zooming")){
-                       MainWindow res = event.getWindow();
-                       Minecraft.getInstance().textureManager.bindTexture(ZOOM_OVERLAY);
-                       AbstractGui.blit(event.getMatrixStack(), 0, 0, 0, 0, res.getScaledWidth(), res.getScaledHeight(), res.getScaledWidth(), res.getScaledHeight());
-                   }
-               }
-           }
-       }
-
+    public double getZoomSPeed() {
+        return zoomSPeed;
     }
 }

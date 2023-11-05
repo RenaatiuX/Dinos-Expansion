@@ -13,7 +13,10 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3f;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
+@OnlyIn(Dist.CLIENT)
 public class TinyRockRenderer extends EntityRenderer<TinyRockEntity> {
     public static final ResourceLocation TEXTURE = DinosExpansion.modLoc("textures/entity/projectile/tiny_rock.png");
     private final TinyRockModel ROCK_MODEL = new TinyRockModel();

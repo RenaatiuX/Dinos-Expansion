@@ -6,7 +6,10 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
+@OnlyIn(Dist.CLIENT)
 public class WidgetLabel extends Widget {
     public WidgetLabel(int x, int y, int width, int height, ITextComponent title) {
         super(x, y, width, height, title);

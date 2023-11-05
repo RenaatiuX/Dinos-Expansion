@@ -7,6 +7,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.geo.raw.pojo.Bone;
@@ -14,7 +16,7 @@ import software.bernie.geckolib3.model.AnimatedTickingGeoModel;
 import software.bernie.geckolib3.model.provider.data.EntityModelData;
 
 import java.util.List;
-
+@OnlyIn(Dist.CLIENT)
 public class SquaolonModel extends AnimatedTickingGeoModel<Squalodon> {
     @Override
     public ResourceLocation getModelLocation(Squalodon object) {

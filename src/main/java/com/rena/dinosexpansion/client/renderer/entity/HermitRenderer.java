@@ -8,7 +8,10 @@ import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.CrossedArmsItemLayer;
 import net.minecraft.client.renderer.entity.layers.HeadLayer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
+@OnlyIn(Dist.CLIENT)
 public class HermitRenderer extends MobRenderer<Hermit, HermitModel> {
 
     public static final ResourceLocation TEXTURE = DinosExpansion.modLoc("textures/entity/hermit.png");

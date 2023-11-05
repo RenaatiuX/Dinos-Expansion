@@ -5,10 +5,12 @@ import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.common.entity.aquatic.fish.Acanthodes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Util;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import software.bernie.geckolib3.model.AnimatedTickingGeoModel;
 
 import java.util.Map;
-
+@OnlyIn(Dist.CLIENT)
 public class AcanthodesModel extends AnimatedTickingGeoModel<Acanthodes> {
 
     public AcanthodesModel() {

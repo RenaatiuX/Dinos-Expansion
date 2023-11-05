@@ -15,11 +15,13 @@ import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 import software.bernie.geckolib3.renderers.geo.GeoLayerRenderer;
 
 import javax.annotation.Nullable;
-
+@OnlyIn(Dist.CLIENT)
 public class AnomalocarisRenderer extends GeoEntityRenderer<Anomalocaris> {
     public AnomalocarisRenderer(EntityRendererManager renderManager) {
         super(renderManager, new AnomalocarisModel());

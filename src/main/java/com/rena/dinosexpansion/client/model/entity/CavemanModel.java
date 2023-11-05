@@ -10,7 +10,10 @@ import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.util.Hand;
 import net.minecraft.util.HandSide;
 import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
+@OnlyIn(Dist.CLIENT)
 public class CavemanModel extends SegmentedModel<Caveman> {
 
     private final ModelRenderer head;

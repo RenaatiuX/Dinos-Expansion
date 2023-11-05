@@ -7,9 +7,11 @@ import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import software.bernie.geckolib3.renderers.geo.GeoLayerRenderer;
 import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
-
+@OnlyIn(Dist.CLIENT)
 public class CeratosaurusSaddleLayer extends GeoLayerRenderer<Ceratosaurus> {
 
     private static final ResourceLocation LAYER = new ResourceLocation(DinosExpansion.MOD_ID, "textures/entity/ceratosaurus/layer/ceratosaurus_saddle.png");

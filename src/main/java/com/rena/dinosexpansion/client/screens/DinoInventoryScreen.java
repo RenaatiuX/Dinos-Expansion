@@ -19,9 +19,12 @@ import net.minecraft.network.play.client.CJigsawBlockGeneratePacket;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Arrays;
 
+@OnlyIn(Dist.CLIENT)
 public class DinoInventoryScreen extends ContainerScreen<DinoInventoryContainer> {
 
     public static final ResourceLocation GUI = DinosExpansion.modLoc("textures/gui/medium_dino_gui.png");

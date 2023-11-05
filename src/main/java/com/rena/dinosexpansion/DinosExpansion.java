@@ -37,9 +37,6 @@ public class DinosExpansion
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
 
         bus.addGenericListener(IRecipeSerializer.class, RecipeInit::registerRecipes);
-
-        bus.addListener(this::setup);
-        bus.addListener(DinoArmorRegistration::armorRegistration);
         ItemInit.ITEMS.register(bus);
         BlockInit.BLOCKS.register(bus);
         EntityInit.ENTITY_TYPES.register(bus);
@@ -54,7 +51,7 @@ public class DinosExpansion
         FeatureInit.FEATURES.register(bus);
         SurfaceBuilderInit.SURFACE_BUILDERS.register(bus);
 
-        MinecraftForge.EVENT_BUS.register(this);
+        //MinecraftForge.EVENT_BUS.register(this);
     }
 
     public static ResourceLocation modLoc(String name) {
@@ -73,17 +70,5 @@ public class DinosExpansion
         return modLoc("blocks/" + name);
     }
 
-    private void setup(final FMLCommonSetupEvent event) {
-        event.enqueueWork(() ->  {
-            BiomeInit.addBiomeEntries();
-            BiomeInit.fillBiomeDictionary();
-            CriteriaTriggerInit.REGISTRY.forEach(CriteriaTriggers::register);
-            Network.register();
-            //FeatureInit.registerConfiguredFeatures();
-            DimensionInit.registerDimension();
-            StructureInit.setupStructures();
-            ModVillagerTrades.registerTrades();
-            TribeTypeSerializer.serializeTribeTypes();
-        });
-    }
+
 }

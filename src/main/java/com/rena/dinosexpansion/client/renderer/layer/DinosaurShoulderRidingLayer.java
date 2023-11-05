@@ -12,7 +12,10 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
+@OnlyIn(Dist.CLIENT)
 public class DinosaurShoulderRidingLayer<T extends PlayerEntity> extends LayerRenderer<T, PlayerModel<T>> {
     public DinosaurShoulderRidingLayer(IEntityRenderer<T, PlayerModel<T>> entityRendererIn) {
         super(entityRendererIn);

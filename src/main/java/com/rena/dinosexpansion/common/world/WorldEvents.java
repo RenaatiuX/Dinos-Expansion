@@ -4,7 +4,6 @@ package com.rena.dinosexpansion.common.world;
 import com.mojang.serialization.Codec;
 import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.common.world.gen.StructureGeneration;
-import com.rena.dinosexpansion.core.init.FeatureInit;
 import com.rena.dinosexpansion.core.init.StructureInit;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
@@ -14,11 +13,11 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biomes;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.FlatChunkGenerator;
-import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.settings.DimensionStructuresSettings;
 import net.minecraft.world.gen.settings.StructureSeparationSettings;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -30,7 +29,7 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
-@Mod.EventBusSubscriber(modid = DinosExpansion.MOD_ID)
+@Mod.EventBusSubscriber(modid = DinosExpansion.MOD_ID, value = Dist.DEDICATED_SERVER)
 public class WorldEvents {
 
     @SubscribeEvent

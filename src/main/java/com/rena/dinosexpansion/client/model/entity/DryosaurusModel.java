@@ -17,7 +17,7 @@ import software.bernie.geckolib3.model.provider.data.EntityModelData;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
-
+@OnlyIn(Dist.CLIENT)
 public class DryosaurusModel extends AnimatedTickingGeoModel<Dryosaurus> {
 
     private static final Map<Dinosaur.Rarity, ResourceLocation> RARITY = Util.make(Maps.newEnumMap(Dinosaur.Rarity.class),

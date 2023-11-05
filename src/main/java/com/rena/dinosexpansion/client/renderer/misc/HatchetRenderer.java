@@ -16,7 +16,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3f;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
+@OnlyIn(Dist.CLIENT)
 public class HatchetRenderer extends EntityRenderer<HatchetEntity> {
 
     private final ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();

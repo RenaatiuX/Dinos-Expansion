@@ -14,36 +14,21 @@ import com.rena.dinosexpansion.client.screens.DinoInventoryScreen;
 import com.rena.dinosexpansion.client.screens.MortarScreen;
 import com.rena.dinosexpansion.client.screens.OrderScreen;
 import com.rena.dinosexpansion.client.screens.TamingScreen;
-import com.rena.dinosexpansion.common.entity.aquatic.*;
-import com.rena.dinosexpansion.common.entity.aquatic.fish.Acanthodes;
-import com.rena.dinosexpansion.common.entity.aquatic.fish.Belantsea;
-import com.rena.dinosexpansion.common.entity.aquatic.fish.Wetherellus;
-import com.rena.dinosexpansion.common.entity.terrestrial.Ceratosaurus;
-import com.rena.dinosexpansion.common.entity.terrestrial.ambient.Meganeura;
-import com.rena.dinosexpansion.common.entity.terrestrial.Dryosaurus;
-import com.rena.dinosexpansion.common.entity.villagers.Hermit;
-import com.rena.dinosexpansion.common.entity.aquatic.fish.MegaPiranha;
-import com.rena.dinosexpansion.common.entity.flying.Dimorphodon;
-import com.rena.dinosexpansion.common.entity.semiaquatic.Astorgosuchus;
-import com.rena.dinosexpansion.common.entity.terrestrial.ambient.Campanile;
-import com.rena.dinosexpansion.common.entity.villagers.caveman.Caveman;
 import com.rena.dinosexpansion.core.init.*;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
-import java.security.Key;
-
 import static net.minecraft.item.ItemModelsProperties.registerProperty;
-
+@OnlyIn(Dist.CLIENT)
 @Mod.EventBusSubscriber(modid = DinosExpansion.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ClientSetupEvents {
 
@@ -87,27 +72,6 @@ public class ClientSetupEvents {
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.CUSTOM_BOAT.get(), CustomBoatRenderer::new);
 
         ClientRegistry.bindTileEntityRenderer(BlockEntityInit.MORTAR.get(), MortarRenderer::new);
-    }
-
-    @SubscribeEvent
-    public static void registerEntityAttributes(EntityAttributeCreationEvent event) {
-        event.put(EntityInit.PARAPUZOSIA.get(), Parapuzosia.createAttributes().create());
-        event.put(EntityInit.EOSQUALODON.get(), Eosqualodon.createAttributes().create());
-        event.put(EntityInit.MEGA_PIRANHA.get(), MegaPiranha.createAttributes().create());
-        event.put(EntityInit.DIMORPHODON.get(), Dimorphodon.createAttributes().create());
-        event.put(EntityInit.ASTORGOSUCHUS.get(), Astorgosuchus.createAttributes().create());
-        event.put(EntityInit.CAMPANILE.get(), Campanile.createAttributes().create());
-        event.put(EntityInit.HERMIT.get(), Hermit.createAttributes());
-        event.put(EntityInit.DRYOSAURUS.get(), Dryosaurus.createAttributes().create());
-        event.put(EntityInit.WETHERELLUS.get(), Wetherellus.createAttributes().create());
-        event.put(EntityInit.AEGIROCASSIS.get(), Aegirocassis.createAttributes().create());
-        event.put(EntityInit.CAVEMAN.get(), Caveman.createAttributes());
-        event.put(EntityInit.ANOMALOCARIS.get(), Anomalocaris.createAttributes().create());
-        event.put(EntityInit.ACANTHODES.get(), Acanthodes.createAttributes().create());
-        event.put(EntityInit.BELANTSEA.get(), Belantsea.createAttributes().create());
-        event.put(EntityInit.MEGANEURA.get(), Meganeura.createAttributes().create());
-        event.put(EntityInit.SQUALODON.get(), Squalodon.createAttributes().create());
-        event.put(EntityInit.CERATOSAURUS.get(), Ceratosaurus.createAttributes().create());
     }
 
     public static void registerPlantsRenderer() {

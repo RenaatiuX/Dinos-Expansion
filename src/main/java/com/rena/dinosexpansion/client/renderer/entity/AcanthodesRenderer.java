@@ -9,10 +9,12 @@ import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
 import javax.annotation.Nullable;
-
+@OnlyIn(Dist.CLIENT)
 public class AcanthodesRenderer extends GeoEntityRenderer<Acanthodes> {
     public AcanthodesRenderer(EntityRendererManager renderManager) {
         super(renderManager, new AcanthodesModel());

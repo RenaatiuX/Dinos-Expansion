@@ -19,8 +19,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3f;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
-
+@OnlyIn(Dist.CLIENT)
 public class BoomerangRenderer extends EntityRenderer<BoomerangEntity> {
 
     private final ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();

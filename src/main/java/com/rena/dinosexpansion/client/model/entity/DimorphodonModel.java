@@ -6,10 +6,12 @@ import com.rena.dinosexpansion.common.entity.Dinosaur;
 import com.rena.dinosexpansion.common.entity.flying.Dimorphodon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Util;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import software.bernie.geckolib3.model.AnimatedTickingGeoModel;
 
 import java.util.Map;
-
+@OnlyIn(Dist.CLIENT)
 public class DimorphodonModel extends AnimatedTickingGeoModel<Dimorphodon> {
 
     public DimorphodonModel() {

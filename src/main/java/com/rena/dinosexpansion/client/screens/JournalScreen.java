@@ -26,6 +26,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.resources.IResource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.io.IOUtils;
 import org.lwjgl.opengl.GL11;
@@ -34,6 +36,7 @@ import org.lwjgl.opengl.GL12;
 import java.io.IOException;
 import java.util.*;
 
+@OnlyIn(Dist.CLIENT)
 public class JournalScreen extends Screen {
     protected static final int X = 390;
     protected static final int Y = 245;

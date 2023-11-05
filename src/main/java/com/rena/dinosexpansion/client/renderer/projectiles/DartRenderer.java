@@ -6,7 +6,10 @@ import net.minecraft.client.renderer.entity.ArrowRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
+@OnlyIn(Dist.CLIENT)
 public class DartRenderer extends ArrowRenderer<DartEntity> {
 
     private static final ResourceLocation TEXTURE = DinosExpansion.modLoc("textures/entity/projectile/dart.png");

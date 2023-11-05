@@ -18,10 +18,13 @@ import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import sun.nio.ch.Net;
 
 import java.awt.*;
 
+@OnlyIn(Dist.CLIENT)
 public class OrderScreen extends ContainerScreen<DinosaurContainer<Dinosaur>> {
 
     protected WidgetLabel attackOrderLabel, moveOrderLabel;

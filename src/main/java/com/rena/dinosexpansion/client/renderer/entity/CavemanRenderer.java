@@ -6,7 +6,10 @@ import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.BipedArmorLayer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
+@OnlyIn(Dist.CLIENT)
 public class CavemanRenderer extends MobRenderer<Caveman, CavemanModel> {
     public CavemanRenderer(EntityRendererManager renderManagerIn) {
         super(renderManagerIn, new CavemanModel(), .5f);

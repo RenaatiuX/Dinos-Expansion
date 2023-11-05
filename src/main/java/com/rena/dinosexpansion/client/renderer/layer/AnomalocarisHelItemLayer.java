@@ -8,9 +8,11 @@ import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.vector.Vector3f;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import software.bernie.geckolib3.renderers.geo.GeoLayerRenderer;
 import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
-
+@OnlyIn(Dist.CLIENT)
 public class AnomalocarisHelItemLayer extends GeoLayerRenderer<Anomalocaris> {
 
     public AnomalocarisHelItemLayer(IGeoRenderer<Anomalocaris> entityRendererIn) {
