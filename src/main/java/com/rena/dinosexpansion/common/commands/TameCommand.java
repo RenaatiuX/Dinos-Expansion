@@ -54,7 +54,7 @@ public class TameCommand {
         double d0 = 10D;
         Vector3d vector3d2 = vector3d.add(vector3d1.x * d0, vector3d1.y * d0, vector3d1.z * d0);
         AxisAlignedBB axisalignedbb = player.getBoundingBox().expand(vector3d1.scale(d0)).grow(1.0D, 1.0D, 1.0D);
-        EntityRayTraceResult entityraytraceresult = ProjectileHelper.rayTraceEntities(player, vector3d, vector3d2, axisalignedbb, (p_215312_0_) -> !p_215312_0_.isSpectator() && p_215312_0_.canBeCollidedWith(), d0);
+        EntityRayTraceResult entityraytraceresult = ProjectileHelper.rayTraceEntities(source.getWorld(), player, vector3d, vector3d2, axisalignedbb, (p_215312_0_) -> !p_215312_0_.isSpectator() && p_215312_0_.canBeCollidedWith());
         return entityraytraceresult;
     }
 
