@@ -50,6 +50,14 @@ public class DinoLayerUtil {
         return matched != null && matched.canGenerateRiver();
     }
 
+    /**
+     * when i wrote this code, only god and i knew how this works, now only god knows, when u want to make changes its on ur own risk
+     * @param contextFactory
+     * @param registry
+     * @return
+     * @param <T>
+     * @param <C>
+     */
     public static <T extends IArea, C extends IExtendedNoiseRandom<T>> IAreaFactory<T> makeLayers(LongFunction<C> contextFactory, Registry<Biome> registry) {
         biomeRegistry = registry;
         IAreaFactory<T> oceanLand = OceanLandLayer.INSTANCE.apply(contextFactory.apply(1L));
