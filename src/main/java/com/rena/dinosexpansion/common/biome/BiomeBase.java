@@ -35,10 +35,6 @@ public class BiomeBase {
 
     public static final int BASE_FOG_COLOUR = 12638463;
 
-    public static final Map<ResourceLocation, WeightedList<ResourceLocation>> BIOME_TO_HILLS_LIST = new HashMap<>();
-    public static final Map<ResourceLocation, ResourceLocation> BIOME_TO_BEACH_LIST = new HashMap<>();
-    public static final Map<ResourceLocation, ResourceLocation> BIOME_TO_EDGE_LIST = new HashMap<>();
-    public static final Map<ResourceLocation, ResourceLocation> BIOME_TO_RIVER_LIST = new HashMap<>();
     public static final List<BiomeBase> LAND_BIOMES = new ArrayList<>(), RIVERS = new ArrayList<>(), SHALLOW_OCEANS = new ArrayList<>(), DEEP_OCEANS = new ArrayList<>(), BIOME_BASES = new ArrayList();
     public static List<BiomeData> biomeData = new ArrayList<>();
 
@@ -62,7 +58,7 @@ public class BiomeBase {
         addBiome(this);
     }
 
-    private void addBiome(BiomeBase base) {
+    private static void addBiome(BiomeBase base) {
         if (base.isRiver())
             RIVERS.add(base);
         else if (base.isShallowOcean())

@@ -14,7 +14,7 @@ public enum DinoSubbiomeLayer implements ICastleTransformer {
             int id = DinoLayerUtil.getBiomeId(base.getKey());
             if (id == center) {
                 for (BiomeBase.Subbiome subbiome : base.getSubBiomes()) {
-                    if ((!subbiome.isNeedsSurroundingBiomes() || check(id, north, west, south, east)) && context.random(subbiome.getProbability()) == 0) {
+                    if ((!subbiome.isNeedsSurroundingBiomes() || DinoLayerUtil.check(id, north, west, south, east)) && context.random(subbiome.getProbability()) == 0) {
                         return DinoLayerUtil.getBiomeId(subbiome.getBiome().get());
                     }
                 }
@@ -24,11 +24,5 @@ public enum DinoSubbiomeLayer implements ICastleTransformer {
         return center;
     }
 
-    protected boolean check(int id, int... compareTo) {
-        for (int comparable : compareTo) {
-            if (id != comparable)
-                return false;
-        }
-        return true;
-    }
+
 }

@@ -14,6 +14,7 @@ import net.minecraft.world.gen.area.LazyArea;
 import net.minecraft.world.gen.layer.*;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.function.LongFunction;
 
 public class DinoLayerUtil {
@@ -69,13 +70,16 @@ public class DinoLayerUtil {
         biomes = DinoRiverLayer.INSTANCE.apply(contextFactory.apply(49L), biomes);
 
         IAreaFactory<T> oceans = DinoOceanLayer.INSTANCE.apply(contextFactory.apply(1000L));
-        oceans = LayerUtil.repeat(1001L, ZoomLayer.NORMAL, oceans, 4, contextFactory);
+        oceans = LayerUtil.repeat(1001L, ZoomLayer.NORMAL, oceans, 2, contextFactory);
+        oceans = DinoDeepOcean.INSTANCE.apply(contextFactory.apply(2000L), oceans);
+        oceans = LayerUtil.repeat(1010L, ZoomLayer.NORMAL, oceans, 3, contextFactory);
         oceans = LayerUtil.repeat(1100L, ZoomLayer.FUZZY, oceans, 2, contextFactory);
+
         oceans = LayerUtil.repeat(1005L, SmoothLayer.INSTANCE, oceans, 1, contextFactory);
 
 
         oceanLand = DinoMixLand.INSTANCE.apply(contextFactory.apply(50L), oceanLand, biomes);
-        oceanLand = DinoMixOceansLayer.INSTANCE.apply(contextFactory.apply(1010L), oceans, oceanLand);
+        oceanLand = DinoMixOceansLayer.INSTANCE.apply(contextFactory.apply(1020L), oceans, oceanLand);
 
         //oceanLand = LayerUtil.repeat(51L, ZoomLayer.NORMAL, oceanLand, 1, contextFactory);
         oceanLand = LayerUtil.repeat(60L, SmoothLayer.INSTANCE, oceanLand, 1, contextFactory);
@@ -113,10 +117,10 @@ public class DinoLayerUtil {
         return false;
     }
 
-    public static BiomeBase weightedRandom(INoiseRandom random, BiomeBase[] biomes) {
-        if (biomes.length == 1)
-            return biomes[0];
-        int totalWeight = Arrays.stream(biomes).mapToInt(BiomeBase::getWeight).sum();
+    public static BiomeBase weightedRandom(INoiseRandom random, List<BiomeBase> biomes) {
+        if (biomes.size() == 1)
+            return biomes.get(0);
+        int totalWeight = biomes.stream().mapToInt(BiomeBase::getWeight).sum();
         int randomWeight = random.random(totalWeight);
         for (BiomeBase base : biomes) {
             randomWeight -= base.getWeight();
@@ -133,6 +137,14 @@ public class DinoLayerUtil {
             }
         }
         return false;
+    }
+
+    public static boolean check(int id, int... compareTo) {
+        for (int comparable : compareTo) {
+            if (id != comparable)
+                return false;
+        }
+        return true;
     }
 
     public static Layer makeLayers(long seed, Registry<Biome> registry) {

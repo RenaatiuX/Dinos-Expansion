@@ -12,6 +12,6 @@ public enum DinoSimpleBiomeLayer implements IAreaTransformer0, IDimOffset0Transf
 
     @Override
     public int apply(INoiseRandom context, int x, int z) {
-        return DinoLayerUtil.getBiomeId(BiomeBase.LAND_BIOMES.get(context.random(BiomeBase.LAND_BIOMES.size())));
+        return DinoLayerUtil.getBiomeId(DinoLayerUtil.weightedRandom(context, BiomeBase.LAND_BIOMES));
     }
 }
