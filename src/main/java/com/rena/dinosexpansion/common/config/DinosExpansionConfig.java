@@ -15,7 +15,7 @@ public class DinosExpansionConfig {
     public static final ForgeConfigSpec.BooleanValue TURN_AROUND_ITEM, TURN_AROUND_MOB, TURN_AROUND_BUTTON,
             BREAKS_TORCHES, BREAKS_FLOWERS, BREAKS_GRASS, BREAKS_TALLGRASS,
             ACTIVATES_LEVERS, ACTIVATES_BUTTONS, ACTIVATES_PRESSURES_PLATES, ACTIVATES_TRIP_WIRE,
-            SHOW_LEVEL_ABOVE_HEAD, SPAWN_DINOSAUR_OVERWORLD;
+            SHOW_LEVEL_ABOVE_HEAD, SPAWN_DINOSAUR_OVERWORLD, CAN_STEAL_DINOS;
 
     static {
         ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
@@ -41,6 +41,8 @@ public class DinosExpansionConfig {
         SHOW_LEVEL_ABOVE_HEAD = builder.define("show_level", true);
         builder.comment("This defines if dinosaurs can spawn in the overworld");
         SPAWN_DINOSAUR_OVERWORLD = builder.define("spawn_dinosaur", false);
+        builder.comment("This defines whether you can tame an already tamed dinosaur again and steal it like this from other players");
+        CAN_STEAL_DINOS = builder.define("steal_dinosaurs", true);
         builder.pop();
 
         builder.push("Boomerang");

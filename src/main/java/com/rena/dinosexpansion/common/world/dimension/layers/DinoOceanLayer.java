@@ -14,22 +14,13 @@ import net.minecraft.world.gen.layer.traits.IDimOffset0Transformer;
 
 import java.util.stream.Collectors;
 
-public enum DinoOceanLayer implements IAreaTransformer1, IDimOffset0Transformer {
+public enum DinoOceanLayer implements IAreaTransformer0, IDimOffset0Transformer {
     INSTANCE;
 
 
     @Override
-    public int apply(IExtendedNoiseRandom<?> context, IArea area, int x, int z) {
-        int id = area.getValue(x, z);
-        int typeID = id - 100;
-        if (typeID >= 0) {
-            BiomeBase.BiomeType type = BiomeBase.BiomeType.values()[typeID];
-            BiomeBase[] result = BiomeBase.SHALLOW_OCEANS.stream().filter(b -> DinoLayerUtil.contains(b.getBiomeType(), type)).collect(Collectors.toList()).toArray(new BiomeBase[0]);
-            if (result.length > 0)
-                return DinoLayerUtil.getBiomeId(DinoLayerUtil.weightedRandom(context, result));
-            else
-                return  DinoLayerUtil.getBiomeId(Biomes.BAMBOO_JUNGLE);
-        }
-        return -1;
+    public int apply(INoiseRandom context, int x, int z) {
+       int id = DinoLayerUtil.getBiomeId(BiomeBase.SHALLOW_OCEANS.get(context.random(BiomeBase.SHALLOW_OCEANS.size())));
+       return id;
     }
 }

@@ -14,7 +14,8 @@ import net.minecraft.world.IBlockReader;
 
 public class GlowStickBlock extends FallingBlock {
 
-    public static final VoxelShape shape = Block.makeCuboidShape(7.499999999999998, 0, 4, 8.499999999999998, 1, 11);
+    public static final VoxelShape SHAPE = Block.makeCuboidShape(7.499999999999998, 0, 4, 8.499999999999998, 1, 11);
+    public static final VoxelShape SHAPE_FLIPPED = Block.makeCuboidShape(4, 0, 7.499999999999998, 11, 1, 8.499999999999998);
     public static final BooleanProperty FLIPPED = BooleanProperty.create("flipped");
     public GlowStickBlock(Properties properties) {
         super(properties);
@@ -23,17 +24,17 @@ public class GlowStickBlock extends FallingBlock {
 
     @Override
     public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-        return shape;
+        return state.get(FLIPPED) ? SHAPE_FLIPPED : SHAPE;
     }
 
     @Override
     public VoxelShape getCollisionShape(BlockState state, IBlockReader reader, BlockPos pos) {
-        return shape;
+        return state.get(FLIPPED) ? SHAPE_FLIPPED : SHAPE;
     }
 
     @Override
     public VoxelShape getRaytraceShape(BlockState state, IBlockReader worldIn, BlockPos pos) {
-        return shape;
+        return state.get(FLIPPED) ? SHAPE_FLIPPED : SHAPE;
     }
 
     @Override

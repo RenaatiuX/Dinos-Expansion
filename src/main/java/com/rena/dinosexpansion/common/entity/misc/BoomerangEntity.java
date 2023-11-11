@@ -305,7 +305,7 @@ public class BoomerangEntity extends Entity {
     }
 
     protected double getDamage(Entity entity, PlayerEntity player){
-        return this.damage;
+        return this.turningAround ? 1.5f * this.damage : this.damage;
     }
 
     public DamageSource causeNewDamage(BoomerangEntity boomerang, Entity entity){

@@ -43,6 +43,11 @@ public class Floodplain extends BiomeBase {
         return 2;
     }
 
+    @Override
+    public boolean canGenerateRiver() {
+        return false;
+    }
+
     static {
         GENERATION_SETTINGS.withFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Features.SEAGRASS_SWAMP);
         DefaultBiomeFeatures.withLavaAndWaterLakes(GENERATION_SETTINGS);

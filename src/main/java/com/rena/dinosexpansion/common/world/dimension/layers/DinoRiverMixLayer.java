@@ -15,13 +15,9 @@ public enum DinoRiverMixLayer implements IAreaTransformer2, IDimOffset0Transform
     }
 
     @Override
-    public int apply(INoiseRandom random, IArea area1, IArea area2, int val1, int val2) {
-        int i = area1.getValue(this.getOffsetX(val1), this.getOffsetZ(val2));
-        int j = area2.getValue(this.getOffsetX(val1), this.getOffsetZ(val2));
-        if (j == DinoLayerUtil.getBiomeId(BiomeInit.RIVER.getKey())) {
-            return j;
-        } else {
-            return i;
-        }
+    public int apply(INoiseRandom random, IArea river, IArea oceanLand, int x, int z) {
+        int i = river.getValue(this.getOffsetX(x), this.getOffsetZ(z));
+        int j = oceanLand.getValue(this.getOffsetX(x), this.getOffsetZ(z));
+        return DinoLayerUtil.isRiver(i) && !DinoLayerUtil.isOcean(j) ? i : j;
     }
 }

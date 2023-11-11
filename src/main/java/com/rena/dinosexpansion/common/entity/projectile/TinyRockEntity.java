@@ -42,7 +42,7 @@ public class TinyRockEntity extends AbstractArrowEntity{
         if (shooter instanceof PlayerEntity) {
             this.pickupStatus = AbstractArrowEntity.PickupStatus.ALLOWED;
         }
-        this.dataManager.set(ROCK_STACK, rock);
+        this.dataManager.set(ROCK_STACK, countRock);
     }
 
     @Override
@@ -91,6 +91,7 @@ public class TinyRockEntity extends AbstractArrowEntity{
         if (result.getType() == RayTraceResult.Type.BLOCK && world.getBlockState(((BlockRayTraceResult) result).getPos()).getBlock() == Blocks.GLASS) {
             world.destroyBlock(((BlockRayTraceResult) result).getPos(), false);
         }
+        super.onImpact(result);
     }
 
     public ItemStack getRock(){

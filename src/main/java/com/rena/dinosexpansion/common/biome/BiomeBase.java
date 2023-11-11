@@ -1,7 +1,6 @@
 package com.rena.dinosexpansion.common.biome;
 
 import com.google.common.collect.ImmutableList;
-import com.mojang.datafixers.util.Pair;
 import com.rena.dinosexpansion.common.biome.util.BiomeData;
 import com.rena.dinosexpansion.core.init.BiomeInit;
 import net.minecraft.util.RegistryKey;
@@ -40,7 +39,7 @@ public class BiomeBase {
     public static final Map<ResourceLocation, ResourceLocation> BIOME_TO_BEACH_LIST = new HashMap<>();
     public static final Map<ResourceLocation, ResourceLocation> BIOME_TO_EDGE_LIST = new HashMap<>();
     public static final Map<ResourceLocation, ResourceLocation> BIOME_TO_RIVER_LIST = new HashMap<>();
-    public static final List<BiomeBase> BIOMES = new ArrayList<>(), RIVERS = new ArrayList<>(), SHALLOW_OCEANS = new ArrayList<>(), DEEP_OCEANS = new ArrayList<>();
+    public static final List<BiomeBase> LAND_BIOMES = new ArrayList<>(), RIVERS = new ArrayList<>(), SHALLOW_OCEANS = new ArrayList<>(), DEEP_OCEANS = new ArrayList<>(), BIOME_BASES = new ArrayList();
     public static List<BiomeData> biomeData = new ArrayList<>();
 
     private final Biome biome;
@@ -71,7 +70,8 @@ public class BiomeBase {
         else if (base.isDeepOcean())
             DEEP_OCEANS.add(base);
         else if (!base.isSubbiome())
-            BIOMES.add(base);
+            LAND_BIOMES.add(base);
+        BIOME_BASES.add(base);
     }
 
     /**
@@ -112,6 +112,13 @@ public class BiomeBase {
 
     public BiomeDictionary.Type[] getBiomeDictionary() {
         return new BiomeDictionary.Type[]{BiomeDictionary.Type.OVERWORLD};
+    }
+
+    /**
+     * this defines whether a river should spawn adjacent to this biome
+     */
+    public boolean canGenerateRiver(){
+        return true;
     }
 
     public List<Subbiome> getSubBiomes() {
@@ -205,7 +212,7 @@ public class BiomeBase {
 
         /**
          * @param biome the sub biome that then should spawn inside that biome
-         *              * @param probability the probability that´s int range from [0, probability) = 0
+         *              * @param probability the probability that´s in range from [0, probability) = 0
          *              * @param needsSurroundingBiomes defines if all surrounding biomes has to be this biome
          */
         public Subbiome(Supplier<RegistryKey<Biome>> biome, int probability, boolean needsSurroundingBiomes) {

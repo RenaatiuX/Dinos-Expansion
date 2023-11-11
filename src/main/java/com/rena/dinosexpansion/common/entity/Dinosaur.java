@@ -279,6 +279,10 @@ public abstract class Dinosaur extends TameableEntity {
                     stack.shrink(1);
                 return ActionResultType.SUCCESS;
             }
+            if ((DinosExpansionConfig.CAN_STEAL_DINOS.get() || !isTamed()) && canBeTamed() && isKnockedOutBy(player) && player.getHeldItem(hand).isEmpty()) {
+                openTamingGui(this, (ServerPlayerEntity) player);
+                return ActionResultType.SUCCESS;
+            }
             if (player instanceof ServerPlayerEntity && isOwner(player) && player.getHeldItem(hand).getItem() == getOrderItem()) {
                 ServerPlayerEntity serverPlayer = (ServerPlayerEntity) player;
                 //sends the packet to the client where it will get executed and then opens the screen
@@ -392,6 +396,7 @@ public abstract class Dinosaur extends TameableEntity {
     public void setKnockedOutBy(LivingEntity player) {
         this.setKnockout(true);
         this.dataManager.set(KNOCKED_OUT, Optional.of(player.getUniqueID()));
+       this.getPassengers().forEach(Entity::stopRiding);
     }
 
     @Nullable
@@ -487,7 +492,7 @@ public abstract class Dinosaur extends TameableEntity {
     public void addHungerValue(ItemStack food, LivingEntity feeder) {
         if (!food.isFood() || !isFood(food) || (!isOwner(feeder) && !isKnockedOutBy(feeder)))
             return;
-        if (feeder instanceof ServerPlayerEntity)
+        if (feeder instanceof ServerPlayerEntity && isOwner(feeder))
             CriteriaTriggerInit.FEED_DINOSAUR.trigger((ServerPlayerEntity) feeder, food, this);
         float saturation = food.getItem().getFood().getHealing();
         float maxSaturation = MathHelper.clamp(saturation, 0, maxHunger - getHungerValue());

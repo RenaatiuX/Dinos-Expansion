@@ -19,7 +19,7 @@ public enum DinoRiverLayer implements ICastleTransformer {
         if (!isOneRiver(north, west, south, east, center) && shouldRiver(center, west, south, east, north)) {
             return DinoLayerUtil.getBiomeId(BiomeInit.RIVER.getKey());
         } else {
-            return -1;
+            return center;
         }
     }
 
@@ -34,8 +34,10 @@ public enum DinoRiverLayer implements ICastleTransformer {
     }
 
     boolean shouldRiver(int id1, int id2) {
-        return id1 != id2 && !areSubbiomes(id1, id2);
+        return id1 != id2 && !areSubbiomes(id1, id2) && DinoLayerUtil.canSpawnRiverAdjacent(id1) && DinoLayerUtil.canSpawnRiverAdjacent(id2);
     }
+
+
 
 
 }

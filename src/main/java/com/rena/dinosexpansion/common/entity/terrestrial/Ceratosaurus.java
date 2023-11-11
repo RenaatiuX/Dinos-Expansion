@@ -45,7 +45,7 @@ public class Ceratosaurus extends ChestedDinosaur implements IAnimatable, IAnima
                 .createMutableAttribute(Attributes.ARMOR, 12.0D)
                 .createMutableAttribute(Attributes.ATTACK_DAMAGE, 10.0D)
                 .createMutableAttribute(Attributes.KNOCKBACK_RESISTANCE, 0.4F)
-                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.25F);
+                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.4F);
     }
 
     private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
@@ -139,23 +139,19 @@ public class Ceratosaurus extends ChestedDinosaur implements IAnimatable, IAnima
         //this.getInfo().print();
         //DinosExpansion.LOGGER.debug("Narcotic: [" + getNarcoticValue() + "/" + this.getMaxNarcotic() + "]");
         //DinosExpansion.LOGGER.debug("IsKnockout: " + this.isKnockout());
-        if (!world.isRemote() && hand == Hand.MAIN_HAND && isKnockedOutBy(player) && player.getHeldItem(hand).isEmpty()) {
-            openTamingGui(this, (ServerPlayerEntity) player);
-            return ActionResultType.SUCCESS;
-        }
         //System.out.println(String.format("%s|%s|%s|%s|%s|%s", !this.world.isRemote, this.isTamed(), isOwner(player), hand == Hand.MAIN_HAND, player.getHeldItem(hand).getItem() == Items.SADDLE, !hasSaddle()));
         if (!this.world.isRemote && this.isTamed() && isOwner(player) && hand == Hand.MAIN_HAND && player.getHeldItem(hand).getItem() == Items.SADDLE && !hasSaddle()) {
             this.setArmor(DinosaurArmorSlotType.SADDLE, player.getHeldItem(hand).copy());
             player.getHeldItem(hand).shrink(1);
             return ActionResultType.SUCCESS;
         }
-        if (!this.world.isRemote && this.isTamed() && isOwner(player) && this.canFitPassenger(player) && hasSaddle() && !player.isSneaking()) {
+        if (!this.world.isRemote && this.isTamed() && isOwner(player) && !isMovementDisabled() && this.canFitPassenger(player) && hasSaddle() && !player.isSneaking() && player.getHeldItem(hand).getItem() != getOrderItem()) {
             player.rotationYaw = this.rotationYaw;
             player.rotationPitch = this.rotationPitch;
             player.startRiding(this);
             return ActionResultType.SUCCESS;
         }
-        if (!this.world.isRemote && this.isTamed() && isOwner(player) && player.getHeldItem(hand).isEmpty() && player.isSneaking()) {
+        if (!this.world.isRemote && this.isTamed() && isOwner(player) && player.getHeldItem(hand).isEmpty() && player.isSneaking() && !isKnockout()) {
             Dinosaur.openMediumDinoGui(this, (ServerPlayerEntity) player);
             return ActionResultType.SUCCESS;
         }
@@ -165,7 +161,7 @@ public class Ceratosaurus extends ChestedDinosaur implements IAnimatable, IAnima
     @Override
     public void travel(Vector3d pos) {
         if (this.isAlive()) {
-            if (this.isBeingRidden()) {
+            if (this.isBeingRidden() && !isMovementDisabled()) {
                 LivingEntity livingentity = (LivingEntity) this.getControllingPassenger();
                 this.rotationYaw = livingentity.rotationYaw;
                 this.prevRotationYaw = this.rotationYaw;

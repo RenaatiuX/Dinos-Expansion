@@ -9,13 +9,9 @@ public enum DinoMixOceansLayer implements IAreaTransformer2, IDimOffset0Transfor
     INSTANCE;
 
     @Override
-    public int apply(INoiseRandom noise, IArea oceans, IArea biomes, int x, int z) {
+    public int apply(INoiseRandom noise, IArea oceans, IArea oceanLandArea, int x, int z) {
         int ocean = oceans.getValue(getOffsetX(x), getOffsetZ(z));
-        int biome = biomes.getValue(getOffsetX(x), getOffsetZ(z));
-
-        if (biome == 0){
-            return ocean;
-        }
-        return biome;
+        int oceanLand = oceanLandArea.getValue(getOffsetX(x), getOffsetZ(z));
+        return oceanLand == 0 ? ocean : oceanLand;
     }
 }

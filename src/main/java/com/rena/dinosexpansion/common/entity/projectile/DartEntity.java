@@ -40,7 +40,7 @@ public class DartEntity extends AbstractArrowEntity {
         if (shooter instanceof PlayerEntity) {
             this.pickupStatus = AbstractArrowEntity.PickupStatus.ALLOWED;
         }
-        this.dataManager.set(DART_STACK, dart);
+        this.dataManager.set(DART_STACK, countDart);
     }
 
     @Override
