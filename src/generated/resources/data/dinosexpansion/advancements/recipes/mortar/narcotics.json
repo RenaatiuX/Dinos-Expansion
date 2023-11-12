@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "dinosexpansion:narcotics"
+    ]
+  },
+  "criteria": {
+    "has_rotten": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "dinosexpansion:narcotic_berries"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "dinosexpansion:narcotics"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_rotten",
+      "has_the_recipe"
+    ]
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "type": "dinosexpansion:mortar",
+  "experience": 0.15,
+  "workTime": 400,
+  "ingredients": [
+    {
+      "ingredient": {
+        "item": "dinosexpansion:narcotic_berries"
+      },
+      "count": 3
+    },
+    {
+      "ingredient": {
+        "item": "minecraft:rotten_flesh"
+      }
+    }
+  ],
+  "result": {
+    "item": "dinosexpansion:narcotics"
+  }
+}
