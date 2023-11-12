@@ -140,16 +140,16 @@ public class BlockInit {
     public static final RegistryObject<Block> REDWOOD_LEAVES = register("redwood_leaves",
             () -> new LeavesBlock(AbstractBlock.Properties.create(Material.LEAVES).hardnessAndResistance(0.2F).tickRandomly().sound(SoundType.PLANT).notSolid()
                     .setBlocksVision((state, world, pos) -> false).setSuffocates((state, world, pos) -> false).harvestTool(ToolType.HOE)), ModItemGroups.BLOCKS);
-    public static final RegistryObject<Block> REDWOOD_LOG = register("redwood_log",
+    public static final RegistryObject<RotatedPillarBlock> REDWOOD_LOG = register("redwood_log",
             () -> new RotatedPillarBlock((AbstractBlock.Properties.create(Material.WOOD).sound(SoundType.WOOD).hardnessAndResistance(2.0F))), ModItemGroups.BLOCKS);
     public static final RegistryObject<Block> REDWOOD_SAPLING = register("redwood_sapling",
             () -> new BaseSaplingBlock(ModTreeSpawners.REDWOOD, AbstractBlock.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().zeroHardnessAndResistance().sound(SoundType.PLANT)), ModItemGroups.BLOCKS);
     public static final RegistryObject<Block> CRATAEGUS_PLANKS = register("crataegus_planks",
             () -> new Block(AbstractBlock.Properties.create(Material.WOOD, MaterialColor.ADOBE).hardnessAndResistance(2.0F, 3.0F)
                     .sound(SoundType.WOOD)), ModItemGroups.BLOCKS);
-    public static final RegistryObject<Block> CRATAEGUS_LOG = register("crataegus_log",
+    public static final RegistryObject<RotatedPillarBlock> CRATAEGUS_LOG = register("crataegus_log",
             () -> new RotatedPillarBlock((AbstractBlock.Properties.create(Material.WOOD).sound(SoundType.WOOD).hardnessAndResistance(2.0F))), ModItemGroups.BLOCKS);
-    public static final RegistryObject<Block> STRIPPED_CRATAEGUS_LOG = register("stripped_crataegus_log",
+    public static final RegistryObject<RotatedPillarBlock> STRIPPED_CRATAEGUS_LOG = register("stripped_crataegus_log",
             () -> new RotatedPillarBlock((AbstractBlock.Properties.create(Material.WOOD).sound(SoundType.WOOD).hardnessAndResistance(2.0F))), ModItemGroups.BLOCKS);
     public static final RegistryObject<DoorBlock> CRATAEGUS_DOOR = register("crataegus_door",
             () -> new DoorBlock(AbstractBlock.Properties.create(Material.WOOD, CRATAEGUS_PLANKS.get().getMaterialColor())

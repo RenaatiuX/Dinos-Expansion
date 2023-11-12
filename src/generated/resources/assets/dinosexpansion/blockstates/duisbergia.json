@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "half=upper": {
+      "model": "dinosexpansion:block/duisbergia_top"
+    },
+    "half=lower": {
+      "model": "dinosexpansion:block/duisbergia_bottom"
+    }
+  }
+}

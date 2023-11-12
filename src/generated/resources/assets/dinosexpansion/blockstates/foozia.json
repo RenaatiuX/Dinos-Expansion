@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "half=upper": {
+      "model": "dinosexpansion:block/foozia_top"
+    },
+    "half=lower": {
+      "model": "dinosexpansion:block/foozia_bottom"
+    }
+  }
+}

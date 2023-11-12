@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:block/cross",
-  "textures": {
-    "cross": "dinosexpansion:block/narcotic_berry_bush_stage0"
-  }
-}

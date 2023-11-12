@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "dinosexpansion:block/prototaxites_crown"
+  }
+}

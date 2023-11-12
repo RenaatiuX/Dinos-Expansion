@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "height=base": {
+      "model": "dinosexpansion:block/tempskya_base"
+    },
+    "height=center": {
+      "model": "dinosexpansion:block/tempskya_center"
+    },
+    "height=crown": {
+      "model": "dinosexpansion:block/tempskya_crown"
+    }
+  }
+}

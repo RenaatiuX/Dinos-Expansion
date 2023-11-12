@@ -1,7 +1,0 @@
-{
-  "parent":"block/cube_column",
-  "textures":{
-    "end":"dinosexpansion:block/stripped_crataegus_log_top",
-    "side":"dinosexpansion:block/stripped_crataegus_log"
-  }
-}

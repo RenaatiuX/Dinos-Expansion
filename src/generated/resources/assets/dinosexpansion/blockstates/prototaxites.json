@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "height=base": {
+      "model": "dinosexpansion:block/prototaxites_base"
+    },
+    "height=center": {
+      "model": "dinosexpansion:block/prototaxites_center"
+    },
+    "height=crown": {
+      "model": "dinosexpansion:block/prototaxites_crown"
+    }
+  }
+}
