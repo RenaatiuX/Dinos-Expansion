@@ -151,7 +151,7 @@ public class BlockInit {
             () -> new RotatedPillarBlock((AbstractBlock.Properties.create(Material.WOOD).sound(SoundType.WOOD).hardnessAndResistance(2.0F))), ModItemGroups.BLOCKS);
     public static final RegistryObject<Block> STRIPPED_CRATAEGUS_LOG = register("stripped_crataegus_log",
             () -> new RotatedPillarBlock((AbstractBlock.Properties.create(Material.WOOD).sound(SoundType.WOOD).hardnessAndResistance(2.0F))), ModItemGroups.BLOCKS);
-    public static final RegistryObject<Block> CRATAEGUS_DOOR = register("crataegus_door",
+    public static final RegistryObject<DoorBlock> CRATAEGUS_DOOR = register("crataegus_door",
             () -> new DoorBlock(AbstractBlock.Properties.create(Material.WOOD, CRATAEGUS_PLANKS.get().getMaterialColor())
                     .hardnessAndResistance(3.0F).sound(SoundType.WOOD).notSolid()), ModItemGroups.BLOCKS);
     public static final RegistryObject<Block> CRATAEGUS_LEAVES = register("crataegus_leaves",

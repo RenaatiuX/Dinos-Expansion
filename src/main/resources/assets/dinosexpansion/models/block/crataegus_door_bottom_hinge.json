@@ -1,7 +1,0 @@
-{
-  "parent": "minecraft:block/door_bottom_rh",
-  "textures": {
-    "top": "dinosexpansion:block/crataegus_door_top",
-    "bottom": "dinosexpansion:block/crataegus_door_bottom"
-  }
-}
