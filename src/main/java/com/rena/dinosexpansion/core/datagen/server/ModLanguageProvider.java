@@ -8,15 +8,11 @@ import com.rena.dinosexpansion.common.util.enums.AttackOrder;
 import com.rena.dinosexpansion.common.util.enums.MoveOrder;
 import com.rena.dinosexpansion.core.init.*;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.data.LanguageProvider;
 import net.minecraftforge.fml.RegistryObject;
-
-import java.util.Arrays;
 
 public class ModLanguageProvider extends LanguageProvider {
     public ModLanguageProvider(DataGenerator gen) {
@@ -127,7 +123,7 @@ public class ModLanguageProvider extends LanguageProvider {
         add(ItemInit.MEGA_PIRANHA_BUCKET.get(), "Bucket of MegaPiranha");
         add(ItemInit.ELECTRONICS_PARTS.get(), "Electronics Parts");
         add(ItemInit.OIL.get(), "Oil");
-        add(ItemInit.SCRAP.get(), "Scrap");
+        add(ItemInit.METAL_SCRAP.get(), "Metal Scrap");
         add(ItemInit.EXPLORER_JOURNAL.get(), "Explorer Journal");
         add(ItemInit.EXPLORER_JOURNAL_PAGE.get(), "Explorer Journal Page");
         add(ItemInit.SPECIAL_FRUIT.get(), "Special Fruit");
@@ -145,7 +141,7 @@ public class ModLanguageProvider extends LanguageProvider {
         add(ItemInit.WETHERELLUS_BUCKET.get(), "Bucket of Wetherellus");
         add(ItemInit.QUICKSAND_BUCKET.get(), "Bucket of Quicksand");
         add(ItemInit.GLOW_STICK.get(), "Glowstick");
-        add(ItemInit.SPYGLASS.get(), "Spyglass");
+        add(ItemInit.BAMBOO_SPYGLASS.get(), "Spyglass");
         add(ItemInit.TELEPORT_ITEM.get(), "Teleport Machine");
         add(ItemInit.NARCOTIC_BERRIES.get(), "Narcotic Berries");
         add(ItemInit.EGGPLANT.get(), "Eggplant");

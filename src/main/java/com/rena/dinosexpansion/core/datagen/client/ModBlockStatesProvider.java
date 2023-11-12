@@ -96,7 +96,7 @@ public class ModBlockStatesProvider extends BlockStateProvider {
         leaves(BlockInit.REDWOOD_LEAVES.get());
         logBlock(BlockInit.REDWOOD_LOG.get());
         blockItem(BlockInit.REDWOOD_LOG.get());
-        simplePlant(BlockInit.REDWOOD_SAPLING, false);
+        simplePlant(BlockInit.REDWOOD_SAPLING);
         block(BlockInit.RUBY_BLOCK.get(), BlockInit.RUBY_ORE.get(), BlockInit.SAPPHIRE_BLOCK.get(), BlockInit.SAPPHIRE_ORE.get());
         simplePlant(BlockInit.SARRACENIA.get());
         logBlock(BlockInit.STRIPPED_CRATAEGUS_LOG.get());

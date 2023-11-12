@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "dinosexpansion:item/raw_gallimimus_meat"
-  }
-}

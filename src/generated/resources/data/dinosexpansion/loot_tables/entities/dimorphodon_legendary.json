@@ -23,7 +23,7 @@
               }
             }
           ],
-          "name": "dinosexpansion:electronics_parts"
+          "name": "dinosexpansion:electronic_parts"
         }
       ],
       "conditions": [
@@ -85,7 +85,7 @@
               }
             }
           ],
-          "name": "dinosexpansion:scrap"
+          "name": "dinosexpansion:metal_scrap"
         }
       ],
       "conditions": [

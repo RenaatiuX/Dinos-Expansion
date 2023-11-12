@@ -33,7 +33,7 @@ public class ModEntityLoot extends EntityLootTables {
         registerLootTable(Dinosaur.getLootTableForRarity(EntityInit.DIMORPHODON.getId(), Dinosaur.Rarity.LEGENDARY), LootTable.builder()
                 .addLootPool(makePool(ItemInit.ELECTRONICS_PARTS.get(),1, 4, .2f, .2f, true))
                 .addLootPool(makePool(ItemInit.OIL.get(), 1 ,4, .3f, .2f, true))
-                .addLootPool(makePool(ItemInit.SCRAP.get(), 1, 4, .6f, .2f, true)
+                .addLootPool(makePool(ItemInit.METAL_SCRAP.get(), 1, 4, .6f, .2f, true)
         ));
         registerLootTable(Dinosaur.getLootTableForRarity(EntityInit.DIMORPHODON.getId(), Dinosaur.Rarity.RARE), LootTable.builder()
                 .addLootPool(makePool(ItemInit.RAW_DIMORPHODON_MEAT.get(), 1, 3, 0, 2, true)));

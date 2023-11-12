@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "dinosexpansion:item/cucumber_seed"
+    "layer0": "dinosexpansion:block/redwood_sapling"
   }
 }

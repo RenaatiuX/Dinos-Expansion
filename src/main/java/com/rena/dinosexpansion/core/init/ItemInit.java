@@ -15,7 +15,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.Rarity;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.fml.RegistryObject;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -299,11 +298,11 @@ public class ItemInit {
             () -> new CustomFishBucket(EntityInit.BELANTSEA::get, () -> Fluids.WATER, new Item.Properties().group(ModItemGroups.ITEMS)));
     public static final RegistryObject<Item> ACANTHODES_BUCKET = ITEMS.register("acanthodes_bucket",
             () -> new CustomFishBucket(EntityInit.ACANTHODES::get, () -> Fluids.WATER, new Item.Properties().group(ModItemGroups.ITEMS)));
-    public static final RegistryObject<Item> ELECTRONICS_PARTS = ITEMS.register("electronics_parts",
+    public static final RegistryObject<Item> ELECTRONICS_PARTS = ITEMS.register("electronic_parts",
             () -> new Item(new Item.Properties().group(ModItemGroups.ITEMS)));
     public static final RegistryObject<Item> OIL = ITEMS.register("oil",
             () -> new TestItem(new Item.Properties().group(ModItemGroups.ITEMS).maxDamage(100)));
-    public static final RegistryObject<Item> SCRAP = ITEMS.register("scrap",
+    public static final RegistryObject<Item> METAL_SCRAP = ITEMS.register("metal_scrap",
             () -> new Item(new Item.Properties().group(ModItemGroups.ITEMS)));
     public static final RegistryObject<Item> EXPLORER_JOURNAL = ITEMS.register("explorer_journal",
             () -> new ExplorerJournalItem(new Item.Properties().group(ModItemGroups.ITEMS)));
@@ -313,7 +312,7 @@ public class ItemInit {
             () -> new CustomBlockBucket(new Item.Properties().group(ModItemGroups.ITEMS).maxStackSize(1), BlockInit.QUICKSAND));
     public static final RegistryObject<Item> GLOW_STICK = ITEMS.register("glowstick",
             () -> new GlowStickItem(new Item.Properties().group(ModItemGroups.ITEMS)));
-    public static final RegistryObject<ZoomItem> SPYGLASS = ITEMS.register("spyglass",
+    public static final RegistryObject<ZoomItem> BAMBOO_SPYGLASS = ITEMS.register("bamboo_spyglass",
             () -> new ZoomItem(new Item.Properties().group(ModItemGroups.ITEMS), 2, 10));
     public static final RegistryObject<Item> TELEPORT_ITEM = ITEMS.register("teleport_machine",
             () -> new TeleportedItem(new Item.Properties().group(ModItemGroups.ITEMS).rarity(Rarity.EPIC)));
