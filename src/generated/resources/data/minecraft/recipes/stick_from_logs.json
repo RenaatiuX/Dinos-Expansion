@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "l",
+    "l"
+  ],
+  "key": {
+    "l": {
+      "item": "dinosexpansion:crataegus_log"
+    }
+  },
+  "result": {
+    "item": "minecraft:stick"
+  }
+}

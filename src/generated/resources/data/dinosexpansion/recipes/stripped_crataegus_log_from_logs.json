@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ll",
+    "ll"
+  ],
+  "key": {
+    "l": {
+      "item": "dinosexpansion:crataegus_log"
+    }
+  },
+  "result": {
+    "item": "dinosexpansion:stripped_crataegus_log",
+    "count": 3
+  }
+}

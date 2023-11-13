@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "dinosexpansion:crataegus_log"
+    }
+  ],
+  "result": {
+    "item": "dinosexpansion:crataegus_planks",
+    "count": 4
+  }
+}

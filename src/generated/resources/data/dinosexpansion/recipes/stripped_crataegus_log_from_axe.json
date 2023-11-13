@@ -1,0 +1,7 @@
+{
+  "type": "dinosexpansion:stripping_recipe",
+  "ingredient": {
+    "item": "dinosexpansion:crataegus_log"
+  },
+  "result": "dinosexpansion:stripped_crataegus_log"
+}

@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "pp",
+    "pp"
+  ],
+  "key": {
+    "p": {
+      "item": "dinosexpansion:crataegus_planks"
+    }
+  },
+  "result": {
+    "item": "minecraft:stick"
+  }
+}

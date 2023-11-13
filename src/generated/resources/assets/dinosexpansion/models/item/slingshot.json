@@ -1,0 +1,20 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "dinosexpansion:item/slingshot"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "minecraft:pulling": 0.0
+      },
+      "model": "dinosexpansion:item/slingshot_pulling_0"
+    },
+    {
+      "predicate": {
+        "minecraft:pulling": 0.0
+      },
+      "model": "dinosexpansion:item/slingshot_pulling_1"
+    }
+  ]
+}
