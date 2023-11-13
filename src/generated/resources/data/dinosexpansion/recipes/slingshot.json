@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "sls",
+    " s "
+  ],
+  "key": {
+    "s": {
+      "tag": "dinosexpansion:dino_sticks"
+    },
+    "l": {
+      "item": "minecraft:lead"
+    }
+  },
+  "result": {
+    "item": "dinosexpansion:slingshot"
+  }
+}

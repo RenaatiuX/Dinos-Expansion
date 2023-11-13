@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:smithing",
+  "base": {
+    "item": "dinosexpansion:wooden_hatchet"
+  },
+  "addition": {
+    "item": "minecraft:smooth_stone"
+  },
+  "result": {
+    "item": "dinosexpansion:stone_hatchet"
+  }
+}

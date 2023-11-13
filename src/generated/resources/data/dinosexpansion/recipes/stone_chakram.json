@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " m ",
+    "msm",
+    " m "
+  ],
+  "key": {
+    "m": {
+      "item": "minecraft:smooth_stone"
+    },
+    "s": {
+      "tag": "dinosexpansion:dino_sticks"
+    }
+  },
+  "result": {
+    "item": "dinosexpansion:stone_chakram"
+  }
+}

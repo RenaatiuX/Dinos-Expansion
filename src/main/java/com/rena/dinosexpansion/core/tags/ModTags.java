@@ -18,6 +18,7 @@ public class ModTags {
         public static final ITag.INamedTag<Item> COMPOUND_ARROWS = mod("compound_arrows");
         public static final ITag.INamedTag <Item> AQUATIC_ENCHANT = mod("aquatic_enchant");
         public static final ITag.INamedTag<Item> KIBBLE = mod("kibble");
+        public static final ITag.INamedTag<Item> DINO_STICKS = mod("dino_sticks");
 
         //Dinosaur Food
         public static final ITag.INamedTag<Item> EOSQUALODON_FOOD = mod("eosqualodon_food");

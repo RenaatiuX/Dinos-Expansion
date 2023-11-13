@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " m ",
+    "msm",
+    " m "
+  ],
+  "key": {
+    "m": {
+      "item": "minecraft:gold_ingot"
+    },
+    "s": {
+      "tag": "dinosexpansion:dino_sticks"
+    }
+  },
+  "result": {
+    "item": "dinosexpansion:golden_chakram"
+  }
+}

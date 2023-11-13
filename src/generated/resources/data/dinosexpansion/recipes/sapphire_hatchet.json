@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:smithing",
+  "base": {
+    "item": "dinosexpansion:ruby_hatchet"
+  },
+  "addition": {
+    "item": "dinosexpansion:sapphire"
+  },
+  "result": {
+    "item": "dinosexpansion:sapphire_hatchet"
+  }
+}

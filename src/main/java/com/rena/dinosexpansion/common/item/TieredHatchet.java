@@ -87,7 +87,7 @@ public class TieredHatchet extends Item {
     protected void throwHatchet(final World world, final PlayerEntity thrower, final ItemStack stack) {
         stack.damageItem(1, thrower, e -> e.sendBreakAnimation(thrower.getActiveHand()));
         HatchetEntity hatchet = new HatchetEntity(thrower, world, stack);
-        hatchet.setDirectionAndMovement(thrower, thrower.rotationPitch, thrower.rotationYaw, 0.0F, 1.75F, 1.0F);
+        hatchet.setDirectionAndMovement(thrower, thrower.rotationPitch, thrower.rotationYaw, 0.0F, 1.65F + this.hatchetTier.getSpeedAddition(), 1.0F);
 
         int j = EnchantmentHelper.getEnchantmentLevel(Enchantments.SHARPNESS, stack);
         if (j > 0) {
@@ -153,7 +153,7 @@ public class TieredHatchet extends Item {
     public interface HatchetTier {
 
         double getDamageAddition();
-        double getSpeedAddition();
+        float getSpeedAddition();
         int getEnchantability();
         int getDurability();
 
