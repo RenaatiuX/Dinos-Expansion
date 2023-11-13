@@ -28,7 +28,8 @@ public class StructureGeneration {
             List<Supplier<StructureFeature<?, ?>>> structures =  event.getGeneration().getStructures();
             structures.add(() -> ConfiguredStructureInit.HERMIT_HOUSE);
         }
-        if (ForgeRegistries.BIOMES.getValue(event.getName()) == BiomeInit.VULCANO.getBiome()){
+        if (event.getName() != null && event.getName().equals(BiomeInit.VULCANO_BIOME.getId())){
+            System.out.println("generating a vulcano");
             event.getGeneration().getStructures().add(() -> ConfiguredStructureInit.VULCANO);
         }
     }

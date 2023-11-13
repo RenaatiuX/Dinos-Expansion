@@ -4,6 +4,8 @@ package com.rena.dinosexpansion.common.world;
 import com.mojang.serialization.Codec;
 import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.common.world.gen.StructureGeneration;
+import com.rena.dinosexpansion.common.world.gen.feature.ore.GeneratedOre;
+import com.rena.dinosexpansion.common.world.gen.feature.ore.GeneratingOres;
 import com.rena.dinosexpansion.core.init.StructureInit;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
@@ -29,12 +31,14 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
-@Mod.EventBusSubscriber(modid = DinosExpansion.MOD_ID, value = Dist.DEDICATED_SERVER)
+@Mod.EventBusSubscriber(modid = DinosExpansion.MOD_ID)
 public class WorldEvents {
 
     @SubscribeEvent
     public static void biomeLoading(final BiomeLoadingEvent event){
         StructureGeneration.generateStructures(event);//this has to be called before all following generations
+
+        GeneratedOre.generateOres(event);
 
         RegistryKey<Biome> key = RegistryKey.getOrCreateKey(Registry.BIOME_KEY, event.getName());
         if (key == Biomes.PLAINS){
