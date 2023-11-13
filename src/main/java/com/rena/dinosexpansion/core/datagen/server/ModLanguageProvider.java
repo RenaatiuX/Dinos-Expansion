@@ -13,6 +13,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.data.LanguageProvider;
 import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.registries.ForgeRegistryEntry;
 
 public class ModLanguageProvider extends LanguageProvider {
     public ModLanguageProvider(DataGenerator gen) {
@@ -52,6 +53,8 @@ public class ModLanguageProvider extends LanguageProvider {
         add(BlockInit.REDWOOD_SAPLING.get(), "Redwood Sapling");
         add(BlockInit.GEYSER.get(), "Geyser");
         add(BlockInit.QUICKSAND.get(), "Quicksand");
+        add(BlockInit.RUBY_ORE.get(), "Ruby Ore");
+        add(BlockInit.SAPPHIRE_ORE.get(), "Sapphire Ore");
         add(ItemInit.COMPOUND_ARROW.get(), "Compound Arrow");
         add(ItemInit.COMPOUND_BOW.get(), "Compound Bow");
         add(ItemInit.TRANQUILLIZER_ARROW.get(), "Tranquillizer Arrow");
@@ -123,6 +126,7 @@ public class ModLanguageProvider extends LanguageProvider {
         add(ItemInit.MEGA_PIRANHA_BUCKET.get(), "Bucket of MegaPiranha");
         add(ItemInit.ELECTRONICS_PARTS.get(), "Electronics Parts");
         add(ItemInit.OIL.get(), "Oil");
+        add(ItemInit.REDWOOD_STICK.get(), toTitleCase(ItemInit.REDWOOD_STICK.get()));
         add(ItemInit.METAL_SCRAP.get(), "Metal Scrap");
         add(ItemInit.EXPLORER_JOURNAL.get(), "Explorer Journal");
         add(ItemInit.EXPLORER_JOURNAL_PAGE.get(), "Explorer Journal Page");
@@ -228,6 +232,9 @@ public class ModLanguageProvider extends LanguageProvider {
         add(component.getString(), name);
     }
 
+    public static String toTitleCase(ForgeRegistryEntry<?> input) {
+        return toTitleCase(input.getRegistryName().getPath());
+    }
 
     public static String toTitleCase(String input) {
         StringBuilder titleCase = new StringBuilder();

@@ -41,6 +41,6 @@ public class ModItemTagsProvider extends ItemTagsProvider {
         getOrCreateBuilder(ModTags.Items.EOSQUALODON_FOOD).add(Items.SALMON);
         getOrCreateBuilder(ModTags.Items.DIMORPHODON_FOOD).add(Items.COD).add(Items.SALMON).add(Items.TROPICAL_FISH).add(Items.PUFFERFISH);
         getOrCreateBuilder(ModTags.Items.CERATOSAURUS_FOOD).add(Items.CHICKEN).add(Items.COOKED_CHICKEN).add(Items.BEEF).add(Items.COOKED_CHICKEN).add(Items.COOKED_MUTTON).add(Items.MUTTON).add(Items.PORKCHOP).add(Items.COOKED_PORKCHOP);
-        getOrCreateBuilder(ModTags.Items.DINO_STICKS).add(Items.STICK);
+        getOrCreateBuilder(ModTags.Items.DINO_STICKS).add(ItemInit.REDWOOD_STICK.get());
     }
 }

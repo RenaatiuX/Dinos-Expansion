@@ -10,14 +10,11 @@ import net.minecraft.world.World;
 
 public class DimensionInit {
 
-    public static final RegistryKey<World> DINO_DIMENSION = RegistryKey.getOrCreateKey(Registry.WORLD_KEY,
-            new ResourceLocation(DinosExpansion.MOD_ID, "dino_dimension"));
+    public static final RegistryKey<World> DINO_DIMENSION = RegistryKey.getOrCreateKey(Registry.WORLD_KEY, new ResourceLocation(DinosExpansion.MOD_ID, "dino_dimension"));
 
     public static void registerDimension() {
-        Registry.register(Registry.BIOME_PROVIDER_CODEC, new ResourceLocation(DinosExpansion.MOD_ID, "dino_biome_source"),
-                DinoBiomeProvider.CODEC);
-        Registry.register(Registry.CHUNK_GENERATOR_CODEC, new ResourceLocation(DinosExpansion.MOD_ID, "dino_chunk_generator"),
-                DinoChunkGenerator.CODEC);
+        Registry.register(Registry.BIOME_PROVIDER_CODEC, new ResourceLocation(DinosExpansion.MOD_ID, "dino_biome_source"), DinoBiomeProvider.CODEC);
+        Registry.register(Registry.CHUNK_GENERATOR_CODEC, new ResourceLocation(DinosExpansion.MOD_ID, "dino_chunk_generator"), DinoChunkGenerator.CODEC);
     }
 
 }

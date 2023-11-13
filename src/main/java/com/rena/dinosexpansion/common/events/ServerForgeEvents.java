@@ -2,9 +2,11 @@ package com.rena.dinosexpansion.common.events;
 
 import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.common.commands.TameCommand;
+import com.rena.dinosexpansion.common.recipe.StrippingRecipe;
 import com.rena.dinosexpansion.core.init.DamageSourceInit;
 import com.rena.dinosexpansion.core.init.EffectInit;
 import com.rena.dinosexpansion.core.init.EnchantmentInit;
+import com.rena.dinosexpansion.core.init.RecipeInit;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
@@ -13,6 +15,7 @@ import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.item.*;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.EffectType;
@@ -20,12 +23,14 @@ import net.minecraft.potion.Effects;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.common.ToolType;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.ProjectileImpactEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -260,5 +265,16 @@ public class ServerForgeEvents {
     @SubscribeEvent
     public static void onCommandRegister(RegisterCommandsEvent event){
         new TameCommand(event.getDispatcher());
+    }
+
+
+    @SubscribeEvent
+    public static void onStrip(BlockEvent.BlockToolInteractEvent event){
+        if (event.getToolType() == ToolType.AXE){
+            StrippingRecipe recipe = event.getPlayer().world.getRecipeManager().getRecipe(RecipeInit.STRIPPING, new Inventory(new ItemStack(event.getFinalState().getBlock())), event.getPlayer().world).orElse(null);
+            if (recipe != null){
+                event.setFinalState(recipe.getResult().getDefaultState());
+            }
+        }
     }
 }

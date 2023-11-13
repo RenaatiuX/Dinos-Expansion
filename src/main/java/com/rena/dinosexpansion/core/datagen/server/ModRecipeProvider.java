@@ -2,9 +2,11 @@ package com.rena.dinosexpansion.core.datagen.server;
 
 import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.core.datagen.server.recipes.MortarRecipeBuilder;
+import com.rena.dinosexpansion.core.datagen.server.recipes.StrippingRecipeBuilder;
 import com.rena.dinosexpansion.core.init.BlockInit;
 import com.rena.dinosexpansion.core.init.ItemInit;
 import com.rena.dinosexpansion.core.tags.ModTags;
+import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.gui.CommandSuggestionHelper;
 import net.minecraft.data.*;
@@ -14,6 +16,7 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tags.ITag;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.IItemProvider;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.Tags;
 
 import java.util.Objects;
@@ -30,6 +33,11 @@ public class ModRecipeProvider extends RecipeProvider {
         makeObfuscatedCraftingRecipes(consumer);
         chakrams(consumer);
         makeHatchets(consumer);
+        makeWoodRecipes(consumer);
+    }
+
+    protected void makeWoodRecipes(Consumer<IFinishedRecipe> consumer){
+        makeWoodRecipes(consumer, BlockInit.CRATAEGUS_LOG.get(), BlockInit.CRATAEGUS_PLANKS.get(), Items.STICK, Items.CHARCOAL, BlockInit.STRIPPED_CRATAEGUS_LOG.get());
     }
 
     protected void makeObfuscatedCraftingRecipes(Consumer<IFinishedRecipe> consumer){
@@ -87,7 +95,7 @@ public class ModRecipeProvider extends RecipeProvider {
     protected static void makeChakramRecipe(Consumer<IFinishedRecipe> consumer, IItemProvider chakram, IItemProvider material, IItemProvider middle){
         ShapedRecipeBuilder.shapedRecipe(chakram)
                 .key('m', material)
-                .key('s', ModTags.Items.DINO_STICKS)
+                .key('s', middle)
                 .patternLine(" m ")
                 .patternLine("msm")
                 .patternLine(" m ")
@@ -104,6 +112,44 @@ public class ModRecipeProvider extends RecipeProvider {
                 .patternLine(" m ")
                 .addCriterion("has_item", hasItem(material))
                 .build(consumer);
+    }
+
+    /**
+     * this will make all the wood related recipes, this will also make smelting recipes, so wood can be smelted to the provided coal
+     * @param consumer
+     * @param log
+     * @param planks
+     * @param sticks
+     */
+
+    protected static void makeWoodRecipes(Consumer<IFinishedRecipe> consumer, IItemProvider log, IItemProvider planks, IItemProvider sticks, IItemProvider coal, Block stripped){
+        if (coal.asItem() != Items.CHARCOAL)
+            CookingRecipeBuilder.smeltingRecipe(Ingredient.fromItems(log), coal, 0.15F, 200).addCriterion("has_log", hasItem(log)).build(consumer);
+        ShapelessRecipeBuilder.shapelessRecipe(planks, 4).addIngredient(Ingredient.fromItems(log)).addCriterion("has_log", hasItem(log)).build(consumer);
+        ShapedRecipeBuilder.shapedRecipe(sticks).key('p', planks)
+                .patternLine("pp")
+                .patternLine("pp").addCriterion("has_planks", hasItem(planks)).build(consumer, extend(sticks.asItem().getRegistryName(), "_from_planks"));
+        ShapedRecipeBuilder.shapedRecipe(sticks).key('l', log)
+                .patternLine("l")
+                .patternLine("l").addCriterion("has_log", hasItem(log)).build(consumer, extend(sticks.asItem().getRegistryName(), "_from_logs"));
+        if (stripped != null){
+            ShapedRecipeBuilder.shapedRecipe(stripped, 3).key('l', log)
+                    .patternLine("ll")
+                    .patternLine("ll").addCriterion("has_log", hasItem(log)).build(consumer,extend(stripped.asItem().getRegistryName(), "_from_logs"));
+            StrippingRecipeBuilder.builder(stripped).log(log).build(consumer, extend(stripped.getRegistryName(), "_from_axe"));
+        }
+    }
+
+    protected static void makeWoodRecipes(Consumer<IFinishedRecipe> consumer, IItemProvider log, IItemProvider planks, IItemProvider sticks, IItemProvider coal){
+        makeWoodRecipes(consumer, log, planks, sticks, coal, null);
+    }
+
+    protected static void makeWoodRecipes(Consumer<IFinishedRecipe> consumer, IItemProvider log, IItemProvider planks, IItemProvider sticks){
+        makeWoodRecipes(consumer, log, planks, sticks, Items.CHARCOAL);
+    }
+
+    protected static ResourceLocation extend(ResourceLocation original, String extension){
+        return new ResourceLocation(original.getNamespace(), original.getPath() + extension);
     }
 
 

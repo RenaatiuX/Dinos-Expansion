@@ -7,6 +7,7 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.item.Item;
 import net.minecraft.item.SpawnEggItem;
 import net.minecraft.util.IItemProvider;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -60,11 +61,23 @@ public class ModItemModelsProvider extends ItemModelProvider {
         handheld(ItemInit.STONE_BOOMERANG.get(), ItemInit.STONE_HATCHET.get());
         simple(ItemInit.TELEPORT_ITEM.get(), ItemInit.TINY_ROCK.get(), ItemInit.TOMATO.get());
         handheld(ItemInit.WOODEN_HATCHET.get(), ItemInit.WOOD_BOOMERANG.get());
+        simple(ItemInit.REDWOOD_STICK.get());
 
 
         charkram(ItemInit.RUBY_CHAKRAM.get(), ItemInit.NETHERITE_CHAKRAM.get(), ItemInit.IRON_CHAKRAM.get(), ItemInit.STONE_CHAKRAM.get(), ItemInit.EMERALD_CHAKRAM.get(), ItemInit.DIAMOND_CHAKRAM.get(), ItemInit.SAPPHIRE_CHAKRAM.get(), ItemInit.WOODEN_CHAKRAM.get(), ItemInit.GOLD_CHAKRAM.get());
 
+        makeSlingshot();
 
+    }
+
+    private void makeSlingshot(){
+        String name = ItemInit.SLINGSHOT.getId().getPath();
+        ResourceLocation overrideProperty = new ResourceLocation("pulling");
+        String override0 = "_pulling_0";
+        String override1 = "_pulling_1";
+        getBuilder(name).parent(generated).texture("layer0", "item/" + name)
+                .override().predicate(overrideProperty, 0).model(getBuilder(name + override0).parent(generated).texture("layer0", "item/" + name + override0)).end()
+                .override().predicate(overrideProperty, 0).model(getBuilder(name + override1).parent(generated).texture("layer0", "item/" + name + override1)).end();
     }
 
     private void simple(Item... items) {
