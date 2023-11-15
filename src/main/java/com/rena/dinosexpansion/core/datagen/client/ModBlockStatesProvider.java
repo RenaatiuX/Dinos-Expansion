@@ -107,14 +107,16 @@ public class ModBlockStatesProvider extends BlockStateProvider {
         simplePlant(BlockInit.WELWITSCHIA);
         agingPlant(BlockInit.YELLOW_BERRY_BUSH.get(), BlockStateProperties.AGE_0_3);
         simplePlant(BlockInit.ZAMITES.get());
-        makeSignFiles(BlockInit.CRATEAGUS_SIGN.get(), BlockInit.CRATAEGUS_PLANKS.get());
+        makeSignFiles(BlockInit.CRATEAGUS_SIGN.get(), BlockInit.CRATEAGUS_WALL_SIGN.get(), BlockInit.CRATAEGUS_PLANKS.get());
 
 
     }
 
-    protected void makeSignFiles(Block standing, Block planks){
+    protected void makeSignFiles(Block standing, Block wall, Block planks) {
         ModelFile file = models().getBuilder(name(standing)).texture("particle", blockTexture(planks));
         this.getVariantBuilder(standing).partialState().setModels(new ConfiguredModel(file));
+        file = models().getBuilder(name(wall)).texture("particle", blockTexture(planks));
+        this.getVariantBuilder(wall).partialState().setModels(new ConfiguredModel(file));
     }
 
     protected void slabBlock(Supplier<Block> block, Supplier<Block> textureFrom) {
@@ -268,11 +270,11 @@ public class ModBlockStatesProvider extends BlockStateProvider {
         }
     }
 
-    protected void triplePlant(Block block){
+    protected void triplePlant(Block block) {
         triplePlant(block, true);
     }
 
-    protected void triplePlant(Block block, boolean generateBlockItem){
+    protected void triplePlant(Block block, boolean generateBlockItem) {
         getVariantBuilder(block).forAllStates(state -> {
             ConfiguredModel.Builder<?> builder = ConfiguredModel.builder();
             TriplePlantBlock.TripleBlockHeight height = state.get(TriplePlantBlock.HEIGHT);
@@ -280,7 +282,7 @@ public class ModBlockStatesProvider extends BlockStateProvider {
             name += "_" + height.getString();
             ModelFile files = models().cross(name, blockTextureLoc(name));
             builder.modelFile(files);
-            if (height == TriplePlantBlock.TripleBlockHeight.CROWN && generateBlockItem){
+            if (height == TriplePlantBlock.TripleBlockHeight.CROWN && generateBlockItem) {
                 itemModels().getBuilder(name(state.getBlock())).parent(generated).texture("layer0", blockTextureLoc(name));
             }
 
