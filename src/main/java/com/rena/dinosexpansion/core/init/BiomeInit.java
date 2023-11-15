@@ -38,7 +38,6 @@ public class BiomeInit {
     private static Set<Integer> integerList = new HashSet<>();
 
     public static final BiomeBase DESERT = new Desert();
-
     public static final BiomeBase DUNES = new Dunes();
     public static final BiomeBase DESERT_HILLS = new DesertHills();
     public static final BiomeBase RIVER = new River();
