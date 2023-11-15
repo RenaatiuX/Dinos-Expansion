@@ -1,5 +1,6 @@
 package com.rena.dinosexpansion.common.entity.terrestrial;
 
+import com.rena.dinosexpansion.common.entity.ChestedDinosaur;
 import com.rena.dinosexpansion.common.entity.Dinosaur;
 import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.EntityType;
@@ -15,7 +16,7 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class Gallimimus extends Dinosaur implements IAnimatable, IAnimationTickable {
+public class Gallimimus extends ChestedDinosaur implements IAnimatable, IAnimationTickable {
     public Gallimimus(EntityType<Gallimimus> type, World world, DinosaurInfo info, int minLevel, int maxLevel) {
         super(type, world, info, minLevel, maxLevel);
     }

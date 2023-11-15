@@ -6,7 +6,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.World;
 import net.minecraftforge.items.ItemStackHandler;
 
-public abstract class ChestedAquaticDinosaur extends DinosaurAquatic{
+public abstract class ChestedAquaticDinosaur extends DinosaurAquatic {
 
     private ItemStackHandler chestInventory = new ItemStackHandler(27);
 
@@ -17,7 +17,7 @@ public abstract class ChestedAquaticDinosaur extends DinosaurAquatic{
 
     public ChestedAquaticDinosaur(EntityType<? extends ChestedAquaticDinosaur> type, World world, DinosaurInfo info, int level) {
         super(type, world, info, level);
-        this.inventory = new ItemStackHandler(3){
+        this.inventory = new ItemStackHandler(3) {
             @Override
             protected void onContentsChanged(int slot) {
                 super.onContentsChanged(slot);
@@ -26,7 +26,7 @@ public abstract class ChestedAquaticDinosaur extends DinosaurAquatic{
         };
     }
 
-    public boolean hasChest(){
+    public boolean hasChest() {
         return BitUtils.getBit(5, this.dataManager.get(BOOLS)) > 0;
     }
 
@@ -37,7 +37,7 @@ public abstract class ChestedAquaticDinosaur extends DinosaurAquatic{
         nbt.put("chestInventory", this.chestInventory.serializeNBT());
     }
 
-    protected void setChested(boolean chested){
+    protected void setChested(boolean chested) {
         if (chested == hasChest())
             return;
         this.dataManager.set(BOOLS, BitUtils.setBit(5, this.dataManager.get(BOOLS), chested));
@@ -46,7 +46,7 @@ public abstract class ChestedAquaticDinosaur extends DinosaurAquatic{
     @Override
     protected void onContentsChanged(int slot) {
         super.onContentsChanged(slot);
-        if(slot == 2){
+        if (slot == 2) {
             boolean chested = !inventory.getStackInSlot(slot).isEmpty();
             if (hasChest() != chested)
                 setChested(chested);

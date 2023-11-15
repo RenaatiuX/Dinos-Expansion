@@ -34,10 +34,10 @@ public class ModItemModelsProvider extends ItemModelProvider {
         simple(ItemInit.GOLD_ARROW.get(), ItemInit.STONE_ARROW.get(), ItemInit.BONE_ARROW.get(), ItemInit.NARCOTICS.get());
         simple(ItemInit.DIAMOND_ARROW.get(), ItemInit.EMERALD_ARROW.get(), ItemInit.IRON_ARROW.get(), ItemInit.NETHERITE_ARROW.get(), ItemInit.WOODEN_ARROW.get());
         simple(ItemInit.KIBBLE_SIMPLE.get(), ItemInit.KIBBLE_BASIC.get(), ItemInit.KIBBLE_REGULAR.get(), ItemInit.KIBBLE_SUPERIOR.get(), ItemInit.KIBBLE_EXCEPTIONAL.get(), ItemInit.KIBBLE_EXTRAORDINARY.get(), ItemInit.CRATAEGUS_BOAT_ITEM.get());
-        simple(BlockInit.CAMPANILE_SHELL_COMMON.get(), BlockInit.CAMPANILE_SHELL_UNCOMMON.get());
+        //simple(BlockInit.CAMPANILE_SHELL_COMMON.get(), BlockInit.CAMPANILE_SHELL_UNCOMMON.get());
         simple(ItemInit.CAMPANILE_GOO.get());
         simple(ItemInit.COOKED_ANKYLOSAURUS_MEAT.get(), ItemInit.COOKED_ANOMALOCARIS_TAIL.get());
-        simple(ItemInit.COOKED_ASTORGOSUCHUS_MEAT.get(), ItemInit.COOKED_CARNOTAURUS_MEAT.get(), ItemInit.COOKED_DIMORPHODON_MEAT.get(), ItemInit.COOKED_GALLIMIMUS_MEAT.get(), ItemInit.COOKED_PARAPUZOSIA_TENTACLE.get(), ItemInit.COOKED_TRICERATOPS_MEAT.get());
+        simple(ItemInit.COOKED_ASTORGOSUCHUS_MEAT.get(), ItemInit.COOKED_CARNOTAURUS_MEAT.get(), ItemInit.COOKED_DIMORPHODON_MEAT.get(), ItemInit.COOKED_GALLIMIMUS_MEAT.get(), ItemInit.COOKED_PARAPUZOSIA_TENTACLE.get(), ItemInit.COOKED_TRICERATOPS_MEAT.get(), ItemInit.COOKED_DRYOSAURUS_MEAT.get());
         simple(ItemInit.CORN.get(), ItemInit.CORN_SEED.get());
         simple(ItemInit.CUCUMBER.get());
         simple(ItemInit.DART.get(), ItemInit.DINOPEDIA.get(), ItemInit.EXPLORER_JOURNAL.get(), ItemInit.EXPLORER_JOURNAL_PAGE.get());
@@ -50,8 +50,8 @@ public class ModItemModelsProvider extends ItemModelProvider {
         handheld(ItemInit.NETHERITE_BOOMERANG.get(), ItemInit.NETHERITE_HATCHET.get());
         simple(ItemInit.LETTUCE_SEED.get(), ItemInit.LETTUCE.get());
         simple(ItemInit.NARCOTIC_BERRIES.get());
-        simple(ItemInit.OIL.get(), ItemInit.ONION.get(),ItemInit.ORANGE_BERRIES.get(),  ItemInit.QUICKSAND_BUCKET.get());
-        simple(ItemInit.RAW_ANKYLOSAURUS_MEAT.get(), ItemInit.RAW_ANOMALOCARIS_TAIL.get(), ItemInit.RAW_ASTORGOSUCHUS_MEAT.get(), ItemInit.RAW_CARNOTAURUS_MEAT.get(), ItemInit.RAW_DIMORPHODON_MEAT.get(), ItemInit.RAW_DRYOSAURUS_MEAT.get(), ItemInit.RAW_PARAPUZOSIA_TENTACLE.get(), ItemInit.RAW_TRICERATOPS_MEAT.get());
+        simple(ItemInit.OIL.get(), ItemInit.ONION.get(),ItemInit.ORANGE_BERRIES.get(),  ItemInit.QUICKSAND_BUCKET.get(), ItemInit.YELLOW_BERRIES.get());
+        simple(ItemInit.RAW_ANKYLOSAURUS_MEAT.get(), ItemInit.RAW_ANOMALOCARIS_TAIL.get(), ItemInit.RAW_ASTORGOSUCHUS_MEAT.get(), ItemInit.RAW_CARNOTAURUS_MEAT.get(), ItemInit.RAW_DIMORPHODON_MEAT.get(), ItemInit.RAW_DRYOSAURUS_MEAT.get(), ItemInit.RAW_PARAPUZOSIA_TENTACLE.get(), ItemInit.RAW_TRICERATOPS_MEAT.get(), ItemInit.RAW_GALLIMIMUS_MEAT.get());
         simple(ItemInit.RUBY.get(), ItemInit.RUBY_ARROW.get());
         handheld(ItemInit.RUBY_BOOMERANG.get(), ItemInit.RUBY_HATCHET.get());
         handheld(ItemInit.SAPPHIRE_BOOMERANG.get(), ItemInit.SAPPHIRE_HATCHET.get());

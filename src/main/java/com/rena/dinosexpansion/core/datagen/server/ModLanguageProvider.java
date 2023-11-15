@@ -8,16 +8,12 @@ import com.rena.dinosexpansion.common.util.enums.AttackOrder;
 import com.rena.dinosexpansion.common.util.enums.MoveOrder;
 import com.rena.dinosexpansion.core.init.*;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
-import net.minecraft.util.IItemProvider;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.data.LanguageProvider;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.ForgeRegistryEntry;
-
-import java.util.function.Supplier;
 
 public class ModLanguageProvider extends LanguageProvider {
     public ModLanguageProvider(DataGenerator gen) {
@@ -161,22 +157,6 @@ public class ModLanguageProvider extends LanguageProvider {
         add(ItemInit.TOMATO.get(), "Tomato");
         add(ItemInit.CUCUMBER.get(), "Cucumber");
         add(ItemInit.LETTUCE.get(), "Lettuce");
-        auto(ItemInit.RUBY_SWORD.get());
-        auto(ItemInit.RUBY_PICKAXE.get());
-        auto(ItemInit.RUBY_SHOVEL.get());
-        auto(ItemInit.RUBY_AXE.get());
-        auto(ItemInit.RUBY_HOE.get());
-
-        auto(ItemInit.SAPPHIRE_SWORD.get());
-        auto(ItemInit.SAPPHIRE_PICKAXE.get());
-        auto(ItemInit.SAPPHIRE_SHOVEL.get());
-        auto(ItemInit.SAPPHIRE_AXE.get());
-        auto(ItemInit.SAPPHIRE_HOE.get());
-
-        auto(ItemInit.CRATAEGUS_SIGN.get());
-        auto(ItemInit.CRATAEGUS_STICK.get());
-
-
         add(EntityInit.PARAPUZOSIA.get(), "Parapuzosia");
         add(EntityInit.EOSQUALODON.get(), "Eosqualodon");
         add(EntityInit.MEGA_PIRANHA.get(), "Mega Piranha");
@@ -246,10 +226,6 @@ public class ModLanguageProvider extends LanguageProvider {
 
     public void add(RegistryObject<Biome> obj) {
         add("biome." + DinosExpansion.MOD_ID + "." + obj.getId().getPath(), toTitleCase(obj.getId().getPath()));
-    }
-
-    public void auto(Item item){
-        add(item, toTitleCase(item.getRegistryName().getPath()));
     }
 
     public void add(ITextComponent component, String name) {

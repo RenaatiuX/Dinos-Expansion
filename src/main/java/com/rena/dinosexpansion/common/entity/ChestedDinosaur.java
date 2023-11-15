@@ -1,23 +1,14 @@
 package com.rena.dinosexpansion.common.entity;
 
 import com.rena.dinosexpansion.api.ArmorSlotItemApi;
-import com.rena.dinosexpansion.common.BitUtils;
 import com.rena.dinosexpansion.common.entity.util.DynamicItemHandler;
 import com.rena.dinosexpansion.common.util.NbtUtils;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
-import net.minecraftforge.items.ItemStackHandler;
-
-import javax.annotation.Nullable;
 
 public abstract class ChestedDinosaur extends Dinosaur {
 

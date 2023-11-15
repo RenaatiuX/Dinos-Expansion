@@ -41,7 +41,7 @@ public class ModBlockStatesProvider extends BlockStateProvider {
         block(BlockInit.FUTURISTIC_BLOCK_ON2.get());
         block(BlockInit.MOSSY_FUTURISTIC_BLOCK1.get());
         block(BlockInit.MOSSY_FUTURISTIC_BLOCK2.get());
-        blockWithoutBlockItem(BlockInit.CAMPANILE_SHELL_COMMON.get(), BlockInit.CAMPANILE_SHELL_UNCOMMON.get());
+        //blockWithoutBlockItem(BlockInit.CAMPANILE_SHELL_COMMON.get(), BlockInit.CAMPANILE_SHELL_UNCOMMON.get());
         doublePlant(BlockInit.AMORPHOPHALLUS);
         doublePlant(BlockInit.BENNETTITALES);
         simplePlant(BlockInit.ARCHAEOSIGILLARIA);
@@ -87,7 +87,7 @@ public class ModBlockStatesProvider extends BlockStateProvider {
         simplePlant(BlockInit.HORSETAIL.get());
         simplePlant(BlockInit.LAVENDER.get());
         simplePlant(BlockInit.LEMON_VERBENA.get());
-        horizontalBlock(BlockInit.MORTAR.get(), existing(BlockInit.MORTAR.get()));
+        //horizontalBlock(BlockInit.MORTAR.get(), existing(BlockInit.MORTAR.get()));
         agingPlant(BlockInit.NARCOTIC_BERRY_BUSH.get(), BlockStateProperties.AGE_0_3);
         agingPlant(BlockInit.ORANGE_BERRY_BUSH.get(), BlockStateProperties.AGE_0_3);
         simplePlant(BlockInit.OSMUNDA);
