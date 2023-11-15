@@ -21,6 +21,7 @@ import com.rena.dinosexpansion.common.entity.villagers.caveman.TribeTypeSerializ
 import com.rena.dinosexpansion.core.init.*;
 import com.rena.dinosexpansion.core.network.Network;
 import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.block.WoodType;
 import net.minecraft.item.Items;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
@@ -43,6 +44,8 @@ public class CommonEvents {
             StructureInit.setupStructures();
             ModVillagerTrades.registerTrades();
             TribeTypeSerializer.serializeTribeTypes();
+
+            WoodType.register(WoodTypeInit.CRATEAGUS_WOOD);
         });
     }
 

@@ -62,7 +62,9 @@ public class ModItemModelsProvider extends ItemModelProvider {
         simple(ItemInit.TELEPORT_ITEM.get(), ItemInit.TINY_ROCK.get(), ItemInit.TOMATO.get());
         handheld(ItemInit.WOODEN_HATCHET.get(), ItemInit.WOOD_BOOMERANG.get());
         simple(ItemInit.REDWOOD_STICK.get());
-
+        handheld(ItemInit.RUBY_SWORD.get(), ItemInit.RUBY_PICKAXE.get(), ItemInit.RUBY_SHOVEL.get(), ItemInit.RUBY_HOE.get(), ItemInit.RUBY_AXE.get());
+        handheld(ItemInit.SAPPHIRE_SWORD.get(), ItemInit.SAPPHIRE_PICKAXE.get(), ItemInit.SAPPHIRE_SHOVEL.get(), ItemInit.SAPPHIRE_HOE.get(), ItemInit.SAPPHIRE_AXE.get());
+        simple(ItemInit.CRATAEGUS_SIGN.get(), ItemInit.CRATAEGUS_STICK.get());
 
         charkram(ItemInit.RUBY_CHAKRAM.get(), ItemInit.NETHERITE_CHAKRAM.get(), ItemInit.IRON_CHAKRAM.get(), ItemInit.STONE_CHAKRAM.get(), ItemInit.EMERALD_CHAKRAM.get(), ItemInit.DIAMOND_CHAKRAM.get(), ItemInit.SAPPHIRE_CHAKRAM.get(), ItemInit.WOODEN_CHAKRAM.get(), ItemInit.GOLD_CHAKRAM.get());
 

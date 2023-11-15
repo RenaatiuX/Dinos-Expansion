@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "sss",
+    "sms",
+    "sss"
+  ],
+  "key": {
+    "s": {
+      "item": "dinosexpansion:ruby"
+    },
+    "m": {
+      "item": "minecraft:netherite_shovel"
+    }
+  },
+  "result": {
+    "item": "dinosexpansion:ruby_shovel"
+  }
+}

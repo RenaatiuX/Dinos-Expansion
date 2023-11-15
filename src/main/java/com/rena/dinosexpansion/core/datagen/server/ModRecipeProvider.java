@@ -11,6 +11,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.client.gui.CommandSuggestionHelper;
 import net.minecraft.data.*;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tags.ITag;
@@ -34,10 +35,25 @@ public class ModRecipeProvider extends RecipeProvider {
         chakrams(consumer);
         makeHatchets(consumer);
         makeWoodRecipes(consumer);
+        makeToolRecipes(consumer);
+    }
+
+    protected void makeToolRecipes(Consumer<IFinishedRecipe> consumer){
+        makeSurroundingRecipe(consumer, ItemInit.RUBY.get(), Items.NETHERITE_SWORD, ItemInit.RUBY_SWORD.get());
+        makeSurroundingRecipe(consumer, ItemInit.RUBY.get(), Items.NETHERITE_PICKAXE, ItemInit.RUBY_PICKAXE.get());
+        makeSurroundingRecipe(consumer, ItemInit.RUBY.get(), Items.NETHERITE_AXE, ItemInit.RUBY_AXE.get());
+        makeSurroundingRecipe(consumer, ItemInit.RUBY.get(), Items.NETHERITE_HOE, ItemInit.RUBY_HOE.get());
+        makeSurroundingRecipe(consumer, ItemInit.RUBY.get(), Items.NETHERITE_SHOVEL, ItemInit.RUBY_SHOVEL.get());
+
+        makeSurroundingRecipe(consumer, ItemInit.SAPPHIRE.get(), ItemInit.RUBY_SWORD.get(), ItemInit.SAPPHIRE_SWORD.get());
+        makeSurroundingRecipe(consumer, ItemInit.SAPPHIRE.get(), ItemInit.RUBY_PICKAXE.get(), ItemInit.SAPPHIRE_PICKAXE.get());
+        makeSurroundingRecipe(consumer, ItemInit.SAPPHIRE.get(), ItemInit.RUBY_AXE.get(), ItemInit.SAPPHIRE_AXE.get());
+        makeSurroundingRecipe(consumer, ItemInit.SAPPHIRE.get(), ItemInit.RUBY_HOE.get(), ItemInit.SAPPHIRE_HOE.get());
+        makeSurroundingRecipe(consumer, ItemInit.SAPPHIRE.get(), ItemInit.RUBY_SHOVEL.get(), ItemInit.SAPPHIRE_SHOVEL.get());
     }
 
     protected void makeWoodRecipes(Consumer<IFinishedRecipe> consumer){
-        makeWoodRecipes(consumer, BlockInit.CRATAEGUS_LOG.get(), BlockInit.CRATAEGUS_PLANKS.get(), Items.STICK, Items.CHARCOAL, BlockInit.STRIPPED_CRATAEGUS_LOG.get());
+        makeWoodRecipes(consumer, BlockInit.CRATAEGUS_LOG.get(), BlockInit.CRATAEGUS_PLANKS.get(), ItemInit.CRATAEGUS_STICK.get(), Items.CHARCOAL, BlockInit.STRIPPED_CRATAEGUS_LOG.get());
     }
 
     protected void makeObfuscatedCraftingRecipes(Consumer<IFinishedRecipe> consumer){
@@ -146,6 +162,36 @@ public class ModRecipeProvider extends RecipeProvider {
 
     protected static void makeWoodRecipes(Consumer<IFinishedRecipe> consumer, IItemProvider log, IItemProvider planks, IItemProvider sticks){
         makeWoodRecipes(consumer, log, planks, sticks, Items.CHARCOAL);
+    }
+
+    protected static void makeSurroundingRecipe(Consumer<IFinishedRecipe> consumer, IItemProvider surroundingMaterial, IItemProvider middle, IItemProvider output){
+        makeSurroundingRecipe(consumer, surroundingMaterial, Ingredient.fromItems(middle), output);
+    }
+
+    protected static void makeSurroundingRecipe(Consumer<IFinishedRecipe> consumer, IItemProvider surroundingMaterial, Ingredient middle, IItemProvider output){
+        makeSurroundingRecipe(consumer, surroundingMaterial, middle, output, 1);
+    }
+
+    protected static void makeSurroundingRecipe(Consumer<IFinishedRecipe> consumer, IItemProvider surroundingMaterial, Ingredient middle, IItemProvider output, int count){
+        makeSurroundingRecipe(consumer, Ingredient.fromItems(surroundingMaterial), middle, new ItemStack(output, count));
+    }
+
+    /**
+     * this will make a recipe like:
+     * "sss"
+     * "sms"
+     * "sss"
+     * with s as the surrounding and m as the middle
+     */
+    protected static void makeSurroundingRecipe(Consumer<IFinishedRecipe> consumer, Ingredient surroundingMaterial, Ingredient middle, ItemStack output){
+        ShapedRecipeBuilder.shapedRecipe(output.getItem(), output.getCount())
+                .key('s', surroundingMaterial)
+                .key('m', middle)
+                .patternLine("sss")
+                .patternLine("sms")
+                .patternLine("sss")
+                .addCriterion("has_item", hasItem(middle.getMatchingStacks()[0].getItem()))
+                .build(consumer);
     }
 
     protected static ResourceLocation extend(ResourceLocation original, String extension){

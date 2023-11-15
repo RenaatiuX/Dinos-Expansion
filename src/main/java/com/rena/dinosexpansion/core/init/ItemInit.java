@@ -10,9 +10,7 @@ import com.rena.dinosexpansion.common.item.arrow.TinyRockItem;
 import com.rena.dinosexpansion.common.item.enums.*;
 import com.rena.dinosexpansion.common.item.util.BaseNarcoticItem;
 import net.minecraft.fluid.Fluids;
-import net.minecraft.item.BlockNamedItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.Rarity;
+import net.minecraft.item.*;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
@@ -325,6 +323,22 @@ public class ItemInit {
 
     public static final RegistryObject<Item> CAMPANILE_GOO = ITEMS.register("snail_goo", () -> new Item(new Item.Properties().group(ModItemGroups.ITEMS)));
 
+    public static final RegistryObject<Item> CRATAEGUS_STICK = ITEMS.register("crataegus_stick", () -> new Item(new Item.Properties().group(ModItemGroups.ITEMS)));
+    public static final RegistryObject<SignItem> CRATAEGUS_SIGN = ITEMS.register("crataegus_sign", () -> new SignItem(new Item.Properties().group(ModItemGroups.ITEMS).maxStackSize(16), BlockInit.CRATEAGUS_SIGN.get(), BlockInit.CRATEAGUS_WALL_SIGN.get()));
+
     //Boats
     public static final RegistryObject<CustomBoatItem> CRATAEGUS_BOAT_ITEM = ITEMS.register("crataegus_boat_item", () -> new CustomBoatItem(BoatType.CRATAEGUS, new Item.Properties().group(ModItemGroups.ITEMS)));
+
+    //Tools
+    public static final RegistryObject<SwordItem> RUBY_SWORD = ITEMS.register("ruby_sword", () -> new SwordItem(ToolTiers.RUBY, 3, -2F, new Item.Properties().group(ModItemGroups.WEAPONS).isImmuneToFire().rarity(ModRarities.RUBY)));
+    public static final RegistryObject<HoeItem> RUBY_HOE = ITEMS.register("ruby_hoe", () -> new HoeItem(ToolTiers.RUBY, -4, 0F, new Item.Properties().group(ModItemGroups.WEAPONS).isImmuneToFire().rarity(ModRarities.RUBY)));
+    public static final RegistryObject<PickaxeItem> RUBY_PICKAXE = ITEMS.register("ruby_pickaxe", () -> new PickaxeItem(ToolTiers.RUBY, 1, -2.8F, new Item.Properties().group(ModItemGroups.WEAPONS).isImmuneToFire().rarity(ModRarities.RUBY)));
+    public static final RegistryObject<ShovelItem> RUBY_SHOVEL = ITEMS.register("ruby_shovel", () -> new ShovelItem(ToolTiers.RUBY, 1.5F, -3.0F, new Item.Properties().group(ModItemGroups.WEAPONS).isImmuneToFire().rarity(ModRarities.RUBY)));
+    public static final RegistryObject<AxeItem> RUBY_AXE = ITEMS.register("ruby_axe", () -> new AxeItem(ToolTiers.RUBY, 5.0F, -3.0F, new Item.Properties().group(ModItemGroups.WEAPONS).isImmuneToFire().rarity(ModRarities.RUBY)));
+
+    public static final RegistryObject<SwordItem> SAPPHIRE_SWORD = ITEMS.register("sapphire_sword", () -> new SwordItem(ToolTiers.SAPPHIRE, 3, -2F, new Item.Properties().group(ModItemGroups.WEAPONS).isImmuneToFire().rarity(ModRarities.SAPPHIRE)));
+    public static final RegistryObject<HoeItem> SAPPHIRE_HOE = ITEMS.register("sapphire_hoe", () -> new HoeItem(ToolTiers.SAPPHIRE, -4, 0F, new Item.Properties().group(ModItemGroups.WEAPONS).isImmuneToFire().rarity(ModRarities.SAPPHIRE)));
+    public static final RegistryObject<PickaxeItem> SAPPHIRE_PICKAXE = ITEMS.register("sapphire_pickaxe", () -> new PickaxeItem(ToolTiers.SAPPHIRE, 1, -2.8F, new Item.Properties().group(ModItemGroups.WEAPONS).isImmuneToFire().rarity(ModRarities.SAPPHIRE)));
+    public static final RegistryObject<ShovelItem> SAPPHIRE_SHOVEL = ITEMS.register("sapphire_shovel", () -> new ShovelItem(ToolTiers.SAPPHIRE, 1.5F, -3.0F, new Item.Properties().group(ModItemGroups.WEAPONS).isImmuneToFire().rarity(ModRarities.SAPPHIRE)));
+    public static final RegistryObject<AxeItem> SAPPHIRE_AXE = ITEMS.register("sapphire_axe", () -> new AxeItem(ToolTiers.SAPPHIRE, 5.0F, -3.0F, new Item.Properties().group(ModItemGroups.WEAPONS).isImmuneToFire().rarity(ModRarities.SAPPHIRE)));
 }

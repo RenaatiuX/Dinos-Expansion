@@ -174,6 +174,10 @@ public class BlockInit {
     public static final RegistryObject<Block> MUD = register("mud",
             ()-> new Block(AbstractBlock.Properties.create(Material.EARTH, MaterialColor.DIRT).hardnessAndResistance(0.5F).sound(SoundType.GROUND)), ModItemGroups.BLOCKS);
 
+    //Signs
+    public static final RegistryObject<ModStandingSignBlock> CRATEAGUS_SIGN = BLOCKS.register("crateagus_sign", () -> new ModStandingSignBlock(AbstractBlock.Properties.create(Material.WOOD).doesNotBlockMovement(), WoodTypeInit.CRATEAGUS_WOOD));
+    public static final RegistryObject<ModWallSignBlock> CRATEAGUS_WALL_SIGN = BLOCKS.register("crateagus_wall_sign", () -> new ModWallSignBlock(AbstractBlock.Properties.create(Material.WOOD).lootFrom(CRATEAGUS_SIGN.get()), WoodTypeInit.CRATEAGUS_WOOD));
+
 
     public static <T extends Block> RegistryObject<T> register(String name, Supplier<T> blockSupplier, ItemGroup tab) {
         return register(name, blockSupplier, () -> new Item.Properties().group(tab));

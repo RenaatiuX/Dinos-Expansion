@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "sss",
+    "sms",
+    "sss"
+  ],
+  "key": {
+    "s": {
+      "item": "dinosexpansion:sapphire"
+    },
+    "m": {
+      "item": "dinosexpansion:ruby_shovel"
+    }
+  },
+  "result": {
+    "item": "dinosexpansion:sapphire_shovel"
+  }
+}

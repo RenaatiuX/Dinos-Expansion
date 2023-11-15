@@ -16,8 +16,10 @@ import com.rena.dinosexpansion.client.screens.OrderScreen;
 import com.rena.dinosexpansion.client.screens.TamingScreen;
 import com.rena.dinosexpansion.core.init.*;
 import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.client.renderer.Atlases;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
+import net.minecraft.client.renderer.tileentity.SignTileEntityRenderer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -72,6 +74,9 @@ public class ClientSetupEvents {
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.CUSTOM_BOAT.get(), CustomBoatRenderer::new);
 
         ClientRegistry.bindTileEntityRenderer(BlockEntityInit.MORTAR.get(), MortarRenderer::new);
+        ClientRegistry.bindTileEntityRenderer(BlockEntityInit.MOD_SIGN_TE.get(), SignTileEntityRenderer::new);
+
+        Atlases.addWoodType(WoodTypeInit.CRATEAGUS_WOOD);
     }
 
     public static void registerPlantsRenderer() {

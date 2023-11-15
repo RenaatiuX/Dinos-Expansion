@@ -29,6 +29,7 @@ public class ModBlockLoot extends BlockLootTables {
         selfDrop(BlockInit.REDWOOD_SAPLING, BlockInit.RUBY_BLOCK, BlockInit.SAPPHIRE_BLOCK);
         selfDrop(BlockInit.GLOW_STICK.get(), BlockInit.REDWOOD_LOG.get(), BlockInit.CRATAEGUS_LOG.get(), BlockInit.CRATAEGUS_DOOR.get(), BlockInit.CRATAEGUS_PLANKS.get(), BlockInit.STRIPPED_CRATAEGUS_LOG.get());
         selfDrop(BlockInit.MORTAR.get(), BlockInit.REDWOOD_LOG.get());
+        selfDrop(BlockInit.CRATEAGUS_SIGN.get());
         ore(BlockInit.SAPPHIRE_ORE.get(), ItemInit.SAPPHIRE.get());
         ore(BlockInit.RUBY_ORE.get(), ItemInit.RUBY.get());
     }

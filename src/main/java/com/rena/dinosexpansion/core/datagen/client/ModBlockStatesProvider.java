@@ -4,6 +4,7 @@ import com.mojang.datafixers.types.Func;
 import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.common.block.plant.TriplePlantBlock;
 import com.rena.dinosexpansion.core.init.BlockInit;
+import com.rena.dinosexpansion.core.init.ModItemGroups;
 import net.minecraft.block.Block;
 import net.minecraft.block.DoorBlock;
 import net.minecraft.data.DataGenerator;
@@ -106,7 +107,14 @@ public class ModBlockStatesProvider extends BlockStateProvider {
         simplePlant(BlockInit.WELWITSCHIA);
         agingPlant(BlockInit.YELLOW_BERRY_BUSH.get(), BlockStateProperties.AGE_0_3);
         simplePlant(BlockInit.ZAMITES.get());
+        makeSignFiles(BlockInit.CRATEAGUS_SIGN.get(), BlockInit.CRATAEGUS_PLANKS.get());
 
+
+    }
+
+    protected void makeSignFiles(Block standing, Block planks){
+        ModelFile file = models().getBuilder(name(standing)).texture("particle", blockTexture(planks));
+        this.getVariantBuilder(standing).partialState().setModels(new ConfiguredModel(file));
     }
 
     protected void slabBlock(Supplier<Block> block, Supplier<Block> textureFrom) {
