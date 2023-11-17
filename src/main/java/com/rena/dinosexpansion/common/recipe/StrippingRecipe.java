@@ -8,9 +8,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.*;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.lwjgl.system.CallbackI;
 
 import javax.annotation.Nullable;
 
@@ -32,7 +34,13 @@ public class StrippingRecipe implements IRecipe<IInventory> {
 
     @Override
     public boolean matches(IInventory inv, World worldIn) {
+        if (inv.getSizeInventory() != 1)
+            return false;
         return this.ingredient.test(inv.getStackInSlot(0));
+    }
+
+    public Ingredient getIngredient() {
+        return ingredient;
     }
 
     @Override
@@ -51,7 +59,7 @@ public class StrippingRecipe implements IRecipe<IInventory> {
 
     @Override
     public ItemStack getRecipeOutput() {
-        return null;
+        return new ItemStack(this.result);
     }
 
     @Override

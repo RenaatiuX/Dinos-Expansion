@@ -2,16 +2,16 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "dinosexpansion:stripped_crataegus_log_from_logs"
+      "dinosexpansion:crataegus_sign"
     ]
   },
   "criteria": {
-    "has_log": {
+    "has_item": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "item": "dinosexpansion:crataegus_log"
+            "item": "dinosexpansion:crataegus_planks"
           }
         ]
       }
@@ -19,13 +19,13 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "dinosexpansion:stripped_crataegus_log_from_logs"
+        "recipe": "dinosexpansion:crataegus_sign"
       }
     }
   },
   "requirements": [
     [
-      "has_log",
+      "has_item",
       "has_the_recipe"
     ]
   ]
