@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ppp",
+    "ppp",
+    " s "
+  ],
+  "key": {
+    "s": {
+      "item": "dinosexpansion:crataegus_stick"
+    },
+    "p": {
+      "item": "dinosexpansion:crataegus_planks"
+    }
+  },
+  "result": {
+    "item": "dinosexpansion:crataegus_sign",
+    "count": 3
+  }
+}

@@ -8,7 +8,7 @@ issueTrackerURL="https://github.com/RenaatiuX/Dinos-Expansion/issues"
     displayName="Dinos Expansion" #mandatory
     #displayURL="https://change.me.to.your.mods.homepage.example.invalid/"
     logoFile="examplemod.png"
-    credits="Credits to those who help us with this mod"
+    credits="To Coffeine and IntelliJ"
     authors="Bretzelfresser, RenatiuX"
     description='''This mod adds plents of dinos and a completely new Dino Dimension'''
 [[dependencies.dinosexpansion]] #optional

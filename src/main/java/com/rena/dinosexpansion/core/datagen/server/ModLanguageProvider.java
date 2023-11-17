@@ -271,9 +271,15 @@ public class ModLanguageProvider extends LanguageProvider {
 
         add("dinosexpansion.taming_gui.title", "%s");
 
+        add("dinosexpansion.mortar.time.seconds", "%ss");
+        add("category." + DinosExpansion.MOD_ID + ".mortar_recipe", "Mortar");
+        add("category." + DinosExpansion.MOD_ID + ".stripping_category", "Stripping");
+
         add(TameCommand.TAME_NO_DINOSAUR, "the entity you are pointing at is no dinosaur, was %s instead");
         add(TameCommand.TAME_SUCCESS, "this dinosaur %s was successfully tamed");
         add(TameCommand.TAME_NO_HIT, "you have to point with ur cursor to an entity");
+
+        add("container." + DinosExpansion.MOD_ID + ".mortar", "Mortar");
 
 
     }
