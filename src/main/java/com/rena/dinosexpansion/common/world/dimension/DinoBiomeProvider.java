@@ -52,7 +52,7 @@ public class DinoBiomeProvider extends BiomeProvider {
             BiomeInit.WARM_OCEAN.getKey(), BiomeInit.DEEP_WARM_OCEAN.getKey(),
             BiomeInit.FROZEN_OCEAN.getKey(), BiomeInit.DEEP_FROZEN_OCEAN.getKey(),
             BiomeInit.DENSE_SWAMP.getKey(), BiomeInit.CHERRY_FOREST.getKey(),
-            BiomeInit.FLOODPLAIN.getKey()
+            BiomeInit.FLOODPLAIN.getKey(), BiomeInit.QUAGMIRE.getKey()
     );
 
     public DinoBiomeProvider(long seed, Registry<Biome> registry) {

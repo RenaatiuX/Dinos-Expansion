@@ -77,6 +77,7 @@ public class ModBlockStatesProvider extends BlockStateProvider {
         logBlock(BlockInit.CRATAEGUS_LOG.get());
         blockItem(BlockInit.CRATAEGUS_LOG.get());
         block(BlockInit.CRATAEGUS_PLANKS.get());
+        block(BlockInit.MUD.get());
         simplePlant(BlockInit.DILLHOFFIA.get());
         doublePlant(BlockInit.DUISBERGIA.get());
         simplePlant(BlockInit.EPHEDRA.get());

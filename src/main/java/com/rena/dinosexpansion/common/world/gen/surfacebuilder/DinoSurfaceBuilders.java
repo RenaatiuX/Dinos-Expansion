@@ -27,6 +27,8 @@ public class DinoSurfaceBuilders {
     public static final Supplier<ConfiguredSurfaceBuilder<SurfaceBuilderConfig>> DUNES = () -> SurfaceBuilderInit.DUNES.get().func_242929_a(SurfaceBuilder.SAND_SAND_GRAVEL_CONFIG);
     //Config
     public static final Supplier<ConfiguredSurfaceBuilder<SurfaceBuilderConfig>> ALPS = () -> SurfaceBuilder.DEFAULT.func_242929_a(ALPS_SB.get());
+    public static final Supplier<ConfiguredSurfaceBuilder<SurfaceBuilderConfig>> MUD = () -> SurfaceBuilderInit.QUAGMIRE.get().func_242929_a(MUD_SB.get());
+
     public static final Supplier<ConfiguredSurfaceBuilder<SurfaceBuilderConfig>> RED_SAND = () -> SurfaceBuilder.DEFAULT.func_242929_a(RED_SAND_SB.get());
     public static final Supplier<ConfiguredSurfaceBuilder<SurfaceBuilderConfig>> OASIS = () -> SurfaceBuilder.DEFAULT.func_242929_a(OASIS_SB.get());
     public static final Supplier<ConfiguredSurfaceBuilder<SurfaceBuilderConfig>> DENSE_SWAMP = () -> SurfaceBuilder.SWAMP.func_242929_a(DENSE_SWAMP_SB.get());

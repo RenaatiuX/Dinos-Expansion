@@ -3,6 +3,7 @@ package com.rena.dinosexpansion.core.init;
 import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.common.world.gen.feature.DInoDesertSurfaceBuilder;
 import com.rena.dinosexpansion.common.world.gen.feature.MarshlandSB;
+import com.rena.dinosexpansion.common.world.gen.feature.QuagmireSB;
 import com.rena.dinosexpansion.common.world.gen.feature.RoundedHillsSB;
 import net.minecraft.world.gen.surfacebuilders.SurfaceBuilder;
 import net.minecraft.world.gen.surfacebuilders.SurfaceBuilderConfig;
@@ -16,6 +17,7 @@ public class SurfaceBuilderInit {
 
     public static final SurfaceBuilder<SurfaceBuilderConfig> MARSHLAND_SB = new MarshlandSB(SurfaceBuilderConfig.CODEC);
     public static final SurfaceBuilder<SurfaceBuilderConfig> ROUNDED_HILLS_SB = new RoundedHillsSB(SurfaceBuilderConfig.CODEC);
+    public static final SurfaceBuilder<SurfaceBuilderConfig> QUAGMIRE_SB = new QuagmireSB(SurfaceBuilderConfig.CODEC);
 
     public static final RegistryObject<SurfaceBuilder<SurfaceBuilderConfig>> DUNES = SURFACE_BUILDERS.register("dunes", DInoDesertSurfaceBuilder::new);
 
@@ -25,5 +27,7 @@ public class SurfaceBuilderInit {
             .register("marshland", () -> MARSHLAND_SB);
     public static final RegistryObject<SurfaceBuilder<SurfaceBuilderConfig>> ROUNDED_HILLS = SURFACE_BUILDERS
             .register("rounded_hills", () -> ROUNDED_HILLS_SB);
+    public static final RegistryObject<SurfaceBuilder<SurfaceBuilderConfig>> QUAGMIRE = SURFACE_BUILDERS
+            .register("quagmire", () -> QUAGMIRE_SB);
 
 }

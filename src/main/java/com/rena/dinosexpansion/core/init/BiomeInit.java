@@ -13,6 +13,7 @@ import com.rena.dinosexpansion.common.biome.biomes.ocean.subbiome.*;
 import com.rena.dinosexpansion.common.biome.biomes.river.River;
 import com.rena.dinosexpansion.common.biome.biomes.swamp.DenseSwamp;
 import com.rena.dinosexpansion.common.biome.biomes.swamp.Floodplain;
+import com.rena.dinosexpansion.common.biome.biomes.swamp.Quagmire;
 import com.rena.dinosexpansion.common.biome.biomes.vulcano.VulcanoBiome;
 import com.rena.dinosexpansion.common.biome.util.BiomeData;
 import net.minecraft.util.RegistryKey;
@@ -56,6 +57,7 @@ public class BiomeInit {
     public static final BiomeBase DENSE_SWAMP = new DenseSwamp();
     public static final BiomeBase CHERRY_FOREST = new CherryForest();
     public static final BiomeBase FLOODPLAIN = new Floodplain();
+    public static final BiomeBase QUAGMIRE = new Quagmire();
 
     public static final BiomeBase VULCANO = new VulcanoBiome();
 
@@ -77,6 +79,7 @@ public class BiomeInit {
     public static final RegistryObject<Biome> DENSE_SWAMP_BIOME = register("dense_swamp", DENSE_SWAMP::getBiome, 16);
     public static final RegistryObject<Biome> CHERRY_FOREST_BIOME = register("cherry_forest", CHERRY_FOREST::getBiome, 17);
     public static final RegistryObject<Biome> FLOODPLAIN_BIOME = register("floodplain", FLOODPLAIN::getBiome, 18);
+    public static final RegistryObject<Biome> QUAGMIRE_BIOME = register("quagmire", QUAGMIRE::getBiome, 21);
 
     public static final RegistryObject<Biome> DUNES_BIOME = register("dunes", DUNES::getBiome, 19);
     public static final RegistryObject<Biome> VULCANO_BIOME = register("vulcano", VULCANO::getBiome, 20);
