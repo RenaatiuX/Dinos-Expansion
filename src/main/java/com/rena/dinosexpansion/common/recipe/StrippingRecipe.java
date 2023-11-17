@@ -8,11 +8,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.*;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.lwjgl.system.CallbackI;
 
 import javax.annotation.Nullable;
 
@@ -24,12 +24,14 @@ public class StrippingRecipe implements IRecipe<IInventory> {
     protected final Block result;
     protected final ResourceLocation id;
     protected final String group;
+    protected final boolean isVanilla;
 
-    public StrippingRecipe(ResourceLocation id, String group, Ingredient input, Block result) {
+    public StrippingRecipe(ResourceLocation id, String group, Ingredient input, Block result, boolean isVanilla) {
         this.id = id;
         this.ingredient = input;
         this.result = result;
         this.group = group;
+        this.isVanilla = isVanilla;
     }
 
     @Override
@@ -90,7 +92,8 @@ public class StrippingRecipe implements IRecipe<IInventory> {
 
             String s1 = JSONUtils.getString(json, "result");
             Block result = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(s1));
-            return new StrippingRecipe(recipeId, s, ingredient, result);
+            boolean isVanilla = JSONUtils.getBoolean(json, "isVanilla", false);
+            return new StrippingRecipe(recipeId, s, ingredient, result, isVanilla);
         }
 
         @Nullable
@@ -99,7 +102,8 @@ public class StrippingRecipe implements IRecipe<IInventory> {
             String s = buffer.readString(32767);
             Ingredient ingredient = Ingredient.read(buffer);
             Block result =  ForgeRegistries.BLOCKS.getValue(new ResourceLocation(buffer.readString()));
-            return new StrippingRecipe(recipeId, s, ingredient, result);
+            boolean isVanilla = buffer.readBoolean();
+            return new StrippingRecipe(recipeId, s, ingredient, result, isVanilla);
         }
 
         @Override
@@ -107,6 +111,7 @@ public class StrippingRecipe implements IRecipe<IInventory> {
             buffer.writeString(recipe.group);
             recipe.ingredient.write(buffer);
             buffer.writeString(recipe.result.getRegistryName().toString());
+            buffer.writeBoolean(recipe.isVanilla);
         }
     }
 }

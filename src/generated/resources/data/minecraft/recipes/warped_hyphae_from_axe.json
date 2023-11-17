@@ -1,0 +1,8 @@
+{
+  "type": "dinosexpansion:stripping_recipe",
+  "isVanilla": true,
+  "ingredient": {
+    "item": "minecraft:warped_hyphae"
+  },
+  "result": "minecraft:stripped_warped_hyphae"
+}

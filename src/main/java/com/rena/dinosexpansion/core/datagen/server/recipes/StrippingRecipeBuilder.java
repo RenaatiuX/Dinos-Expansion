@@ -21,6 +21,8 @@ public class StrippingRecipeBuilder {
 
     protected String group = "stripping";
 
+    protected boolean isVanilla = false;
+
     public StrippingRecipeBuilder(Block stripped) {
         this.stripped = stripped;
     }
@@ -49,6 +51,11 @@ public class StrippingRecipeBuilder {
         return this;
     }
 
+    public StrippingRecipeBuilder vanilla(boolean isVanilla){
+        this.isVanilla = isVanilla;
+        return this;
+    }
+
     public void build(Consumer<IFinishedRecipe> consumerIn) {
         this.build(consumerIn, this.stripped.getRegistryName());
     }
@@ -70,7 +77,7 @@ public class StrippingRecipeBuilder {
      * Builds this recipe into an {@link IFinishedRecipe}.
      */
     public void build(Consumer<IFinishedRecipe> consumerIn, ResourceLocation id) {
-        consumerIn.accept(new Result(id, this.stripped, this.log, this.group));
+        consumerIn.accept(new Result(id, this.stripped, this.log, this.group, isVanilla));
     }
 
     private static class Result implements IFinishedRecipe{
@@ -81,17 +88,22 @@ public class StrippingRecipeBuilder {
 
         private final String group;
 
-        public Result(ResourceLocation id, Block block, Ingredient log, String group) {
+        private final boolean isVanilla;
+
+        public Result(ResourceLocation id, Block block, Ingredient log, String group, boolean isVanilla) {
             this.id = id;
             this.block = block;
             this.log = log;
             this.group = group;
+            this.isVanilla = isVanilla;
         }
 
         @Override
         public void serialize(JsonObject json) {
             if (!group.equals("stripping"))
                 json.addProperty("group", this.group);
+            if (isVanilla)
+                json.addProperty("isVanilla", true);
             json.add("ingredient", this.log.serialize());
             json.addProperty("result", ForgeRegistries.BLOCKS.getKey(this.block).toString());
         }

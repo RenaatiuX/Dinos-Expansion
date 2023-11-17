@@ -20,6 +20,8 @@ public class ModTags {
         public static final ITag.INamedTag<Item> KIBBLE = mod("kibble");
         public static final ITag.INamedTag<Item> DINO_STICKS = mod("dino_sticks");
 
+        public static final ITag.INamedTag<Item> CAN_DESTROY_FUTURISTIC_BLOCKS = mod("can_destroy_futuristic_blocks");
+
         //Dinosaur Food
         public static final ITag.INamedTag<Item> EOSQUALODON_FOOD = mod("eosqualodon_food");
         public static final ITag.INamedTag<Item> DIMORPHODON_FOOD = mod("dimorphodon_food");

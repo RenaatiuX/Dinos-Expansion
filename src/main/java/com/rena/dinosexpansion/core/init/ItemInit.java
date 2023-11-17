@@ -178,6 +178,7 @@ public class ItemInit {
             () -> new ForgeSpawnEggItem(EntityInit.MEGA_PIRANHA, 5201984, 14858845, new Item.Properties().group(ModItemGroups.SPAWN_EGGS)));
     public static final RegistryObject<Item> DIMORPHODON_SPAWN_EGG = ITEMS.register("dimorphodon_spawn_egg",
             () -> new ForgeSpawnEggItem(EntityInit.DIMORPHODON, 5592428, 10785674, new Item.Properties().group(ModItemGroups.SPAWN_EGGS)));
+    public static final RegistryObject<ThrownEggItem> DIMORPHODON_EGG = ITEMS.register("dimorphodon_egg", () -> new ThrownEggItem(new Item.Properties().group(ModItemGroups.ITEMS), EntityInit.DIMORPHODON::get, 0, 1));
     public static final RegistryObject<Item> ASTORGOSUCHUS_SPAWN_EGG = ITEMS.register("astorgosuchus_spawn_egg",
             () -> new ForgeSpawnEggItem(EntityInit.ASTORGOSUCHUS, 8098406, 12561789, new Item.Properties().group(ModItemGroups.SPAWN_EGGS)));
     public static final RegistryObject<Item> CAMPANILE_SPAEN_EGG = ITEMS.register("campanile_spawn_egg",

@@ -20,7 +20,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class TinyRockEntity extends AbstractArrowEntity{
+public class TinyRockEntity extends AbstractArrowEntity implements INarcoticProjectile{
 
     public static final DataParameter<ItemStack> ROCK_STACK = EntityDataManager.createKey(TinyRockEntity.class, DataSerializers.ITEMSTACK);
 
@@ -96,5 +96,10 @@ public class TinyRockEntity extends AbstractArrowEntity{
 
     public ItemStack getRock(){
         return this.dataManager.get(ROCK_STACK);
+    }
+
+    @Override
+    public int getNarcoticValue() {
+        return (int) (1d + this.getDamage() * 0.3d);
     }
 }

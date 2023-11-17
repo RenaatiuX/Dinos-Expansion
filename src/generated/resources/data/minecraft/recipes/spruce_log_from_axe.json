@@ -1,0 +1,8 @@
+{
+  "type": "dinosexpansion:stripping_recipe",
+  "isVanilla": true,
+  "ingredient": {
+    "item": "minecraft:spruce_log"
+  },
+  "result": "minecraft:stripped_spruce_log"
+}

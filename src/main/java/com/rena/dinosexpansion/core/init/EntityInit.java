@@ -5,6 +5,7 @@ import com.rena.dinosexpansion.common.entity.aquatic.*;
 import com.rena.dinosexpansion.common.entity.aquatic.fish.Acanthodes;
 import com.rena.dinosexpansion.common.entity.aquatic.fish.Belantsea;
 import com.rena.dinosexpansion.common.entity.aquatic.fish.Wetherellus;
+import com.rena.dinosexpansion.common.entity.projectile.ThrowEggEntity;
 import com.rena.dinosexpansion.common.entity.terrestrial.Ceratosaurus;
 import com.rena.dinosexpansion.common.entity.terrestrial.ambient.Meganeura;
 import com.rena.dinosexpansion.common.entity.projectile.TinyRockEntity;
@@ -33,6 +34,8 @@ public class EntityInit {
 
     public static final RegistryObject<EntityType<CustomArrow>> CUSTOM_ARROW = ENTITY_TYPES.register("custom_arrow",
             () -> EntityType.Builder.<CustomArrow>create(CustomArrow::new, EntityClassification.MISC).size(0.5F, 0.5F).build(DinosExpansion.modLoc("custom_arrow").toString()));
+
+    public static final RegistryObject<EntityType<ThrowEggEntity>> THROWN_EGG = register("thrown_egg", () -> EntityType.Builder.<ThrowEggEntity>create(ThrowEggEntity::new, EntityClassification.MISC).size(0.25F, 0.25F).trackingRange(4).updateInterval(10));
     public static final RegistryObject<EntityType<TinyRockEntity>> TINY_ROCK = ENTITY_TYPES.register("tiny_rock",
             () -> EntityType.Builder.<TinyRockEntity>create(TinyRockEntity::new, EntityClassification.MISC).size(0.5F, 0.5F).build(DinosExpansion.modLoc("tiny_rock").toString()));
     public static final RegistryObject<EntityType<SpearEntity>> SPEAR = ENTITY_TYPES.register("spear",

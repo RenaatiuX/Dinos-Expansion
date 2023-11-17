@@ -11,6 +11,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.gui.CommandSuggestionHelper;
 import net.minecraft.data.*;
+import net.minecraft.item.AxeItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -20,6 +21,7 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.lwjgl.system.CallbackI;
 
 import java.util.Objects;
@@ -38,6 +40,15 @@ public class ModRecipeProvider extends RecipeProvider {
         makeHatchets(consumer);
         makeWoodRecipes(consumer);
         makeToolRecipes(consumer);
+        makeVanillaStrippingRecipes(consumer);
+    }
+
+    protected void makeVanillaStrippingRecipes(Consumer<IFinishedRecipe> consumer){
+        ForgeRegistries.BLOCKS.getValues().forEach(block -> {
+            if (AxeItem.BLOCK_STRIPPING_MAP.containsKey(block)){
+                StrippingRecipeBuilder.builder(AxeItem.BLOCK_STRIPPING_MAP.get(block)).log(block).vanilla(true).build(consumer, new ResourceLocation(block.getRegistryName().getPath() + "_from_axe"));
+            }
+        });
     }
 
     protected void makeToolRecipes(Consumer<IFinishedRecipe> consumer) {

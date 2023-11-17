@@ -20,6 +20,7 @@ public class CustomArrow extends AbstractArrowEntity implements INarcoticProject
 
     private final int narcoticValue;
     private boolean hasAquaticEnchant = false;
+    protected double damageScaling = .5d;
 
     public CustomArrow(EntityType<CustomArrow> type, World world) {
         super(type, world);
@@ -61,6 +62,14 @@ public class CustomArrow extends AbstractArrowEntity implements INarcoticProject
         this.hasAquaticEnchant = EnchantmentHelper.getEnchantmentLevel(EnchantmentInit.AQUATIC_ENCHANT.get(), this.getArrowStack()) > 0;
     }
 
+    /**
+     * this defines how the damage is scaled before added to the narcotic value, this may be negative but note that the arrow then will remove narcotic value from the dinosaur
+     * @param damageScaling
+     */
+    public void setDamageScaling(double damageScaling) {
+        this.damageScaling = damageScaling;
+    }
+
     @Override
     protected float getSpeedFactor() {
         if (!hasAquaticEnchant)
@@ -81,7 +90,7 @@ public class CustomArrow extends AbstractArrowEntity implements INarcoticProject
 
     @Override
     public int getNarcoticValue() {
-        return this.narcoticValue;
+        return this.narcoticValue + (int)(this.getDamage() * this.damageScaling);
     }
 
     @Override

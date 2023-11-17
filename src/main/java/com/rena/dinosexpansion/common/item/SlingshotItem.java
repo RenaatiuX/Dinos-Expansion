@@ -40,7 +40,7 @@ public class SlingshotItem extends BowItem {
 
             if (!itemstack.isEmpty() || flag) {
                 if (itemstack.isEmpty()) {
-                    itemstack = new ItemStack(Items.ARROW);
+                    itemstack = new ItemStack(ItemInit.TINY_ROCK.get());
                 }
 
                 float f = getArrowVelocity(i);

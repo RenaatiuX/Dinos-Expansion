@@ -14,9 +14,12 @@ import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
 import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
+import net.minecraft.entity.EntityType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockReader;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -35,23 +38,23 @@ public class BlockInit {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, DinosExpansion.MOD_ID);
 
     public static final RegistryObject<Block> FUTURISTIC_BLOCK_OFF1 = register("futuristic_block_off_1",
-            () -> new Block(AbstractBlock.Properties.create(Material.ROCK).hardnessAndResistance(100f, 2400f)
-                    .harvestTool(ToolType.PICKAXE).harvestLevel(3).setRequiresTool()), ModItemGroups.BLOCKS);
+            () -> new OnlyFromSapphireBreakable(AbstractBlock.Properties.create(Material.ROCK).hardnessAndResistance(100f, 3600000.0F)
+                    .harvestTool(ToolType.PICKAXE).harvestLevel(5).setRequiresTool()), ModItemGroups.BLOCKS);
     public static final RegistryObject<Block> FUTURISTIC_BLOCK_OFF2 = register("futuristic_block_off_2",
-            () -> new Block(AbstractBlock.Properties.create(Material.ROCK).hardnessAndResistance(100f, 2400f)
-                    .harvestTool(ToolType.PICKAXE).harvestLevel(3).setRequiresTool()), ModItemGroups.BLOCKS);
+            () -> new OnlyFromSapphireBreakable(AbstractBlock.Properties.create(Material.ROCK).hardnessAndResistance(100f, 3600000.0F)
+                    .harvestTool(ToolType.PICKAXE).harvestLevel(5).setRequiresTool()), ModItemGroups.BLOCKS);
     public static final RegistryObject<Block> FUTURISTIC_BLOCK_ON1 = register("futuristic_block_on_1",
-            () -> new Block(AbstractBlock.Properties.create(Material.ROCK).hardnessAndResistance(100f, 2400f)
-                    .harvestTool(ToolType.PICKAXE).harvestLevel(3).setRequiresTool().setLightLevel(state -> 11)), ModItemGroups.BLOCKS);
+            () -> new OnlyFromSapphireBreakable(AbstractBlock.Properties.create(Material.ROCK).hardnessAndResistance(30f, 3600000.0F)
+                    .harvestTool(ToolType.PICKAXE).harvestLevel(5).setRequiresTool().setLightLevel(state -> 11)), ModItemGroups.BLOCKS);
     public static final RegistryObject<Block> FUTURISTIC_BLOCK_ON2 = register("futuristic_block_on_2",
-            () -> new Block(AbstractBlock.Properties.create(Material.ROCK).hardnessAndResistance(100f, 2400f)
-                    .harvestTool(ToolType.PICKAXE).harvestLevel(3).setRequiresTool().setLightLevel(state -> 10)), ModItemGroups.BLOCKS);
+            () -> new OnlyFromSapphireBreakable(AbstractBlock.Properties.create(Material.ROCK).hardnessAndResistance(30f, 3600000.0F)
+                    .harvestTool(ToolType.PICKAXE).harvestLevel(5).setRequiresTool().setLightLevel(state -> 10)), ModItemGroups.BLOCKS);
     public static final RegistryObject<Block> MOSSY_FUTURISTIC_BLOCK1 = register("mossy_futuristic_block_1",
-            () -> new Block(AbstractBlock.Properties.create(Material.ROCK).hardnessAndResistance(100f, 2400f)
-                    .harvestTool(ToolType.PICKAXE).harvestLevel(3).setRequiresTool()), ModItemGroups.BLOCKS);
+            () -> new OnlyFromSapphireBreakable(AbstractBlock.Properties.create(Material.ROCK).hardnessAndResistance(30f, 3600000.0F)
+                    .harvestTool(ToolType.PICKAXE).harvestLevel(5).setRequiresTool()), ModItemGroups.BLOCKS);
     public static final RegistryObject<Block> MOSSY_FUTURISTIC_BLOCK2 = register("mossy_futuristic_block_2",
-            () -> new Block(AbstractBlock.Properties.create(Material.ROCK).hardnessAndResistance(100f, 2400f)
-                    .harvestTool(ToolType.PICKAXE).harvestLevel(3).setRequiresTool()), ModItemGroups.BLOCKS);
+            () -> new OnlyFromSapphireBreakable(AbstractBlock.Properties.create(Material.ROCK).hardnessAndResistance(30f, 3600000.0F)
+                    .harvestTool(ToolType.PICKAXE).harvestLevel(5).setRequiresTool()), ModItemGroups.BLOCKS);
     public static final RegistryObject<Block> QUICKSAND = register("quicksand",
             () -> new QuicksandBlock(AbstractBlock.Properties.create(Material.SAND, MaterialColor.SAND).hardnessAndResistance(0.5F)
                     .sound(SoundType.SAND).doesNotBlockMovement().harvestTool(ToolType.SHOVEL)), ModItemGroups.BLOCKS);
@@ -178,6 +181,11 @@ public class BlockInit {
     public static final RegistryObject<ModStandingSignBlock> CRATEAGUS_SIGN = BLOCKS.register("crateagus_sign", () -> new ModStandingSignBlock(AbstractBlock.Properties.create(Material.WOOD).doesNotBlockMovement(), WoodTypeInit.CRATEAGUS_WOOD));
     public static final RegistryObject<ModWallSignBlock> CRATEAGUS_WALL_SIGN = BLOCKS.register("crateagus_wall_sign", () -> new ModWallSignBlock(AbstractBlock.Properties.create(Material.WOOD).doesNotBlockMovement().lootFrom(CRATEAGUS_SIGN.get()), WoodTypeInit.CRATEAGUS_WOOD));
 
+
+    private static Boolean onlyWithSapphire(BlockState state, IBlockReader reader, BlockPos pos, EntityType<?> entity) {
+
+        return false;
+    }
 
     public static <T extends Block> RegistryObject<T> register(String name, Supplier<T> blockSupplier, ItemGroup tab) {
         return register(name, blockSupplier, () -> new Item.Properties().group(tab));

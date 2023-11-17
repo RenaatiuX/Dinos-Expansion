@@ -8,6 +8,7 @@ import com.rena.dinosexpansion.common.util.enums.AttackOrder;
 import com.rena.dinosexpansion.common.util.enums.MoveOrder;
 import com.rena.dinosexpansion.core.init.*;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.biome.Biome;
@@ -215,6 +216,7 @@ public class ModLanguageProvider extends LanguageProvider {
         add(ItemInit.SAPPHIRE_PICKAXE.get(), "Sapphire Pickaxe");
         add(ItemInit.SAPPHIRE_SHOVEL.get(), "Sapphire Shovel");
         add(ItemInit.SAPPHIRE_AXE.get(), "Sapphire Axe");
+        auto(ItemInit.DIMORPHODON_EGG.get());
         add(EntityInit.PARAPUZOSIA.get(), "Parapuzosia");
         add(EntityInit.EOSQUALODON.get(), "Eosqualodon");
         add(EntityInit.MEGA_PIRANHA.get(), "Mega Piranha");
@@ -294,6 +296,10 @@ public class ModLanguageProvider extends LanguageProvider {
 
     public void add(ITextComponent component, String name) {
         add(component.getString(), name);
+    }
+
+    public void auto(Item item){
+        add(item, toTitleCase(item.getRegistryName().getPath()));
     }
 
     public static String toTitleCase(ForgeRegistryEntry<?> input) {

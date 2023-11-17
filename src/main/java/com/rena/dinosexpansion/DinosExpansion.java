@@ -1,27 +1,17 @@
 package com.rena.dinosexpansion;
 
 import com.rena.dinosexpansion.common.config.DinosExpansionConfig;
-import com.rena.dinosexpansion.common.entity.villagers.caveman.Tribe;
-import com.rena.dinosexpansion.common.entity.villagers.caveman.TribeTypeSerializer;
-import com.rena.dinosexpansion.common.events.DinoArmorRegistration;
 import com.rena.dinosexpansion.core.init.*;
-import com.rena.dinosexpansion.core.network.Network;
-import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import software.bernie.geckolib3.GeckoLib;
-
-import java.util.Comparator;
 
 @Mod(DinosExpansion.MOD_ID)
 public class DinosExpansion

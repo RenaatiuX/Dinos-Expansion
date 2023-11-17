@@ -1,0 +1,8 @@
+{
+  "type": "dinosexpansion:stripping_recipe",
+  "isVanilla": true,
+  "ingredient": {
+    "item": "minecraft:spruce_wood"
+  },
+  "result": "minecraft:stripped_spruce_wood"
+}
