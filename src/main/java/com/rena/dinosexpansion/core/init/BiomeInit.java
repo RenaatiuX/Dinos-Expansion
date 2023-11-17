@@ -8,10 +8,12 @@ import com.rena.dinosexpansion.common.biome.biomes.desert.Dunes;
 import com.rena.dinosexpansion.common.biome.biomes.desert.RedDesert;
 import com.rena.dinosexpansion.common.biome.biomes.desert.subbiomes.DesertHills;
 import com.rena.dinosexpansion.common.biome.biomes.forest.CherryForest;
+import com.rena.dinosexpansion.common.biome.biomes.lakes.Lake;
 import com.rena.dinosexpansion.common.biome.biomes.ocean.*;
 import com.rena.dinosexpansion.common.biome.biomes.ocean.subbiome.*;
 import com.rena.dinosexpansion.common.biome.biomes.river.River;
 import com.rena.dinosexpansion.common.biome.biomes.swamp.DenseSwamp;
+import com.rena.dinosexpansion.common.biome.biomes.swamp.EtherealSwamp;
 import com.rena.dinosexpansion.common.biome.biomes.swamp.Floodplain;
 import com.rena.dinosexpansion.common.biome.biomes.swamp.Quagmire;
 import com.rena.dinosexpansion.common.biome.biomes.vulcano.VulcanoBiome;
@@ -58,7 +60,8 @@ public class BiomeInit {
     public static final BiomeBase CHERRY_FOREST = new CherryForest();
     public static final BiomeBase FLOODPLAIN = new Floodplain();
     public static final BiomeBase QUAGMIRE = new Quagmire();
-
+    public static final BiomeBase LAKE = new Lake();
+    public static final BiomeBase ETHEREAL_SWAMP = new EtherealSwamp();
     public static final BiomeBase VULCANO = new VulcanoBiome();
 
     public static final RegistryObject<Biome> DESERT_BIOME = register("desert", DESERT::getBiome, 1);
@@ -80,7 +83,8 @@ public class BiomeInit {
     public static final RegistryObject<Biome> CHERRY_FOREST_BIOME = register("cherry_forest", CHERRY_FOREST::getBiome, 17);
     public static final RegistryObject<Biome> FLOODPLAIN_BIOME = register("floodplain", FLOODPLAIN::getBiome, 18);
     public static final RegistryObject<Biome> QUAGMIRE_BIOME = register("quagmire", QUAGMIRE::getBiome, 21);
-
+    public static final RegistryObject<Biome> LAKE_BIOME = register("lake", LAKE::getBiome, 22);
+    public static final RegistryObject<Biome> ETHEREAL_SWAMP_BIOME = register("ethereal_swamp", ETHEREAL_SWAMP::getBiome, 23);
     public static final RegistryObject<Biome> DUNES_BIOME = register("dunes", DUNES::getBiome, 19);
     public static final RegistryObject<Biome> VULCANO_BIOME = register("vulcano", VULCANO::getBiome, 20);
 
