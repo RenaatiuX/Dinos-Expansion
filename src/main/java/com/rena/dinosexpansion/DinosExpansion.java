@@ -4,6 +4,7 @@ import com.rena.dinosexpansion.common.config.DinosExpansionConfig;
 import com.rena.dinosexpansion.core.init.*;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -58,6 +59,10 @@ public class DinosExpansion
 
     public static ResourceLocation blockLoot(String name){
         return modLoc("blocks/" + name);
+    }
+
+    public static TranslationTextComponent translatable(String type, String key) {
+        return new TranslationTextComponent(type + "." + MOD_ID + "." + key);
     }
 
 

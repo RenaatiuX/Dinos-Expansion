@@ -43,5 +43,6 @@ public class ModItemTagsProvider extends ItemTagsProvider {
         getOrCreateBuilder(ModTags.Items.CERATOSAURUS_FOOD).add(Items.CHICKEN).add(Items.COOKED_CHICKEN).add(Items.BEEF).add(Items.COOKED_CHICKEN).add(Items.COOKED_MUTTON).add(Items.MUTTON).add(Items.PORKCHOP).add(Items.COOKED_PORKCHOP);
         getOrCreateBuilder(ModTags.Items.DINO_STICKS).add(ItemInit.REDWOOD_STICK.get(), ItemInit.CRATAEGUS_STICK.get());
         getOrCreateBuilder(ModTags.Items.CAN_DESTROY_FUTURISTIC_BLOCKS).add(ItemInit.SAPPHIRE_PICKAXE.get());
+        getOrCreateBuilder(ModTags.Items.TIME_MACHINE_FUEL).add(Items.ENDER_PEARL);
     }
 }

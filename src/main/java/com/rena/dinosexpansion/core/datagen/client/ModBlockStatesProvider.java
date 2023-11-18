@@ -183,7 +183,7 @@ public class ModBlockStatesProvider extends BlockStateProvider {
             ConfiguredModel.Builder<?> builder = ConfiguredModel.builder();
             if (state.get(BlockStateProperties.SLAB_TYPE) == SlabType.TOP) {
                 name += "_top";
-                builder.modelFile(models().slab(name, side, bottom, top));
+                builder.modelFile(models().slabTop(name, side, bottom, top));
                 return builder.build();
             } else if (state.get(BlockStateProperties.SLAB_TYPE) == SlabType.BOTTOM) {
                 ModelFile model = models().slab(name, side, bottom, top);

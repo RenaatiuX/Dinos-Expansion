@@ -26,6 +26,7 @@ public class ModTags {
         public static final ITag.INamedTag<Item> EOSQUALODON_FOOD = mod("eosqualodon_food");
         public static final ITag.INamedTag<Item> DIMORPHODON_FOOD = mod("dimorphodon_food");
         public static final ITag.INamedTag<Item> CERATOSAURUS_FOOD = mod("ceratosaurus_food");
+        public static final ITag.INamedTag<Item> TIME_MACHINE_FUEL = mod("time_machine_fuel");
 
         public static ITag.INamedTag<Item> mod(String name){
             return ItemTags.makeWrapperTag(DinosExpansion.modLoc(name).toString());

@@ -1,5 +1,5 @@
 {
-  "parent": "minecraft:block/slab",
+  "parent": "minecraft:block/slab_top",
   "textures": {
     "side": "dinosexpansion:block/mossy_futuristic_block_1",
     "bottom": "dinosexpansion:block/mossy_futuristic_block_1",
