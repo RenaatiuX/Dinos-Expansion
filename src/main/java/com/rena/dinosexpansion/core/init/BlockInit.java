@@ -9,6 +9,7 @@ import com.rena.dinosexpansion.common.block.crops.DoubleCropBaseBlock;
 import com.rena.dinosexpansion.common.block.plant.SinglePlantBlock;
 import com.rena.dinosexpansion.common.block.plant.TriplePlantBlock;
 import com.rena.dinosexpansion.common.item.util.AnimatedBlockItem;
+import com.rena.dinosexpansion.common.tileentity.UnknownLockTileEntity;
 import com.rena.dinosexpansion.common.world.gen.trees.ModTreeSpawners;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
@@ -57,6 +58,8 @@ public class BlockInit {
                     .harvestTool(ToolType.PICKAXE).harvestLevel(5).setRequiresTool()), ModItemGroups.BLOCKS);
     public static final RegistryObject<Block> FUTURISTIC_LOCK_BLOCK = register("futuristic_lock_block",
             () -> new UnknownLockBlock(AbstractBlock.Properties.create(Material.ROCK).hardnessAndResistance(-1.0F, 1000000F)), ModItemGroups.BLOCKS);
+    public static final RegistryObject<Block> FUTURISTIC_LOCK_FRAME_BLOCK = register("futuristic_lock_frame_block",
+            () -> new TileEntityBlock(UnknownLockTileEntity::new, AbstractBlock.Properties.create(Material.ROCK).hardnessAndResistance(-1.0F, 1000000F)), ModItemGroups.BLOCKS);
 
     //futuristic slabs
     public static final RegistryObject<SlabBlock> FUTURISTIC_BLOCK_OFF1_SLAB = register("futuristic_block_off_1_slab", () -> new OnlySapphireBreakableSlab(AbstractBlock.Properties.from(FUTURISTIC_BLOCK_OFF1.get())), ModItemGroups.BLOCKS);
