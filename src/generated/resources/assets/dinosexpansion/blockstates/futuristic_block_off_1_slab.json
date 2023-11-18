@@ -1,0 +1,22 @@
+{
+  "variants": {
+    "type=top,waterlogged=false": {
+      "model": "dinosexpansion:block/futuristic_block_off_1_slab_top"
+    },
+    "type=bottom,waterlogged=false": {
+      "model": "dinosexpansion:block/futuristic_block_off_1_slab"
+    },
+    "type=double,waterlogged=false": {
+      "model": "dinosexpansion:block/futuristic_block_off_1"
+    },
+    "type=top,waterlogged=true": {
+      "model": "dinosexpansion:block/futuristic_block_off_1_slab_top"
+    },
+    "type=bottom,waterlogged=true": {
+      "model": "dinosexpansion:block/futuristic_block_off_1_slab"
+    },
+    "type=double,waterlogged=true": {
+      "model": "dinosexpansion:block/futuristic_block_off_1"
+    }
+  }
+}

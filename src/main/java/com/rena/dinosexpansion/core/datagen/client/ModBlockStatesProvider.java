@@ -5,8 +5,7 @@ import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.common.block.plant.TriplePlantBlock;
 import com.rena.dinosexpansion.core.init.BlockInit;
 import com.rena.dinosexpansion.core.init.ModItemGroups;
-import net.minecraft.block.Block;
-import net.minecraft.block.DoorBlock;
+import net.minecraft.block.*;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -41,6 +40,36 @@ public class ModBlockStatesProvider extends BlockStateProvider {
         block(BlockInit.FUTURISTIC_BLOCK_ON2.get());
         block(BlockInit.MOSSY_FUTURISTIC_BLOCK1.get());
         block(BlockInit.MOSSY_FUTURISTIC_BLOCK2.get());
+        slabBlock(BlockInit.FUTURISTIC_BLOCK_OFF1_SLAB.get(), BlockInit.FUTURISTIC_BLOCK_OFF1.get());
+        stairsBlock(BlockInit.FUTURISTIC_BLOCK_OFF1_STAIRS.get(), BlockInit.FUTURISTIC_BLOCK_OFF1.get());
+        fenceBlock(BlockInit.FUTURISTIC_BLOCK_OFF1_FENCE.get(), BlockInit.FUTURISTIC_BLOCK_OFF1.get());
+        wallBlock(BlockInit.FUTURISTIC_BLOCK_OFF1_WALL.get(), BlockInit.FUTURISTIC_BLOCK_OFF1.get());
+
+        slabBlock(BlockInit.FUTURISTIC_BLOCK_OFF2_SLAB.get(), BlockInit.FUTURISTIC_BLOCK_OFF2.get());
+        stairsBlock(BlockInit.FUTURISTIC_BLOCK_OFF2_STAIRS.get(), BlockInit.FUTURISTIC_BLOCK_OFF2.get());
+        fenceBlock(BlockInit.FUTURISTIC_BLOCK_OFF2_FENCE.get(), BlockInit.FUTURISTIC_BLOCK_OFF2.get());
+        wallBlock(BlockInit.FUTURISTIC_BLOCK_OFF2_WALL.get(), BlockInit.FUTURISTIC_BLOCK_OFF2.get());
+
+        slabBlock(BlockInit.FUTURISTIC_BLOCK_ON1_SLAB.get(), BlockInit.FUTURISTIC_BLOCK_ON1.get());
+        stairsBlock(BlockInit.FUTURISTIC_BLOCK_ON1_STAIRS.get(), BlockInit.FUTURISTIC_BLOCK_ON1.get());
+        fenceBlock(BlockInit.FUTURISTIC_BLOCK_ON1_FENCE.get(), BlockInit.FUTURISTIC_BLOCK_ON1.get());
+        wallBlock(BlockInit.FUTURISTIC_BLOCK_ON1_WALL.get(), BlockInit.FUTURISTIC_BLOCK_ON1.get());
+
+        slabBlock(BlockInit.FUTURISTIC_BLOCK_ON2_SLAB.get(), BlockInit.FUTURISTIC_BLOCK_ON2.get());
+        stairsBlock(BlockInit.FUTURISTIC_BLOCK_ON2_STAIRS.get(), BlockInit.FUTURISTIC_BLOCK_ON2.get());
+        fenceBlock(BlockInit.FUTURISTIC_BLOCK_ON2_FENCE.get(), BlockInit.FUTURISTIC_BLOCK_ON2.get());
+        wallBlock(BlockInit.FUTURISTIC_BLOCK_ON2_WALL.get(), BlockInit.FUTURISTIC_BLOCK_ON2.get());
+
+        slabBlock(BlockInit.MOSSY_FUTURISTIC_BLOCK1_SLAB.get(), BlockInit.MOSSY_FUTURISTIC_BLOCK1.get());
+        stairsBlock(BlockInit.MOSSY_FUTURISTIC_BLOCK1_STAIRS.get(), BlockInit.MOSSY_FUTURISTIC_BLOCK1.get());
+        fenceBlock(BlockInit.MOSSY_FUTURISTIC_BLOCK1_FENCE.get(), BlockInit.MOSSY_FUTURISTIC_BLOCK1.get());
+        wallBlock(BlockInit.MOSSY_FUTURISTIC_BLOCK1_WALL.get(), BlockInit.MOSSY_FUTURISTIC_BLOCK1.get());
+
+        slabBlock(BlockInit.MOSSY_FUTURISTIC_BLOCK2_SLAB.get(), BlockInit.MOSSY_FUTURISTIC_BLOCK2.get());
+        stairsBlock(BlockInit.MOSSY_FUTURISTIC_BLOCK2_STAIRS.get(), BlockInit.MOSSY_FUTURISTIC_BLOCK2.get());
+        fenceBlock(BlockInit.MOSSY_FUTURISTIC_BLOCK2_FENCE.get(), BlockInit.MOSSY_FUTURISTIC_BLOCK2.get());
+        wallBlock(BlockInit.MOSSY_FUTURISTIC_BLOCK2_WALL.get(), BlockInit.MOSSY_FUTURISTIC_BLOCK2.get());
+
         //blockWithoutBlockItem(BlockInit.CAMPANILE_SHELL_COMMON.get(), BlockInit.CAMPANILE_SHELL_UNCOMMON.get());
         doublePlant(BlockInit.AMORPHOPHALLUS);
         doublePlant(BlockInit.BENNETTITALES);
@@ -120,9 +149,9 @@ public class ModBlockStatesProvider extends BlockStateProvider {
         this.getVariantBuilder(wall).partialState().setModels(new ConfiguredModel(file));
     }
 
-    protected void slabBlock(Supplier<Block> block, Supplier<Block> textureFrom) {
-        ResourceLocation texture = blockTexture(textureFrom.get());
-        slabBlock(block.get(), models().getExistingFile(textureFrom.get().getRegistryName()), texture, texture, texture);
+    protected void slabBlock(Block block, Block textureFrom) {
+        ResourceLocation texture = blockTexture(textureFrom);
+        slabBlock(block, models().getExistingFile(textureFrom.getRegistryName()), texture, texture, texture);
     }
 
     protected void simpleDoorBlock(Supplier<DoorBlock> block) {
@@ -167,6 +196,11 @@ public class ModBlockStatesProvider extends BlockStateProvider {
         });
 
     }
+
+   public void stairsBlock(StairsBlock stair, Block textureFrom){
+        stairsBlock(stair, blockTexture(textureFrom));
+        simpleBlockItem(stair, existing(stair));
+   }
 
     protected void leaves(Block block) {
         String name = name(block);
@@ -331,6 +365,16 @@ public class ModBlockStatesProvider extends BlockStateProvider {
             return builder.build();
 
         });
+    }
+
+    protected void fenceBlock(FenceBlock fence, Block textureFrom){
+        fenceBlock(fence, blockTexture(textureFrom));
+        simpleBlockItem(fence, models().fenceInventory(name(fence), blockTexture(textureFrom)));
+    }
+
+    protected void wallBlock(WallBlock fence, Block textureFrom){
+        wallBlock(fence, blockTexture(textureFrom));
+        simpleBlockItem(fence, models().wallInventory(name(fence), blockTexture(textureFrom)));
     }
 
     public ResourceLocation blockTextureLoc(String name) {

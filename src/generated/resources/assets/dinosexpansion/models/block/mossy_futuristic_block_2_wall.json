@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/wall_inventory",
+  "textures": {
+    "wall": "dinosexpansion:block/mossy_futuristic_block_2"
+  }
+}

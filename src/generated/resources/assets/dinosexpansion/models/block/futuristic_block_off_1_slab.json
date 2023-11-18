@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab",
+  "textures": {
+    "side": "dinosexpansion:block/futuristic_block_off_1",
+    "bottom": "dinosexpansion:block/futuristic_block_off_1",
+    "top": "dinosexpansion:block/futuristic_block_off_1"
+  }
+}

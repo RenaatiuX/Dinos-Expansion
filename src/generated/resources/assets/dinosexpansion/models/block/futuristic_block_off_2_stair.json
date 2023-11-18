@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/stairs",
+  "textures": {
+    "side": "dinosexpansion:block/futuristic_block_off_2",
+    "bottom": "dinosexpansion:block/futuristic_block_off_2",
+    "top": "dinosexpansion:block/futuristic_block_off_2"
+  }
+}

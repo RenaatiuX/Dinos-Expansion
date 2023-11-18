@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "  m",
+    " mm",
+    "mmm"
+  ],
+  "key": {
+    "m": {
+      "item": "dinosexpansion:mossy_futuristic_block_1"
+    }
+  },
+  "result": {
+    "item": "dinosexpansion:mossy_futuristic_block_1_stair",
+    "count": 4
+  }
+}

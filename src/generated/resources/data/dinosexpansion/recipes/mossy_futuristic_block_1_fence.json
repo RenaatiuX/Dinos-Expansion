@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "msm",
+    "msm"
+  ],
+  "key": {
+    "m": {
+      "item": "dinosexpansion:mossy_futuristic_block_1"
+    },
+    "s": {
+      "tag": "dinosexpansion:dino_sticks"
+    }
+  },
+  "result": {
+    "item": "dinosexpansion:mossy_futuristic_block_1_fence",
+    "count": 3
+  }
+}

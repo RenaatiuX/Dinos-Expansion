@@ -29,6 +29,38 @@ public class ModLanguageProvider extends LanguageProvider {
         add(BlockInit.FUTURISTIC_BLOCK_ON2.get(), "Unknown Block");
         add(BlockInit.MOSSY_FUTURISTIC_BLOCK1.get(), "Unknown Block");
         add(BlockInit.MOSSY_FUTURISTIC_BLOCK2.get(), "Unknown Block");
+
+        add(BlockInit.FUTURISTIC_BLOCK_OFF1_SLAB.get(), "Unknown Slab");
+        add(BlockInit.FUTURISTIC_BLOCK_OFF1_STAIRS.get(), "Unknown Stair");
+        add(BlockInit.FUTURISTIC_BLOCK_OFF1_FENCE.get(), "Unknown Fence");
+        add(BlockInit.FUTURISTIC_BLOCK_OFF1_WALL.get(), "Unknown Wall");
+
+        add(BlockInit.FUTURISTIC_BLOCK_OFF2_SLAB.get(), "Unknown Slab");
+        add(BlockInit.FUTURISTIC_BLOCK_OFF2_STAIRS.get(), "Unknown Stair");
+        add(BlockInit.FUTURISTIC_BLOCK_OFF2_FENCE.get(), "Unknown Fence");
+        add(BlockInit.FUTURISTIC_BLOCK_OFF2_WALL.get(), "Unknown Wall");
+
+        add(BlockInit.FUTURISTIC_BLOCK_ON1_SLAB.get(), "Unknown Slab");
+        add(BlockInit.FUTURISTIC_BLOCK_ON1_STAIRS.get(), "Unknown Stair");
+        add(BlockInit.FUTURISTIC_BLOCK_ON1_FENCE.get(), "Unknown Fence");
+        add(BlockInit.FUTURISTIC_BLOCK_ON1_WALL.get(), "Unknown Wall");
+
+        add(BlockInit.FUTURISTIC_BLOCK_ON2_SLAB.get(), "Unknown Slab");
+        add(BlockInit.FUTURISTIC_BLOCK_ON2_STAIRS.get(), "Unknown Stair");
+        add(BlockInit.FUTURISTIC_BLOCK_ON2_FENCE.get(), "Unknown Fence");
+        add(BlockInit.FUTURISTIC_BLOCK_ON2_WALL.get(), "Unknown Wall");
+
+        add(BlockInit.MOSSY_FUTURISTIC_BLOCK1_SLAB.get(), "Unknown Slab");
+        add(BlockInit.MOSSY_FUTURISTIC_BLOCK1_STAIRS.get(), "Unknown Stair");
+        add(BlockInit.MOSSY_FUTURISTIC_BLOCK1_FENCE.get(), "Unknown Fence");
+        add(BlockInit.MOSSY_FUTURISTIC_BLOCK1_WALL.get(), "Unknown Wall");
+
+        add(BlockInit.MOSSY_FUTURISTIC_BLOCK2_SLAB.get(), "Unknown Slab");
+        add(BlockInit.MOSSY_FUTURISTIC_BLOCK2_STAIRS.get(), "Unknown Stair");
+        add(BlockInit.MOSSY_FUTURISTIC_BLOCK2_FENCE.get(), "Unknown Fence");
+        add(BlockInit.MOSSY_FUTURISTIC_BLOCK2_WALL.get(), "Unknown Wall");
+
+
         add(BlockInit.LAVENDER.get(), "Lavender");
         add(BlockInit.LEMON_VERBENA.get(), "Lemon Verbena");
         add(BlockInit.ARCHAEOSIGILLARIA.get(), "Archaeosigillaria");

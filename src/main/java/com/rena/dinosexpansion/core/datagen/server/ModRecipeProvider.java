@@ -41,6 +41,39 @@ public class ModRecipeProvider extends RecipeProvider {
         makeWoodRecipes(consumer);
         makeToolRecipes(consumer);
         makeVanillaStrippingRecipes(consumer);
+        makeFuturisticRecipes(consumer);
+    }
+
+    private void makeFuturisticRecipes(Consumer<IFinishedRecipe> consumer){
+        makeSlabRecipe(consumer, BlockInit.FUTURISTIC_BLOCK_OFF1_SLAB.get(), BlockInit.FUTURISTIC_BLOCK_OFF1.get());
+        makeStairRecipe(consumer, BlockInit.FUTURISTIC_BLOCK_OFF1_STAIRS.get(), BlockInit.FUTURISTIC_BLOCK_OFF1.get());
+        makeFenceRecipe(consumer, BlockInit.FUTURISTIC_BLOCK_OFF1_FENCE.get(),ModTags.Items.DINO_STICKS, BlockInit.FUTURISTIC_BLOCK_OFF1.get());
+        makeWallRecipe(consumer, BlockInit.FUTURISTIC_BLOCK_OFF1_WALL.get(), BlockInit.FUTURISTIC_BLOCK_OFF1.get());
+
+        makeSlabRecipe(consumer, BlockInit.FUTURISTIC_BLOCK_OFF2_SLAB.get(), BlockInit.FUTURISTIC_BLOCK_OFF2.get());
+        makeStairRecipe(consumer, BlockInit.FUTURISTIC_BLOCK_OFF2_STAIRS.get(), BlockInit.FUTURISTIC_BLOCK_OFF2.get());
+        makeFenceRecipe(consumer, BlockInit.FUTURISTIC_BLOCK_OFF2_FENCE.get(),ModTags.Items.DINO_STICKS, BlockInit.FUTURISTIC_BLOCK_OFF2.get());
+        makeWallRecipe(consumer, BlockInit.FUTURISTIC_BLOCK_OFF2_WALL.get(), BlockInit.FUTURISTIC_BLOCK_OFF2.get());
+
+        makeSlabRecipe(consumer, BlockInit.FUTURISTIC_BLOCK_ON1_SLAB.get(), BlockInit.FUTURISTIC_BLOCK_ON1.get());
+        makeStairRecipe(consumer, BlockInit.FUTURISTIC_BLOCK_ON1_STAIRS.get(), BlockInit.FUTURISTIC_BLOCK_ON1.get());
+        makeFenceRecipe(consumer, BlockInit.FUTURISTIC_BLOCK_ON1_FENCE.get(),ModTags.Items.DINO_STICKS, BlockInit.FUTURISTIC_BLOCK_ON1.get());
+        makeWallRecipe(consumer, BlockInit.FUTURISTIC_BLOCK_ON1_WALL.get(), BlockInit.FUTURISTIC_BLOCK_ON1.get());
+
+        makeSlabRecipe(consumer, BlockInit.FUTURISTIC_BLOCK_ON2_SLAB.get(), BlockInit.FUTURISTIC_BLOCK_ON2.get());
+        makeStairRecipe(consumer, BlockInit.FUTURISTIC_BLOCK_ON2_STAIRS.get(), BlockInit.FUTURISTIC_BLOCK_ON2.get());
+        makeFenceRecipe(consumer, BlockInit.FUTURISTIC_BLOCK_ON2_FENCE.get(),ModTags.Items.DINO_STICKS, BlockInit.FUTURISTIC_BLOCK_ON2.get());
+        makeWallRecipe(consumer, BlockInit.FUTURISTIC_BLOCK_ON2_WALL.get(), BlockInit.FUTURISTIC_BLOCK_ON2.get());
+
+        makeSlabRecipe(consumer, BlockInit.MOSSY_FUTURISTIC_BLOCK1_SLAB.get(), BlockInit.MOSSY_FUTURISTIC_BLOCK1.get());
+        makeStairRecipe(consumer, BlockInit.MOSSY_FUTURISTIC_BLOCK1_STAIRS.get(), BlockInit.MOSSY_FUTURISTIC_BLOCK1.get());
+        makeFenceRecipe(consumer, BlockInit.MOSSY_FUTURISTIC_BLOCK1_FENCE.get(),ModTags.Items.DINO_STICKS, BlockInit.MOSSY_FUTURISTIC_BLOCK1.get());
+        makeWallRecipe(consumer, BlockInit.MOSSY_FUTURISTIC_BLOCK1_WALL.get(), BlockInit.MOSSY_FUTURISTIC_BLOCK1.get());
+
+        makeSlabRecipe(consumer, BlockInit.MOSSY_FUTURISTIC_BLOCK2_SLAB.get(), BlockInit.MOSSY_FUTURISTIC_BLOCK2.get());
+        makeStairRecipe(consumer, BlockInit.MOSSY_FUTURISTIC_BLOCK2_STAIRS.get(), BlockInit.MOSSY_FUTURISTIC_BLOCK2.get());
+        makeFenceRecipe(consumer, BlockInit.MOSSY_FUTURISTIC_BLOCK2_FENCE.get(),ModTags.Items.DINO_STICKS, BlockInit.MOSSY_FUTURISTIC_BLOCK2.get());
+        makeWallRecipe(consumer, BlockInit.MOSSY_FUTURISTIC_BLOCK2_WALL.get(), BlockInit.MOSSY_FUTURISTIC_BLOCK2.get());
     }
 
     protected void makeVanillaStrippingRecipes(Consumer<IFinishedRecipe> consumer){
@@ -242,6 +275,71 @@ public class ModRecipeProvider extends RecipeProvider {
                 .patternLine("ppp")
                 .patternLine(" s ")
                 .addCriterion("has_item", hasItem(planks.getMatchingStacks()[0].getItem())).build(consumer);
+    }
+
+    protected static void makeStairRecipe(Consumer<IFinishedRecipe> consumer, IItemProvider stairs, ITag<Item> material){
+        makeStairRecipe(consumer, stairs, Ingredient.fromTag(material));
+    }
+
+    protected static void makeStairRecipe(Consumer<IFinishedRecipe> consumer, IItemProvider stairs, IItemProvider material){
+        makeStairRecipe(consumer, stairs, Ingredient.fromItems(material));
+    }
+
+
+    protected static void makeStairRecipe(Consumer<IFinishedRecipe> consumer, IItemProvider stairs, Ingredient material){
+        ShapedRecipeBuilder.shapedRecipe(stairs, 4)
+                .key('m', material)
+                .patternLine("  m")
+                .patternLine(" mm")
+                .patternLine("mmm")
+                .addCriterion("has_item", hasItem(material.getMatchingStacks()[0].getItem())).build(consumer);
+    }
+
+    protected static void makeSlabRecipe(Consumer<IFinishedRecipe> consumer, IItemProvider slab, ITag<Item> material){
+        makeSlabRecipe(consumer, slab, Ingredient.fromTag(material));
+    }
+
+
+    protected static void makeSlabRecipe(Consumer<IFinishedRecipe> consumer, IItemProvider slab, IItemProvider material){
+        makeSlabRecipe(consumer, slab, Ingredient.fromItems(material));
+    }
+
+    protected static void makeSlabRecipe(Consumer<IFinishedRecipe> consumer, IItemProvider slab, Ingredient material){
+        ShapedRecipeBuilder.shapedRecipe(slab, 6)
+                .key('m', material)
+                .patternLine("mmm")
+                .addCriterion("has_item", hasItem(material.getMatchingStacks()[0].getItem())).build(consumer);
+    }
+
+    protected static void makeFenceRecipe(Consumer<IFinishedRecipe> consumer, IItemProvider fence, ITag<Item> sticks, IItemProvider material){
+        makeFenceRecipe(consumer,fence, Ingredient.fromTag(sticks), Ingredient.fromItems(material));
+    }
+    protected static void makeFenceRecipe(Consumer<IFinishedRecipe> consumer, IItemProvider fence, IItemProvider sticks, IItemProvider material){
+        makeFenceRecipe(consumer,fence, Ingredient.fromItems(sticks), Ingredient.fromItems(material));
+    }
+
+    protected static void makeFenceRecipe(Consumer<IFinishedRecipe> consumer, IItemProvider fence, Ingredient sticks, Ingredient material){
+        ShapedRecipeBuilder.shapedRecipe(fence, 3)
+                .key('m', material)
+                .key('s', sticks)
+                .patternLine("msm")
+                .patternLine("msm")
+                .addCriterion("has_item", hasItem(material.getMatchingStacks()[0].getItem())).build(consumer);
+    }
+
+    protected static void makeWallRecipe(Consumer<IFinishedRecipe> consumer, IItemProvider wall, ITag<Item> material){
+        makeWallRecipe(consumer, wall, Ingredient.fromTag(material));
+    }
+    protected static void makeWallRecipe(Consumer<IFinishedRecipe> consumer, IItemProvider wall, IItemProvider material){
+        makeWallRecipe(consumer, wall, Ingredient.fromItems(material));
+    }
+
+    protected static void makeWallRecipe(Consumer<IFinishedRecipe> consumer, IItemProvider wall, Ingredient material){
+        ShapedRecipeBuilder.shapedRecipe(wall, 6)
+                .key('m', material)
+                .patternLine("mmm")
+                .patternLine("mmm")
+                .addCriterion("has_item", hasItem(material.getMatchingStacks()[0].getItem())).build(consumer);
     }
 
     protected static ResourceLocation extend(ResourceLocation original, String extension) {

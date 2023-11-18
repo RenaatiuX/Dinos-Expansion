@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "mmm"
+  ],
+  "key": {
+    "m": {
+      "item": "dinosexpansion:futuristic_block_off_2"
+    }
+  },
+  "result": {
+    "item": "dinosexpansion:futuristic_block_off_2_slab",
+    "count": 6
+  }
+}

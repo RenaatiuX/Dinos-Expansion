@@ -24,6 +24,16 @@ public class ModBlockLoot extends BlockLootTables {
         registerDropSelfLootTable(BlockInit.FUTURISTIC_BLOCK_ON2.get());
         registerDropSelfLootTable(BlockInit.MOSSY_FUTURISTIC_BLOCK1.get());
         registerDropSelfLootTable(BlockInit.MOSSY_FUTURISTIC_BLOCK2.get());
+
+        selfDrop(BlockInit.FUTURISTIC_BLOCK_OFF1_SLAB.get(), BlockInit.FUTURISTIC_BLOCK_OFF1_STAIRS.get(), BlockInit.FUTURISTIC_BLOCK_OFF1_FENCE.get(), BlockInit.FUTURISTIC_BLOCK_OFF1_WALL.get());
+        selfDrop(BlockInit.FUTURISTIC_BLOCK_OFF2_SLAB.get(), BlockInit.FUTURISTIC_BLOCK_OFF2_STAIRS.get(), BlockInit.FUTURISTIC_BLOCK_OFF2_FENCE.get(), BlockInit.FUTURISTIC_BLOCK_OFF2_WALL.get());
+
+        selfDrop(BlockInit.FUTURISTIC_BLOCK_ON1_SLAB.get(), BlockInit.FUTURISTIC_BLOCK_ON1_STAIRS.get(), BlockInit.FUTURISTIC_BLOCK_ON1_FENCE.get(), BlockInit.FUTURISTIC_BLOCK_ON1_WALL.get());
+        selfDrop(BlockInit.FUTURISTIC_BLOCK_ON2_SLAB.get(), BlockInit.FUTURISTIC_BLOCK_ON2_STAIRS.get(), BlockInit.FUTURISTIC_BLOCK_ON2_FENCE.get(), BlockInit.FUTURISTIC_BLOCK_ON2_WALL.get());
+
+        selfDrop(BlockInit.MOSSY_FUTURISTIC_BLOCK1_SLAB.get(), BlockInit.MOSSY_FUTURISTIC_BLOCK1_STAIRS.get(), BlockInit.MOSSY_FUTURISTIC_BLOCK1_FENCE.get(), BlockInit.MOSSY_FUTURISTIC_BLOCK1_WALL.get());
+        selfDrop(BlockInit.MOSSY_FUTURISTIC_BLOCK2_SLAB.get(), BlockInit.MOSSY_FUTURISTIC_BLOCK2_STAIRS.get(), BlockInit.MOSSY_FUTURISTIC_BLOCK2_FENCE.get(), BlockInit.MOSSY_FUTURISTIC_BLOCK2_WALL.get());
+
         registerDropSelfLootTable(BlockInit.CAMPANILE_SHELL_COMMON.get());
         registerDropSelfLootTable(BlockInit.CAMPANILE_SHELL_UNCOMMON.get());
         selfDrop(BlockInit.REDWOOD_SAPLING, BlockInit.RUBY_BLOCK, BlockInit.SAPPHIRE_BLOCK);

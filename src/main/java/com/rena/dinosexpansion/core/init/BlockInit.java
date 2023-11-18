@@ -55,6 +55,38 @@ public class BlockInit {
     public static final RegistryObject<Block> MOSSY_FUTURISTIC_BLOCK2 = register("mossy_futuristic_block_2",
             () -> new OnlyFromSapphireBreakable(AbstractBlock.Properties.create(Material.ROCK).hardnessAndResistance(30f, 3600000.0F)
                     .harvestTool(ToolType.PICKAXE).harvestLevel(5).setRequiresTool()), ModItemGroups.BLOCKS);
+
+    //futuristic slabs
+    public static final RegistryObject<SlabBlock> FUTURISTIC_BLOCK_OFF1_SLAB = register("futuristic_block_off_1_slab", () -> new OnlySapphireBreakableSlab(AbstractBlock.Properties.from(FUTURISTIC_BLOCK_OFF1.get())), ModItemGroups.BLOCKS);
+    public static final RegistryObject<StairsBlock> FUTURISTIC_BLOCK_OFF1_STAIRS = register("futuristic_block_off_1_stair", () -> new OnlySapphireBreakableStair(() -> FUTURISTIC_BLOCK_OFF1.get().getDefaultState()), ModItemGroups.BLOCKS);
+    public static final RegistryObject<WallBlock> FUTURISTIC_BLOCK_OFF1_WALL = register("futuristic_block_off_1_wall", () -> new OnlySapphireBreakableWall(AbstractBlock.Properties.from(FUTURISTIC_BLOCK_OFF1.get())), ModItemGroups.BLOCKS);
+    public static final RegistryObject<FenceBlock> FUTURISTIC_BLOCK_OFF1_FENCE = register("futuristic_block_off_1_fence", () -> new OnlySapphireBreakableFence(AbstractBlock.Properties.from(FUTURISTIC_BLOCK_OFF1.get())), ModItemGroups.BLOCKS);
+
+    public static final RegistryObject<SlabBlock> FUTURISTIC_BLOCK_OFF2_SLAB = register("futuristic_block_off_2_slab", () -> new OnlySapphireBreakableSlab(AbstractBlock.Properties.from(FUTURISTIC_BLOCK_OFF2.get())), ModItemGroups.BLOCKS);
+    public static final RegistryObject<StairsBlock> FUTURISTIC_BLOCK_OFF2_STAIRS = register("futuristic_block_off_2_stair", () -> new OnlySapphireBreakableStair(() -> FUTURISTIC_BLOCK_OFF2.get().getDefaultState()), ModItemGroups.BLOCKS);
+    public static final RegistryObject<WallBlock> FUTURISTIC_BLOCK_OFF2_WALL = register("futuristic_block_off_2_wall", () -> new OnlySapphireBreakableWall(AbstractBlock.Properties.from(FUTURISTIC_BLOCK_OFF2.get())), ModItemGroups.BLOCKS);
+    public static final RegistryObject<FenceBlock> FUTURISTIC_BLOCK_OFF2_FENCE = register("futuristic_block_off_2_fence", () -> new OnlySapphireBreakableFence(AbstractBlock.Properties.from(FUTURISTIC_BLOCK_OFF2.get())), ModItemGroups.BLOCKS);
+
+    public static final RegistryObject<SlabBlock> FUTURISTIC_BLOCK_ON1_SLAB = register("futuristic_block_on_1_slab", () -> new OnlySapphireBreakableSlab(AbstractBlock.Properties.from(FUTURISTIC_BLOCK_ON1.get())), ModItemGroups.BLOCKS);
+    public static final RegistryObject<StairsBlock> FUTURISTIC_BLOCK_ON1_STAIRS = register("futuristic_block_on_1_stair", () -> new OnlySapphireBreakableStair(() -> FUTURISTIC_BLOCK_ON1.get().getDefaultState()), ModItemGroups.BLOCKS);
+    public static final RegistryObject<WallBlock> FUTURISTIC_BLOCK_ON1_WALL = register("futuristic_block_on_1_wall", () -> new OnlySapphireBreakableWall(AbstractBlock.Properties.from(FUTURISTIC_BLOCK_ON1.get())), ModItemGroups.BLOCKS);
+    public static final RegistryObject<FenceBlock> FUTURISTIC_BLOCK_ON1_FENCE = register("futuristic_block_on_1_fence", () -> new OnlySapphireBreakableFence(AbstractBlock.Properties.from(FUTURISTIC_BLOCK_ON1.get())), ModItemGroups.BLOCKS);
+
+    public static final RegistryObject<SlabBlock> FUTURISTIC_BLOCK_ON2_SLAB = register("futuristic_block_on_2_slab", () -> new OnlySapphireBreakableSlab(AbstractBlock.Properties.from(FUTURISTIC_BLOCK_ON2.get())), ModItemGroups.BLOCKS);
+    public static final RegistryObject<StairsBlock> FUTURISTIC_BLOCK_ON2_STAIRS = register("futuristic_block_on_2_stair", () -> new OnlySapphireBreakableStair(() -> FUTURISTIC_BLOCK_ON2.get().getDefaultState()), ModItemGroups.BLOCKS);
+    public static final RegistryObject<WallBlock> FUTURISTIC_BLOCK_ON2_WALL = register("futuristic_block_on_2_wall", () -> new OnlySapphireBreakableWall(AbstractBlock.Properties.from(FUTURISTIC_BLOCK_ON2.get())), ModItemGroups.BLOCKS);
+    public static final RegistryObject<FenceBlock> FUTURISTIC_BLOCK_ON2_FENCE = register("futuristic_block_on_2_fence", () -> new OnlySapphireBreakableFence(AbstractBlock.Properties.from(FUTURISTIC_BLOCK_ON2.get())), ModItemGroups.BLOCKS);
+
+    public static final RegistryObject<SlabBlock>  MOSSY_FUTURISTIC_BLOCK1_SLAB = register("mossy_futuristic_block_1_slab", () -> new OnlySapphireBreakableSlab(AbstractBlock.Properties.from(MOSSY_FUTURISTIC_BLOCK1.get())), ModItemGroups.BLOCKS);
+    public static final RegistryObject<StairsBlock>  MOSSY_FUTURISTIC_BLOCK1_STAIRS = register("mossy_futuristic_block_1_stair", () -> new OnlySapphireBreakableStair(() -> MOSSY_FUTURISTIC_BLOCK1.get().getDefaultState()), ModItemGroups.BLOCKS);
+    public static final RegistryObject<WallBlock>  MOSSY_FUTURISTIC_BLOCK1_WALL = register("mossy_futuristic_block_1_wall", () -> new OnlySapphireBreakableWall(AbstractBlock.Properties.from(MOSSY_FUTURISTIC_BLOCK1.get())), ModItemGroups.BLOCKS);
+    public static final RegistryObject<FenceBlock>  MOSSY_FUTURISTIC_BLOCK1_FENCE = register("mossy_futuristic_block_1_fence", () -> new OnlySapphireBreakableFence(AbstractBlock.Properties.from(MOSSY_FUTURISTIC_BLOCK1.get())), ModItemGroups.BLOCKS);
+
+    public static final RegistryObject<SlabBlock>  MOSSY_FUTURISTIC_BLOCK2_SLAB = register("mossy_futuristic_block_2_slab", () -> new OnlySapphireBreakableSlab(AbstractBlock.Properties.from(MOSSY_FUTURISTIC_BLOCK2.get())), ModItemGroups.BLOCKS);
+    public static final RegistryObject<StairsBlock>  MOSSY_FUTURISTIC_BLOCK2_STAIRS = register("mossy_futuristic_block_2_stair", () -> new OnlySapphireBreakableStair(() -> MOSSY_FUTURISTIC_BLOCK2.get().getDefaultState()), ModItemGroups.BLOCKS);
+
+    public static final RegistryObject<WallBlock>  MOSSY_FUTURISTIC_BLOCK2_WALL = register("mossy_futuristic_block_2_wall", () -> new OnlySapphireBreakableWall(AbstractBlock.Properties.from(MOSSY_FUTURISTIC_BLOCK2.get())), ModItemGroups.BLOCKS);
+    public static final RegistryObject<FenceBlock>  MOSSY_FUTURISTIC_BLOCK2_FENCE = register("mossy_futuristic_block_2_fence", () -> new OnlySapphireBreakableFence(AbstractBlock.Properties.from(MOSSY_FUTURISTIC_BLOCK2.get())), ModItemGroups.BLOCKS);
     public static final RegistryObject<Block> QUICKSAND = register("quicksand",
             () -> new QuicksandBlock(AbstractBlock.Properties.create(Material.SAND, MaterialColor.SAND).hardnessAndResistance(0.5F)
                     .sound(SoundType.SAND).doesNotBlockMovement().harvestTool(ToolType.SHOVEL)), ModItemGroups.BLOCKS);

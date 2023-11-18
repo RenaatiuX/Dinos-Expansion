@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "  m",
+    " mm",
+    "mmm"
+  ],
+  "key": {
+    "m": {
+      "item": "dinosexpansion:futuristic_block_on_1"
+    }
+  },
+  "result": {
+    "item": "dinosexpansion:futuristic_block_on_1_stair",
+    "count": 4
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/template_wall_post",
+  "textures": {
+    "wall": "dinosexpansion:block/futuristic_block_on_1"
+  }
+}
