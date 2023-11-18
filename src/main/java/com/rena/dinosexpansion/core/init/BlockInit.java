@@ -55,6 +55,8 @@ public class BlockInit {
     public static final RegistryObject<Block> MOSSY_FUTURISTIC_BLOCK2 = register("mossy_futuristic_block_2",
             () -> new OnlyFromSapphireBreakable(AbstractBlock.Properties.create(Material.ROCK).hardnessAndResistance(30f, 3600000.0F)
                     .harvestTool(ToolType.PICKAXE).harvestLevel(5).setRequiresTool()), ModItemGroups.BLOCKS);
+    public static final RegistryObject<Block> FUTURISTIC_LOCK_BLOCK = register("futuristic_lock_block",
+            () -> new UnknownLockBlock(AbstractBlock.Properties.create(Material.ROCK).hardnessAndResistance(-1.0F, 1000000F)), ModItemGroups.BLOCKS);
 
     //futuristic slabs
     public static final RegistryObject<SlabBlock> FUTURISTIC_BLOCK_OFF1_SLAB = register("futuristic_block_off_1_slab", () -> new OnlySapphireBreakableSlab(AbstractBlock.Properties.from(FUTURISTIC_BLOCK_OFF1.get())), ModItemGroups.BLOCKS);
