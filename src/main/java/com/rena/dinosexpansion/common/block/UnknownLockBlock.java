@@ -49,8 +49,9 @@ public class UnknownLockBlock extends Block {
             }
             if (!worldIn.isRemote)
                 deleteNearbyBlock(worldIn, pos, 32);
+            return ActionResultType.SUCCESS;
         }
-        return ActionResultType.SUCCESS;
+        return ActionResultType.PASS;
     }
 
 
@@ -74,11 +75,9 @@ public class UnknownLockBlock extends Block {
                     }
                 }
             }
-            System.out.println(ticksBeforeDestruction + " | " + current.toString());
             te.setShouldDestroy(ticksBeforeDestruction);
             ticksBeforeDestruction += ticksDelay;
             finishedPos.add(current);
-            System.out.println(Arrays.toString(currentPoses.toArray()));
         }
 
     }

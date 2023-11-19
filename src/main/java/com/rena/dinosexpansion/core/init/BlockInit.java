@@ -20,6 +20,7 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockReader;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.event.RegistryEvent;
@@ -104,7 +105,7 @@ public class BlockInit {
     public static final RegistryObject<CampanileShell> CAMPANILE_SHELL_COMMON = register("campanile_common_shell", CampanileShell::new, ModItemGroups.BLOCKS);
     public static final RegistryObject<CampanileShell> CAMPANILE_SHELL_UNCOMMON = register("campanile_uncommon_shell", CampanileShell::new, ModItemGroups.BLOCKS);
     public static final RegistryObject<Block> RUBY_ORE = register("ruby_ore",
-            () -> new TypeOreBlock(AbstractBlock.Properties.create(Material.ROCK).setRequiresTool()
+            () -> new TypeOreBlock(rand -> MathHelper.nextInt(rand, 3, 7), AbstractBlock.Properties.create(Material.ROCK).setRequiresTool()
                     .harvestTool(ToolType.PICKAXE).harvestLevel(2)
                     .hardnessAndResistance(3.0F, 3.0F)), ModItemGroups.BLOCKS);
     public static final RegistryObject<Block> RUBY_BLOCK = register("ruby_block",
@@ -112,7 +113,7 @@ public class BlockInit {
                     .harvestTool(ToolType.PICKAXE).harvestLevel(2).hardnessAndResistance(5.0F, 6.0F)
                     .sound(SoundType.METAL)), ModItemGroups.BLOCKS);
     public static final RegistryObject<Block> SAPPHIRE_ORE = register("sapphire_ore",
-            () -> new TypeOreBlock(AbstractBlock.Properties.create(Material.ROCK).setRequiresTool()
+            () -> new TypeOreBlock(rand -> MathHelper.nextInt(rand, 3, 7), AbstractBlock.Properties.create(Material.ROCK).setRequiresTool()
                     .harvestTool(ToolType.PICKAXE).harvestLevel(2)
                     .hardnessAndResistance(3.0F, 3.0F)), ModItemGroups.BLOCKS);
     public static final RegistryObject<Block> SAPPHIRE_BLOCK = register("sapphire_block",

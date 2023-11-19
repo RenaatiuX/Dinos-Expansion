@@ -8,23 +8,25 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IWorldReader;
 
 import java.util.Random;
+import java.util.function.Function;
 
 public class TypeOreBlock extends Block {
 
+
+
+    protected final Function<Random, Integer> xpFunction;
+
     public TypeOreBlock(Properties properties) {
-        super(properties);
+        this(null, properties);
     }
 
-    protected int getExperience(Random rand) {
-        if (this == BlockInit.SAPPHIRE_ORE.get()) {
-            return MathHelper.nextInt(rand, 3, 7);
-        } else {
-            return this == BlockInit.RUBY_ORE.get() ? MathHelper.nextInt(rand, 3, 7) : 0;
-        }
+    public TypeOreBlock(Function<Random, Integer> xpFunction, Properties properties) {
+        super(properties);
+        this.xpFunction = xpFunction;
     }
 
     @Override
     public int getExpDrop(BlockState state, IWorldReader world, BlockPos pos, int fortune, int silktouch) {
-        return silktouch == 0 ? this.getExperience(RANDOM) : 0;
+        return silktouch == 0 && xpFunction != null ? xpFunction.apply(RANDOM) : 0;
     }
 }
