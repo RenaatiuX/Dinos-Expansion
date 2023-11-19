@@ -67,7 +67,7 @@ public class UnknownLockBlock extends Block {
             UnknownLockTileEntity te = WorldUtils.getTileEntity(UnknownLockTileEntity.class, worldIn, current);
             for (Direction dir : Direction.values()) {
                 BlockPos offset = current.offset(dir);
-                if (!finishedPos.contains(offset)) {
+                if (!finishedPos.contains(offset) && !currentPoses.contains(offset)) {
                     UnknownLockTileEntity offsetTe = WorldUtils.getTileEntity(UnknownLockTileEntity.class, worldIn, offset);
                     if (offsetTe != null) {
                         currentPoses.add(offset);
