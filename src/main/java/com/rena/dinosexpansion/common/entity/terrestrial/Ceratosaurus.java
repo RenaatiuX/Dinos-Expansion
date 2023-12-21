@@ -83,6 +83,11 @@ public class Ceratosaurus extends ChestedDinosaur implements IAnimatable, IAnima
     }
 
     @Override
+    public DinosaurArmorSlotType[] getArmorPieces() {
+        return DinosaurArmorSlotType.values();
+    }
+
+    @Override
     protected Gender getInitialGender() {
         return getRNG().nextDouble() <= 0.51 ? Gender.MALE : Gender.FEMALE;
     }

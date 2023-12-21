@@ -5,7 +5,6 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.rena.dinosexpansion.DinosExpansion;
-import com.rena.dinosexpansion.client.StatCollector;
 import com.rena.dinosexpansion.client.events.ClientEvents;
 import com.rena.dinosexpansion.client.screens.widgets.ChangePageButton;
 import com.rena.dinosexpansion.client.screens.widgets.IndexPageButton;
@@ -54,6 +53,7 @@ public class JournalScreen extends Screen {
     protected ItemStack journal;
     protected boolean index;
     protected FontRenderer font = getFont();
+
     public JournalScreen(ItemStack journal) {
         super(new TranslationTextComponent("explorer_journal_gui"));
         this.journal = journal;
@@ -175,7 +175,7 @@ public class JournalScreen extends Screen {
         writeFromTxt(ms);
     }
 
-    @SuppressWarnings({"rawtypes", "unused" })
+    @SuppressWarnings({"rawtypes", "unused"})
     public void imageFromTxt(MatrixStack ms) {
         String fileName = this.pageType.toString().toLowerCase(Locale.ROOT) + "_" + this.bookPages + ".txt";
         ResourceLocation fileLoc = DinosExpansion.modLoc("lang/explorer_journal/" + Minecraft.getInstance().gameSettings.language + "_0/" + fileName);
@@ -274,7 +274,7 @@ public class JournalScreen extends Screen {
 
     }
 
-    @SuppressWarnings({ "rawtypes"})
+    @SuppressWarnings({"rawtypes"})
     public void writeFromTxt(MatrixStack ms) {
         String fileName = this.pageType.toString().toLowerCase(Locale.ROOT) + "_" + this.bookPages + ".txt";
         ResourceLocation fileLoc = DinosExpansion.modLoc("lang/explorer_journal/" + Minecraft.getInstance().gameSettings.language + "_0/" + fileName);
@@ -316,10 +316,10 @@ public class JournalScreen extends Screen {
             e.printStackTrace();
         }
         ms.push();
-        String s = StatCollector.translateToLocal("explorer_journal." + this.pageType.toString().toLowerCase(Locale.ROOT));
-        float scale = font.getStringWidth(s) <= 100 ? 1.5F : font.getStringWidth(s) * 0.0125F;
+        TranslationTextComponent s = new TranslationTextComponent("explorer_journal." + this.pageType.toString().toLowerCase(Locale.ROOT));
+        float scale = font.getStringPropertyWidth(s) <= 100 ? 1.5F : font.getStringPropertyWidth(s) * 0.0125F;
         ms.scale(scale, scale, scale);
-        font.drawString(ms, s, 25, 7, 0X7A756A);
+        font.drawText(ms, s, 25, 7, 0X7A756A);
         ms.pop();
     }
 
@@ -369,7 +369,7 @@ public class JournalScreen extends Screen {
         RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         RenderSystem.scalef(16.0F * scale, 16.0F * scale, 16.0F * scale);
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.translatef((float)x, (float)y , 100.0F + itemRenderer.zLevel);
+        RenderSystem.translatef((float) x, (float) y, 100.0F + itemRenderer.zLevel);
         RenderSystem.scalef(1.0F, -1.0F, 1.0F);
         MatrixStack matrixstack = new MatrixStack();
         IRenderTypeBuffer.Impl irendertypebuffer$impl = Minecraft.getInstance().getRenderTypeBuffers().getBufferSource();

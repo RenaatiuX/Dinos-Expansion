@@ -61,6 +61,10 @@ public class DinosExpansion
         return modLoc("blocks/" + name);
     }
 
+    public static ResourceLocation entityTexture(String name){
+        return modLoc("textures/entity/" + name);
+    }
+
     public static TranslationTextComponent translatable(String type, String key) {
         return new TranslationTextComponent(type + "." + MOD_ID + "." + key);
     }

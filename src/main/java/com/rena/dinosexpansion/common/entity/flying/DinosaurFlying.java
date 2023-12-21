@@ -47,6 +47,7 @@ public abstract class DinosaurFlying extends Dinosaur implements IFlyingAnimal {
      * makes the entity store the sleep order until it lands
      */
     protected boolean shouldSleep = false;
+    protected int flyingCooldown = 0;
 
     public DinosaurFlying(EntityType<? extends Dinosaur> type, World world, DinosaurInfo info, int level) {
         super(type, world, info, level);
@@ -78,11 +79,6 @@ public abstract class DinosaurFlying extends Dinosaur implements IFlyingAnimal {
             setFlying(false);
         }
         super.setKnockout(knockout);
-    }
-
-    @Override
-    protected void jump() {
-        super.jump();
     }
 
     @Override
@@ -149,6 +145,7 @@ public abstract class DinosaurFlying extends Dinosaur implements IFlyingAnimal {
             if (!this.isFlying() && this.isOnGround()) {
                 this.startFlying = true;
                 this.navigator.clearPath();
+                this.flyingCooldown = getMinFlying();
                 setFlying(true);
             }
         }
@@ -157,6 +154,9 @@ public abstract class DinosaurFlying extends Dinosaur implements IFlyingAnimal {
     @Override
     public void tick() {
         if (!world.isRemote) {
+            if (this.flyingCooldown > 0) {
+                flyingCooldown--;
+            }
             if (shouldLand && isOnGround()) {
                 shouldLand = false;
                 if (shouldSleep) {
@@ -195,6 +195,17 @@ public abstract class DinosaurFlying extends Dinosaur implements IFlyingAnimal {
         switchNavigator(!flying);
         setNoGravity(flying);
         this.dataManager.set(FLYING, flying);
+    }
+
+    protected int getMinFlying() {
+        return 1200;
+    }
+
+    /**
+     * only on server side
+     */
+    public int getFlyingCooldown() {
+        return flyingCooldown;
     }
 
     @Override
@@ -435,24 +446,35 @@ public abstract class DinosaurFlying extends Dinosaur implements IFlyingAnimal {
         public boolean shouldExecute() {
             if (dino.isTamed() && dino.getMoveOrder() != MoveOrder.WANDER)
                 return false;
-            return !dino.isMovementDisabled() && !this.dino.isBeingRidden() && dino.isFlying() ? dino.getRNG().nextDouble() < chanceGoOnGround : dino.getRNG().nextDouble() < chanceStartFlying;
+            if (dino.isMovementDisabled() || dino.isBeingRidden())
+                return false;
+            if (dino.isFlying()) {
+                return dino.getFlyingCooldown() <= 0 && dino.getRNG().nextDouble() < chanceGoOnGround;
+            }
+            return dino.getRNG().nextDouble() < chanceStartFlying;
         }
 
         @Override
         public void startExecuting() {
             if (dino.isFlying())
                 dino.shouldLand();
-            else
+            else {
                 dino.startFlying();
+            }
         }
     }
 
 
     public static class DinosaurRandomFlyingGoal extends Goal {
 
+        protected static final int MAX_TIMER_STUCK = 200;
+
         protected final DinosaurFlying dino;
         protected final double chance, speed;
         protected BlockPos target;
+        protected boolean isStuck;
+        protected int stuckTimer;
+        protected double distFromTarget;
 
         public DinosaurRandomFlyingGoal(DinosaurFlying dino, double chance, double speed) {
             this.dino = dino;
@@ -462,7 +484,7 @@ public abstract class DinosaurFlying extends Dinosaur implements IFlyingAnimal {
 
         @Override
         public boolean shouldExecute() {
-            if (!dino.isMovementDisabled() || target != null && !this.dino.isBeingRidden() || (dino.isTamed() && dino.getMoveOrder() != MoveOrder.WANDER))
+            if (dino.isMovementDisabled() || this.dino.isBeingRidden() || (dino.isTamed() && dino.getMoveOrder() == MoveOrder.WANDER))
                 return false;
             if (this.dino.getRNG().nextDouble() >= chance)
                 return false;
@@ -476,16 +498,35 @@ public abstract class DinosaurFlying extends Dinosaur implements IFlyingAnimal {
         @Override
         public void startExecuting() {
             this.dino.getNavigator().tryMoveToXYZ(target.getX(), target.getY(), target.getZ(), this.speed);
+            this.isStuck = false;
+            this.distFromTarget = this.dino.getDistanceSq(Vector3d.copy(this.target));
+            this.stuckTimer = 0;
+        }
+
+        @Override
+        public void tick() {
+            if (distFromTarget == this.dino.getDistanceSq(Vector3d.copy(this.target))) {
+                this.stuckTimer++;
+            } else {
+                this.stuckTimer = 0;
+                distFromTarget = this.dino.getDistanceSq(Vector3d.copy(this.target));
+            }
+            if (this.stuckTimer >= MAX_TIMER_STUCK) {
+                this.isStuck = true;
+            }
         }
 
         @Override
         public void resetTask() {
             this.dino.getNavigator().clearPath();
+            this.stuckTimer = 0;
+            this.isStuck = false;
+            this.distFromTarget = 0d;
         }
 
         @Override
         public boolean shouldContinueExecuting() {
-            return !dino.getNavigator().noPath() && !dino.isMovementDisabled() && !dino.isBeingRidden();
+            return !isStuck && !dino.getNavigator().noPath() && !dino.isMovementDisabled() && !dino.isBeingRidden();
         }
 
         public static BlockPos getBlockInView(DinosaurFlying dinosaur) {
@@ -493,7 +534,7 @@ public abstract class DinosaurFlying extends Dinosaur implements IFlyingAnimal {
             BlockPos ground = getGroundDinosaur(dinosaur);
             int distFromGround = (int) dinosaur.getPosY() - ground.getY();
             BlockPos newPos = radialPos.up(distFromGround > dinosaur.getMaxFlyingHeight() ? (int) Math.min(dinosaur.getMaxFlyingHeight(), dinosaur.getPosY() + dinosaur.getRNG().nextInt(4) - 2) : (int) dinosaur.getPosY() + dinosaur.getRNG().nextInt(10) + 1);
-            if (dinosaur.world.isAirBlock(newPos) && dinosaur.getDistanceSq(Vector3d.copyCentered(newPos)) > 6) {
+            if (dinosaur.world.isAirBlock(newPos)) {
                 return newPos;
             }
             return null;

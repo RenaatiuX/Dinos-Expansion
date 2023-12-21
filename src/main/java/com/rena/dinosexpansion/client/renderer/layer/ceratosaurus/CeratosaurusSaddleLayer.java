@@ -1,4 +1,4 @@
-package com.rena.dinosexpansion.client.renderer.layer;
+package com.rena.dinosexpansion.client.renderer.layer.ceratosaurus;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.rena.dinosexpansion.DinosExpansion;

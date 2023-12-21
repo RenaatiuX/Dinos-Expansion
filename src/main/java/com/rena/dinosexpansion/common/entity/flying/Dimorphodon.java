@@ -81,7 +81,7 @@ public class Dimorphodon extends DinosaurFlying implements IAnimatable, IAnimati
         super.registerGoals();
         this.goalSelector.addGoal(0, new SwimGoal(this));
         this.goalSelector.addGoal(0, new SitOnShoulder());
-        this.goalSelector.addGoal(1, new ChangeFlyingGoal(this, 0.01d, 0.009d));
+        this.goalSelector.addGoal(1, new ChangeFlyingGoal(this, 0.05d, 0.009d));
         this.goalSelector.addGoal(1, new LandWhenOrderedGoal(this, 1.0, true));
         this.goalSelector.addGoal(2, new DinosaurFlyingMeleeAttackGoal(this));
         this.goalSelector.addGoal(4, new DinosaurFollowOwnerGoal(this, 1.0D, 10.0F, 2.0F, false));
@@ -92,7 +92,7 @@ public class Dimorphodon extends DinosaurFlying implements IAnimatable, IAnimati
         this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, 10, true, false, this::func_233680_b_));
         this.targetSelector.addGoal(5, new ResetAngerGoal<>(this, true));
         this.goalSelector.addGoal(9, new FlyingRandomWalkingGoal(this, 0.6d));
-        this.goalSelector.addGoal(9, new DinosaurRandomFlyingGoal(this, 0.08d, 1.1d));
+        this.goalSelector.addGoal(9, new DinosaurRandomFlyingGoal(this, 0.01d, 1.1d));
     }
 
     @Override
@@ -140,6 +140,8 @@ public class Dimorphodon extends DinosaurFlying implements IAnimatable, IAnimati
         }
     }
 
+
+
     @Override
     protected int reduceNarcotic(int narcoticValue) {
         if (getRNG().nextDouble() <= 0.005)
@@ -155,9 +157,9 @@ public class Dimorphodon extends DinosaurFlying implements IAnimatable, IAnimati
                 this.setFlying(false);
             }
         }
-        if (!this.world.isRemote && this.isAlive() && !this.isChild() && --this.timeUntilNextEgg <= 0 && this.getRarity() != Rarity.LEGENDARY) {
+        if (!this.world.isRemote && this.isAlive() && !this.isChild() && --this.timeUntilNextEgg <= 0 && this.getRarity() != Rarity.LEGENDARY && this.isOnGround()) {
             this.playSound(SoundEvents.ENTITY_CHICKEN_EGG, 1.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
-            //this.entityDropItem(Items.EGG);
+            this.entityDropItem(ItemInit.DIMORPHODON_EGG.get());
             this.timeUntilNextEgg = this.rand.nextInt(6000) + 6000;
         }
         if (getMoveOrder() == MoveOrder.IDLE && isOnShoulder() && getOwner() instanceof PlayerEntity){
@@ -165,34 +167,6 @@ public class Dimorphodon extends DinosaurFlying implements IAnimatable, IAnimati
         }
         if (isOnShoulder() && getOwner() != null) {
             this.dataManager.set(SHOULDER_SCALING, 0.5f);
-            /*
-            Vector3d offset;
-            if (!isLeftShoulderFree(getOwner()) && getLeftShoulderEntity(getOwner()) != null && getLeftShoulderEntity(getOwner()).getEntityId() == this.getEntityId())
-                offset = new Vector3d(0.25, -0.25, 0.5); // Adjust the values to fine-tune the position
-            else
-                offset = new Vector3d(0.0, -0.25, -0.5);
-
-            Vector3d playerPos = getOwner().getPositionVec().add(0, getOwner().getEyeHeight(), 0);
-            float playerYaw = getOwner().rotationYaw;
-
-            double rotationRad = Math.toRadians(playerYaw + 90); // Add 90 to account for the default entity orientation
-            double xPos = playerPos.getX() + (offset.x * Math.cos(rotationRad));
-            double yPos = playerPos.getY() + offset.y;
-            double zPos = playerPos.getZ() + (offset.z * Math.sin(rotationRad));
-
-// Adjust position based on player's body rotation
-            double bodyRotationRad = Math.toRadians(getOwner().renderYawOffset);
-            xPos += -0.25 * Math.sin(bodyRotationRad);
-            zPos += 0.25 * Math.cos(bodyRotationRad);
-
-// Finally, set the position and rotation of the entity
-            setPosition(xPos, yPos, zPos);
-            rotationYaw = playerYaw; // Add 180 to account for the default entity orientation
-            rotationPitch = 0; // Replace with your desired pitch offset
-            this.navigator.clearPath();
-            this.setMotion(Vector3d.ZERO);
-
-             */
         } else {
             this.dataManager.set(SHOULDER_SCALING, 1f);
         }
