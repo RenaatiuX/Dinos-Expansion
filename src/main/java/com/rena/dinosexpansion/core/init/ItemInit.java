@@ -15,6 +15,7 @@ import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.omg.CORBA.PUBLIC_MEMBER;
 
 public class ItemInit {
 
@@ -285,6 +286,22 @@ public class ItemInit {
             () -> new Item(new Item.Properties().group(ModItemGroups.ITEMS).food(FoodInit.RAW_ANOMALOCARIS_TAIL)));
     public static final RegistryObject<Item> COOKED_ANOMALOCARIS_TAIL = ITEMS.register("cooked_anomalocaris_tail",
             () -> new Item(new Item.Properties().group(ModItemGroups.ITEMS).food(FoodInit.COOKED_ANOMALOCARIS_TAIL)));
+    public static final RegistryObject<Item> MEGA_PIRANHA = ITEMS.register("mega_piranha",
+            () -> new Item(new Item.Properties().group(ModItemGroups.ITEMS).food(FoodInit.MEGA_PIRANHA)));
+    public static final RegistryObject<Item> COOKED_MEGA_PIRANHA = ITEMS.register("cooked_mega_piranha",
+            () -> new Item(new Item.Properties().group(ModItemGroups.ITEMS).food(FoodInit.COOKED_MEGA_PIRANHA)));
+    public static final RegistryObject<Item> WETHERELLUS = ITEMS.register("wetherellus",
+            () -> new Item(new Item.Properties().group(ModItemGroups.ITEMS).food(FoodInit.WETHERELLUS)));
+    public static final RegistryObject<Item> COOKED_WETHERELLUS = ITEMS.register("cooked_wetherellus",
+            () -> new Item(new Item.Properties().group(ModItemGroups.ITEMS).food(FoodInit.COOKED_WETHERELLUS)));
+    public static final RegistryObject<Item> BELANTSEA = ITEMS.register("belantsea",
+            () -> new Item(new Item.Properties().group(ModItemGroups.ITEMS).food(FoodInit.BELANTSEA)));
+    public static final RegistryObject<Item> COOKED_BELANTSEA = ITEMS.register("cooked_belantsea",
+            () -> new Item(new Item.Properties().group(ModItemGroups.ITEMS).food(FoodInit.COOKED_BELANTSEA)));
+    public static final RegistryObject<Item> ACANTHODES = ITEMS.register("acanthodes",
+            () -> new Item(new Item.Properties().group(ModItemGroups.ITEMS).food(FoodInit.ACANTHODES)));
+    public static final RegistryObject<Item> COOKED_ACANTHODES = ITEMS.register("cooked_acanthodes",
+            () -> new Item(new Item.Properties().group(ModItemGroups.ITEMS).food(FoodInit.COOKED_ACANTHODES)));
 
     public static final RegistryObject<Item> SPECIAL_FRUIT = ITEMS.register("special_fruit",
             () -> new SpecialFruitItem(new Item.Properties().group(ModItemGroups.ITEMS).food(FoodInit.SPECIAL_FRUIT)));

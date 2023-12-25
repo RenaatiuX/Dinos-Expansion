@@ -43,7 +43,23 @@ public class FoodInit {
             .saturation(0.2F).build();
     public static final Food COOKED_ANOMALOCARIS_TAIL = new Food.Builder().hunger(6)
             .saturation(0.7F).build();
-
+    public static final Food MEGA_PIRANHA = new Food.Builder().hunger(1)
+            .saturation(0.2F)
+            .effect(() -> new EffectInstance(Effects.POISON, 5), 1).build();
+    public static final Food COOKED_MEGA_PIRANHA = new Food.Builder().hunger(6)
+            .saturation(0.7F).build();
+    public static final Food WETHERELLUS = new Food.Builder().hunger(1)
+            .saturation(0.2F).build();
+    public static final Food COOKED_WETHERELLUS = new Food.Builder().hunger(6)
+            .saturation(0.7F).build();
+    public static final Food BELANTSEA = new Food.Builder().hunger(1)
+            .saturation(0.2F).build();
+    public static final Food COOKED_BELANTSEA = new Food.Builder().hunger(6)
+            .saturation(0.7F).build();
+    public static final Food ACANTHODES = new Food.Builder().hunger(1)
+            .saturation(0.2F).build();
+    public static final Food COOKED_ACANTHODES = new Food.Builder().hunger(6)
+            .saturation(0.7F).build();
     public static final Food SPECIAL_FRUIT = new Food.Builder().hunger(0)
             .saturation(0.0F).setAlwaysEdible().build();
     public static final Food NARCOTIC_BERRIES = new Food.Builder().hunger(2)

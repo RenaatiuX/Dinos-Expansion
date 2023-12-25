@@ -40,6 +40,7 @@ public class ModItemModelsProvider extends ItemModelProvider {
         simple(ItemInit.COOKED_ASTORGOSUCHUS_MEAT.get(), ItemInit.COOKED_CARNOTAURUS_MEAT.get(), ItemInit.COOKED_DIMORPHODON_MEAT.get(), ItemInit.COOKED_GALLIMIMUS_MEAT.get(), ItemInit.COOKED_PARAPUZOSIA_TENTACLE.get(), ItemInit.COOKED_TRICERATOPS_MEAT.get(), ItemInit.COOKED_DRYOSAURUS_MEAT.get());
         simple(ItemInit.CORN.get(), ItemInit.CORN_SEED.get());
         simple(ItemInit.CUCUMBER.get());
+        simple(ItemInit.CUCUMBER_SEED.get());
         simple(ItemInit.DART.get(), ItemInit.DINOPEDIA.get(), ItemInit.EXPLORER_JOURNAL.get(), ItemInit.EXPLORER_JOURNAL_PAGE.get());
         handheld(ItemInit.DIAMOND_HATCHET.get(), ItemInit.DIAMOND_BOOMERANG.get());
         simple(ItemInit.EGGPLANT.get(), ItemInit.EGGPLANT_SEED.get());
@@ -57,7 +58,7 @@ public class ModItemModelsProvider extends ItemModelProvider {
         handheld(ItemInit.SAPPHIRE_BOOMERANG.get(), ItemInit.SAPPHIRE_HATCHET.get());
         simple(ItemInit.SAPPHIRE.get(), ItemInit.SAPPHIRE_ARROW.get());
         simple(ItemInit.METAL_SCRAP.get());
-        simple(ItemInit.SPINACH.get(), ItemInit.BAMBOO_SPYGLASS.get());
+        simple(ItemInit.SPINACH.get(), ItemInit.BAMBOO_SPYGLASS.get(), ItemInit.SPINACH_SEED.get());
         handheld(ItemInit.STONE_BOOMERANG.get(), ItemInit.STONE_HATCHET.get());
         simple(ItemInit.TELEPORT_ITEM.get(), ItemInit.TINY_ROCK.get(), ItemInit.TOMATO.get());
         handheld(ItemInit.WOODEN_HATCHET.get(), ItemInit.WOOD_BOOMERANG.get());
@@ -66,9 +67,13 @@ public class ModItemModelsProvider extends ItemModelProvider {
         handheld(ItemInit.SAPPHIRE_SWORD.get(), ItemInit.SAPPHIRE_PICKAXE.get(), ItemInit.SAPPHIRE_SHOVEL.get(), ItemInit.SAPPHIRE_HOE.get(), ItemInit.SAPPHIRE_AXE.get());
         simple(ItemInit.CRATAEGUS_SIGN.get(), ItemInit.CRATAEGUS_STICK.get());
         simple(ItemInit.DIMORPHODON_EGG.get());
-
+        simple(ItemInit.ACANTHODES_BUCKET.get(), ItemInit.BELANTSEA_BUCKET.get(), ItemInit.MEGA_PIRANHA_BUCKET.get(), ItemInit.WETHERELLUS_BUCKET.get());
+        simple(ItemInit.SPECIAL_FRUIT.get());
         charkram(ItemInit.RUBY_CHAKRAM.get(), ItemInit.NETHERITE_CHAKRAM.get(), ItemInit.IRON_CHAKRAM.get(), ItemInit.STONE_CHAKRAM.get(), ItemInit.EMERALD_CHAKRAM.get(), ItemInit.DIAMOND_CHAKRAM.get(), ItemInit.SAPPHIRE_CHAKRAM.get(), ItemInit.WOODEN_CHAKRAM.get(), ItemInit.GOLD_CHAKRAM.get());
-
+        simple(ItemInit.ACANTHODES.get(), ItemInit.COOKED_ACANTHODES.get());
+        simple(ItemInit.BELANTSEA.get(), ItemInit.COOKED_BELANTSEA.get());
+        simple(ItemInit.WETHERELLUS.get(), ItemInit.COOKED_WETHERELLUS.get());
+        simple(ItemInit.MEGA_PIRANHA.get(), ItemInit.COOKED_MEGA_PIRANHA.get());
         makeSlingshot();
 
     }
