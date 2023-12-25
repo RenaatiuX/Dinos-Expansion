@@ -11,7 +11,10 @@ import com.rena.dinosexpansion.core.tags.ModTags;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.entity.ai.goal.SwimGoal;
+import net.minecraft.entity.monster.AbstractSkeletonEntity;
+import net.minecraft.entity.passive.CowEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
@@ -41,11 +44,11 @@ public class Ceratosaurus extends ChestedDinosaur implements IAnimatable, IAnima
     public static AttributeModifierMap.MutableAttribute createAttributes() {
         return MobEntity.func_233666_p_()
                 .createMutableAttribute(Attributes.MAX_HEALTH, 50.0D)
-                .createMutableAttribute(Attributes.FOLLOW_RANGE, 20)
+                .createMutableAttribute(Attributes.FOLLOW_RANGE, 40.0D)
                 .createMutableAttribute(Attributes.ARMOR, 12.0D)
                 .createMutableAttribute(Attributes.ATTACK_DAMAGE, 10.0D)
                 .createMutableAttribute(Attributes.KNOCKBACK_RESISTANCE, 0.4F)
-                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.4F);
+                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.25F);
     }
 
     private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
@@ -61,14 +64,14 @@ public class Ceratosaurus extends ChestedDinosaur implements IAnimatable, IAnima
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(0, new SwimGoal(this));
-        this.goalSelector.addGoal(1, new DinosaurMeleeAttackGoal(this, 1f, false));
-        this.goalSelector.addGoal(2, new DinosaurFollowOwnerGoal(this, .7f, 10, 20, false));
+        this.goalSelector.addGoal(1, new DinosaurMeleeAttackGoal(this, 0.8D, false));
+        this.goalSelector.addGoal(2, new DinosaurFollowOwnerGoal(this, 1.0D, 10, 20, false));
         this.goalSelector.addGoal(3, new DinosaurLookAtGoal(this, PlayerEntity.class, 10));
 
         this.targetSelector.addGoal(5, new DinosaurNearestTargetGoal<>(this, PlayerEntity.class, true));
-        this.targetSelector.addGoal(6, new DinosaurHurByTargetGoal(this));
-
-        this.goalSelector.addGoal(7, new DinosaurWanderGoal(this, .6f));
+        this.targetSelector.addGoal(6, new NearestAttackableTargetGoal<>(this, CowEntity.class, true));
+        this.targetSelector.addGoal(7, new DinosaurHurByTargetGoal(this));
+        this.goalSelector.addGoal(8, new DinosaurWanderGoal(this, 0.6D));
 
     }
 
@@ -118,15 +121,17 @@ public class Ceratosaurus extends ChestedDinosaur implements IAnimatable, IAnima
             event.getController().setAnimation(new AnimationBuilder().loop("sleep"));
         } else if (this.getMoveOrder() == MoveOrder.SIT) {
             event.getController().setAnimation(new AnimationBuilder().loop("sit"));
-        } else if (event.isMoving()) {
-            if (this.isRunning()) {
+        } else if (Entity.horizontalMag(this.getMotion()) > 1.0E-6) {
+            if (this.isSprinting()) {
                 event.getController().setAnimation(new AnimationBuilder().loop("run"));
-            } else
+                event.getController().setAnimationSpeed(2.0D);
+            } else {
                 event.getController().setAnimation(new AnimationBuilder().loop("walk"));
+                event.getController().setAnimationSpeed(1.4D);
+            }
         } else {
             event.getController().setAnimation(new AnimationBuilder().loop("idle"));
         }
-
         return PlayState.CONTINUE;
     }
 
@@ -191,6 +196,17 @@ public class Ceratosaurus extends ChestedDinosaur implements IAnimatable, IAnima
         super.updatePassenger(passenger);
         Vector3d look = getLookVec().scale(-0.2);
         passenger.setPosition(this.getPosX() - look.getX(), this.getPosY() + 1.5F, this.getPosZ() - look.getZ());
+    }
+
+    @Override
+    protected void updateAITasks() {
+        if (this.getMoveHelper().isUpdating()) {
+            this.setSprinting(this.getMoveHelper().getSpeed() >= 0.8D);
+        } else {
+            this.setSprinting(false);
+        }
+
+        super.updateAITasks();
     }
 
     @Override
