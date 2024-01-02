@@ -1,7 +1,7 @@
 package com.rena.dinosexpansion.common.entity.ia;
 
 import com.rena.dinosexpansion.common.entity.Dinosaur;
-import com.rena.dinosexpansion.common.entity.terrestrial.ambient.AmbientDinosaur;
+import com.rena.dinosexpansion.common.entity.flying.DinosaurFlying;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.math.BlockPos;
@@ -14,18 +14,24 @@ import java.util.function.Predicate;
 
 public class BatRandomFly<T extends Dinosaur> extends Goal {
 
+
+    public static final int MAX_STUCK_TIME = 100;
     protected BlockPos targetPos;
     protected final T ambient;
     protected Predicate<T> shouldExecute;
+    protected double distTarget;
+    protected int avgHeight, noise, stuckTimer;
 
-    public BatRandomFly(T ambient, Predicate<T> shouldExecute) {
-        this(ambient);
+    public BatRandomFly(T ambient, int avgHeight, int noise, Predicate<T> shouldExecute) {
+        this.ambient = ambient;
         this.shouldExecute = shouldExecute;
+        this.noise = noise;
+        this.avgHeight = avgHeight;
+        this.setMutexFlags(EnumSet.of(Flag.MOVE));
     }
 
-    public BatRandomFly(T ambient) {
-        this.ambient = ambient;
-        this.setMutexFlags(EnumSet.of(Flag.MOVE));
+    public BatRandomFly(T ambient, int avgHeight, int noise) {
+        this(ambient, avgHeight, noise, null);
     }
 
     @Override
@@ -40,11 +46,15 @@ public class BatRandomFly<T extends Dinosaur> extends Goal {
         }
 
         if (this.targetPos == null || this.targetPos.withinDistance(ambient.getPositionVec(), 2.0)) {
-            Random rand = ambient.getRNG();
-            this.targetPos = new BlockPos(ambient.getPosX() + (double) rand.nextInt(7) - (double) rand.nextInt(7), ambient.getPosY() + (double) rand.nextInt(6) - 2.0D, ambient.getPosZ() + (double) rand.nextInt(7) - (double) rand.nextInt(7));
+            generateNewPos();
         }
 
         if (this.targetPos != null) {
+            if (Math.abs(distTarget - this.targetPos.distanceSq(this.ambient.getPosition())) >= .1d) {
+                this.stuckTimer++;
+            } else {
+                this.distTarget = this.targetPos.distanceSq(this.ambient.getPosition());
+            }
             double d0 = this.targetPos.getX() + 0.5D - ambient.getPosX();
             double d1 = this.targetPos.getY() + 0.1D - ambient.getPosY();
             double d2 = this.targetPos.getZ() + 0.5D - ambient.getPosZ();
@@ -60,10 +70,31 @@ public class BatRandomFly<T extends Dinosaur> extends Goal {
             float wrappedAngle = MathHelper.wrapDegrees(angle - ambient.rotationYaw);
             ambient.rotationYaw += wrappedAngle;
         }
+        if (stuckTimer >= MAX_STUCK_TIME){
+            this.generateNewPos();
+        }
+    }
+
+    protected void generateNewPos() {
+        Random rand = ambient.getRNG();
+        int currentHeight = (int) Math.abs(this.ambient.getPosY() - DinosaurFlying.getGroundDinosaur(this.ambient).getY());
+        int range = avgHeight - currentHeight;
+        double y = generateRange(rand, MathHelper.clamp(range, -3, 0) - noise, MathHelper.clamp(range, 0, 3) + noise);
+        this.targetPos = this.ambient.getPosition().add(rand.nextInt(7) - rand.nextInt(7), y, rand.nextInt(7) - rand.nextInt(7));
+    }
+
+    /**
+     * generates a number with a range [min, max]
+     */
+    public static double generateRange(Random random, int min, int max) {
+        int range = Math.abs(max - min);
+        return random.nextInt(range + 1) + min;
     }
 
     @Override
     public void resetTask() {
         ambient.setMotion(Vector3d.ZERO);
+        this.targetPos = null;
+        this.stuckTimer = 0;
     }
 }

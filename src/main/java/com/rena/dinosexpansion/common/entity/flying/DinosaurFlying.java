@@ -298,7 +298,7 @@ public abstract class DinosaurFlying extends Dinosaur implements IFlyingAnimal {
      * @param dino
      * @return this will return the first blockPos under the dino that is not air id there isnt it will return the same pos with y set to 0
      */
-    public static BlockPos getGroundDinosaur(DinosaurFlying dino) {
+    public static BlockPos getGroundDinosaur(Dinosaur dino) {
         BlockPos dinoPos = dino.getPosition();
         for (; dinoPos.getY() > 0 && dino.world.isAirBlock(dinoPos); dinoPos = dinoPos.down()) ;
         return dinoPos;

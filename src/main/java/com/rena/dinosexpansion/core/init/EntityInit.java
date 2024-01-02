@@ -77,7 +77,7 @@ public class EntityInit {
     public static final RegistryObject<EntityType<Anomalocaris>> ANOMALOCARIS = register("anomalocaris",
             () -> EntityType.Builder.<Anomalocaris>create(Anomalocaris::new, EntityClassification.WATER_CREATURE).size(0.7F, 0.3F));
     public static final RegistryObject<EntityType<Meganeura>> MEGANEURA = register("meganeura",
-            () -> EntityType.Builder.<Meganeura>create(Meganeura::new, EntityClassification.AMBIENT).size(0.5F, 0.5F));
+            () -> EntityType.Builder.<Meganeura>create(Meganeura::new, EntityClassification.AMBIENT).size(0.7F, 0.2F));
 
     public static final RegistryObject<EntityType<Hermit>> HERMIT = register("hermit", () -> EntityType.Builder.create(Hermit::new, EntityClassification.CREATURE));
     public static final RegistryObject<EntityType<Caveman>> CAVEMAN = register("caveman", () -> EntityType.Builder.create(Caveman::new, EntityClassification.CREATURE));
