@@ -8,6 +8,7 @@ import com.rena.dinosexpansion.common.container.OrderContainer;
 import com.rena.dinosexpansion.common.container.TamingContainer;
 import com.rena.dinosexpansion.common.entity.ia.SleepRhythmGoal;
 import com.rena.dinosexpansion.common.entity.projectile.INarcoticProjectile;
+import com.rena.dinosexpansion.common.item.armor.DinosaurArmorItem;
 import com.rena.dinosexpansion.common.item.util.INarcotic;
 import com.rena.dinosexpansion.common.util.NbtUtils;
 import com.rena.dinosexpansion.common.util.enums.AttackOrder;
@@ -18,6 +19,7 @@ import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -396,7 +398,7 @@ public abstract class Dinosaur extends TameableEntity {
     public void setKnockedOutBy(LivingEntity player) {
         this.setKnockout(true);
         this.dataManager.set(KNOCKED_OUT, Optional.of(player.getUniqueID()));
-       this.getPassengers().forEach(Entity::stopRiding);
+        this.getPassengers().forEach(Entity::stopRiding);
     }
 
     @Nullable
@@ -610,6 +612,20 @@ public abstract class Dinosaur extends TameableEntity {
     protected void onContentsChanged(int slot) {
         if (!this.world.isRemote) {
             this.dataManager.set(ARMOR, BitUtils.setBit(slot, this.dataManager.get(ARMOR), !this.inventory.getStackInSlot(slot).isEmpty()));
+        }
+        for (DinosaurArmorSlotType slotType : this.getArmorPieces()) {
+            ItemStack stack = this.getFromSlot(slotType);
+            if (!stack.isEmpty() && stack.getItem() instanceof DinosaurArmorItem){
+                DinosaurArmorItem item = (DinosaurArmorItem) stack.getItem();
+                item.getDinoAttributes(slotType, stack).forEach((attribute, modifier) -> {
+                    ModifiableAttributeInstance instance = getAttribute(attribute);
+                    if (!hasArmor(slotType) && instance.hasModifier(modifier)){
+                        instance.removeModifier(modifier);
+                    }else if (hasArmor(slotType) && !instance.hasModifier(modifier)){
+                        instance.applyNonPersistentModifier(modifier);
+                    }
+                });
+            }
         }
     }
 

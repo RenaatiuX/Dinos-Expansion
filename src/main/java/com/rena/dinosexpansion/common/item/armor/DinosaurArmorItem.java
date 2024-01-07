@@ -112,7 +112,8 @@ public class DinosaurArmorItem extends Item {
     }
 
    public Multimap<Attribute, AttributeModifier> getDinoAttributes(DinosaurArmorSlotType slot, ItemStack stack){
-        return this.slot == slot ? this.field_234656_m_ : ImmutableMultimap.of();
+        return !stack.isEmpty() && this.slot == slot ? this.field_234656_m_ : ImmutableMultimap.of();
+
    }
 
     public int getDamageReduceAmount() {
