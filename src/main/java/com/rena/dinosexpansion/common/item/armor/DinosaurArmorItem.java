@@ -37,7 +37,7 @@ public class DinosaurArmorItem extends Item {
         }
     };
     protected final DinosaurArmorSlotType slot;
-    private final int damageReduceAmount;
+    private final double damageReduceAmount;
     private final float toughness;
     protected final float knockbackResistance;
     protected final DinosaurArmorMaterial material;
@@ -77,7 +77,7 @@ public class DinosaurArmorItem extends Item {
         DispenserBlock.registerDispenseBehavior(this, DISPENSER_BEHAVIOR);
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
         UUID uuid = materialIn.getArmorModifierUUID(slot);
-        builder.put(Attributes.ARMOR, new AttributeModifier(uuid, "Armor modifier", (double) this.damageReduceAmount, AttributeModifier.Operation.ADDITION));
+        builder.put(Attributes.ARMOR, new AttributeModifier(uuid, "Armor modifier", this.damageReduceAmount, AttributeModifier.Operation.ADDITION));
         builder.put(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(uuid, "Armor toughness", (double) this.toughness, AttributeModifier.Operation.ADDITION));
         if (this.knockbackResistance > 0) {
             builder.put(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(uuid, "Armor knockback resistance", (double) this.knockbackResistance, AttributeModifier.Operation.ADDITION));
@@ -108,6 +108,8 @@ public class DinosaurArmorItem extends Item {
      * Return whether this item is repairable in an anvil.
      */
     public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
+        if (this.material.getRepairMaterial() == null)
+            return super.getIsRepairable(toRepair, repair);
         return this.material.getRepairMaterial().test(repair) || super.getIsRepairable(toRepair, repair);
     }
 
@@ -116,7 +118,7 @@ public class DinosaurArmorItem extends Item {
 
    }
 
-    public int getDamageReduceAmount() {
+    public double getDamageReduceAmount() {
         return this.damageReduceAmount;
     }
 

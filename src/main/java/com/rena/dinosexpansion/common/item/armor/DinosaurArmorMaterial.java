@@ -15,7 +15,7 @@ public interface DinosaurArmorMaterial {
 
     int getDurability(DinosaurArmorSlotType slotIn);
 
-    int getDamageReductionAmount(DinosaurArmorSlotType slotIn);
+    double getDamageReductionAmount(DinosaurArmorSlotType slotIn);
 
     UUID getArmorModifierUUID(DinosaurArmorSlotType slot);
 
@@ -25,6 +25,10 @@ public interface DinosaurArmorMaterial {
         return SoundEvents.ITEM_ARMOR_EQUIP_IRON;
     }
 
+    /**
+     *
+     * @return the rapair material with which the armor can be repaired, this may be null in order to disable repairing
+     */
     Ingredient getRepairMaterial();
 
     @OnlyIn(Dist.CLIENT)

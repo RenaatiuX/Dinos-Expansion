@@ -74,6 +74,7 @@ public class ModItemModelsProvider extends ItemModelProvider {
         simple(ItemInit.BELANTSEA.get(), ItemInit.COOKED_BELANTSEA.get());
         simple(ItemInit.WETHERELLUS.get(), ItemInit.COOKED_WETHERELLUS.get());
         simple(ItemInit.MEGA_PIRANHA.get(), ItemInit.COOKED_MEGA_PIRANHA.get());
+        simple(ItemInit.DINOSAUR_IRON_FEET.get(), ItemInit.DINOSAUR_IRON_HEAD.get(), ItemInit.DINOSAUR_IRON_LEG.get(), ItemInit.DINOSAUR_IRON_CHESTPLATE.get());
         makeSlingshot();
 
     }

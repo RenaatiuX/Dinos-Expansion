@@ -18,14 +18,17 @@ import com.rena.dinosexpansion.common.entity.terrestrial.ambient.Meganeura;
 import com.rena.dinosexpansion.common.entity.villagers.Hermit;
 import com.rena.dinosexpansion.common.entity.villagers.caveman.Caveman;
 import com.rena.dinosexpansion.common.entity.villagers.caveman.TribeTypeSerializer;
+import com.rena.dinosexpansion.common.item.armor.DinosaurArmorItem;
 import com.rena.dinosexpansion.core.init.*;
 import com.rena.dinosexpansion.core.network.Network;
 import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.block.DispenserBlock;
 import net.minecraft.block.WoodType;
 import net.minecraft.item.Items;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
@@ -46,6 +49,12 @@ public class CommonEvents {
             TribeTypeSerializer.serializeTribeTypes();
 
             WoodType.register(WoodTypeInit.CRATEAGUS_WOOD);
+
+            ItemInit.ITEMS.getEntries().stream().map(RegistryObject::get).forEach(i -> {
+                        if (i instanceof DinosaurArmorItem){
+                            DispenserBlock.registerDispenseBehavior(i, DinosaurArmorItem.DISPENSER_BEHAVIOR);
+                        }
+                    });
         });
     }
 

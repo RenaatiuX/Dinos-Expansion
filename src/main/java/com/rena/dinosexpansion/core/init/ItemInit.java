@@ -2,9 +2,11 @@ package com.rena.dinosexpansion.core.init;
 
 import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.client.renderer.ClientISTERProvider;
+import com.rena.dinosexpansion.common.entity.DinosaurArmorSlotType;
 import com.rena.dinosexpansion.common.entity.projectile.CustomArrow;
 import com.rena.dinosexpansion.common.entity.util.BoatType;
 import com.rena.dinosexpansion.common.item.*;
+import com.rena.dinosexpansion.common.item.armor.DinosaurArmorItem;
 import com.rena.dinosexpansion.common.item.arrow.DartItem;
 import com.rena.dinosexpansion.common.item.arrow.TinyRockItem;
 import com.rena.dinosexpansion.common.item.enums.*;
@@ -359,4 +361,11 @@ public class ItemInit {
     public static final RegistryObject<PickaxeItem> SAPPHIRE_PICKAXE = ITEMS.register("sapphire_pickaxe", () -> new PickaxeItem(ToolTiers.SAPPHIRE, 1, -2.8F, new Item.Properties().group(ModItemGroups.WEAPONS).isImmuneToFire().rarity(ModRarities.SAPPHIRE)));
     public static final RegistryObject<ShovelItem> SAPPHIRE_SHOVEL = ITEMS.register("sapphire_shovel", () -> new ShovelItem(ToolTiers.SAPPHIRE, 1.5F, -3.0F, new Item.Properties().group(ModItemGroups.WEAPONS).isImmuneToFire().rarity(ModRarities.SAPPHIRE)));
     public static final RegistryObject<AxeItem> SAPPHIRE_AXE = ITEMS.register("sapphire_axe", () -> new AxeItem(ToolTiers.SAPPHIRE, 5.0F, -3.0F, new Item.Properties().group(ModItemGroups.WEAPONS).isImmuneToFire().rarity(ModRarities.SAPPHIRE)));
+
+
+    //Dino Armor
+    public static final RegistryObject<DinosaurArmorItem> DINOSAUR_IRON_HEAD = ITEMS.register("dinosaur_iron_armor_head", () -> new DinosaurArmorItem(DinosaurArmorTiers.IRON_DINO_ARMOR, DinosaurArmorSlotType.HEAD, new Item.Properties().group(ModItemGroups.ITEMS)));
+    public static final RegistryObject<DinosaurArmorItem> DINOSAUR_IRON_CHESTPLATE = ITEMS.register("dinosaur_iron_armor_torso", () -> new DinosaurArmorItem(DinosaurArmorTiers.IRON_DINO_ARMOR, DinosaurArmorSlotType.CHESTPLATE, new Item.Properties().group(ModItemGroups.ITEMS)));
+    public static final RegistryObject<DinosaurArmorItem> DINOSAUR_IRON_LEG = ITEMS.register("dinosaur_iron_armor_torso", () -> new DinosaurArmorItem(DinosaurArmorTiers.IRON_DINO_ARMOR, DinosaurArmorSlotType.LEG, new Item.Properties().group(ModItemGroups.ITEMS)));
+    public static final RegistryObject<DinosaurArmorItem> DINOSAUR_IRON_FEET = ITEMS.register("dinosaur_iron_armor_tail", () -> new DinosaurArmorItem(DinosaurArmorTiers.IRON_DINO_ARMOR, DinosaurArmorSlotType.FEET, new Item.Properties().group(ModItemGroups.ITEMS)));
 }
