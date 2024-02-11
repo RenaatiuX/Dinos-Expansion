@@ -83,7 +83,7 @@ public class TamingScreen extends ContainerScreen<TamingContainer> {
         float round = (float)Math.round(dino.getTamingEfficiency() * 1000f) / 10f;
         StringTextComponent comp = new StringTextComponent( round + "%");
         int width = this.font.getStringPropertyWidth(comp);
-        this.font.drawText(matrixStack, comp, guiLeft + 7 + (84 - width) / 2, guiTop + 99, 4210752);
+        this.font.drawText(matrixStack, comp, guiLeft + 7 + (float) (84 - width) / 2, guiTop + 99, 4210752);
         Dinosaur.DinosaurInfo info = dino.getInfo();
         int left = guiLeft + this.titleX + 88;
         this.font.drawText(matrixStack, new TranslationTextComponent(DinosExpansion.MOD_ID + ".gender", info.getGender().getDisplayName()), left, (float) guiTop + this.titleY - 2, 4210752);

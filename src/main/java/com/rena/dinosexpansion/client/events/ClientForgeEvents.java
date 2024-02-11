@@ -2,9 +2,11 @@ package com.rena.dinosexpansion.client.events;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.rena.dinosexpansion.DinosExpansion;
 import com.rena.dinosexpansion.client.renderer.entity.ParapuzosiaRenderer;
 import com.rena.dinosexpansion.client.renderer.layer.DinosaurShoulderRidingLayer;
+import com.rena.dinosexpansion.client.util.RenderingUtils;
 import com.rena.dinosexpansion.common.config.DinosExpansionConfig;
 import com.rena.dinosexpansion.common.entity.Dinosaur;
 import com.rena.dinosexpansion.common.events.ServerForgeEvents;
@@ -19,17 +21,20 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;;
 import net.minecraft.client.settings.PointOfView;
+import net.minecraft.command.CommandSource;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.math.vector.Vector3d;
@@ -45,8 +50,12 @@ import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+import java.awt.Color;
+import java.security.PublicKey;
 import java.util.Map;
 import java.util.Random;
+import java.util.function.Predicate;
+
 @OnlyIn(Dist.CLIENT)
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE, modid = DinosExpansion.MOD_ID, value = Dist.CLIENT)
 public class ClientForgeEvents {
@@ -278,7 +287,7 @@ public class ClientForgeEvents {
     }
 
     @SubscribeEvent
-    public static void changeFov(EntityViewRenderEvent.FOVModifier event){
+    public static void changeFov(EntityViewRenderEvent.FOVModifier event) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null || mc.currentScreen != null) {
             return;
@@ -308,16 +317,48 @@ public class ClientForgeEvents {
     }
 
     @SubscribeEvent
-    public static void renderZoomOverlay(RenderGameOverlayEvent.Post event){
-        if (event.getType() == RenderGameOverlayEvent.ElementType.HOTBAR) {
-            if (Minecraft.getInstance() != null && Minecraft.getInstance().player != null){
-                if (Minecraft.getInstance().player.getPersistentData().contains(DinosExpansion.MOD_ID + "zooming") && Minecraft.getInstance().player.getPersistentData().getBoolean(DinosExpansion.MOD_ID + "zooming")){
+    public static void renderZoomOverlay(RenderGameOverlayEvent.Post event) {
+        if (event.getType() == RenderGameOverlayEvent.ElementType.CHAT) {
+            if (Minecraft.getInstance().player != null) {
+                if (Minecraft.getInstance().player.getPersistentData().contains(DinosExpansion.MOD_ID + "zooming") && Minecraft.getInstance().player.getPersistentData().getBoolean(DinosExpansion.MOD_ID + "zooming")) {
                     MainWindow res = event.getWindow();
                     Minecraft.getInstance().textureManager.bindTexture(ZOOM_OVERLAY);
                     AbstractGui.blit(event.getMatrixStack(), 0, 0, 0, 0, res.getScaledWidth(), res.getScaledHeight(), res.getScaledWidth(), res.getScaledHeight());
+                   makeDinoSpyglassTooltip(event);
                 }
+
+
             }
+
+
         }
+    }
+
+    protected static void makeDinoSpyglassTooltip(RenderGameOverlayEvent.Post event){
+        assert Minecraft.getInstance().player != null;
+        EntityRayTraceResult result = rayTraceEntities(Minecraft.getInstance().player, 30, e -> e instanceof Dinosaur);
+        if (result != null) {
+            Dinosaur dino = (Dinosaur) result.getEntity();
+            MainWindow res = event.getWindow();
+            MatrixStack stack = event.getMatrixStack();
+            stack.push();
+            Color backgroundColor = new Color(255, 255, 255, 100).darker().darker();
+            Color borderColor = backgroundColor.darker().darker().darker().darker();
+            RenderingUtils.drawDinosaurInfo(stack, dino, (res.getScaledWidth()) / 2, (res.getScaledHeight()) / 2, res.getScaledWidth(), res.getScaledHeight(), Minecraft.getInstance().fontRenderer);
+            stack.pop();
+        }
+    }
+
+
+    public static EntityRayTraceResult rayTraceEntities(PlayerEntity player, double maxDistance, Predicate<Entity> filter) {
+        Vector3d vector3d = player.getEyePosition(0f);
+        Vector3d vector3d1 = player.getLook(1.0F);
+        Vector3d vector3d2 = vector3d.add(vector3d1.x * maxDistance, vector3d1.y * maxDistance, vector3d1.z * maxDistance);
+        AxisAlignedBB axisalignedbb = player.getBoundingBox().expand(vector3d1.scale(maxDistance)).grow(1.0D, 1.0D, 1.0D);
+        Predicate<Entity> presetFilter = (p_215312_0_) -> !p_215312_0_.isSpectator() && p_215312_0_.canBeCollidedWith();
+        presetFilter = presetFilter.and(filter);
+        EntityRayTraceResult entityraytraceresult = ProjectileHelper.rayTraceEntities(player.world, player, vector3d, vector3d2, axisalignedbb, presetFilter);
+        return entityraytraceresult;
     }
 
 }

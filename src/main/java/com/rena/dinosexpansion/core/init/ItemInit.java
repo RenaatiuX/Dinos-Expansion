@@ -366,6 +366,6 @@ public class ItemInit {
     //Dino Armor
     public static final RegistryObject<DinosaurArmorItem> DINOSAUR_IRON_HEAD = ITEMS.register("dinosaur_iron_armor_head", () -> new DinosaurArmorItem(DinosaurArmorTiers.IRON_DINO_ARMOR, DinosaurArmorSlotType.HEAD, new Item.Properties().group(ModItemGroups.ITEMS)));
     public static final RegistryObject<DinosaurArmorItem> DINOSAUR_IRON_CHESTPLATE = ITEMS.register("dinosaur_iron_armor_torso", () -> new DinosaurArmorItem(DinosaurArmorTiers.IRON_DINO_ARMOR, DinosaurArmorSlotType.CHESTPLATE, new Item.Properties().group(ModItemGroups.ITEMS)));
-    public static final RegistryObject<DinosaurArmorItem> DINOSAUR_IRON_LEG = ITEMS.register("dinosaur_iron_armor_torso", () -> new DinosaurArmorItem(DinosaurArmorTiers.IRON_DINO_ARMOR, DinosaurArmorSlotType.LEG, new Item.Properties().group(ModItemGroups.ITEMS)));
+    public static final RegistryObject<DinosaurArmorItem> DINOSAUR_IRON_LEG = ITEMS.register("dinosaur_iron_armor_leg", () -> new DinosaurArmorItem(DinosaurArmorTiers.IRON_DINO_ARMOR, DinosaurArmorSlotType.LEG, new Item.Properties().group(ModItemGroups.ITEMS)));
     public static final RegistryObject<DinosaurArmorItem> DINOSAUR_IRON_FEET = ITEMS.register("dinosaur_iron_armor_tail", () -> new DinosaurArmorItem(DinosaurArmorTiers.IRON_DINO_ARMOR, DinosaurArmorSlotType.FEET, new Item.Properties().group(ModItemGroups.ITEMS)));
 }

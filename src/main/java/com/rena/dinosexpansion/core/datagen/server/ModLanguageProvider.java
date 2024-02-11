@@ -296,6 +296,9 @@ public class ModLanguageProvider extends LanguageProvider {
         add("dinosexpansion.gender", "Gender: %s");
         add("dinosexpansion.level", "Level: %s");
         add("dinosexpansion.sleep_rhythm", "Sleep Rhythm: %s");
+        add("dinosexpansion.rarity", "Rarity: %s");
+
+        add("dinosexpansion.hunger", "Hunger:");
 
         add("dinosexpansion.survival_instinct_cooldown", "Cooldown: %d");
 
