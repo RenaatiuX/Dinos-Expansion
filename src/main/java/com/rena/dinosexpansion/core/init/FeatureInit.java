@@ -10,12 +10,16 @@ import net.minecraft.block.Blocks;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.WorldGenRegistries;
+import net.minecraft.world.gen.blockplacer.SimpleBlockPlacer;
+import net.minecraft.world.gen.blockstateprovider.SimpleBlockStateProvider;
 import net.minecraft.world.gen.feature.*;
 import net.minecraft.world.gen.placement.AtSurfaceWithExtraConfig;
 import net.minecraft.world.gen.placement.Placement;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+
+import java.util.function.Supplier;
 
 public class FeatureInit {
     public static final DeferredRegister<Feature<?>> FEATURES = DeferredRegister.create(ForgeRegistries.FEATURES, DinosExpansion.MOD_ID);
@@ -36,6 +40,9 @@ public class FeatureInit {
                         REDWOOD_TREE1.withChance(0.55F),
                         REDWOOD_TREE2.withChance(0.1F)),
                         REDWOOD_TREE2));
+        public static final ConfiguredFeature<?, ?> OSMUNDA = Feature.RANDOM_PATCH.withConfiguration(new BlockClusterFeatureConfig.Builder(
+                new SimpleBlockStateProvider(BlockInit.OSMUNDA.get().getDefaultState()), SimpleBlockPlacer.PLACER)
+                .replaceable().tries(32).build()).withPlacement(Features.Placements.PATCH_PLACEMENT).count(10);
     }
 
     public static void registerConfiguredFeatures() {

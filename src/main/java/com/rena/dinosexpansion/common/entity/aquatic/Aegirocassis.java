@@ -4,16 +4,20 @@ import com.rena.dinosexpansion.common.entity.ia.DinosaurLookRandomGoal;
 import com.rena.dinosexpansion.common.entity.ia.SleepRhythmGoal;
 import com.rena.dinosexpansion.common.entity.ia.movecontroller.AquaticMoveController;
 import com.rena.dinosexpansion.core.init.EntityInit;
-import net.minecraft.entity.AgeableEntity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.FindWaterGoal;
 import net.minecraft.entity.ai.goal.LookAtGoal;
 import net.minecraft.entity.ai.goal.RandomSwimmingGoal;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.item.Item;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tags.FluidTags;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -31,6 +35,7 @@ import java.util.List;
 
 public class Aegirocassis extends DinosaurAquatic implements IAnimatable, IAnimationTickable {
     private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
+    private static final int DESIRED_DEPTH = 5;
 
     public Aegirocassis(EntityType<Aegirocassis> type, World world) {
         super(type, world, new DinosaurInfo("aegirocassis", 100, 80, 30, SleepRhythmGoal.SleepRhythm.NONE), generateLevelWithinBounds(20, 70));
@@ -78,6 +83,17 @@ public class Aegirocassis extends DinosaurAquatic implements IAnimatable, IAnima
     @Override
     public AgeableEntity createChild(ServerWorld world, AgeableEntity mate) {
         return null;
+    }
+
+    @Override
+    public ILivingEntityData onInitialSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
+        BlockPos spawnPos = new BlockPos(this.getPositionVec());
+        FluidState fluidState = worldIn.getFluidState(spawnPos);
+        if (fluidState.isTagged(FluidTags.WATER) && fluidState.getActualHeight(worldIn, spawnPos) < DESIRED_DEPTH) {
+            return super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
+        } else {
+            return null;
+        }
     }
 
     private PlayState predicate(AnimationEvent<Aegirocassis> event) {

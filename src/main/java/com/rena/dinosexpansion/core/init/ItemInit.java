@@ -268,6 +268,8 @@ public class ItemInit {
             ()-> new BlockNamedItem(BlockInit.LETTUCE_CROP.get(), new Item.Properties().group(ModItemGroups.ITEMS)));
     public static final RegistryObject<Item> SPINACH_SEED = ITEMS.register("spinach_seed",
             ()-> new BlockNamedItem(BlockInit.SPINACH_CROP.get(), new Item.Properties().group(ModItemGroups.ITEMS)));
+    public static final RegistryObject<Item> TOMATO_SEED = ITEMS.register("tomato_seed",
+            () -> new StakedCropSeedItem(new Item.Properties().group(ModItemGroups.ITEMS), BlockInit.TOMATO_CROP));
 
     public static final RegistryObject<Item> NARCOTICS = ITEMS.register("narcotics",
             () -> new BaseNarcoticItem(new Item.Properties().group(ModItemGroups.ITEMS), 10));

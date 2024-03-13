@@ -6,6 +6,8 @@ import com.rena.dinosexpansion.common.block.*;
 import com.rena.dinosexpansion.common.block.bush.BushBlockBase;
 import com.rena.dinosexpansion.common.block.crops.CropBaseBlock;
 import com.rena.dinosexpansion.common.block.crops.DoubleCropBaseBlock;
+import com.rena.dinosexpansion.common.block.crops.StakedCropBlock;
+import com.rena.dinosexpansion.common.block.crops.StakedGrowCropBlock;
 import com.rena.dinosexpansion.common.block.plant.SinglePlantBlock;
 import com.rena.dinosexpansion.common.block.plant.TriplePlantBlock;
 import com.rena.dinosexpansion.common.item.util.AnimatedBlockItem;
@@ -209,7 +211,10 @@ public class BlockInit {
             () -> new CropBaseBlock(AbstractBlock.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().hardnessAndResistance(0).sound(SoundType.CROP), ItemInit.LETTUCE_SEED));
     public static final RegistryObject<Block> SPINACH_CROP = BLOCKS.register("spinach_crop",
             () -> new CropBaseBlock(AbstractBlock.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().hardnessAndResistance(0).sound(SoundType.CROP), ItemInit.SPINACH_SEED));
-
+    public static final RegistryObject<Block> CROP_STAKE = register("crop_stake",
+            () -> new StakedCropBlock(AbstractBlock.Properties.create(Material.WOOD).hardnessAndResistance(2.0F, 5.0F).sound(SoundType.WOOD).notSolid()), ModItemGroups.BLOCKS);
+    public static final RegistryObject<StakedGrowCropBlock> TOMATO_CROP = BLOCKS.register("tomato_crop",
+            () -> new StakedGrowCropBlock(AbstractBlock.Properties.create(Material.PLANTS).hardnessAndResistance(0).tickRandomly(), ItemInit.TOMATO_SEED, ItemInit.TOMATO, 3));
     //Blocks
     public static final RegistryObject<Block> GEYSER = register("geyser", ()-> new GeyserBlock(AbstractBlock.Properties.create(Material.ROCK).zeroHardnessAndResistance().sound(SoundType.GROUND).tickRandomly().notSolid()), ModItemGroups.BLOCKS);
     public static final RegistryObject<Block> MUD = register("mud",

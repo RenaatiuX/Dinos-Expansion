@@ -2,7 +2,9 @@ package com.rena.dinosexpansion.common.biome.biomes.swamp;
 
 import com.rena.dinosexpansion.common.biome.BiomeBase;
 import com.rena.dinosexpansion.common.world.gen.surfacebuilder.DinoSurfaceBuilders;
+import com.rena.dinosexpansion.core.init.FeatureInit;
 import net.minecraft.world.biome.*;
+import net.minecraft.world.gen.GenerationStage;
 import net.minecraftforge.common.BiomeDictionary;
 
 public class EtherealSwamp extends BiomeBase {
@@ -41,5 +43,9 @@ public class EtherealSwamp extends BiomeBase {
     @Override
     public int getWeight() {
         return 6;
+    }
+
+    static {
+        GENERATION_SETTINGS.withFeature(GenerationStage.Decoration.VEGETAL_DECORATION, FeatureInit.ConfiguredFeatures.OSMUNDA);
     }
 }

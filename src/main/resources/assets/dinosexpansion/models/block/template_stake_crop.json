@@ -1,0 +1,74 @@
+{
+  "__comment": "Model generated using MrCrayfish's Model Creator (http://mrcrayfish.com/modelcreator/)",
+  "textures": {
+    "0": "block/oak_log",
+    "1": "block/oak_planks",
+    "crop": "#crop",
+    "particle": "#crop"
+  },
+  "elements": [
+      {
+        "from": [5.5, 14, 5.5],
+        "to": [10.5, 16, 10.5],
+        "faces": {
+          "north": {"uv": [0, 0, 5, 2], "texture": "#0"},
+          "east": {"uv": [0, 0, 5, 2], "texture": "#0"},
+          "south": {"uv": [0, 0, 5, 2], "texture": "#0"},
+          "west": {"uv": [0, 0, 5, 2], "texture": "#0"},
+          "up": {"uv": [0, 0, 5, 5], "texture": "#0"},
+          "down": {"uv": [0, 0, 5, 5], "texture": "#0"}
+        }
+      },
+      {
+        "from": [6.5, 0, 6.5],
+        "to": [9.5, 14, 9.5],
+        "faces": {
+          "north": {"uv": [11, 0, 14, 14], "texture": "#1"},
+          "east": {"uv": [11, 0, 14, 14], "texture": "#1"},
+          "south": {"uv": [11, 0, 14, 14], "texture": "#1"},
+          "west": {"uv": [11, 0, 14, 14], "texture": "#1"},
+          "up": {"uv": [11, 0, 14, 3], "texture": "#1"},
+          "down": {"uv": [11, 0, 14, 3], "texture": "#1"}
+        }
+      },
+    {
+      "name": "north",
+      "from": [0, 0, 1],
+      "to": [16, 16, 1],
+      "faces": {
+        "north": {"uv": [0, 0, 16, 16], "texture": "#crop"},
+        "south": {"uv": [16, 0, 0, 16], "texture": "#crop"}
+      }
+    },
+    {
+      "name": "south",
+      "from": [0, 0, 15],
+      "to": [16, 16, 15],
+      "rotation": {"angle": 0, "axis": "y", "origin": [0, 0, 16]},
+      "faces": {
+        "north": {"uv": [16, 0, 0, 16], "texture": "#crop"},
+        "south": {"uv": [0, 0, 16, 16], "texture": "#crop"}
+      }
+    },
+    {
+      "name": "west",
+      "from": [1, 0, 0],
+      "to": [1, 16, 16],
+      "faces": {
+        "east": {"uv": [16, 0, 0, 16], "texture": "#crop"},
+        "west": {"uv": [0, 0, 16, 16], "texture": "#crop"}
+      }
+    },
+
+    {
+      "name": "east",
+      "from": [15, 0, 0],
+      "to": [15, 16, 16],
+      "rotation": {"angle": 0, "axis": "y", "origin": [16, 0, 0]},
+      "faces": {
+        "east": {"uv": [0, 0, 16, 16], "texture": "#crop"},
+        "west": {"uv": [16, 0, 0, 16], "texture": "#crop"}
+      }
+    }
+  ]
+}

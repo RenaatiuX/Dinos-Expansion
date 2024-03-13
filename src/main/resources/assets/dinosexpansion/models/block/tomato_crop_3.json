@@ -1,0 +1,6 @@
+{
+  "parent": "dinosexpansion:block/template_stake_crop",
+  "textures": {
+    "crop": "dinosexpansion:block/tomato_crop_3"
+  }
+}
